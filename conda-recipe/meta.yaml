@@ -1,0 +1,29 @@
+{% set data = load_setup_py_data() %}
+
+package:
+    name    : pcdswidgets
+    version : {{ data.get('version') }}
+
+source:
+    path: ..
+
+requirements:
+    build:
+      - python
+
+
+    run:
+      - python
+      - pydm >=1.6.0
+
+test:
+    imports:
+      - pcdswidgets
+
+    requires: 
+      - pytest
+
+about:
+  home: https://github.com/pcdshub/pcdswidgets
+  license: SLAC Open License
+  summary: LCLS PyDM Widget Library
