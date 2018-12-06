@@ -15,6 +15,19 @@ matrix:
           - PYDM_CHANNEL=pcds-tag
      - python: 3.6
        env: PYDM_CHANNEL=pydm-dev
+    - python: 3.7
+      dist: xenial
+      env: PYDM_CHANNEL=pcds-tag
+    - python: 3.7
+      dist: xenial
+      env: PYDM_CHANNEL=pydm-dev
+  allow_failures:
+    - python: 3.7
+      dist: xenial
+      env: PYDM_CHANNEL=pcds-tag
+    - python: 3.7
+      dist: xenial
+      env: PYDM_CHANNEL=pydm-dev
 
 install:
   - sudo apt-get update
