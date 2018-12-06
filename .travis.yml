@@ -81,4 +81,3 @@ after_success:
 
 after_failure:
   - cat logs/run_tests_log.txt
-  - cat logs/run_tests_log.txt.1    
