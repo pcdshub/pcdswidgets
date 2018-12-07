@@ -9,12 +9,12 @@ env:
 
 matrix:
   include:
-     - python: 3.6
-       env:
-          - BUILD=1
-          - PYDM_CHANNEL=pcds-tag
-     - python: 3.6
-       env: PYDM_CHANNEL=pydm-dev
+    - python: 3.6
+      env:
+        - BUILD=1
+        - PYDM_CHANNEL=pcds-tag
+    - python: 3.6
+      env: PYDM_CHANNEL=pydm-dev
     - python: 3.7
       dist: xenial
       env: PYDM_CHANNEL=pcds-tag
