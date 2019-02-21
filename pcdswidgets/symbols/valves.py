@@ -73,16 +73,22 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         }
 
     """
+    _interlock_suffix = ":OPN_OK"
+    _error_suffix = ":STATE"
+    _open_state_suffix = ":OPN_DI"
+    _close_state_suffix = ":CLS_DI"
+
     Q_ENUMS(ContentLocation)
     NAME = "Pneumatic Valve"
 
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValve, self).__init__(parent=parent,
-                                             interlock_suffix=":OPN_OK",
-                                             error_suffix=":STATE",
-                                             open_suffix=":OPN_DI",
-                                             close_suffix=":CLS_DI",
-                                             **kwargs)
+        super(PneumaticValve, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            open_suffix=self._open_state_suffix,
+            close_suffix=self._close_state_suffix,
+            **kwargs)
 
         self.open_close_btn = PyDMEnumButton()
         self.icon = PneumaticValveSymbolIcon(self)
@@ -251,16 +257,22 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         }
 
     """
+    _interlock_suffix = ":OPN_OK"
+    _error_suffix = ":ERROR"
+    _open_state_suffix = ":OPN_DI"
+    _close_state_suffix = ":CLS_DI"
+
     Q_ENUMS(ContentLocation)
     NAME = "Fast Shutter"
 
     def __init__(self, parent=None, **kwargs):
-        super(FastShutter, self).__init__(parent=parent,
-                                          interlock_suffix=":OPN_OK",
-                                          error_suffix=":ERROR",
-                                          open_suffix=":OPN_DI",
-                                          close_suffix=":CLS_DI",
-                                          **kwargs)
+        super(FastShutter, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            open_suffix=self._open_state_suffix,
+            close_suffix=self._close_state_suffix,
+            **kwargs)
 
         self.open_close_btn = PyDMEnumButton()
         self.icon = FastShutterSymbolIcon(self)

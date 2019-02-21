@@ -1,5 +1,5 @@
-from pydm.widgets.label import PyDMLabel
 from pydm.widgets.enum_button import PyDMEnumButton
+from pydm.widgets.label import PyDMLabel
 from qtpy.QtCore import QSize, Property, Q_ENUMS, Qt
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
@@ -62,12 +62,13 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
         }
 
     """
+    _state_suffix = ":PRESS_OK"
     Q_ENUMS(ContentLocation)
     NAME = "Pirani Gauge"
 
     def __init__(self, parent=None, **kwargs):
         super(PiraniGauge, self).__init__(parent=parent,
-                                          state_suffix=":PRESS_OK",
+                                          state_suffix=self._state_suffix,
                                           **kwargs)
 
         self.pressure_label = PyDMLabel(self)
@@ -202,14 +203,18 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         }
 
     """
+    _interlock_suffix = ":ILK_OK"
+    _state_suffix = ":STATE"
+
     Q_ENUMS(ContentLocation)
     NAME = "Hot Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        super(HotCathodeGauge, self).__init__(parent=parent,
-                                              interlock_suffix=":ILK_OK",
-                                              state_suffix=":STATE",
-                                              **kwargs)
+        super(HotCathodeGauge, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            state_suffix=self._state_suffix,
+            **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
         self.pressure_label = PyDMLabel()
@@ -382,14 +387,17 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         }
 
     """
+    _interlock_suffix = ":ILK_OK"
+    _state_suffix = ":STATE"
     Q_ENUMS(ContentLocation)
     NAME = "Cold Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        super(ColdCathodeGauge, self).__init__(parent=parent,
-                                               interlock_suffix=":ILK_OK",
-                                               state_suffix=":STATE",
-                                               **kwargs)
+        super(ColdCathodeGauge, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            state_suffix=self._state_suffix,
+            **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
         self.pressure_label = PyDMLabel()

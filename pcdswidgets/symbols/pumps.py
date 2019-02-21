@@ -2,6 +2,7 @@ from pydm.widgets.enum_button import PyDMEnumButton
 from pydm.widgets.label import PyDMLabel
 from qtpy.QtCore import QSize, Qt, Property, Q_ENUMS
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
+
 from .base import PCDSSymbolBase, ContentLocation
 from .mixins import InterlockMixin, ErrorMixin, StateMixin
 from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
@@ -72,14 +73,17 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _interlock_suffix = ":ILK_OK"
+    _error_suffix = ":ERROR"
+    _state_suffix = ":HV_DO"
     Q_ENUMS(ContentLocation)
     NAME = "Ion Pump"
 
     def __init__(self, parent=None, **kwargs):
         super(IonPump, self).__init__(parent=parent,
-                                      interlock_suffix=":ILK_OK",
-                                      error_suffix=":ERROR",
-                                      state_suffix=":HV_DO",
+                                      interlock_suffix=self._interlock_suffix,
+                                      error_suffix=self._error_suffix,
+                                      state_suffix=self._state_suffix,
                                       **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
@@ -257,14 +261,17 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _interlock_suffix = ":ILK_STATUS"
+    _error_suffix = ":FAULT"
+    _state_suffix = ":STATE"
     Q_ENUMS(ContentLocation)
     NAME = "Turbo Pump"
 
     def __init__(self, parent=None, **kwargs):
         super(TurboPump, self).__init__(parent=parent,
-                                        interlock_suffix=":ILK_STATUS",
-                                        error_suffix=":FAULT",
-                                        state_suffix=":STATE",
+                                        interlock_suffix=self._interlock_suffix,
+                                        error_suffix=self._error_suffix,
+                                        state_suffix=self._state_suffix,
                                         **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
@@ -433,15 +440,19 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _interlock_suffix = ":ILK_OK"
+    _error_suffix = ":ERROR"
+    _state_suffix = ":STATE"
     Q_ENUMS(ContentLocation)
     NAME = "Scroll Pump"
 
     def __init__(self, parent=None, **kwargs):
-        super(ScrollPump, self).__init__(parent=parent,
-                                         interlock_suffix=":ILK_OK",
-                                         error_suffix=":ERROR",
-                                         state_suffix=":STATE",
-                                         **kwargs)
+        super(ScrollPump, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            state_suffix=self._state_suffix,
+            **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
         self.icon = ScrollPumpSymbolIcon(self)
