@@ -4,8 +4,32 @@ PCDSWidgets
 
 LCLS PyDM Widget Library
 
+.. toctree::
+    :maxdepth: 1
+    :caption: Widgets
 
-Related Projects
-----------------
-- `pydm <https://github.com/slaclab/pydm/>`_
+    symbols.rst
+    icons.rst
 
+.. toctree::
+   :maxdepth: 1
+   :caption: API Documentation
+   :hidden:
+
+   mixins.rst
+   utils.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Related Projects
+   :hidden:
+
+   PyDM <https://github.com/slaclab/pydm>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Links
+   :hidden:
+
+   PCDSWidgets GitHub <https://github.com/pcdshub/pcdswidgets>
+   PCDS-wide GitHub <https://github.com/pcdshub>
