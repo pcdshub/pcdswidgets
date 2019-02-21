@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>451</width>
+    <height>401</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1">
+   <item>
+    <widget class="PneumaticValve" name="PneumaticValve">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">*[interlocked=&quot;true&quot;] #interlock {
+	border: 5px solid red;
+}
+
+*[interlocked=&quot;false&quot;] #icon{
+    qproperty-penWidth: 1;
+    qproperty-penColor: #000000;
+	qproperty-penStyle: &quot;Qt::SolidLine&quot;;
+	qproperty-brush: green;
+}
+*[interlocked=&quot;true&quot;] #icon{
+    qproperty-penWidth: 1;
+    qproperty-penColor: #FF0000;
+}
+*[state=&quot;INVALID&quot;] #icon{
+    qproperty-penWidth: 0;
+    qproperty-penColor: transparent;
+	qproperty-penStyle: &quot;Qt::SolidLine&quot;;
+	qproperty-brush: transparent;
+}
+* #controls{
+	background-color: transparent;
+}
+</string>
+     </property>
+     <property name="channelsPrefix" stdset="0">
+      <string>ca://VALVE</string>
+     </property>
+     <property name="showIcon" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="showStatusTooltip" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="iconSize" stdset="0">
+      <number>32</number>
+     </property>
+     <property name="interlocked" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="controlsLocation" stdset="0">
+      <enum>PneumaticValve::Top</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PneumaticValve</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.valves</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

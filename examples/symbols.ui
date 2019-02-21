@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>878</width>
+    <height>742</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="PneumaticValve" name="PneumaticValve">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>30</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="FastShutter" name="FastShutter">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>30</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="IonPump" name="IonPump">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>260</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="TurboPump" name="TurboPump">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>260</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="ScrollPump" name="ScrollPump">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>260</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="PiraniGauge" name="PiraniGauge">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>470</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="HotCathodeGauge" name="HotCathodeGauge">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>470</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+  <widget class="ColdCathodeGauge" name="ColdCathodeGauge">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>480</y>
+     <width>200</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="iconSize" stdset="0">
+    <number>64</number>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PneumaticValve</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>FastShutter</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>IonPump</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>TurboPump</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>ScrollPump</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>PiraniGauge</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+  <customwidget>
+   <class>HotCathodeGauge</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+  <customwidget>
+   <class>ColdCathodeGauge</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
