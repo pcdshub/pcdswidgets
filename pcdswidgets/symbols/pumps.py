@@ -268,11 +268,12 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
     NAME = "Turbo Pump"
 
     def __init__(self, parent=None, **kwargs):
-        super(TurboPump, self).__init__(parent=parent,
-                                        interlock_suffix=self._interlock_suffix,
-                                        error_suffix=self._error_suffix,
-                                        state_suffix=self._state_suffix,
-                                        **kwargs)
+        super(TurboPump, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            state_suffix=self._state_suffix,
+            **kwargs)
 
         self.start_stop_btn = PyDMEnumButton()
         self.icon = TurboPumpSymbolIcon(self)
