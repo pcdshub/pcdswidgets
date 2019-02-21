@@ -1,0 +1,129 @@
+import math
+
+from qtpy.QtCore import (QPointF, QRectF, Property, QLineF, Qt)
+from qtpy.QtGui import (QColor, QBrush, QPainterPath, QPolygonF, QTransform)
+
+from .base import BaseSymbolIcon
+
+
+class TurboPumpSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a turbo pump symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(TurboPumpSymbolIcon, self).__init__(parent, **kwargs)
+        self._center_brush = QBrush(QColor("transparent"))
+
+    @Property(QBrush)
+    def centerBrush(self):
+        return self._center_brush
+
+    @centerBrush.setter
+    def centerBrush(self, new_brush):
+        if new_brush != self._center_brush:
+            self._center_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        super(TurboPumpSymbolIcon, self).draw_icon(painter)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
+        circle_arrow_point = QPointF(0.3, 0.5)
+
+        brush = painter.brush()
+        pen = painter.pen()
+
+        painter.setBrush(self.centerBrush)
+        painter.setPen(QColor("transparent"))
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.2, 0.2)
+
+        painter.setBrush(brush)
+        painter.setPen(pen)
+
+        painter.drawArc(QRectF(0.3, 0.3, 0.4, 0.4), 90 * 16, -270 * 16)
+
+        arrow = QPolygonF(
+            [QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, -0.025)])
+        painter.setBrush(QBrush(QColor(0, 0, 0)))
+        painter.drawPolygon(arrow.translated(circle_arrow_point))
+
+
+class IonPumpSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with an ion pump symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+
+    def draw_icon(self, painter):
+        super(IonPumpSymbolIcon, self).draw_icon(painter)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
+        bottom_arrow_point = QPointF(0.5, 0.8)
+        painter.drawLine(bottom_arrow_point, QPointF(0.5, 0.7))
+        curve_start = QPointF(0.5, 0.7)
+        bend_angle = 25
+        curve_end_l = QPointF(
+            0.4 * math.cos(math.radians(90 + bend_angle)) + 0.5,
+            -0.4 * math.sin(math.radians(90 + bend_angle)) + 0.5)
+        c1 = QPointF(0.5, 0.4)
+        path = QPainterPath(curve_start)
+        path.quadTo(c1, curve_end_l)
+        painter.drawPath(path)
+        curve_end_r = QPointF(
+            0.4 * math.cos(math.radians(90 - bend_angle)) + 0.5,
+            -0.4 * math.sin(math.radians(90 - bend_angle)) + 0.5)
+        path = QPainterPath(curve_start)
+        path.quadTo(c1, curve_end_r)
+        painter.drawPath(path)
+        # Draw the arrow end-caps
+        painter.setBrush(QBrush(QColor(0, 0, 0)))
+        arrow = QPolygonF(
+            [QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, 0.025)])
+        painter.drawPolygon(arrow.translated(bottom_arrow_point))
+        t = QTransform()
+        t.rotate(180.0 - 25.0)
+        arrow_l = t.map(arrow)
+        arrow_l = arrow_l.translated(curve_end_l)
+        painter.drawPolygon(arrow_l)
+        t = QTransform()
+        t.rotate(180.0 + 25.0)
+        arrow_r = t.map(arrow)
+        arrow_r = arrow_r.translated(curve_end_r)
+        painter.drawPolygon(arrow_r)
+
+
+class ScrollPumpSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a scroll pump symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+
+    def draw_icon(self, painter):
+        super(ScrollPumpSymbolIcon, self).draw_icon(painter)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
+        pen = painter.pen()
+        pen.setWidthF(pen.width()*2)
+        pen.setCapStyle(Qt.FlatCap)
+        painter.setPen(pen)
+        r = 0.5
+        x1 = r + r * math.cos(math.radians(45))
+        y1 = r + r * math.sin(math.radians(45))
+        x2 = r + r * math.cos(math.radians(225))
+        y2 = r + r * math.sin(math.radians(225))
+        painter.drawLine(QLineF(x1, y1, x2, y2))
+        painter.drawLine(QLineF(x2, y1, x1, y2))
