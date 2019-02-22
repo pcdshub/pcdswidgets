@@ -34,6 +34,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
 
         self._channels_prefix = None
         self.icon = None
+        self._rotate_icon = False
 
         self._show_icon = True
         self._show_status_tooltip = True
@@ -167,6 +168,31 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
 
         self._icon_size = size
         self.icon.update()
+
+    @Property(bool)
+    def rotateIcon(self):
+        """
+        Rotate the icon 90 degrees clockwise
+
+        Returns
+        -------
+        rotate : bool
+        """
+        return self._rotate_icon
+
+    @rotateIcon.setter
+    def rotateIcon(self, rotate):
+        """
+        Rotate the icon 90 degrees clockwise
+
+        Parameters
+        ----------
+        rotate : bool
+        """
+        self._rotate_icon = rotate
+        angle = 90 if self._rotate_icon else 0
+        if self.icon:
+            self.icon.rotation = angle
 
     def paintEvent(self, evt):
         """

@@ -62,6 +62,12 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         PneumaticValve [interlocked="false"] #interlock {
             border: 0px;
         }
+        PneumaticValve [interlocked="true"] #icon {
+            qproperty-interlockBrush: #FF0000;
+        }
+        PneumaticValve [interlocked="false"] #icon {
+            qproperty-interlockBrush: #00FF00;
+        }
         PneumaticValve [error="Lost Vacuum"] #icon {
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;

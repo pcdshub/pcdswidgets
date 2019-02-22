@@ -18,6 +18,7 @@ class BaseSymbolIcon(QWidget):
     def __init__(self, parent=None):
         self._brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
         self._original_brush = None
+        self._rotation = 0
         self._pen_style = Qt.SolidLine
         self._pen = QPen(self._pen_style)
         self._pen.setCosmetic(True)
@@ -50,18 +51,23 @@ class BaseSymbolIcon(QWidget):
         opt = QStyleOption()
         opt.initFrom(self)
         painter = QPainter(self)
+        painter.setClipping(True)
         self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
         painter.setRenderHint(QPainter.Antialiasing)
         x = event.rect().x()
         y = event.rect().y()
         w = event.rect().width()
         h = event.rect().height()
+        painter.translate(w / 2.0, h / 2.0)
+        painter.rotate(self._rotation)
+        painter.translate(-w / 2.0, -h / 2.0)
         painter.translate(self._pen_width / 2.0, self._pen_width / 2.0)
         painter.scale(w - self._pen_width, h - self._pen_width)
         painter.translate(x, y)
         painter.setBrush(self._brush)
         painter.setPen(self._pen)
         self.draw_icon(painter)
+
         QWidget.paintEvent(self, event)
 
     def draw_icon(self, painter):
@@ -180,3 +186,30 @@ class BaseSymbolIcon(QWidget):
             self._pen_width = new_width
             self._pen.setWidth(self._pen_width)
             self.update()
+
+    @Property(float)
+    def rotation(self):
+        """
+        PyQt Property for the rotation.
+        This rotates the icon coordinate system clockwise.
+
+        Returns
+        -------
+        angle : float
+            The angle in degrees
+        """
+        return self._rotation
+
+    @rotation.setter
+    def rotation(self, angle):
+        """
+        PyQt Property for the rotation.
+        This rotates the icon coordinate system clockwise.
+
+        Parameters
+        ----------
+        angle : float
+            The angle in degrees
+        """
+        self._rotation = angle
+        self.update()

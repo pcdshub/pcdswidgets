@@ -20,24 +20,28 @@ Hot Cathode  |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIco
 Cold Cathode |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
 ============ ========== ============================================================
 
-.. |pirani| image:: /_static/symbols/pirani_icon.png
-.. |cathode| image:: /_static/symbols/cathode_icon.png
-.. |hcathode| image:: /_static/symbols/hcathode_icon.png
-.. |ccathode| image:: /_static/symbols/ccathode_icon.png
+.. |pirani| image:: /_static/symbols/PiraniGaugeSymbolIcon.png
+.. |cathode| image:: /_static/symbols/CathodeGaugeSymbolIcon.png
+.. |hcathode| image:: /_static/symbols/HotCathodeGaugeSymbolIcon.png
+.. |ccathode| image:: /_static/symbols/ColdCathodeGaugeSymbolIcon.png
 
 
 Valves
 ------
 
-============ =========== ============================================================
-Name         Icon        Import
-============ =========== ============================================================
-Pneumatic    |pneuvalve| ``from pcdswidgets.icons import PneumaticValveSymbolIcon``
-Fast Shutter |fshutter|  ``from pcdswidgets.icons import FastShutterSymbolIcon``
-============ =========== ============================================================
+================== =========== =================================================================
+Name               Icon        Import
+================== =========== =================================================================
+Pneumatic          |pneuvalve| ``from pcdswidgets.icons import PneumaticValveSymbolIcon``
+Aperture           |aperture|  ``from pcdswidgets.icons import ApertureValveSymbolIcon``
+Fast Shutter       |fshutter|  ``from pcdswidgets.icons import FastShutterSymbolIcon``
+Right Angle Manual |ramvalve|  ``from pcdswidgets.icons import RightAngleManualValveSymbolIcon``
+================== =========== =================================================================
 
-.. |pneuvalve| image:: /_static/symbols/pneuvalve_icon.png
-.. |fshutter| image:: /_static/symbols/fshutter_icon.png
+.. |pneuvalve| image:: /_static/symbols/PneumaticValveSymbolIcon.png
+.. |aperture| image:: /_static/symbols/ApertureValveSymbolIcon.png
+.. |fshutter| image:: /_static/symbols/FastShutterSymbolIcon.png
+.. |ramvalve| image:: /_static/symbols/RightAngleManualValveSymbolIcon.png
 
 
 Pumps
@@ -49,11 +53,13 @@ Name         Icon       Import
 Ion          |ionp|     ``from pcdswidgets.icons import IonPumpSymbolIcon``
 Turbo        |turbop|   ``from pcdswidgets.icons import TurboPumpSymbolIcon``
 Scroll       |scrollp|  ``from pcdswidgets.icons import ScrollPumpSymbolIcon``
+Getter       |getter|   ``from pcdswidgets.icons import GetterPumpSymbolIcon``
 ============ ========== ============================================================
 
-.. |ionp| image:: /_static/symbols/ionpump_icon.png
-.. |turbop| image:: /_static/symbols/turbopump_icon.png
-.. |scrollp| image:: /_static/symbols/scrollpump_icon.png
+.. |ionp| image:: /_static/symbols/IonPumpSymbolIcon.png
+.. |turbop| image:: /_static/symbols/TurboPumpSymbolIcon.png
+.. |scrollp| image:: /_static/symbols/ScrollPumpSymbolIcon.png
+.. |getter| image:: /_static/symbols/GetterPumpSymbolIcon.png
 
 
 Others
@@ -65,4 +71,4 @@ Name         Icon       Import
 RGA          |rga|      ``from pcdswidgets.icons import RGASymbolIcon``
 ============ ========== ============================================================
 
-.. |rga| image:: /_static/symbols/rga_icon.png
+.. |rga| image:: /_static/symbols/RGASymbolIcon.png

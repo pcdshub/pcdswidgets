@@ -6,63 +6,187 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>451</width>
-    <height>401</height>
+    <width>506</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="1">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0">
    <item>
     <widget class="PneumaticValve" name="PneumaticValve">
      <property name="toolTip">
       <string/>
      </property>
      <property name="styleSheet">
-      <string notr="true">*[interlocked=&quot;true&quot;] #interlock {
-	border: 5px solid red;
-}
-
-*[interlocked=&quot;false&quot;] #icon{
+      <string notr="true">PneumaticValve #icon {
+    qproperty-penStyle: &quot;Qt::SolidLine&quot;;
     qproperty-penWidth: 1;
-    qproperty-penColor: #000000;
-	qproperty-penStyle: &quot;Qt::SolidLine&quot;;
-	qproperty-brush: green;
+    qproperty-brush: #00FF00;
+    qproperty-interlockBrush: #00FF00;
 }
-*[interlocked=&quot;true&quot;] #icon{
+PneumaticValve[state=&quot;INVALID&quot;] #icon {
+    qproperty-brush: purple;
+    qproperty-interlockBrush: purple;
+}
+PneumaticValve[interlocked=&quot;true&quot;] #interlock {
+    border: 2px solid red;
+}
+PneumaticValve[interlocked=&quot;false&quot;] #interlock {
+    border: 0px;
+}
+PneumaticValve[interlocked=&quot;true&quot;] #icon {
+    qproperty-interlockBrush: #FF0000;
+}
+PneumaticValve[error=&quot;Lost Vacuum&quot;] #icon {
+    qproperty-penStyle: &quot;Qt::DotLine&quot;;
     qproperty-penWidth: 1;
-    qproperty-penColor: #FF0000;
-}
-*[state=&quot;INVALID&quot;] #icon{
-    qproperty-penWidth: 0;
-    qproperty-penColor: transparent;
-	qproperty-penStyle: &quot;Qt::SolidLine&quot;;
-	qproperty-brush: transparent;
-}
-* #controls{
-	background-color: transparent;
-}
-</string>
+    qproperty-brush: red;
+}</string>
      </property>
      <property name="channelsPrefix" stdset="0">
       <string>ca://VALVE</string>
      </property>
-     <property name="showIcon" stdset="0">
+    </widget>
+   </item>
+   <item>
+    <widget class="PneumaticValve" name="PneumaticValve_2">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">PneumaticValve #icon {
+    qproperty-penStyle: &quot;Qt::SolidLine&quot;;
+    qproperty-penWidth: 1;
+    qproperty-brush: #00FF00;
+    qproperty-interlockBrush: #00FF00;
+}
+PneumaticValve[state=&quot;INVALID&quot;] #icon {
+    qproperty-brush: purple;
+    qproperty-interlockBrush: purple;
+}
+PneumaticValve[interlocked=&quot;true&quot;] #interlock {
+    border: 2px solid red;
+}
+PneumaticValve[interlocked=&quot;false&quot;] #interlock {
+    border: 0px;
+}
+PneumaticValve[interlocked=&quot;true&quot;] #icon {
+    qproperty-interlockBrush: #FF0000;
+}
+PneumaticValve[error=&quot;Lost Vacuum&quot;] #icon {
+    qproperty-penStyle: &quot;Qt::DotLine&quot;;
+    qproperty-penWidth: 1;
+    qproperty-brush: red;
+}</string>
+     </property>
+     <property name="channelsPrefix" stdset="0">
+      <string>ca://VALVE</string>
+     </property>
+     <property name="rotateIcon" stdset="0">
       <bool>true</bool>
-     </property>
-     <property name="showStatusTooltip" stdset="0">
-      <bool>true</bool>
-     </property>
-     <property name="iconSize" stdset="0">
-      <number>32</number>
-     </property>
-     <property name="interlocked" stdset="0">
-      <bool>false</bool>
      </property>
      <property name="controlsLocation" stdset="0">
-      <enum>PneumaticValve::Top</enum>
+      <enum>PneumaticValve::Left</enum>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Error:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PyDMEnumButton" name="PyDMEnumButton">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://VALVE:STATE</string>
+     </property>
+     <property name="orientation" stdset="0">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Interlock:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PyDMEnumButton" name="PyDMEnumButton_2">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="channel" stdset="0">
+      <string>ca://VALVE:OPN_OK</string>
+     </property>
+     <property name="orientation" stdset="0">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>State:</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Open Signal:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMEnumButton" name="PyDMEnumButton_3">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://VALVE:OPN_DI</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Closed Signal:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMEnumButton" name="PyDMEnumButton_4">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://VALVE:CLS_DI</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -71,7 +195,12 @@
   <customwidget>
    <class>PneumaticValve</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.valves</header>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumButton</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.enum_button</header>
   </customwidget>
  </customwidgets>
  <resources/>

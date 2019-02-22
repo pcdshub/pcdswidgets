@@ -16,3 +16,5 @@ def refresh_style(widget):
         child_widget.style().unpolish(child_widget)
         child_widget.style().polish(child_widget)
         child_widget.update()
+        if child_widget != widget:
+            refresh_style(child_widget)

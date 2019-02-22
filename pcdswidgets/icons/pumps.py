@@ -127,3 +127,54 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
         y2 = r + r * math.sin(math.radians(225))
         painter.drawLine(QLineF(x1, y1, x2, y2))
         painter.drawLine(QLineF(x2, y1, x1, y2))
+
+
+class GetterPumpSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a getter pump symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+
+    def draw_icon(self, painter):
+        super(GetterPumpSymbolIcon, self).draw_icon(painter)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 90 * 16, -100 * 16)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 100 * 16)
+
+        # Draw the arrow end-caps
+        painter.setBrush(QBrush(QColor(0, 0, 0)))
+
+        top_arrow_point = QPointF(0.35, 0.15)
+        arrow = QPolygonF(
+            [QPointF(-0.08, 0.0),
+             QPointF(-0.005, 0.0),
+             QPointF(-0.005, 0.15),
+             QPointF(0.005, 0.15),
+             QPointF(0.005, 0.0),
+             QPointF(0.08, 0.0),
+             QPointF(0.00, -0.08)]
+        )
+
+        t = QTransform()
+        t.rotate(-25)
+        top_arrow_r = t.map(arrow)
+        arrow_l = top_arrow_r.translated(top_arrow_point)
+        painter.drawPolygon(arrow_l)
+
+        bottom_left_arrow_point = QPointF(0.35, 0.89)
+        t = QTransform()
+        t.rotate(180.0 + 25.0)
+        arrow_r = t.map(arrow)
+        arrow_r = arrow_r.translated(bottom_left_arrow_point)
+        painter.drawPolygon(arrow_r)
+
+        bottom_right_arrow_point = QPointF(0.85, 0.65)
+        t = QTransform()
+        t.rotate(180.0 - 65.0)
+        arrow_r = t.map(arrow)
+        arrow_r = arrow_r.translated(bottom_right_arrow_point)
+        painter.drawPolygon(arrow_r)
