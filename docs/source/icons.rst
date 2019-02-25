@@ -36,12 +36,16 @@ Pneumatic          |pneuvalve| ``from pcdswidgets.icons import PneumaticValveSym
 Aperture           |aperture|  ``from pcdswidgets.icons import ApertureValveSymbolIcon``
 Fast Shutter       |fshutter|  ``from pcdswidgets.icons import FastShutterSymbolIcon``
 Right Angle Manual |ramvalve|  ``from pcdswidgets.icons import RightAngleManualValveSymbolIcon``
+Needle             |nvalve|    ``from pcdswidgets.icons import NeedleValveSymbolIcon``
+Proportional       |propvalve| ``from pcdswidgets.icons import ProportionalValveSymbolIcon``
 ================== =========== =================================================================
 
 .. |pneuvalve| image:: /_static/symbols/PneumaticValveSymbolIcon.png
 .. |aperture| image:: /_static/symbols/ApertureValveSymbolIcon.png
 .. |fshutter| image:: /_static/symbols/FastShutterSymbolIcon.png
 .. |ramvalve| image:: /_static/symbols/RightAngleManualValveSymbolIcon.png
+.. |nvalve| image:: /_static/symbols/NeedleValveSymbolIcon.png
+.. |propvalve| image:: /_static/symbols/ProportionalValveSymbolIcon.png
 
 
 Pumps
