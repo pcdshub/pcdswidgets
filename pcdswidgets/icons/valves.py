@@ -244,4 +244,3 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
                            QLineF(0.0+t_x, 0.0+t_y, 0.1+t_x, 0.2+t_y),
                            QLineF(0.1+t_x, 0.2+t_y, 0.2+t_x, 0.0+t_y),
                            QLineF(0.2+t_x, 0.0+t_y, 0.2+t_x, 0.2+t_y)])
-
