@@ -19,3 +19,9 @@ Scroll Pump
 
 .. autoclass:: pcdswidgets.symbols.pumps.ScrollPump
    :members:
+
+Getter Pump
+-----------
+
+.. autoclass:: pcdswidgets.symbols.pumps.GetterPump
+   :members:

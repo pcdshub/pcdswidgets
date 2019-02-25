@@ -48,4 +48,5 @@ Symbol Widgets
    symbols/valves.rst
    symbols/pumps.rst
    symbols/gauges.rst
+   symbols/others.rst
 
