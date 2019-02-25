@@ -29,15 +29,17 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
 
     **Internal Components**
 
-    +-----------+--------------+---------------------------------------+
-    |Widget Name|Type          |What is it?                            |
-    +===========+==============+=======================================+
-    |interlock  |QFrame        |The QFrame wrapping this whole widget. |
-    +-----------+--------------+---------------------------------------+
-    |controls   |QFrame        |The QFrame wrapping the controls panel.|
-    +-----------+--------------+---------------------------------------+
-    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
-    +-----------+--------------+---------------------------------------+
+    +-----------+--------------+--------------------------------------------+
+    |Widget Name|Type          |What is it?                                 |
+    +===========+==============+============================================+
+    |interlock  |QFrame        |The QFrame wrapping this whole widget.      |
+    +-----------+--------------+--------------------------------------------+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.     |
+    +-----------+--------------+--------------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.     |
+    +-----------+--------------+--------------------------------------------+
+    |pressure   |PyDMLabel     |The widget containing the pressure readback.|
+    +-----------+--------------+--------------------------------------------+
 
     **Additional Properties**
 
