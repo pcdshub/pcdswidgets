@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 from .base import PCDSSymbolBase, ContentLocation
 from .mixins import InterlockMixin, ErrorMixin, StateMixin
 from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
-                           ScrollPumpSymbolIcon)
+                           ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
 
 
 class IonPump(InterlockMixin, ErrorMixin, StateMixin,
@@ -557,3 +557,67 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
         """
         InterlockMixin.interlock_value_changed(self, value)
         self.controls_frame.setEnabled(not self._interlocked)
+
+
+class GetterPump(PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Getter Pump with the proper icon.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |interlock  |QFrame        |The QFrame wrapping this whole widget. |
+    +-----------+--------------+---------------------------------------+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+
+    """
+    NAME = "Getter Pump"
+
+    def __init__(self, parent=None, **kwargs):
+        super(GetterPump, self).__init__(parent=parent, **kwargs)
+        self._controls_location = ContentLocation.Hidden
+        self.icon = GetterPumpSymbolIcon(self)
+        self.icon.setMinimumSize(16, 16)
+        self.icon.setSizePolicy(QSizePolicy.Expanding,
+                                QSizePolicy.Expanding)
+        self.icon.setVisible(self._show_icon)
+        self.iconSize = 32
+
+        self.assemble_layout()
+        self.update_status_tooltip()
+
+    def sizeHint(self):
+        """
+        Suggested initial size for the widget.
+
+        Returns
+        -------
+        size : QSize
+        """
+        return QSize(64, 64)
+
+    @Property(str, designable=False)
+    def channelsPrefix(self):
+        pass
+
+    @Property(bool, designable=False)
+    def showIcon(self):
+        pass
