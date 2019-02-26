@@ -63,6 +63,8 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
 
     """
     _state_suffix = ":PRESS_OK"
+    _readback_suffix = ":PRESS"
+
     Q_ENUMS(ContentLocation)
     NAME = "Pirani Gauge"
 
@@ -132,7 +134,7 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
         super(PiraniGauge, self).create_channels()
         if self._channels_prefix:
             self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        ":PRESS")
+                                                        self._readback_suffix)
 
     def destroy_channels(self):
         """
@@ -205,6 +207,8 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
     """
     _interlock_suffix = ":ILK_OK"
     _state_suffix = ":STATE"
+    _readback_suffix = ":PRESS"
+    _command_suffix = ":HV_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Hot Cathode Gauge"
@@ -296,9 +300,9 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         super(HotCathodeGauge, self).create_channels()
         if self._channels_prefix:
             self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        ":PRESS")
+                                                        self._readback_suffix)
             self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":HV_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -389,6 +393,9 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
     """
     _interlock_suffix = ":ILK_OK"
     _state_suffix = ":STATE"
+    _readback_suffix = ":PRESS"
+    _command_suffix = ":HV_SW"
+
     Q_ENUMS(ContentLocation)
     NAME = "Cold Cathode Gauge"
 
@@ -479,9 +486,9 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         super(ColdCathodeGauge, self).create_channels()
         if self._channels_prefix:
             self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        ":PRESS")
+                                                        self._readback_suffix)
             self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":HV_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """

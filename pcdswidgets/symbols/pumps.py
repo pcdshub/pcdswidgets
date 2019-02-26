@@ -78,6 +78,9 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
     _interlock_suffix = ":ILK_OK"
     _error_suffix = ":ERROR"
     _state_suffix = ":HV_DO"
+    _command_suffix = ":HV_SW"
+    _readback_suffix = ":PRESS"
+
     Q_ENUMS(ContentLocation)
     NAME = "Ion Pump"
 
@@ -168,9 +171,9 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
         super(IonPump, self).create_channels()
         if self._channels_prefix:
             self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        ":PRESS")
+                                                        self._readback_suffix)
             self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":HV_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -266,6 +269,8 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
     _interlock_suffix = ":ILK_STATUS"
     _error_suffix = ":FAULT"
     _state_suffix = ":STATE"
+    _command_suffix = ":RUN_SW"
+
     Q_ENUMS(ContentLocation)
     NAME = "Turbo Pump"
 
@@ -352,7 +357,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
         super(TurboPump, self).create_channels()
         if self._channels_prefix:
             self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":RUN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -446,6 +451,8 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
     _interlock_suffix = ":ILK_OK"
     _error_suffix = ":ERROR"
     _state_suffix = ":STATE"
+    _command_suffix = ":RUN_SW"
+
     Q_ENUMS(ContentLocation)
     NAME = "Scroll Pump"
 
@@ -532,7 +539,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
         super(ScrollPump, self).create_channels()
         if self._channels_prefix:
             self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":RUN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """

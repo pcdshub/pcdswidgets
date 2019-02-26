@@ -86,6 +86,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _error_suffix = ":STATE"
     _open_state_suffix = ":OPN_DI"
     _close_state_suffix = ":CLS_DI"
+    _command_suffix = ":OPN_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Pneumatic Valve"
@@ -174,7 +175,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(PneumaticValve, self).create_channels()
         if self._channels_prefix:
             self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":OPN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -277,6 +278,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _error_suffix = ":STATE"
     _open_state_suffix = ":OPN_DI"
     _close_state_suffix = ":CLS_DI"
+    _command_suffix = ":OPN_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Aperture Valve"
@@ -365,7 +367,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(ApertureValve, self).create_channels()
         if self._channels_prefix:
             self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":OPN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -461,6 +463,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _error_suffix = ":ERROR"
     _open_state_suffix = ":OPN_DI"
     _close_state_suffix = ":CLS_DI"
+    _command_suffix = ":OPN_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Fast Shutter"
@@ -549,7 +552,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(FastShutter, self).create_channels()
         if self._channels_prefix:
             self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":OPN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -636,6 +639,7 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
     """
     _interlock_suffix = ":ILK_OK"
     _state_suffix = ":STATE"
+    _command_suffix = ":OPN_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Needle Valve"
@@ -722,7 +726,7 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         super(NeedleValve, self).create_channels()
         if self._channels_prefix:
             self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":OPN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -809,6 +813,7 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
     """
     _interlock_suffix = ":ILK_OK"
     _state_suffix = ":STATE"
+    _command_suffix = ":OPN_SW"
 
     Q_ENUMS(ContentLocation)
     NAME = "Proportional Valve"
@@ -895,7 +900,7 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         super(ProportionalValve, self).create_channels()
         if self._channels_prefix:
             self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        ":OPN_SW")
+                                                        self._command_suffix)
 
     def destroy_channels(self):
         """
