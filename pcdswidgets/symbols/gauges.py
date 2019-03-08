@@ -1,6 +1,6 @@
 from pydm.widgets.enum_button import PyDMEnumButton
 from pydm.widgets.label import PyDMLabel
-from qtpy.QtCore import QSize, Property, Q_ENUMS, Qt
+from qtpy.QtCore import QSize, Qt
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
 from .base import PCDSSymbolBase, ContentLocation
@@ -9,7 +9,7 @@ from ..icons.gauges import (PiraniGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
                             ColdCathodeGaugeSymbolIcon)
 
 
-class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
+class PiraniGauge(StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pirani Gauge with the proper icon and
     controls.
@@ -65,7 +65,6 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
     _state_suffix = ":PRESS_OK"
     _readback_suffix = ":PRESS"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Pirani Gauge"
 
     def __init__(self, parent=None, **kwargs):
@@ -90,30 +89,6 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
 
         self.assemble_layout()
         self.update_status_tooltip()
-
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
 
     def sizeHint(self):
         """
@@ -146,8 +121,7 @@ class PiraniGauge(StateMixin, PCDSSymbolBase, ContentLocation):
         self.pressure_label.channel = None
 
 
-class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
-                      ContentLocation):
+class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -210,7 +184,6 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
     _readback_suffix = ":PRESS"
     _command_suffix = ":HV_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Hot Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
@@ -241,30 +214,6 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -282,8 +231,8 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         button depending on the location.
         """
         super(HotCathodeGauge, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.start_stop_btn.orientation = Qt.Horizontal
             self.start_stop_btn.setMinimumSize(100, 40)
         else:
@@ -331,8 +280,7 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.controls_frame.setEnabled(not self._interlocked)
 
 
-class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
-                       ContentLocation):
+class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Cold Cathode Gauge with the proper icon and
     controls.
@@ -396,7 +344,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
     _readback_suffix = ":PRESS"
     _command_suffix = ":HV_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Cold Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
@@ -427,30 +374,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -468,8 +391,8 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase,
         button depending on the location.
         """
         super(ColdCathodeGauge, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.start_stop_btn.orientation = Qt.Horizontal
             self.start_stop_btn.setMinimumSize(100, 40)
         else:

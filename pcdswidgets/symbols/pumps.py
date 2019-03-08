@@ -1,6 +1,6 @@
 from pydm.widgets.enum_button import PyDMEnumButton
 from pydm.widgets.label import PyDMLabel
-from qtpy.QtCore import QSize, Qt, Property, Q_ENUMS
+from qtpy.QtCore import QSize, Qt, Property
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
 from .base import PCDSSymbolBase, ContentLocation
@@ -9,8 +9,7 @@ from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
                            ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
 
 
-class IonPump(InterlockMixin, ErrorMixin, StateMixin,
-              PCDSSymbolBase, ContentLocation):
+class IonPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -81,7 +80,6 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":HV_SW"
     _readback_suffix = ":PRESS"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Ion Pump"
 
     def __init__(self, parent=None, **kwargs):
@@ -112,30 +110,6 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -153,8 +127,8 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
         button depending on the location.
         """
         super(IonPump, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.start_stop_btn.orientation = Qt.Horizontal
             self.start_stop_btn.setMinimumSize(100, 40)
         else:
@@ -202,8 +176,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin,
         self.controls_frame.setEnabled(not self._interlocked)
 
 
-class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
-                PCDSSymbolBase, ContentLocation):
+class TurboPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Turbo Pump with the proper icon and
     controls.
@@ -271,7 +244,6 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
     _state_suffix = ":STATE"
     _command_suffix = ":RUN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Turbo Pump"
 
     def __init__(self, parent=None, **kwargs):
@@ -299,30 +271,6 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -340,8 +288,8 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
         button depending on the location.
         """
         super(TurboPump, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.start_stop_btn.orientation = Qt.Horizontal
             self.start_stop_btn.setMinimumSize(100, 40)
         else:
@@ -384,8 +332,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin,
         self.controls_frame.setEnabled(not self._interlocked)
 
 
-class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
-                 PCDSSymbolBase, ContentLocation):
+class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Scroll Pump with the proper icon and
     controls.
@@ -453,7 +400,6 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
     _state_suffix = ":STATE"
     _command_suffix = ":RUN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Scroll Pump"
 
     def __init__(self, parent=None, **kwargs):
@@ -481,30 +427,6 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -522,8 +444,8 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin,
         button depending on the location.
         """
         super(ScrollPump, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.start_stop_btn.orientation = Qt.Horizontal
             self.start_stop_btn.setMinimumSize(100, 40)
         else:

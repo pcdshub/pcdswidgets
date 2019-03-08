@@ -6,9 +6,14 @@ from .symbols.pumps import IonPump, TurboPump, ScrollPump, GetterPump
 from .symbols.valves import (PneumaticValve, FastShutter, NeedleValve,
                              ProportionalValve, RightAngleManualValve)
 
+from .symbols.base import PCDSSymbolBase
+
+BasePlugin = qtplugin_factory(PCDSSymbolBase, group="PCDS Symbols")
+
 # Valves
 PCDSPneumaticValvePlugin = qtplugin_factory(PneumaticValve,
                                             group="PCDS Valves")
+
 PCDSFastShutterPlugin = qtplugin_factory(FastShutter, group="PCDS Valves")
 
 PCDSNeedleValvePlugin = qtplugin_factory(NeedleValve, group="PCDS Valves")

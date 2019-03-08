@@ -1,5 +1,5 @@
 from pydm.widgets.enum_button import PyDMEnumButton
-from qtpy.QtCore import QSize, Qt, Property, Q_ENUMS
+from qtpy.QtCore import QSize, Qt, Property
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
 from .base import PCDSSymbolBase, ContentLocation
@@ -11,7 +11,7 @@ from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
 
 
 class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                     PCDSSymbolBase, ContentLocation):
+                     PCDSSymbolBase):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
     controls.
@@ -88,7 +88,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _close_state_suffix = ":CLS_DI"
     _command_suffix = ":OPN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Pneumatic Valve"
 
     def __init__(self, parent=None, **kwargs):
@@ -117,30 +116,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -158,8 +133,10 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         button depending on the location.
         """
         super(PneumaticValve, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if not hasattr(self, 'open_close_btn'):
+            return
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.open_close_btn.orientation = Qt.Horizontal
             self.open_close_btn.setMinimumSize(100, 40)
         else:
@@ -203,7 +180,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
 
 
 class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                    PCDSSymbolBase, ContentLocation):
+                    PCDSSymbolBase):
     """
     A Symbol Widget representing an Aperture Valve with the proper icon and
     controls.
@@ -280,7 +257,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _close_state_suffix = ":CLS_DI"
     _command_suffix = ":OPN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Aperture Valve"
 
     def __init__(self, parent=None, **kwargs):
@@ -309,30 +285,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -350,9 +302,10 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         button depending on the location.
         """
         super(ApertureValve, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
-            self.open_close_btn.orientation = Qt.Horizontal
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
+            self.horizontal = Qt.Horizontal
+            self.open_close_btn.orientation = self.horizontal
             self.open_close_btn.setMinimumSize(100, 40)
         else:
             self.open_close_btn.orientation = Qt.Vertical
@@ -395,7 +348,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
 
 
 class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                  PCDSSymbolBase, ContentLocation):
+                  PCDSSymbolBase):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
     controls.
@@ -465,7 +418,6 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _close_state_suffix = ":CLS_DI"
     _command_suffix = ":OPN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Fast Shutter"
 
     def __init__(self, parent=None, **kwargs):
@@ -494,30 +446,6 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -535,8 +463,8 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         button depending on the location.
         """
         super(FastShutter, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.open_close_btn.orientation = Qt.Horizontal
             self.open_close_btn.setMinimumSize(100, 40)
         else:
@@ -579,8 +507,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         self.controls_frame.setEnabled(not self._interlocked)
 
 
-class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
-                  ContentLocation):
+class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Needle Valve with the proper icon and
     controls.
@@ -641,7 +568,6 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
     _state_suffix = ":STATE"
     _command_suffix = ":OPN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Needle Valve"
 
     def __init__(self, parent=None, **kwargs):
@@ -668,30 +594,6 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -709,8 +611,8 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         button depending on the location.
         """
         super(NeedleValve, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.open_close_btn.orientation = Qt.Horizontal
             self.open_close_btn.setMinimumSize(100, 40)
         else:
@@ -753,8 +655,7 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.controls_frame.setEnabled(not self._interlocked)
 
 
-class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
-                        ContentLocation):
+class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Proportional Valve with the proper icon and
     controls.
@@ -815,7 +716,6 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
     _state_suffix = ":STATE"
     _command_suffix = ":OPN_SW"
 
-    Q_ENUMS(ContentLocation)
     NAME = "Proportional Valve"
 
     def __init__(self, parent=None, **kwargs):
@@ -842,30 +742,6 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         self.assemble_layout()
         self.update_status_tooltip()
 
-    @Property(ContentLocation)
-    def controlsLocation(self):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Returns
-        -------
-        location : ContentLocation
-        """
-        return self._controls_location
-
-    @controlsLocation.setter
-    def controlsLocation(self, location):
-        """
-        Property controlling where the controls frame will be displayed.
-
-        Parameters
-        ----------
-        location : ContentLocation
-        """
-        if location != self._controls_location:
-            self._controls_location = location
-            self.assemble_layout()
-
     def sizeHint(self):
         """
         Suggested initial size for the widget.
@@ -883,8 +759,8 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase,
         button depending on the location.
         """
         super(ProportionalValve, self).assemble_layout()
-        if self.controlsLocation in [ContentLocation.Top,
-                                     ContentLocation.Bottom]:
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
             self.open_close_btn.orientation = Qt.Horizontal
             self.open_close_btn.setMinimumSize(100, 40)
         else:

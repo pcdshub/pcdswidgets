@@ -1,6 +1,6 @@
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Q_ENUMS
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
                             QSizePolicy, QStyle, QStyleOption)
@@ -8,7 +8,7 @@ from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
 from ..utils import refresh_style
 
 
-class ContentLocation(object):
+class ContentLocation:
     """
     Enum Class to be used by the widgets to configure the Controls Content
     Location.
@@ -20,7 +20,7 @@ class ContentLocation(object):
     Right = 4
 
 
-class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
+class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     """
     Base class to be used for all PCDS Symbols.
 
@@ -30,9 +30,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
         The parent widget for this symbol.
     """
 
+    Q_ENUMS(ContentLocation)
+    ContentLocation = ContentLocation
+
     def __init__(self, parent=None, **kwargs):
         super(PCDSSymbolBase, self).__init__(parent=parent, **kwargs)
-
+        self.interlock = None
         self._channels_prefix = None
         self.icon = None
         self._rotate_icon = False
@@ -40,8 +43,44 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
         self._show_icon = True
         self._show_status_tooltip = True
         self._icon_size = -1
+        self.interlock = QFrame(self)
+        self.interlock.setObjectName("interlock")
+        self.interlock.setSizePolicy(QSizePolicy.Expanding,
+                                     QSizePolicy.Expanding)
+
+        self.controls_frame = QFrame(self)
+        self.controls_frame.setObjectName("controls")
+        self.controls_frame.setSizePolicy(QSizePolicy.Maximum,
+                                          QSizePolicy.Maximum)
+        self.setLayout(QVBoxLayout())
+        self.layout().setSpacing(0)
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().addWidget(self.interlock)
         self._controls_location = ContentLocation.Bottom
-        self.setup_ui()
+
+    @Property(ContentLocation)
+    def controlsLocation(self):
+        """
+        Property controlling where the controls frame will be displayed.
+
+        Returns
+        -------
+        location : ContentLocation
+        """
+        return self._controls_location
+
+    @controlsLocation.setter
+    def controlsLocation(self, location):
+        """
+        Property controlling where the controls frame will be displayed.
+
+        Parameters
+        ----------
+        location : ContentLocation
+        """
+        if location != self._controls_location:
+            self._controls_location = location
+            self.assemble_layout()
 
     @Property(str)
     def channelsPrefix(self):
@@ -214,34 +253,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
         painter.setRenderHint(QPainter.Antialiasing)
         super(PCDSSymbolBase, self).paintEvent(evt)
 
-    def setup_ui(self):
-        """
-        Create the inner widgets that are base for all the other symbol
-        widgets.
-        This method is invoked once at the constructor of the base class.
-
-        Returns
-        -------
-        None
-        """
-        self.interlock = QFrame(self)
-        self.interlock.setObjectName("interlock")
-        self.interlock.setSizePolicy(QSizePolicy.Expanding,
-                                     QSizePolicy.Expanding)
-
-        self.controls_frame = QFrame(self)
-        self.controls_frame.setObjectName("controls")
-        self.controls_frame.setSizePolicy(QSizePolicy.Maximum,
-                                          QSizePolicy.Maximum)
-        self.setLayout(QVBoxLayout())
-        self.layout().setSpacing(0)
-        self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().addWidget(self.interlock)
-
     def clear(self):
         """
         Remove all inner widgets from the interlock frame layout.
         """
+        if not self.interlock:
+            return
         layout = self.interlock.layout()
         if not layout:
             return
@@ -260,6 +277,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
         and other configurations set.
 
         """
+        if not self.interlock:
+            return
         self.clear()
 
         # (Layout, items)
