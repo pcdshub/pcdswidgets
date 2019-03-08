@@ -110,16 +110,6 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
-
     def assemble_layout(self):
         """
         Assembles the widget's inner layout depending on the ContentLocation
@@ -271,16 +261,6 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
-
     def assemble_layout(self):
         """
         Assembles the widget's inner layout depending on the ContentLocation
@@ -426,16 +406,6 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
 
     def assemble_layout(self):
         """

@@ -1,6 +1,6 @@
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
-from qtpy.QtCore import Property, Q_ENUMS
+from qtpy.QtCore import Property, Q_ENUMS, QSize
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
                             QSizePolicy, QStyle, QStyleOption)
@@ -57,6 +57,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.interlock)
         self._controls_location = ContentLocation.Bottom
+
+    def sizeHint(self):
+        """
+        Suggested initial size for the widget.
+
+        Returns
+        -------
+        size : QSize
+        """
+        return QSize(200, 200)
 
     @Property(ContentLocation)
     def controlsLocation(self):

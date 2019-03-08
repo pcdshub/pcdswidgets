@@ -90,16 +90,6 @@ class PiraniGauge(StateMixin, PCDSSymbolBase):
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
-
     def create_channels(self):
         """
         Method invoked when the channels associated with the widget must be
@@ -213,16 +203,6 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
 
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
 
     def assemble_layout(self):
         """
@@ -373,16 +353,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
 
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def sizeHint(self):
-        """
-        Suggested initial size for the widget.
-
-        Returns
-        -------
-        size : QSize
-        """
-        return QSize(200, 200)
 
     def assemble_layout(self):
         """
