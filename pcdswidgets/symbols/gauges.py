@@ -1,6 +1,6 @@
 from pydm.widgets.enum_button import PyDMEnumButton
 from pydm.widgets.label import PyDMLabel
-from qtpy.QtCore import QSize, Qt
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
 from .base import PCDSSymbolBase, ContentLocation
