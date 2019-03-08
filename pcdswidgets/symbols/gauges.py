@@ -1,15 +1,11 @@
-from pydm.widgets.enum_button import PyDMEnumButton
-from pydm.widgets.label import PyDMLabel
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
-
-from .base import PCDSSymbolBase, ContentLocation
-from .mixins import StateMixin, InterlockMixin
+from .base import PCDSSymbolBase
+from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
+                     LabelControl)
 from ..icons.gauges import (PiraniGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
                             ColdCathodeGaugeSymbolIcon)
 
 
-class PiraniGauge(StateMixin, PCDSSymbolBase):
+class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pirani Gauge with the proper icon and
     controls.
@@ -68,50 +64,21 @@ class PiraniGauge(StateMixin, PCDSSymbolBase):
     NAME = "Pirani Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        super(PiraniGauge, self).__init__(parent=parent,
-                                          state_suffix=self._state_suffix,
-                                          **kwargs)
+        super(PiraniGauge, self).__init__(
+            parent=parent,
+            state_suffix=self._state_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
+            **kwargs)
 
-        self.pressure_label = PyDMLabel(self)
-        self.pressure_label.setObjectName("pressure")
         self.icon = PiraniGaugeSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.pressure_label)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(PiraniGauge, self).create_channels()
-        if self._channels_prefix:
-            self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
 
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(PiraniGauge, self).destroy_channels()
-        self.pressure_label.channel = None
-
-
-class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
+class HotCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
+                      PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -181,71 +148,19 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
             **kwargs)
 
-        self.start_stop_btn = PyDMEnumButton()
-        self.pressure_label = PyDMLabel()
-        self.pressure_label.setObjectName("pressure")
-        self.pressure_label.setAlignment(Qt.AlignCenter)
         self.icon = HotCathodeGaugeSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.pressure_label)
-        self.controls_frame.layout().addWidget(self.start_stop_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(HotCathodeGauge, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.start_stop_btn.orientation = Qt.Horizontal
-            self.start_stop_btn.setMinimumSize(100, 40)
-        else:
-            self.start_stop_btn.orientation = Qt.Vertical
-            self.start_stop_btn.setMinimumSize(100, 80)
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the pressure label and
-        control button.
-        """
-        super(HotCathodeGauge, self).create_channels()
-        if self._channels_prefix:
-            self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
-            self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the pressure label and
-        control button.
-        """
-        super(HotCathodeGauge, self).destroy_channels()
-        self.pressure_label.channel = None
-        self.start_stop_btn.channel = None
-
-
-class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
+class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
+                       PCDSSymbolBase):
     """
     A Symbol Widget representing a Cold Cathode Gauge with the proper icon and
     controls.
@@ -316,65 +231,12 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
             **kwargs)
 
-        self.start_stop_btn = PyDMEnumButton()
-        self.pressure_label = PyDMLabel()
-        self.pressure_label.setObjectName("pressure")
-        self.pressure_label.setAlignment(Qt.AlignCenter)
         self.icon = ColdCathodeGaugeSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.pressure_label)
-        self.controls_frame.layout().addWidget(self.start_stop_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(ColdCathodeGauge, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.start_stop_btn.orientation = Qt.Horizontal
-            self.start_stop_btn.setMinimumSize(100, 40)
-        else:
-            self.start_stop_btn.orientation = Qt.Vertical
-            self.start_stop_btn.setMinimumSize(100, 80)
-
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the pressure label and
-        control button.
-        """
-        super(ColdCathodeGauge, self).create_channels()
-        if self._channels_prefix:
-            self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
-            self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the pressure label and
-        control button.
-        """
-        super(ColdCathodeGauge, self).destroy_channels()
-        self.pressure_label.channel = None
-        self.start_stop_btn.channel = None

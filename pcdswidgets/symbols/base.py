@@ -327,6 +327,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
 
+    def setup_icon(self):
+        self.icon.setMinimumSize(16, 16)
+        self.icon.setSizePolicy(QSizePolicy.Expanding,
+                                QSizePolicy.Expanding)
+        self.icon.setVisible(self._show_icon)
+        self.iconSize = 32
+
     def status_tooltip(self):
         """
         Assemble and returns the status tooltip for the symbol.

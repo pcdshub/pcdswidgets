@@ -81,14 +81,14 @@ PneumaticValve[error=&quot;Lost Vacuum&quot;] #icon {
     qproperty-brush: red;
 }</string>
      </property>
+     <property name="controlsLocation" stdset="0">
+      <enum>PCDSSymbolBase::Hidden</enum>
+     </property>
      <property name="channelsPrefix" stdset="0">
       <string>ca://VALVE</string>
      </property>
      <property name="rotateIcon" stdset="0">
       <bool>true</bool>
-     </property>
-     <property name="controlsLocation" stdset="0">
-      <enum>PneumaticValve::Left</enum>
      </property>
     </widget>
    </item>
@@ -193,8 +193,13 @@ PneumaticValve[error=&quot;Lost Vacuum&quot;] #icon {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PneumaticValve</class>
+   <class>PCDSSymbolBase</class>
    <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.base</header>
+  </customwidget>
+  <customwidget>
+   <class>PneumaticValve</class>
+   <extends>PCDSSymbolBase</extends>
    <header>pcdswidgets.symbols.valves</header>
   </customwidget>
   <customwidget>

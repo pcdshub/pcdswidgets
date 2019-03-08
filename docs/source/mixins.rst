@@ -33,3 +33,18 @@ State - Open/Close
 .. autoclass:: pcdswidgets.symbols.mixins.OpenCloseStateMixin
    :members:
 
+Button Control
+--------------
+.. autoclass:: pcdswidgets.symbols.mixins.ButtonControl
+   :members:
+
+Label Control
+-------------
+.. autoclass:: pcdswidgets.symbols.mixins.LabelControl
+   :members:
+
+
+Button & Label Control
+----------------------
+.. autoclass:: pcdswidgets.symbols.mixins.ButtonLabelControl
+   :members:

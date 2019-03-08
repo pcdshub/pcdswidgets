@@ -1,8 +1,13 @@
 import os
 from functools import partial
 
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Qt
+from qtpy.QtWidgets import QVBoxLayout
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.enum_button import PyDMEnumButton
+from pydm.widgets.label import PyDMLabel
+
+from .base import ContentLocation
 
 
 class InterlockMixin(object):
@@ -517,3 +522,158 @@ class OpenCloseStateMixin(object):
 
         self.update_stylesheet()
         self.update_status_tooltip()
+
+
+class ButtonControl(object):
+    """
+    The ButtonControl class adds a PyDMEnumButton to the widget for controls.
+
+    Parameters
+    ----------
+    command_suffix : str
+        The suffix to be used along with the channelPrefix from PCDSSymbolBase
+        to compose the command button channel address.
+    """
+    def __init__(self, command_suffix, **kwargs):
+        super(ButtonControl, self).__init__(**kwargs)
+        self._command_suffix = command_suffix
+        self.control_btn = PyDMEnumButton()
+        self.controls_layout = QVBoxLayout()
+        self.controls_layout.setSpacing(0)
+        self.controls_layout.setContentsMargins(0, 0, 0, 0)
+        self.controls_frame.setLayout(self.controls_layout)
+        self.controls_frame.layout().addWidget(self.control_btn)
+
+    def assemble_layout(self):
+        """
+        Assembles the widget's inner layout depending on the ContentLocation
+        and other configurations set and adjust the orientation of the control
+        button depending on the location.
+        """
+        super(ButtonControl, self).assemble_layout()
+        if self._controls_location in [ContentLocation.Top,
+                                       ContentLocation.Bottom]:
+            self.control_btn.orientation = Qt.Horizontal
+            self.control_btn.setMinimumSize(100, 40)
+        else:
+            self.control_btn.orientation = Qt.Vertical
+            self.control_btn.setMinimumSize(100, 80)
+
+    def create_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        created.
+        This method also sets the channel address for the control button.
+        """
+        super(ButtonControl, self).create_channels()
+        if self._channels_prefix:
+            self.control_btn.channel = "{}{}".format(self._channels_prefix,
+                                                     self._command_suffix)
+
+    def destroy_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        destroyed.
+        This method also clears the channel address for the control button.
+        """
+        super(ButtonControl, self).destroy_channels()
+        self.control_btn.channel = None
+
+
+class LabelControl(object):
+    """
+    The LabelControl class adds a PyDMLabel to the widget for controls.
+
+    Parameters
+    ----------
+    readback_suffix : str
+        The suffix to be used along with the channelPrefix from PCDSSymbolBase
+        to compose the readback label channel address.
+    readback_name : str
+        The name to be set to the PyDMLabel so one can refer to it by name
+        with stylesheet
+    """
+    def __init__(self, readback_suffix, readback_name,
+                 **kwargs):
+        super(LabelControl, self).__init__(**kwargs)
+        self._readback_suffix = readback_suffix
+
+        self.readback_label = PyDMLabel()
+        if readback_name:
+            self.readback_label.setObjectName(readback_name)
+        self.readback_label.setAlignment(Qt.AlignCenter)
+
+        self.controls_layout = QVBoxLayout()
+        self.controls_layout.setSpacing(0)
+        self.controls_layout.setContentsMargins(0, 0, 0, 0)
+        self.controls_frame.setLayout(self.controls_layout)
+        self.controls_frame.layout().addWidget(self.readback_label)
+
+    def create_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        created.
+        This method also sets the channel address for the control button.
+        """
+        super(LabelControl, self).create_channels()
+        if self._channels_prefix:
+            self.readback_label.channel = "{}{}".format(self._channels_prefix,
+                                                        self._readback_suffix)
+
+    def destroy_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        destroyed.
+        This method also clears the channel address for the control button.
+        """
+        super(LabelControl, self).destroy_channels()
+        self.readback_label.channel = None
+
+
+class ButtonLabelControl(ButtonControl):
+    """
+    The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the
+    widget for controls.
+
+    Parameters
+    ----------
+    command_suffix : str
+        The suffix to be used along with the channelPrefix from PCDSSymbolBase
+        to compose the command button channel address.
+    readback_suffix : str
+        The suffix to be used along with the channelPrefix from PCDSSymbolBase
+        to compose the readback label channel address.
+    readback_name : str
+        The name to be set to the PyDMLabel so one can refer to it by name
+        with stylesheet
+    """
+    def __init__(self, command_suffix, readback_suffix, readback_name,
+                 **kwargs):
+        super(ButtonLabelControl, self).__init__(command_suffix, **kwargs)
+        self._readback_suffix = readback_suffix
+
+        self.readback_label = PyDMLabel()
+        self.readback_label.setObjectName(readback_name)
+        self.readback_label.setAlignment(Qt.AlignCenter)
+
+        self.controls_frame.layout().addWidget(self.readback_label)
+
+    def create_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        created.
+        This method also sets the channel address for the control button.
+        """
+        super(ButtonLabelControl, self).create_channels()
+        if self._channels_prefix:
+            self.readback_label.channel = "{}{}".format(self._channels_prefix,
+                                                        self._readback_suffix)
+
+    def destroy_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        destroyed.
+        This method also clears the channel address for the control button.
+        """
+        super(ButtonLabelControl, self).destroy_channels()
+        self.readback_label.channel = None

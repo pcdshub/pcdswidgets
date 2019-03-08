@@ -1,15 +1,14 @@
-from pydm.widgets.enum_button import PyDMEnumButton
-from pydm.widgets.label import PyDMLabel
-from qtpy.QtCore import QSize, Qt, Property
-from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
+from qtpy.QtCore import QSize, Property
 
 from .base import PCDSSymbolBase, ContentLocation
-from .mixins import InterlockMixin, ErrorMixin, StateMixin
+from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
+                     ButtonLabelControl)
 from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
                            ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
 
 
-class IonPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
+class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
+              PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -87,71 +86,19 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
                                       interlock_suffix=self._interlock_suffix,
                                       error_suffix=self._error_suffix,
                                       state_suffix=self._state_suffix,
+                                      command_suffix=self._command_suffix,
+                                      readback_suffix=self._readback_suffix,
+                                      readback_name='pressure',
                                       **kwargs)
 
-        self.start_stop_btn = PyDMEnumButton()
-        self.pressure_label = PyDMLabel()
-        self.pressure_label.setObjectName("pressure")
-        self.pressure_label.setAlignment(Qt.AlignCenter)
         self.icon = IonPumpSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.pressure_label)
-        self.controls_frame.layout().addWidget(self.start_stop_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(IonPump, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.start_stop_btn.orientation = Qt.Horizontal
-            self.start_stop_btn.setMinimumSize(100, 40)
-        else:
-            self.start_stop_btn.orientation = Qt.Vertical
-            self.start_stop_btn.setMinimumSize(100, 80)
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the pressure label and
-        control button.
-        """
-        super(IonPump, self).create_channels()
-        if self._channels_prefix:
-            self.pressure_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
-            self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the pressure label and
-        control button.
-        """
-        super(IonPump, self).destroy_channels()
-        self.pressure_label.channel = None
-        self.start_stop_btn.channel = None
-
-
-class TurboPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
+class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
+                PCDSSymbolBase):
     """
     A Symbol Widget representing a Turbo Pump with the proper icon and
     controls.
@@ -227,62 +174,18 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.start_stop_btn = PyDMEnumButton()
         self.icon = TurboPumpSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
 
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.start_stop_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(TurboPump, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.start_stop_btn.orientation = Qt.Horizontal
-            self.start_stop_btn.setMinimumSize(100, 40)
-        else:
-            self.start_stop_btn.orientation = Qt.Vertical
-            self.start_stop_btn.setMinimumSize(100, 80)
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(TurboPump, self).create_channels()
-        if self._channels_prefix:
-            self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(TurboPump, self).destroy_channels()
-        self.start_stop_btn.channel = None
-
-
-class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
+class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
+                 PCDSSymbolBase):
     """
     A Symbol Widget representing a Scroll Pump with the proper icon and
     controls.
@@ -358,59 +261,13 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.start_stop_btn = PyDMEnumButton()
         self.icon = ScrollPumpSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.start_stop_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(ScrollPump, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.start_stop_btn.orientation = Qt.Horizontal
-            self.start_stop_btn.setMinimumSize(100, 40)
-        else:
-            self.start_stop_btn.orientation = Qt.Vertical
-            self.start_stop_btn.setMinimumSize(100, 80)
-
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(ScrollPump, self).create_channels()
-        if self._channels_prefix:
-            self.start_stop_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(ScrollPump, self).destroy_channels()
-        self.start_stop_btn.channel = None
 
 
 class GetterPump(PCDSSymbolBase):
@@ -448,13 +305,9 @@ class GetterPump(PCDSSymbolBase):
     def __init__(self, parent=None, **kwargs):
         super(GetterPump, self).__init__(parent=parent, **kwargs)
         self._controls_location = ContentLocation.Hidden
-        self.icon = GetterPumpSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
 
+        self.icon = GetterPumpSymbolIcon(self)
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 

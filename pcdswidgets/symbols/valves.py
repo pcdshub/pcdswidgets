@@ -1,9 +1,8 @@
-from pydm.widgets.enum_button import PyDMEnumButton
-from qtpy.QtCore import QSize, Qt, Property
-from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
+from qtpy.QtCore import QSize, Property
 
 from .base import PCDSSymbolBase, ContentLocation
-from .mixins import InterlockMixin, ErrorMixin, OpenCloseStateMixin, StateMixin
+from .mixins import (InterlockMixin, ErrorMixin, OpenCloseStateMixin,
+                     StateMixin, ButtonControl)
 from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
                             FastShutterSymbolIcon, NeedleValveSymbolIcon,
                             ProportionalValveSymbolIcon,
@@ -97,65 +96,17 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             error_suffix=self._error_suffix,
             open_suffix=self._open_state_suffix,
             close_suffix=self._close_state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.open_close_btn = PyDMEnumButton()
         self.icon = PneumaticValveSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.open_close_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(PneumaticValve, self).assemble_layout()
-        if not hasattr(self, 'open_close_btn'):
-            return
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.open_close_btn.orientation = Qt.Horizontal
-            self.open_close_btn.setMinimumSize(100, 40)
-        else:
-            self.open_close_btn.orientation = Qt.Vertical
-            self.open_close_btn.setMinimumSize(100, 80)
-
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(PneumaticValve, self).create_channels()
-        if self._channels_prefix:
-            self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(PneumaticValve, self).destroy_channels()
-        self.open_close_btn.channel = None
-
 
 class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                    PCDSSymbolBase):
+                    ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing an Aperture Valve with the proper icon and
     controls.
@@ -241,64 +192,17 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             error_suffix=self._error_suffix,
             open_suffix=self._open_state_suffix,
             close_suffix=self._close_state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.open_close_btn = PyDMEnumButton()
         self.icon = ApertureValveSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.open_close_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(ApertureValve, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.horizontal = Qt.Horizontal
-            self.open_close_btn.orientation = self.horizontal
-            self.open_close_btn.setMinimumSize(100, 40)
-        else:
-            self.open_close_btn.orientation = Qt.Vertical
-            self.open_close_btn.setMinimumSize(100, 80)
-
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(ApertureValve, self).create_channels()
-        if self._channels_prefix:
-            self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(ApertureValve, self).destroy_channels()
-        self.open_close_btn.channel = None
-
 
 class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                  PCDSSymbolBase):
+                  ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
     controls.
@@ -377,62 +281,16 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             error_suffix=self._error_suffix,
             open_suffix=self._open_state_suffix,
             close_suffix=self._close_state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.open_close_btn = PyDMEnumButton()
         self.icon = FastShutterSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.open_close_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(FastShutter, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.open_close_btn.orientation = Qt.Horizontal
-            self.open_close_btn.setMinimumSize(100, 40)
-        else:
-            self.open_close_btn.orientation = Qt.Vertical
-            self.open_close_btn.setMinimumSize(100, 80)
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(FastShutter, self).create_channels()
-        if self._channels_prefix:
-            self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(FastShutter, self).destroy_channels()
-        self.open_close_btn.channel = None
-
-
-class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase):
+class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Needle Valve with the proper icon and
     controls.
@@ -500,62 +358,17 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase):
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.open_close_btn = PyDMEnumButton()
         self.icon = NeedleValveSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.open_close_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(NeedleValve, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.open_close_btn.orientation = Qt.Horizontal
-            self.open_close_btn.setMinimumSize(100, 40)
-        else:
-            self.open_close_btn.orientation = Qt.Vertical
-            self.open_close_btn.setMinimumSize(100, 80)
 
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(NeedleValve, self).create_channels()
-        if self._channels_prefix:
-            self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(NeedleValve, self).destroy_channels()
-        self.open_close_btn.channel = None
-
-
-class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase):
+class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
+                        PCDSSymbolBase):
     """
     A Symbol Widget representing a Proportional Valve with the proper icon and
     controls.
@@ -623,59 +436,13 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase):
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
             **kwargs)
 
-        self.open_close_btn = PyDMEnumButton()
         self.icon = ProportionalValveSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
-        self.controls_layout = QVBoxLayout()
-        self.controls_layout.setSpacing(0)
-        self.controls_layout.setContentsMargins(0, 0, 0, 0)
-        self.controls_frame.setLayout(self.controls_layout)
-        self.controls_frame.layout().addWidget(self.open_close_btn)
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
-
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(ProportionalValve, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.open_close_btn.orientation = Qt.Horizontal
-            self.open_close_btn.setMinimumSize(100, 40)
-        else:
-            self.open_close_btn.orientation = Qt.Vertical
-            self.open_close_btn.setMinimumSize(100, 80)
-
-    def create_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        created.
-        This method also sets the channel address for the control button.
-        """
-        super(ProportionalValve, self).create_channels()
-        if self._channels_prefix:
-            self.open_close_btn.channel = "{}{}".format(self._channels_prefix,
-                                                        self._command_suffix)
-
-    def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        This method also clears the channel address for the control button.
-        """
-        super(ProportionalValve, self).destroy_channels()
-        self.open_close_btn.channel = None
 
 
 class RightAngleManualValve(PCDSSymbolBase):
@@ -715,12 +482,7 @@ class RightAngleManualValve(PCDSSymbolBase):
         super(RightAngleManualValve, self).__init__(parent=parent, **kwargs)
         self._controls_location = ContentLocation.Hidden
         self.icon = RightAngleManualValveSymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
-
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 

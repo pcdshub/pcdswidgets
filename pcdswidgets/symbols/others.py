@@ -1,5 +1,4 @@
 from qtpy.QtCore import QSize, Property
-from qtpy.QtWidgets import QSizePolicy
 
 from .base import PCDSSymbolBase, ContentLocation
 from ..icons.others import RGASymbolIcon
@@ -40,13 +39,9 @@ class RGA(PCDSSymbolBase):
     def __init__(self, parent=None, **kwargs):
         super(RGA, self).__init__(parent=parent, **kwargs)
         self._controls_location = ContentLocation.Hidden
-        self.icon = RGASymbolIcon(self)
-        self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
-        self.icon.setVisible(self._show_icon)
-        self.iconSize = 32
 
+        self.icon = RGASymbolIcon(self)
+        self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
 
