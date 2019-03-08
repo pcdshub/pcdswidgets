@@ -244,21 +244,6 @@ class HotCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
         self.pressure_label.channel = None
         self.start_stop_btn.channel = None
 
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
-
 
 class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
@@ -393,18 +378,3 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, PCDSSymbolBase):
         super(ColdCathodeGauge, self).destroy_channels()
         self.pressure_label.channel = None
         self.start_stop_btn.channel = None
-
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)

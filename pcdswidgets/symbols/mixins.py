@@ -102,6 +102,7 @@ class InterlockMixin(object):
             that the widget is interlocked.
         """
         self._interlocked = value == 0
+        self.controls_frame.setEnabled(not self._interlocked)
         self.update_stylesheet()
         self.update_status_tooltip()
 

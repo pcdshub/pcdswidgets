@@ -153,21 +153,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(PneumaticValve, self).destroy_channels()
         self.open_close_btn.channel = None
 
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
-
 
 class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
                     PCDSSymbolBase):
@@ -311,21 +296,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(ApertureValve, self).destroy_channels()
         self.open_close_btn.channel = None
 
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
-
 
 class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
                   PCDSSymbolBase):
@@ -461,21 +431,6 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         super(FastShutter, self).destroy_channels()
         self.open_close_btn.channel = None
 
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
-
 
 class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase):
     """
@@ -598,21 +553,6 @@ class NeedleValve(InterlockMixin, StateMixin, PCDSSymbolBase):
         """
         super(NeedleValve, self).destroy_channels()
         self.open_close_btn.channel = None
-
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
 
 
 class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase):
@@ -737,21 +677,6 @@ class ProportionalValve(InterlockMixin, StateMixin, PCDSSymbolBase):
         super(ProportionalValve, self).destroy_channels()
         self.open_close_btn.channel = None
 
-    def interlock_value_changed(self, value):
-        """
-        Callback invoked when the value changes for the Interlock Channel.
-        This method is responsible for enabling/disabling the controls frame
-        depending on the interlock status.
-
-        Parameters
-        ----------
-        value : int
-            The value from the channel will be either 0 or 1 with 1 meaning
-            that the widget is interlocked.
-        """
-        InterlockMixin.interlock_value_changed(self, value)
-        self.controls_frame.setEnabled(not self._interlocked)
-
 
 class RightAngleManualValve(PCDSSymbolBase):
     """
@@ -815,4 +740,8 @@ class RightAngleManualValve(PCDSSymbolBase):
 
     @Property(bool, designable=False)
     def showIcon(self):
+        pass
+
+    @Property(ContentLocation, designable=False)
+    def controlsLocation(self):
         pass
