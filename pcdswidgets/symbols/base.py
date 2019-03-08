@@ -1,4 +1,5 @@
 from pydm.widgets.base import PyDMPrimitiveWidget
+from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Property
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
@@ -314,10 +315,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget):
         """
         Method invoked when the channels associated with the widget must be
         destroyed.
-        This method must be implemented on the subclasses and mixins as needed.
-        By default this method does nothing.
         """
-        pass
+        for v in self.__dict__.values():
+            if isinstance(v, PyDMChannel):
+                v.disconnect()
 
     def create_channels(self):
         """

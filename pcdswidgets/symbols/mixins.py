@@ -64,15 +64,6 @@ class InterlockMixin(object):
         )
         self.interlock_channel.connect()
 
-    def destroy_channels(self):
-        """
-        This method invokes `destroy_channels` from the super classes and
-        disconnects the `interlock_channel` if in use.
-        """
-        super(InterlockMixin, self).destroy_channels()
-        if self.interlock_channel is not None:
-            self.interlock_channel.disconnect()
-
     def status_tooltip(self):
         """
         This method adds the contribution of the interlock mixin into the
@@ -174,15 +165,6 @@ class ErrorMixin(object):
             enum_strings_slot=self.error_enum_changed
         )
         self.error_channel.connect()
-
-    def destroy_channels(self):
-        """
-        This method invokes `destroy_channels` from the super classes and
-        disconnects the `error_channel` if in use.
-        """
-        super(ErrorMixin, self).destroy_channels()
-        if self.error_channel is not None:
-            self.error_channel.disconnect()
 
     def status_tooltip(self):
         """
@@ -321,15 +303,6 @@ class StateMixin(object):
             enum_strings_slot=self.state_enum_changed
         )
         self.state_channel.connect()
-
-    def destroy_channels(self):
-        """
-        This method invokes `destroy_channels` from the super classes and
-        disconnects the `state_channel` if in use.
-        """
-        super(StateMixin, self).destroy_channels()
-        if self.state_channel is not None:
-            self.state_channel.disconnect()
 
     def status_tooltip(self):
         """
@@ -488,17 +461,6 @@ class OpenCloseStateMixin(object):
             value_slot=partial(self.state_value_changed, "CLOSE")
         )
         self.state_close_channel.connect()
-
-    def destroy_channels(self):
-        """
-        This method invokes `destroy_channels` from the super classes and
-        disconnects the channels used.
-        """
-        super(OpenCloseStateMixin, self).destroy_channels()
-        if self.state_open_channel is not None:
-            self.state_open_channel.disconnect()
-        if self.state_close_channel is not None:
-            self.state_close_channel.disconnect()
 
     def status_tooltip(self):
         """
