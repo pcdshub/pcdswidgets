@@ -1,0 +1,41 @@
+record(bi, "VALVE:OPN_DI")
+{
+    field(DESC, "Open Status")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bi, "VALVE:CLS_DI")
+{
+    field(DESC, "Close Status")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+
+record(bi, "VALVE:OPN_OK")
+{
+    field(DESC, "Interlock Signal")
+    field(ZNAM, "TRUE")
+    field(ONAM, "FALSE")
+}
+
+record(mbbi, "VALVE:STATE")
+{
+    field(DESC, "State")
+    field(ZRVL, "0")
+    field(ZRST, "Vented")
+    field(ONVL, "1")
+    field(ONST, "At Vacuum")
+    field(TWVL, "2")
+    field(TWST, "Differential Pressure")
+    field(THVL, "3")
+    field(THST, "Lost Vacuum")
+}
+
+record(bo, "VALVE:OPN_SW")
+{
+    field(DESC, "Open Valve Command")
+    field(PINI, "YES")
+    field(ZNAM, "Close")
+    field(ONAM, "Open")
+}

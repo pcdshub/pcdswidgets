@@ -19,10 +19,12 @@
 #
 import os
 import sys
-import sphinx_rtd_theme
-module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
-sys.path.insert(0, module_path)
 
+import pcdswidgets
+
+module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           '../../')
+sys.path.insert(0, module_path)
 
 # -- General configuration ------------------------------------------------
 
@@ -34,12 +36,12 @@ sys.path.insert(0, module_path)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.githubpages']
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.autodoc',
+              'sphinx.ext.autosummary',
+              'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -64,7 +66,7 @@ author = 'SLAC National Accelerator Laboratory'
 # built documents.
 #
 # The short X.Y version.
-import pcdswidgets
+
 version = pcdswidgets.__version__
 # The full version, including alpha/beta/rc tags.
 release = pcdswidgets.__version__
@@ -86,7 +88,6 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -121,12 +122,10 @@ html_sidebars = {
     ]
 }
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'PCDSWidgetsdoc'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -156,7 +155,6 @@ latex_documents = [
      'SLAC National Accelerator Laboratory', 'manual'),
 ]
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
@@ -165,7 +163,6 @@ man_pages = [
     (master_doc, 'pcdswidgets', 'PCDS Widgets Documentation',
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -177,9 +174,6 @@ texinfo_documents = [
      author, 'PCDS Widgets', 'LCLS PyDM Widget Library',
      'Miscellaneous'),
 ]
-
-
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}

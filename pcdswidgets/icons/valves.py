@@ -1,0 +1,246 @@
+from qtpy.QtCore import (QPointF, QRectF, Qt, Property, QLineF)
+from qtpy.QtGui import (QPainterPath, QBrush, QColor, QPolygonF, QTransform)
+
+from .base import BaseSymbolIcon
+
+
+class PneumaticValveSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a pneumatic valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(PneumaticValveSymbolIcon, self).__init__(parent, **kwargs)
+        self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def interlockBrush(self):
+        return self._interlock_brush
+
+    @interlockBrush.setter
+    def interlockBrush(self, new_brush):
+        if new_brush != self._interlock_brush:
+            self._interlock_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        super(PneumaticValveSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.3))
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF(0.2, 0, 0.6, 0.3))
+
+
+class FastShutterSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a fast shutter symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+
+    def draw_icon(self, painter):
+        super(FastShutterSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+
+        painter.drawLine(QPointF(0.4, 0), QPointF(0.5, 0.15))
+        painter.drawLine(QPointF(0.4, 0.10), QPointF(0.5, 0.25))
+        painter.drawLine(QPointF(0.5, 0.15), QPointF(0.6, 0))
+        painter.drawLine(QPointF(0.5, 0.25), QPointF(0.6, 0.10))
+
+        painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.0))
+
+
+class RightAngleManualValveSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a right angle manual valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def draw_icon(self, painter):
+        super(RightAngleManualValveSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0))
+        path.lineTo(1, 1)
+        path.lineTo(0.005, 1)
+        path.lineTo(0.5, 0.5)
+        path.lineTo(0, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.05, 0.05)
+
+
+class ApertureValveSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with an aperture valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(ApertureValveSymbolIcon, self).__init__(parent, **kwargs)
+        self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def interlockBrush(self):
+        return self._interlock_brush
+
+    @interlockBrush.setter
+    def interlockBrush(self, new_brush):
+        if new_brush != self._interlock_brush:
+            self._interlock_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        super(ApertureValveSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawEllipse(QPointF(0.5, 0.6), 0.1, 0.1)
+        painter.drawLine(QPointF(0.5, 0.5), QPointF(0.5, 0.3))
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF(0.2, 0, 0.6, 0.3))
+
+
+class NeedleValveSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a needle valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(NeedleValveSymbolIcon, self).__init__(parent, **kwargs)
+        self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def interlockBrush(self):
+        return self._interlock_brush
+
+    @interlockBrush.setter
+    def interlockBrush(self, new_brush):
+        if new_brush != self._interlock_brush:
+            self._interlock_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        super(NeedleValveSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.15))
+
+        # Draw the arrow end-caps
+        painter.setBrush(QBrush(QColor(0, 0, 0)))
+
+        top_arrow_point = QPointF(0.65, 0.36)
+        arrow = QPolygonF(
+            [QPointF(-0.09, 0.0),
+             QPointF(-0.005, 0.0),
+             QPointF(-0.005, 0.8),
+             QPointF(0.005, 0.8),
+             QPointF(0.005, 0.0),
+             QPointF(0.09, 0.0),
+             QPointF(0.00, -0.25)]
+        )
+
+        t = QTransform()
+        t.rotate(35)
+        top_arrow_r = t.map(arrow)
+        arrow_l = top_arrow_r.translated(top_arrow_point)
+        painter.drawPolygon(arrow_l)
+
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF(0.3, 0, 0.4, 0.15))
+
+
+class ProportionalValveSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a proportional valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(ProportionalValveSymbolIcon, self).__init__(parent, **kwargs)
+        self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def interlockBrush(self):
+        return self._interlock_brush
+
+    @interlockBrush.setter
+    def interlockBrush(self, new_brush):
+        if new_brush != self._interlock_brush:
+            self._interlock_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        super(ProportionalValveSymbolIcon, self).draw_icon(painter)
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.15))
+
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF(0.35, 0, 0.3, 0.3))
+
+        # Draw the arrow end-caps
+        painter.setBrush(QBrush(QColor(0, 0, 0)))
+
+        top_arrow_point = QPointF(0.65, 0.42)
+        arrow = QPolygonF(
+            [QPointF(-0.07, 0.0),
+             QPointF(-0.005, 0.0),
+             QPointF(-0.005, 0.8),
+             QPointF(0.005, 0.8),
+             QPointF(0.005, 0.0),
+             QPointF(0.07, 0.0),
+             QPointF(0.00, -0.25)]
+        )
+
+        t = QTransform()
+        t.rotate(40)
+        top_arrow_r = t.map(arrow)
+        arrow_l = top_arrow_r.translated(top_arrow_point)
+        painter.drawPolygon(arrow_l)
+
+        t_x = 0.4
+        t_y = 0.05
+        painter.drawLines([QLineF(0.0+t_x, 0.0+t_y, 0.0+t_x, 0.2+t_y),
+                           QLineF(0.0+t_x, 0.0+t_y, 0.1+t_x, 0.2+t_y),
+                           QLineF(0.1+t_x, 0.2+t_y, 0.2+t_x, 0.0+t_y),
+                           QLineF(0.2+t_x, 0.0+t_y, 0.2+t_x, 0.2+t_y)])

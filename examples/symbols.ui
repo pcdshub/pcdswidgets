@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>878</width>
+    <height>742</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Right Angle Manual Valve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Fast Shutter</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Cold Cathode Gauge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Getter Pump</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Pneumatic Valve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="TurboPump" name="TurboPump">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="PiraniGauge" name="PiraniGauge">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="PneumaticValve" name="PneumaticValve">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="HotCathodeGauge" name="HotCathodeGauge">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="GetterPump" name="GetterPump">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="FastShutter" name="FastShutter">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="ColdCathodeGauge" name="ColdCathodeGauge">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="ScrollPump" name="ScrollPump">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="RightAngleManualValve" name="RightAngleManualValve">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="IonPump" name="IonPump">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="RGA" name="RGA">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="NeedleValve" name="NeedleValve">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="ProportionalValve" name="ProportionalValve">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="iconSize" stdset="0">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Ion Pump</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Scroll Pump</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>Hot Cathode Gauge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Proportional Valve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Turbo Pump</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Pirani Gauge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Needle Valve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>RGA</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PCDSSymbolBase</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.symbols.base</header>
+  </customwidget>
+  <customwidget>
+   <class>PneumaticValve</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>FastShutter</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>NeedleValve</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>ProportionalValve</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>RightAngleManualValve</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.valves</header>
+  </customwidget>
+  <customwidget>
+   <class>IonPump</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>TurboPump</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>ScrollPump</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>GetterPump</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.pumps</header>
+  </customwidget>
+  <customwidget>
+   <class>PiraniGauge</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+  <customwidget>
+   <class>HotCathodeGauge</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+  <customwidget>
+   <class>ColdCathodeGauge</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.gauges</header>
+  </customwidget>
+  <customwidget>
+   <class>RGA</class>
+   <extends>PCDSSymbolBase</extends>
+   <header>pcdswidgets.symbols.others</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

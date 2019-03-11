@@ -12,29 +12,28 @@ matrix:
     - python: 3.6
       env:
         - BUILD=1
+        - BUILD_DOCS=1
         - PYDM_CHANNEL=pcds-tag
     - python: 3.6
       env: PYDM_CHANNEL=pydm-dev
     - python: 3.7
       dist: xenial
-      env: PYDM_CHANNEL=pcds-tag
+      env:
+        - BUILD=1
+        - PYDM_CHANNEL=pcds-tag
     - python: 3.7
       dist: xenial
       env: PYDM_CHANNEL=pydm-dev
   allow_failures:
     - python: 3.7
       dist: xenial
-      env: PYDM_CHANNEL=pcds-tag
-    - python: 3.7
-      dist: xenial
-      env: PYDM_CHANNEL=pydm-dev
-
+      env:
+        - BUILD=1
+        - PYDM_CHANNEL=pcds-tag
 install:
   - sudo apt-get update
   # Install windows manager
   - sudo apt-get install -y xvfb herbstluftwm
-  # We do this conditionally because it saves us some downloading if the
-  # version is the same.
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -70,7 +69,7 @@ script:
   # Build docs
   - set -e
   - |
-    if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY" && $BUILD ]]; then
+    if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY_PCDSHUB_PCDSWIDGETS" && $BUILD_DOCS ]]; then
       # Create HTML documentation  
       pushd docs
       make html
@@ -82,12 +81,12 @@ script:
 after_success:
   - codecov
   - |
-    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == $TRAVIS_TAG  && $TRAVIS_TAG != '' && $BUILD ]]; then
+    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == $TRAVIS_TAG  && $TRAVIS_TAG != '' && $BUILD && $CONDA_UPLOAD_TOKEN_TAG != '' ]]; then
       export ANACONDA_API_TOKEN=$CONDA_UPLOAD_TOKEN_TAG
       anaconda upload bld-dir/linux-64/*.tar.bz2
     fi
   - |
-    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == 'master' && $BUILD ]]; then
+    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == 'master' && $BUILD && $CONDA_UPLOAD_TOKEN_DEV != '' ]]; then
       export ANACONDA_API_TOKEN=$CONDA_UPLOAD_TOKEN_DEV
       anaconda upload bld-dir/linux-64/*.tar.bz2
     fi
