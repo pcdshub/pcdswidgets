@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Mixins &mdash; PCDSWidgets 0+untagged.40.g6ddd521 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Symbol Icons" href="icons.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PCDSWidgets
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0+untagged.40.g6ddd521
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="symbols.html">Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mixins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interlock">Interlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error">Error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-open-close">State - Open/Close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#button-control">Button Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#label-control">Label Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#button-label-control">Button &amp; Label Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PCDSWidgets</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Mixins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/mixins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mixins">
+<h1>Mixins<a class="headerlink" href="#mixins" title="Permalink to this headline">¶</a></h1>
+<p>A couple of mixin classes were created to help us make it easy to create new
+symbol widgets and ensure that the code has an uniform behavior.</p>
+<div class="section" id="interlock">
+<h2>Interlock<a class="headerlink" href="#interlock" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">InterlockMixin</code><span class="sig-paren">(</span><em>interlock_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#InterlockMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The InterlockMixin class adds the interlock channel and <cite>interlocked</cite>
+property to the widget.</p>
+<p>The interlocked property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>interlock_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the interlock channel address.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#InterlockMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>interlock_channel</cite> to the widget along with a reset for the
+interlocked and interlock_connected variables.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin.interlock_connection_changed">
+<code class="descname">interlock_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#InterlockMixin.interlock_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin.interlock_connection_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the connection status changes for the Interlock
+Channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin.interlock_value_changed">
+<code class="descname">interlock_value_changed</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#InterlockMixin.interlock_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin.interlock_value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the value changes for the Interlock Channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel will be either 0 or 1 with 0 meaning
+that the widget is interlocked.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin.interlocked">
+<code class="descname">interlocked</code><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin.interlocked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property used to query interlock state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.InterlockMixin.status_tooltip">
+<code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#InterlockMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.InterlockMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds the contribution of the interlock mixin into the
+general status tooltip.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="error">
+<h2>Error<a class="headerlink" href="#error" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">ErrorMixin</code><span class="sig-paren">(</span><em>error_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ErrorMixin class adds the error channel and <cite>error</cite>
+property to the widget.</p>
+<p>The error property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">error</span><span class="o">=</span><span class="s2">&quot;INVALID&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="k">color</span><span class="p">:</span> <span class="kc">purple</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>error_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the error channel address.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>error_channel</cite> to the widget along with a reset for the error and
+error_connected variables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.error">
+<code class="descname">error</code><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property used to query the error state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.error_connection_changed">
+<code class="descname">error_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin.error_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.error_connection_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the connection status changes for the Error
+Channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.error_enum_changed">
+<code class="descname">error_enum_changed</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin.error_enum_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.error_enum_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the enumeration strings change for the Error
+Channel.
+This callback triggers the update of the error message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current error value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.error_value_changed">
+<code class="descname">error_value_changed</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin.error_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.error_value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the value change for the Error Channel.
+This callback triggers the update of the error message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current error value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ErrorMixin.status_tooltip">
+<code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ErrorMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ErrorMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds the contribution of the error mixin into the general
+status tooltip.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="state">
+<h2>State<a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.StateMixin">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">StateMixin</code><span class="sig-paren">(</span><em>state_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The StateMixin class adds the state channel and <cite>state</cite> property to the
+widget.</p>
+<p>The state property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Vented&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the state channel address.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>state_channel</cite> to the widget along with a reset for the
+state and state_connected variables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.state">
+<code class="descname">state</code><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property used to query the state of the widget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.state_connection_changed">
+<code class="descname">state_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin.state_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.state_connection_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the connection status changes for the State
+Channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.state_enum_changed">
+<code class="descname">state_enum_changed</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin.state_enum_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.state_enum_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the enumeration strings change for the State
+Channel.
+This callback triggers the update of the state message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current state value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.state_value_changed">
+<code class="descname">state_value_changed</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin.state_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.state_value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the value change for the State Channel.
+This callback triggers the update of the state message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current state value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.StateMixin.status_tooltip">
+<code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#StateMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.StateMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds the contribution of the state mixin into the general
+status tooltip.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="state-open-close">
+<h2>State - Open/Close<a class="headerlink" href="#state-open-close" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">OpenCloseStateMixin</code><span class="sig-paren">(</span><em>open_suffix</em>, <em>close_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#OpenCloseStateMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OpenCloseStateMixin class adds two channels (Open and Close State) and
+a <cite>state</cite> property based on a combination of the two channels to the
+widget.</p>
+<p>The state property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Close&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="p">:</span> <span class="kc">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>open_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the open state channel address.</li>
+<li><strong>close_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the close state channel address.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#OpenCloseStateMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>state_open_channel</cite> and <cite>state_close_channel</cite> to the widget along
+with a reset for the state and interlock_connected variables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin.state">
+<code class="descname">state</code><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property used to query the state of the widget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The return string will either be <cite>Open</cite>, <cite>Close</cite> or <cite>INVALID</cite> when
+it was not possible to determine the state.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_connection_changed">
+<code class="descname">state_connection_changed</code><span class="sig-paren">(</span><em>which</em>, <em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#OpenCloseStateMixin.state_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_connection_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the connection status changes for one of the
+channels in this mixin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</li>
+<li><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_value_changed">
+<code class="descname">state_value_changed</code><span class="sig-paren">(</span><em>which</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#OpenCloseStateMixin.state_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_value_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback invoked when the value changes for one of the channels in this
+mixin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel which will be either 0 or 1 with 1
+meaning that a certain state is active.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.OpenCloseStateMixin.status_tooltip">
+<code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#OpenCloseStateMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.OpenCloseStateMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds the contribution of the open close state mixin into
+the general status tooltip.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="button-control">
+<h2>Button Control<a class="headerlink" href="#button-control" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.ButtonControl">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">ButtonControl</code><span class="sig-paren">(</span><em>command_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ButtonControl class adds a PyDMEnumButton to the widget for controls.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ButtonControl.assemble_layout">
+<code class="descname">assemble_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonControl.assemble_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonControl.assemble_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles the widget’s inner layout depending on the ContentLocation
+and other configurations set and adjust the orientation of the control
+button depending on the location.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ButtonControl.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonControl.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonControl.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ButtonControl.destroy_channels">
+<code class="descname">destroy_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonControl.destroy_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonControl.destroy_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="label-control">
+<h2>Label Control<a class="headerlink" href="#label-control" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.LabelControl">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">LabelControl</code><span class="sig-paren">(</span><em>readback_suffix</em>, <em>readback_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#LabelControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.LabelControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The LabelControl class adds a PyDMLabel to the widget for controls.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</li>
+<li><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.LabelControl.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#LabelControl.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.LabelControl.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.LabelControl.destroy_channels">
+<code class="descname">destroy_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#LabelControl.destroy_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.LabelControl.destroy_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="button-label-control">
+<h2>Button &amp; Label Control<a class="headerlink" href="#button-label-control" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pcdswidgets.symbols.mixins.ButtonLabelControl">
+<em class="property">class </em><code class="descclassname">pcdswidgets.symbols.mixins.</code><code class="descname">ButtonLabelControl</code><span class="sig-paren">(</span><em>command_suffix</em>, <em>readback_suffix</em>, <em>readback_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonLabelControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonLabelControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the
+widget for controls.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</li>
+<li><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</li>
+<li><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ButtonLabelControl.create_channels">
+<code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonLabelControl.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonLabelControl.create_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pcdswidgets.symbols.mixins.ButtonLabelControl.destroy_channels">
+<code class="descname">destroy_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/symbols/mixins.html#ButtonLabelControl.destroy_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.symbols.mixins.ButtonLabelControl.destroy_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="icons.html" class="btn btn-neutral" title="Symbol Icons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, SLAC National Accelerator Laboratory
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
