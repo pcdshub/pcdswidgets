@@ -20,7 +20,6 @@ class PiraniGaugeSymbolIcon(BaseSymbolIcon):
     path.closeSubpath()
 
     def draw_icon(self, painter):
-        super(PiraniGaugeSymbolIcon, self).draw_icon(painter)
         painter.drawPath(self.path)
 
 
@@ -35,7 +34,6 @@ class CathodeGaugeSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
-        super(CathodeGaugeSymbolIcon, self).draw_icon(painter)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
 
 

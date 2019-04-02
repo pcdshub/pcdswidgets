@@ -28,7 +28,6 @@ class PneumaticValveSymbolIcon(BaseSymbolIcon):
             self.update()
 
     def draw_icon(self, painter):
-        super(PneumaticValveSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -51,7 +50,6 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
-        super(FastShutterSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -77,7 +75,6 @@ class RightAngleManualValveSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def draw_icon(self, painter):
-        super(RightAngleManualValveSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0))
         path.lineTo(1, 1)
         path.lineTo(0.005, 1)
@@ -112,7 +109,6 @@ class ApertureValveSymbolIcon(BaseSymbolIcon):
             self.update()
 
     def draw_icon(self, painter):
-        super(ApertureValveSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -149,7 +145,6 @@ class NeedleValveSymbolIcon(BaseSymbolIcon):
             self.update()
 
     def draw_icon(self, painter):
-        super(NeedleValveSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -206,7 +201,6 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
             self.update()
 
     def draw_icon(self, painter):
-        super(ProportionalValveSymbolIcon, self).draw_icon(painter)
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
