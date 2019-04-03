@@ -324,8 +324,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.controls_frame.setVisible(controls_visible)
 
         for widget in widgets:
-            if widget == self.controls_frame and not controls_visible:
-                continue
             box_layout = QHBoxLayout()
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
