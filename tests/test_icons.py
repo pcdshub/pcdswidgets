@@ -14,7 +14,8 @@ icons = [getattr(pcdswidgets.icons, icon)
 def test_icon_smoke(qtbot, icon_class):
     icon = icon_class()
     qtbot.addWidget(icon)
-    icon.show()
+    with qtbot.waitExposed(icon):
+        icon.show()
     icon.repaint()
 
 
