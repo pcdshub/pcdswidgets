@@ -30,7 +30,9 @@ def test_symbol_paintEvent_smoke(symbol):
 
 def test_no_controls_content(symbol):
     symbol.controlsLocation = ContentLocation.Hidden
-    assert symbol.interlock.layout().itemAt(0).widget() == symbol.icon
+    widget_layout = symbol.interlock.layout().itemAt(0).layout()
+    widget = widget_layout.itemAt(0).widget()
+    assert widget == symbol.icon
 
 
 @pytest.mark.parametrize('location,layout,position',
@@ -42,7 +44,8 @@ def test_no_controls_content(symbol):
 def test_controls_content_location(symbol, location, layout, position):
     symbol.controlsLocation = location
     assert isinstance(symbol.interlock.layout(), layout)
-    widget = symbol.interlock.layout().itemAt(position).widget()
+    widget_layout = symbol.interlock.layout().itemAt(position).layout()
+    widget = widget_layout.itemAt(0).widget()
     assert widget == symbol.controls_frame
 
 
