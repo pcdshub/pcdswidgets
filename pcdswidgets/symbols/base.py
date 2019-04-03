@@ -37,7 +37,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         super(PCDSSymbolBase, self).__init__(parent=parent, **kwargs)
         self.interlock = None
         self._channels_prefix = None
-        self.icon = None
         self._rotate_icon = False
 
         self._show_icon = True
