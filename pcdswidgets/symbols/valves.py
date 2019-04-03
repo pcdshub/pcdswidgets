@@ -10,7 +10,7 @@ from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
 
 
 class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                     PCDSSymbolBase):
+                     ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
     controls.
