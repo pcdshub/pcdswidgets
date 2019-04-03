@@ -9,20 +9,20 @@ symbol widgets and ensure that the code has an uniform behavior.
 Interlock
 ---------
 
-.. autoclass:: pcdswidgets.symbols.mixins.InterlockMixin
+.. autoclass:: pcdswidgets.vacuum.mixins.InterlockMixin
    :members:
 
 Error
 -----
 
-.. autoclass:: pcdswidgets.symbols.mixins.ErrorMixin
+.. autoclass:: pcdswidgets.vacuum.mixins.ErrorMixin
    :members:
 
 
 State
 -----
 
-.. autoclass:: pcdswidgets.symbols.mixins.StateMixin
+.. autoclass:: pcdswidgets.vacuum.mixins.StateMixin
    :members:
 
 
@@ -30,21 +30,21 @@ State
 State - Open/Close
 -------------------
 
-.. autoclass:: pcdswidgets.symbols.mixins.OpenCloseStateMixin
+.. autoclass:: pcdswidgets.vacuum.mixins.OpenCloseStateMixin
    :members:
 
 Button Control
 --------------
-.. autoclass:: pcdswidgets.symbols.mixins.ButtonControl
+.. autoclass:: pcdswidgets.vacuum.mixins.ButtonControl
    :members:
 
 Label Control
 -------------
-.. autoclass:: pcdswidgets.symbols.mixins.LabelControl
+.. autoclass:: pcdswidgets.vacuum.mixins.LabelControl
    :members:
 
 
 Button & Label Control
 ----------------------
-.. autoclass:: pcdswidgets.symbols.mixins.ButtonLabelControl
+.. autoclass:: pcdswidgets.vacuum.mixins.ButtonLabelControl
    :members:

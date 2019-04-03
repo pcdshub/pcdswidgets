@@ -21,7 +21,7 @@ for ic_name in icons.__all__:
     tp.setFixedSize(64, 64)
     tp.show()
     path = os.path.join(os.path.dirname(__file__), '..', 'docs', 'source',
-                        '_static', "symbols",
+                        '_static', "icons",
                         tp.__class__.__name__)
 
     screenshot(tp, path)

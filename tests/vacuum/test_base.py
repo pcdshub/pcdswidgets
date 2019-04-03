@@ -1,7 +1,7 @@
 import pytest
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout
 
-from pcdswidgets.symbols.base import PCDSSymbolBase, ContentLocation
+from pcdswidgets.vacuum.base import PCDSSymbolBase, ContentLocation
 from pcdswidgets.icons import RGASymbolIcon
 
 

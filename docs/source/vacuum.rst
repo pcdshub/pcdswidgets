@@ -1,5 +1,5 @@
 ============================
-Symbols
+Vacuum Widgets
 ============================
 
 PCDSWidgets comes with a set of symbol widgets each of them composed by an icon
@@ -45,8 +45,8 @@ Symbol Widgets
 .. toctree::
    :maxdepth: 2
 
-   symbols/valves.rst
-   symbols/pumps.rst
-   symbols/gauges.rst
-   symbols/others.rst
+   vacuum/valves.rst
+   vacuum/pumps.rst
+   vacuum/gauges.rst
+   vacuum/others.rst
 

@@ -245,72 +245,72 @@
   <customwidget>
    <class>PCDSSymbolBase</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.symbols.base</header>
+   <header>pcdswidgets.vacuum.base</header>
   </customwidget>
   <customwidget>
    <class>PneumaticValve</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>FastShutter</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>NeedleValve</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>ProportionalValve</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>RightAngleManualValve</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>IonPump</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.pumps</header>
+   <header>pcdswidgets.vacuum.pumps</header>
   </customwidget>
   <customwidget>
    <class>TurboPump</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.pumps</header>
+   <header>pcdswidgets.vacuum.pumps</header>
   </customwidget>
   <customwidget>
    <class>ScrollPump</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.pumps</header>
+   <header>pcdswidgets.vacuum.pumps</header>
   </customwidget>
   <customwidget>
    <class>GetterPump</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.pumps</header>
+   <header>pcdswidgets.vacuum.pumps</header>
   </customwidget>
   <customwidget>
    <class>PiraniGauge</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.gauges</header>
+   <header>pcdswidgets.vacuum.gauges</header>
   </customwidget>
   <customwidget>
    <class>HotCathodeGauge</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.gauges</header>
+   <header>pcdswidgets.vacuum.gauges</header>
   </customwidget>
   <customwidget>
    <class>ColdCathodeGauge</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.gauges</header>
+   <header>pcdswidgets.vacuum.gauges</header>
   </customwidget>
   <customwidget>
    <class>RGA</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.others</header>
+   <header>pcdswidgets.vacuum.others</header>
   </customwidget>
  </customwidgets>
  <resources/>

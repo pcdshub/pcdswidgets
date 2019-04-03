@@ -8,7 +8,7 @@ LCLS PyDM Widget Library
     :maxdepth: 1
     :caption: Widgets
 
-    symbols.rst
+    vacuum.rst
     icons.rst
 
 .. toctree::

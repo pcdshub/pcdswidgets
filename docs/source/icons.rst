@@ -20,10 +20,10 @@ Hot Cathode  |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIco
 Cold Cathode |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
 ============ ========== ============================================================
 
-.. |pirani| image:: /_static/symbols/PiraniGaugeSymbolIcon.png
-.. |cathode| image:: /_static/symbols/CathodeGaugeSymbolIcon.png
-.. |hcathode| image:: /_static/symbols/HotCathodeGaugeSymbolIcon.png
-.. |ccathode| image:: /_static/symbols/ColdCathodeGaugeSymbolIcon.png
+.. |pirani| image:: /_static/icons/PiraniGaugeSymbolIcon.png
+.. |cathode| image:: /_static/icons/CathodeGaugeSymbolIcon.png
+.. |hcathode| image:: /_static/icons/HotCathodeGaugeSymbolIcon.png
+.. |ccathode| image:: /_static/icons/ColdCathodeGaugeSymbolIcon.png
 
 
 Valves
@@ -40,12 +40,12 @@ Needle             |nvalve|    ``from pcdswidgets.icons import NeedleValveSymbol
 Proportional       |propvalve| ``from pcdswidgets.icons import ProportionalValveSymbolIcon``
 ================== =========== =================================================================
 
-.. |pneuvalve| image:: /_static/symbols/PneumaticValveSymbolIcon.png
-.. |aperture| image:: /_static/symbols/ApertureValveSymbolIcon.png
-.. |fshutter| image:: /_static/symbols/FastShutterSymbolIcon.png
-.. |ramvalve| image:: /_static/symbols/RightAngleManualValveSymbolIcon.png
-.. |nvalve| image:: /_static/symbols/NeedleValveSymbolIcon.png
-.. |propvalve| image:: /_static/symbols/ProportionalValveSymbolIcon.png
+.. |pneuvalve| image:: /_static/icons/PneumaticValveSymbolIcon.png
+.. |aperture| image:: /_static/icons/ApertureValveSymbolIcon.png
+.. |fshutter| image:: /_static/icons/FastShutterSymbolIcon.png
+.. |ramvalve| image:: /_static/icons/RightAngleManualValveSymbolIcon.png
+.. |nvalve| image:: /_static/icons/NeedleValveSymbolIcon.png
+.. |propvalve| image:: /_static/icons/ProportionalValveSymbolIcon.png
 
 
 Pumps
@@ -60,10 +60,10 @@ Scroll       |scrollp|  ``from pcdswidgets.icons import ScrollPumpSymbolIcon``
 Getter       |getter|   ``from pcdswidgets.icons import GetterPumpSymbolIcon``
 ============ ========== ============================================================
 
-.. |ionp| image:: /_static/symbols/IonPumpSymbolIcon.png
-.. |turbop| image:: /_static/symbols/TurboPumpSymbolIcon.png
-.. |scrollp| image:: /_static/symbols/ScrollPumpSymbolIcon.png
-.. |getter| image:: /_static/symbols/GetterPumpSymbolIcon.png
+.. |ionp| image:: /_static/icons/IonPumpSymbolIcon.png
+.. |turbop| image:: /_static/icons/TurboPumpSymbolIcon.png
+.. |scrollp| image:: /_static/icons/ScrollPumpSymbolIcon.png
+.. |getter| image:: /_static/icons/GetterPumpSymbolIcon.png
 
 
 Others
@@ -75,4 +75,4 @@ Name         Icon       Import
 RGA          |rga|      ``from pcdswidgets.icons import RGASymbolIcon``
 ============ ========== ============================================================
 
-.. |rga| image:: /_static/symbols/RGASymbolIcon.png
+.. |rga| image:: /_static/icons/RGASymbolIcon.png

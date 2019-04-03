@@ -1,12 +1,12 @@
 from pydm.widgets.qtplugin_base import qtplugin_factory
 
-from .symbols.gauges import PiraniGauge, HotCathodeGauge, ColdCathodeGauge
-from .symbols.others import RGA
-from .symbols.pumps import IonPump, TurboPump, ScrollPump, GetterPump
-from .symbols.valves import (PneumaticValve, FastShutter, NeedleValve,
-                             ProportionalValve, RightAngleManualValve)
+from .vacuum.gauges import PiraniGauge, HotCathodeGauge, ColdCathodeGauge
+from .vacuum.others import RGA
+from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
+from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
+                            ProportionalValve, RightAngleManualValve)
 
-from .symbols.base import PCDSSymbolBase
+from .vacuum.base import PCDSSymbolBase
 
 BasePlugin = qtplugin_factory(PCDSSymbolBase, group="PCDS Symbols")
 
