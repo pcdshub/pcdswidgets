@@ -10,7 +10,7 @@ from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
 
 
 class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                     PCDSSymbolBase):
+                     ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
     controls.
@@ -90,6 +90,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Pneumatic Valve"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = PneumaticValveSymbolIcon()
         super(PneumaticValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -98,11 +99,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.icon = PneumaticValveSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
@@ -186,6 +182,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Aperture Valve"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = ApertureValveSymbolIcon()
         super(ApertureValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -194,11 +191,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.icon = ApertureValveSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
@@ -275,6 +267,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Fast Shutter"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = FastShutterSymbolIcon()
         super(FastShutter, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -283,11 +276,6 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.icon = FastShutterSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
@@ -354,17 +342,13 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     NAME = "Needle Valve"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = NeedleValveSymbolIcon()
         super(NeedleValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.icon = NeedleValveSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
@@ -432,17 +416,13 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
     NAME = "Proportional Valve"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = ProportionalValveSymbolIcon()
         super(ProportionalValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.icon = ProportionalValveSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class RightAngleManualValve(PCDSSymbolBase):
@@ -479,12 +459,9 @@ class RightAngleManualValve(PCDSSymbolBase):
     NAME = "Right Angle Manual Valve"
 
     def __init__(self, parent=None, **kwargs):
-        super(RightAngleManualValve, self).__init__(parent=parent, **kwargs)
+        self.icon = RightAngleManualValveSymbolIcon()
         self._controls_location = ContentLocation.Hidden
-        self.icon = RightAngleManualValveSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
+        super(RightAngleManualValve, self).__init__(parent=parent, **kwargs)
 
     def sizeHint(self):
         """

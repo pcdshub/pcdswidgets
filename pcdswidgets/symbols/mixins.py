@@ -31,11 +31,11 @@ class InterlockMixin(object):
         to compose the interlock channel address.
     """
     def __init__(self, interlock_suffix, **kwargs):
-        super(InterlockMixin, self).__init__(**kwargs)
         self._interlock_suffix = interlock_suffix
         self._interlocked = False
         self._interlock_connected = False
         self.interlock_channel = None
+        super(InterlockMixin, self).__init__(**kwargs)
 
     @Property(bool, designable=False)
     def interlocked(self):
@@ -132,13 +132,13 @@ class ErrorMixin(object):
         to compose the error channel address.
     """
     def __init__(self, error_suffix, **kwargs):
-        super(ErrorMixin, self).__init__(**kwargs)
         self._error_suffix = error_suffix
         self._error = ""
         self._error_value = None
         self._error_enum = []
         self._error_connected = False
         self.error_channel = None
+        super(ErrorMixin, self).__init__(**kwargs)
 
     @Property(str, designable=False)
     def error(self):
@@ -270,13 +270,13 @@ class StateMixin(object):
         to compose the state channel address.
     """
     def __init__(self, state_suffix, **kwargs):
-        super(StateMixin, self).__init__(**kwargs)
         self._state_suffix = state_suffix
         self._state = ""
         self._state_value = None
         self._state_enum = []
         self._state_connected = False
         self.state_channel = None
+        super(StateMixin, self).__init__(**kwargs)
 
     @Property(str, designable=False)
     def state(self):
@@ -376,9 +376,15 @@ class StateMixin(object):
         Internal method that updates the state property and triggers an update
         on the stylesheet and tooltip.
         """
+        if self._state_value is None:
+            return
         if len(self._state_enum) > 0:
-            self._state = self._state_enum[self._state_value]
-        self._state = str(self._state_value)
+            try:
+                self._state = self._state_enum[self._state_value]
+            except IndexError:
+                self._state = ""
+        else:
+            self._state = str(self._state_value)
         self.update_stylesheet()
         self.update_status_tooltip()
 
@@ -407,7 +413,6 @@ class OpenCloseStateMixin(object):
         to compose the close state channel address.
     """
     def __init__(self, open_suffix, close_suffix, **kwargs):
-        super(OpenCloseStateMixin, self).__init__(**kwargs)
         self._open_suffix = open_suffix
         self._close_suffix = close_suffix
 
@@ -419,6 +424,7 @@ class OpenCloseStateMixin(object):
 
         self.state_open_channel = None
         self.state_close_channel = None
+        super(OpenCloseStateMixin, self).__init__(**kwargs)
 
     @Property(str, designable=False)
     def state(self):
@@ -535,12 +541,12 @@ class ButtonControl(object):
         to compose the command button channel address.
     """
     def __init__(self, command_suffix, **kwargs):
-        super(ButtonControl, self).__init__(**kwargs)
         self._command_suffix = command_suffix
         self.control_btn = PyDMEnumButton()
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(0)
         self.controls_layout.setContentsMargins(0, 0, 0, 0)
+        super(ButtonControl, self).__init__(**kwargs)
         self.controls_frame.setLayout(self.controls_layout)
         self.controls_frame.layout().addWidget(self.control_btn)
 
@@ -595,17 +601,15 @@ class LabelControl(object):
     """
     def __init__(self, readback_suffix, readback_name,
                  **kwargs):
-        super(LabelControl, self).__init__(**kwargs)
         self._readback_suffix = readback_suffix
-
         self.readback_label = PyDMLabel()
         if readback_name:
             self.readback_label.setObjectName(readback_name)
         self.readback_label.setAlignment(Qt.AlignCenter)
-
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(0)
         self.controls_layout.setContentsMargins(0, 0, 0, 0)
+        super(LabelControl, self).__init__(**kwargs)
         self.controls_frame.setLayout(self.controls_layout)
         self.controls_frame.layout().addWidget(self.readback_label)
 
@@ -649,12 +653,12 @@ class ButtonLabelControl(ButtonControl):
     """
     def __init__(self, command_suffix, readback_suffix, readback_name,
                  **kwargs):
-        super(ButtonLabelControl, self).__init__(command_suffix, **kwargs)
         self._readback_suffix = readback_suffix
 
         self.readback_label = PyDMLabel()
         self.readback_label.setObjectName(readback_name)
         self.readback_label.setAlignment(Qt.AlignCenter)
+        super(ButtonLabelControl, self).__init__(command_suffix, **kwargs)
 
         self.controls_frame.layout().addWidget(self.readback_label)
 

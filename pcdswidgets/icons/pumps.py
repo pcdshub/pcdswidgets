@@ -30,7 +30,6 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
             self.update()
 
     def draw_icon(self, painter):
-        super(TurboPumpSymbolIcon, self).draw_icon(painter)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
@@ -65,7 +64,6 @@ class IonPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
-        super(IonPumpSymbolIcon, self).draw_icon(painter)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
@@ -114,7 +112,6 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
-        super(ScrollPumpSymbolIcon, self).draw_icon(painter)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         pen = painter.pen()
         pen.setWidthF(pen.width()*2)
@@ -140,7 +137,6 @@ class GetterPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
-        super(GetterPumpSymbolIcon, self).draw_icon(painter)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 90 * 16, -100 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 100 * 16)

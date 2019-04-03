@@ -37,7 +37,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         super(PCDSSymbolBase, self).__init__(parent=parent, **kwargs)
         self.interlock = None
         self._channels_prefix = None
-        self.icon = None
         self._rotate_icon = False
 
         self._show_icon = True
@@ -56,7 +55,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.layout().setSpacing(0)
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.interlock)
-        self._controls_location = ContentLocation.Bottom
+        if not hasattr(self, '_controls_location'):
+            self._controls_location = ContentLocation.Bottom
+        self.setup_icon()
+        self.assemble_layout()
+        self.update_status_tooltip()
 
     def sizeHint(self):
         """
@@ -317,12 +320,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         widgets = widget_map[self._controls_location][1]
 
+        # Hide the controls box if they are not going to be included in layout
         controls_visible = self._controls_location != ContentLocation.Hidden
         self.controls_frame.setVisible(controls_visible)
 
         for widget in widgets:
-            if widget == self.controls_frame and not controls_visible:
-                continue
+            # Each widget is in a separate layout to help with expansion rules
             box_layout = QHBoxLayout()
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)

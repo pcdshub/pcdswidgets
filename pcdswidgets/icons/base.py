@@ -80,7 +80,7 @@ class BaseSymbolIcon(QWidget):
         ----------
         painter : QPainter
         """
-        pass
+        raise NotImplementedError("draw_icon must be implemented by subclass")
 
     @Property(QBrush)
     def brush(self):

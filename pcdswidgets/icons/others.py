@@ -25,5 +25,4 @@ class RGASymbolIcon(BaseSymbolIcon):
     path.closeSubpath()
 
     def draw_icon(self, painter):
-        super(RGASymbolIcon, self).draw_icon(painter)
         painter.drawPath(self.path)

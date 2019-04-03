@@ -15,7 +15,8 @@ def screenshot(widget, filename):
 
 app = QApplication([])
 
-for ic in icons.__all__:
+for ic_name in icons.__all__:
+    ic = getattr(icons, ic_name)
     tp = ic()
     tp.setFixedSize(64, 64)
     tp.show()

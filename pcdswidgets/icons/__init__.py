@@ -7,11 +7,11 @@ from .valves import (PneumaticValveSymbolIcon, FastShutterSymbolIcon,
                      NeedleValveSymbolIcon, ProportionalValveSymbolIcon)
 from .others import RGASymbolIcon
 
-__all__ = [PiraniGaugeSymbolIcon, CathodeGaugeSymbolIcon,
-           HotCathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon,
-           IonPumpSymbolIcon, TurboPumpSymbolIcon, ScrollPumpSymbolIcon,
-           GetterPumpSymbolIcon,
-           PneumaticValveSymbolIcon, FastShutterSymbolIcon,
-           ApertureValveSymbolIcon, RightAngleManualValveSymbolIcon,
-           NeedleValveSymbolIcon, ProportionalValveSymbolIcon,
-           RGASymbolIcon]
+__all__ = ['PiraniGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
+           'HotCathodeGaugeSymbolIcon', 'ColdCathodeGaugeSymbolIcon',
+           'IonPumpSymbolIcon', 'TurboPumpSymbolIcon', 'ScrollPumpSymbolIcon',
+           'GetterPumpSymbolIcon',
+           'PneumaticValveSymbolIcon', 'FastShutterSymbolIcon',
+           'ApertureValveSymbolIcon', 'RightAngleManualValveSymbolIcon',
+           'NeedleValveSymbolIcon', 'ProportionalValveSymbolIcon',
+           'RGASymbolIcon']

@@ -64,6 +64,7 @@ class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
     NAME = "Pirani Gauge"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = PiraniGaugeSymbolIcon()
         super(PiraniGauge, self).__init__(
             parent=parent,
             state_suffix=self._state_suffix,
@@ -71,13 +72,8 @@ class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_name='pressure',
             **kwargs)
 
-        self.icon = PiraniGaugeSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
-
-class HotCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
+class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
                       PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
@@ -144,6 +140,7 @@ class HotCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
     NAME = "Hot Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = HotCathodeGaugeSymbolIcon()
         super(HotCathodeGauge, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -152,11 +149,6 @@ class HotCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-
-        self.icon = HotCathodeGaugeSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
 
 
 class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
@@ -227,6 +219,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
     NAME = "Cold Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
+        self.icon = ColdCathodeGaugeSymbolIcon()
         super(ColdCathodeGauge, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -235,8 +228,3 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-
-        self.icon = ColdCathodeGaugeSymbolIcon(self)
-        self.setup_icon()
-        self.assemble_layout()
-        self.update_status_tooltip()
