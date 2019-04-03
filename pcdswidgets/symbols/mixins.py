@@ -376,9 +376,15 @@ class StateMixin(object):
         Internal method that updates the state property and triggers an update
         on the stylesheet and tooltip.
         """
+        if self._state_value is None:
+            return
         if len(self._state_enum) > 0:
-            self._state = self._state_enum[self._state_value]
-        self._state = str(self._state_value)
+            try:
+                self._state = self._state_enum[self._state_value]
+            except IndexError:
+                self._state = ""
+        else:
+            self._state = str(self._state_value)
         self.update_stylesheet()
         self.update_status_tooltip()
 
