@@ -15,6 +15,7 @@ def test_icon_smoke(qtbot, icon_class):
     icon = icon_class()
     qtbot.addWidget(icon)
     icon.show()
+    icon.repaint()
 
 
 @pytest.fixture(scope='function')
