@@ -56,7 +56,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.layout().setSpacing(0)
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.interlock)
-        self._controls_location = ContentLocation.Bottom
+        if not hasattr(self, '_controls_location'):
+            self._controls_location = ContentLocation.Bottom
         self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
