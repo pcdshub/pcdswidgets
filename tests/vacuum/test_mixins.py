@@ -1,8 +1,8 @@
 import pytest
 from qtpy.QtWidgets import QWidget
 
-from pcdswidgets.symbols.base import PCDSSymbolBase
-from pcdswidgets.symbols.mixins import (InterlockMixin, ErrorMixin, StateMixin,
+from pcdswidgets.vacuum.base import PCDSSymbolBase
+from pcdswidgets.vacuum.mixins import (InterlockMixin, ErrorMixin, StateMixin,
                                         OpenCloseStateMixin)
 
 

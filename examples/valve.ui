@@ -195,12 +195,12 @@ PneumaticValve[error=&quot;Lost Vacuum&quot;] #icon {
   <customwidget>
    <class>PCDSSymbolBase</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.symbols.base</header>
+   <header>pcdswidgets.vacuum.base</header>
   </customwidget>
   <customwidget>
    <class>PneumaticValve</class>
    <extends>PCDSSymbolBase</extends>
-   <header>pcdswidgets.symbols.valves</header>
+   <header>pcdswidgets.vacuum.valves</header>
   </customwidget>
   <customwidget>
    <class>PyDMEnumButton</class>
