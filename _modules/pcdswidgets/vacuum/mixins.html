@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.symbols.mixins &mdash; PCDSWidgets 0+untagged.65.g2760920 documentation</title>
+  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0+untagged.68.g2799827 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0+untagged.65.g2760920
+                0+untagged.68.g2799827
               </div>
             
           
@@ -84,7 +84,7 @@
             
               <p class="caption"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../symbols.html">Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -147,7 +147,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pcdswidgets.symbols.mixins</li>
+      <li>pcdswidgets.vacuum.mixins</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,7 +162,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pcdswidgets.symbols.mixins</h1><div class="highlight"><pre>
+  <h1>Source code for pcdswidgets.vacuum.mixins</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
 
@@ -175,7 +175,7 @@
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">ContentLocation</span>
 
 
-<div class="viewcode-block" id="InterlockMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.InterlockMixin">[docs]</a><span class="k">class</span> <span class="nc">InterlockMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="InterlockMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin">[docs]</a><span class="k">class</span> <span class="nc">InterlockMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The InterlockMixin class adds the interlock channel and `interlocked`</span>
 <span class="sd">    property to the widget.</span>
@@ -213,7 +213,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span>
 
-<div class="viewcode-block" id="InterlockMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.InterlockMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InterlockMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
 <span class="sd">        the `interlock_channel` to the widget along with a reset for the</span>
@@ -234,7 +234,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interlock_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="InterlockMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.InterlockMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="InterlockMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method adds the contribution of the interlock mixin into the</span>
 <span class="sd">        general status tooltip.</span>
@@ -249,7 +249,7 @@
         <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;Interlocked: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interlocked</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="InterlockMixin.interlock_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.InterlockMixin.interlock_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">interlock_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<div class="viewcode-block" id="InterlockMixin.interlock_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">interlock_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the connection status changes for the Interlock</span>
 <span class="sd">        Channel.</span>
@@ -261,7 +261,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
 
-<div class="viewcode-block" id="InterlockMixin.interlock_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.InterlockMixin.interlock_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">interlock_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="InterlockMixin.interlock_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">interlock_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the value changes for the Interlock Channel.</span>
 
@@ -277,7 +277,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="ErrorMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin">[docs]</a><span class="k">class</span> <span class="nc">ErrorMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin">[docs]</a><span class="k">class</span> <span class="nc">ErrorMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The ErrorMixin class adds the error channel and `error`</span>
 <span class="sd">    property to the widget.</span>
@@ -316,7 +316,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span>
 
-<div class="viewcode-block" id="ErrorMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
 <span class="sd">        the `error_channel` to the widget along with a reset for the error and</span>
@@ -337,7 +337,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">error_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ErrorMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method adds the contribution of the error mixin into the general</span>
 <span class="sd">        status tooltip.</span>
@@ -351,7 +351,7 @@
         <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;Error: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="ErrorMixin.error_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin.error_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin.error_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the connection status changes for the Error</span>
 <span class="sd">        Channel.</span>
@@ -363,7 +363,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_error_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
 
-<div class="viewcode-block" id="ErrorMixin.error_enum_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin.error_enum_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin.error_enum_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_enum_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the enumeration strings change for the Error</span>
 <span class="sd">        Channel.</span>
@@ -381,7 +381,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_error_enum</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_error_msg</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ErrorMixin.error_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ErrorMixin.error_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorMixin.error_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">error_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the value change for the Error Channel.</span>
 <span class="sd">        This callback triggers the update of the error message and also a</span>
@@ -415,7 +415,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="StateMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin">[docs]</a><span class="k">class</span> <span class="nc">StateMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin">[docs]</a><span class="k">class</span> <span class="nc">StateMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The StateMixin class adds the state channel and `state` property to the</span>
 <span class="sd">    widget.</span>
@@ -454,7 +454,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
 
-<div class="viewcode-block" id="StateMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
 <span class="sd">        the `state_channel` to the widget along with a reset for the</span>
@@ -475,7 +475,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="StateMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method adds the contribution of the state mixin into the general</span>
 <span class="sd">        status tooltip.</span>
@@ -490,7 +490,7 @@
         <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;State: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="StateMixin.state_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin.state_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin.state_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the connection status changes for the State</span>
 <span class="sd">        Channel.</span>
@@ -502,7 +502,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
 
-<div class="viewcode-block" id="StateMixin.state_enum_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin.state_enum_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin.state_enum_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_enum_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the enumeration strings change for the State</span>
 <span class="sd">        Channel.</span>
@@ -520,7 +520,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_enum</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_state_msg</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="StateMixin.state_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.StateMixin.state_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="StateMixin.state_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the value change for the State Channel.</span>
 <span class="sd">        This callback triggers the update of the state message and also a</span>
@@ -554,7 +554,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="OpenCloseStateMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.OpenCloseStateMixin">[docs]</a><span class="k">class</span> <span class="nc">OpenCloseStateMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCloseStateMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin">[docs]</a><span class="k">class</span> <span class="nc">OpenCloseStateMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The OpenCloseStateMixin class adds two channels (Open and Close State) and</span>
 <span class="sd">    a `state` property based on a combination of the two channels to the</span>
@@ -609,7 +609,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;Close&quot;</span>
 
-<div class="viewcode-block" id="OpenCloseStateMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.OpenCloseStateMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCloseStateMixin.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
 <span class="sd">        the `state_open_channel` and `state_close_channel` to the widget along</span>
@@ -639,7 +639,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state_close_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="OpenCloseStateMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.OpenCloseStateMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCloseStateMixin.status_tooltip"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip">[docs]</a>    <span class="k">def</span> <span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method adds the contribution of the open close state mixin into</span>
 <span class="sd">        the general status tooltip.</span>
@@ -654,7 +654,7 @@
         <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;State: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="OpenCloseStateMixin.state_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCloseStateMixin.state_connection_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the connection status changes for one of the</span>
 <span class="sd">        channels in this mixin.</span>
@@ -672,7 +672,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_close_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
 
-<div class="viewcode-block" id="OpenCloseStateMixin.state_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.OpenCloseStateMixin.state_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenCloseStateMixin.state_value_changed"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed">[docs]</a>    <span class="k">def</span> <span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Callback invoked when the value changes for one of the channels in this</span>
 <span class="sd">        mixin.</span>
@@ -695,7 +695,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="ButtonControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonControl">[docs]</a><span class="k">class</span> <span class="nc">ButtonControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl">[docs]</a><span class="k">class</span> <span class="nc">ButtonControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The ButtonControl class adds a PyDMEnumButton to the widget for controls.</span>
 
@@ -715,7 +715,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ButtonControl.assemble_layout"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonControl.assemble_layout">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonControl.assemble_layout"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.assemble_layout">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assembles the widget&#39;s inner layout depending on the ContentLocation</span>
 <span class="sd">        and other configurations set and adjust the orientation of the control</span>
@@ -730,7 +730,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ButtonControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        created.</span>
@@ -741,7 +741,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
                                                      <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ButtonControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        destroyed.</span>
@@ -751,7 +751,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="LabelControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.LabelControl">[docs]</a><span class="k">class</span> <span class="nc">LabelControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="LabelControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl">[docs]</a><span class="k">class</span> <span class="nc">LabelControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The LabelControl class adds a PyDMLabel to the widget for controls.</span>
 
@@ -778,7 +778,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LabelControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.LabelControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LabelControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        created.</span>
@@ -789,7 +789,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LabelControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.LabelControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LabelControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        destroyed.</span>
@@ -799,7 +799,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="ButtonLabelControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonLabelControl">[docs]</a><span class="k">class</span> <span class="nc">ButtonLabelControl</span><span class="p">(</span><span class="n">ButtonControl</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonLabelControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl">[docs]</a><span class="k">class</span> <span class="nc">ButtonLabelControl</span><span class="p">(</span><span class="n">ButtonControl</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the</span>
 <span class="sd">    widget for controls.</span>
@@ -827,7 +827,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ButtonLabelControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonLabelControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonLabelControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        created.</span>
@@ -838,7 +838,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ButtonLabelControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.symbols.mixins.ButtonLabelControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ButtonLabelControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method invoked when the channels associated with the widget must be</span>
 <span class="sd">        destroyed.</span>

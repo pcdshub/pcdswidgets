@@ -5,5 +5,5 @@ Others
 Residual Gas Analyzer
 ---------------------
 
-.. autoclass:: pcdswidgets.symbols.others.RGA
+.. autoclass:: pcdswidgets.vacuum.others.RGA
    :members:

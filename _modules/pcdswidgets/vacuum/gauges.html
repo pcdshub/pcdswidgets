@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.symbols.gauges &mdash; PCDSWidgets 0+untagged.65.g2760920 documentation</title>
+  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0+untagged.68.g2799827 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0+untagged.65.g2760920
+                0+untagged.68.g2799827
               </div>
             
           
@@ -84,7 +84,7 @@
             
               <p class="caption"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../symbols.html">Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -147,7 +147,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pcdswidgets.symbols.gauges</li>
+      <li>pcdswidgets.vacuum.gauges</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,7 +162,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pcdswidgets.symbols.gauges</h1><div class="highlight"><pre>
+  <h1>Source code for pcdswidgets.vacuum.gauges</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span>
 <span class="kn">from</span> <span class="nn">.mixins</span> <span class="k">import</span> <span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
                      <span class="n">LabelControl</span><span class="p">)</span>
@@ -170,7 +170,7 @@
                             <span class="n">ColdCathodeGaugeSymbolIcon</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="PiraniGauge"><a class="viewcode-back" href="../../../symbols/gauges.html#pcdswidgets.symbols.gauges.PiraniGauge">[docs]</a><span class="k">class</span> <span class="nc">PiraniGauge</span><span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<div class="viewcode-block" id="PiraniGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.PiraniGauge">[docs]</a><span class="k">class</span> <span class="nc">PiraniGauge</span><span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Pirani Gauge with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -238,7 +238,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HotCathodeGauge"><a class="viewcode-back" href="../../../symbols/gauges.html#pcdswidgets.symbols.gauges.HotCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">HotCathodeGauge</span><span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
+<div class="viewcode-block" id="HotCathodeGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.HotCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">HotCathodeGauge</span><span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
                       <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing an Ion Pump with the proper icon and controls.</span>
@@ -316,7 +316,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ColdCathodeGauge"><a class="viewcode-back" href="../../../symbols/gauges.html#pcdswidgets.symbols.gauges.ColdCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">ColdCathodeGauge</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
+<div class="viewcode-block" id="ColdCathodeGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.ColdCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">ColdCathodeGauge</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
                        <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Cold Cathode Gauge with the proper icon and</span>

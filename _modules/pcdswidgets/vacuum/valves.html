@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.symbols.valves &mdash; PCDSWidgets 0+untagged.65.g2760920 documentation</title>
+  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0+untagged.68.g2799827 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0+untagged.65.g2760920
+                0+untagged.68.g2799827
               </div>
             
           
@@ -84,7 +84,7 @@
             
               <p class="caption"><span class="caption-text">Widgets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../symbols.html">Symbols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -147,7 +147,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pcdswidgets.symbols.valves</li>
+      <li>pcdswidgets.vacuum.valves</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,7 +162,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pcdswidgets.symbols.valves</h1><div class="highlight"><pre>
+  <h1>Source code for pcdswidgets.vacuum.valves</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="k">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Property</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span><span class="p">,</span> <span class="n">ContentLocation</span>
@@ -174,7 +174,7 @@
                             <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="PneumaticValve"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.PneumaticValve">[docs]</a><span class="k">class</span> <span class="nc">PneumaticValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
+<div class="viewcode-block" id="PneumaticValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValve">[docs]</a><span class="k">class</span> <span class="nc">PneumaticValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
                      <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Pneumatic Valve with the proper icon and</span>
@@ -266,7 +266,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ApertureValve"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.ApertureValve">[docs]</a><span class="k">class</span> <span class="nc">ApertureValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
+<div class="viewcode-block" id="ApertureValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ApertureValve">[docs]</a><span class="k">class</span> <span class="nc">ApertureValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
                     <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing an Aperture Valve with the proper icon and</span>
@@ -358,7 +358,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FastShutter"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.FastShutter">[docs]</a><span class="k">class</span> <span class="nc">FastShutter</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
+<div class="viewcode-block" id="FastShutter"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.FastShutter">[docs]</a><span class="k">class</span> <span class="nc">FastShutter</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">OpenCloseStateMixin</span><span class="p">,</span>
                   <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Fast Shutter with the proper icon and</span>
@@ -443,7 +443,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="NeedleValve"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.NeedleValve">[docs]</a><span class="k">class</span> <span class="nc">NeedleValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<div class="viewcode-block" id="NeedleValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.NeedleValve">[docs]</a><span class="k">class</span> <span class="nc">NeedleValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Needle Valve with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -516,7 +516,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ProportionalValve"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.ProportionalValve">[docs]</a><span class="k">class</span> <span class="nc">ProportionalValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
+<div class="viewcode-block" id="ProportionalValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ProportionalValve">[docs]</a><span class="k">class</span> <span class="nc">ProportionalValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
                         <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Proportional Valve with the proper icon and</span>
@@ -590,7 +590,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RightAngleManualValve"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.RightAngleManualValve">[docs]</a><span class="k">class</span> <span class="nc">RightAngleManualValve</span><span class="p">(</span><span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<div class="viewcode-block" id="RightAngleManualValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.RightAngleManualValve">[docs]</a><span class="k">class</span> <span class="nc">RightAngleManualValve</span><span class="p">(</span><span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Right Angle Manual Valve with the proper</span>
 <span class="sd">    icon.</span>
@@ -628,7 +628,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_controls_location</span> <span class="o">=</span> <span class="n">ContentLocation</span><span class="o">.</span><span class="n">Hidden</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RightAngleManualValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RightAngleManualValve.sizeHint"><a class="viewcode-back" href="../../../symbols/valves.html#pcdswidgets.symbols.valves.RightAngleManualValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RightAngleManualValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.RightAngleManualValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Suggested initial size for the widget.</span>
 
