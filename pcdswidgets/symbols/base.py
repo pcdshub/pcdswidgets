@@ -320,10 +320,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         widgets = widget_map[self._controls_location][1]
 
+        # Hide the controls box if they are not going to be included in layout
         controls_visible = self._controls_location != ContentLocation.Hidden
         self.controls_frame.setVisible(controls_visible)
 
         for widget in widgets:
+            # Each widget is in a separate layout to help with expansion rules
             box_layout = QHBoxLayout()
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
