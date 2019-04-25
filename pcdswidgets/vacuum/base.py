@@ -42,6 +42,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._show_icon = True
         self._show_status_tooltip = True
         self._icon_size = -1
+
+        if not hasattr(self, 'icon'):
+            self.icon = None
+
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
         self.interlock.setSizePolicy(QSizePolicy.Expanding,
@@ -325,12 +329,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.controls_frame.setVisible(controls_visible)
 
         for widget in widgets:
+            if widget is None:
+                continue
             # Each widget is in a separate layout to help with expansion rules
             box_layout = QHBoxLayout()
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
 
     def setup_icon(self):
+        if not self.icon:
+            return
         self.icon.setMinimumSize(16, 16)
         self.icon.setSizePolicy(QSizePolicy.Expanding,
                                 QSizePolicy.Expanding)
