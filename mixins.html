@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Mixins &mdash; PCDSWidgets 0+untagged.68.g2799827 documentation</title>
+  <title>Mixins &mdash; PCDSWidgets 0+untagged.70.g9c498dc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0+untagged.68.g2799827
+                0+untagged.70.g9c498dc
               </div>
             
           
@@ -192,15 +192,12 @@ property to the widget.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>interlock_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the interlock channel address.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interlock_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the interlock channel address.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.InterlockMixin.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.create_channels" title="Permalink to this definition">¶</a></dt>
@@ -214,45 +211,37 @@ interlocked and interlock_connected variables.</p>
 <code class="descname">interlock_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.interlock_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the connection status changes for the Interlock
 Channel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed">
 <code class="descname">interlock_value_changed</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.interlock_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the value changes for the Interlock Channel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel will be either 0 or 1 with 0 meaning
-that the widget is interlocked.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel will be either 0 or 1 with 0 meaning
+that the widget is interlocked.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pcdswidgets.vacuum.mixins.InterlockMixin.interlocked">
 <code class="descname">interlocked</code><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlocked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Property used to query interlock state.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -260,16 +249,14 @@ that the widget is interlocked.</td>
 <code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds the contribution of the interlock mixin into the
 general status tooltip.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -288,15 +275,12 @@ property to the widget.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>error_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the error channel address.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>error_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the error channel address.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.ErrorMixin.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.create_channels" title="Permalink to this definition">¶</a></dt>
@@ -309,16 +293,14 @@ error_connected variables.</p>
 <dt id="pcdswidgets.vacuum.mixins.ErrorMixin.error">
 <code class="descname">error</code><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Property used to query the error state.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -326,14 +308,11 @@ error_connected variables.</p>
 <code class="descname">error_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.error_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the connection status changes for the Error
 Channel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -344,14 +323,11 @@ Channel.
 This callback triggers the update of the error message and also a
 repaint of the widget with the new stylesheet guidelines for the
 current error value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -361,14 +337,11 @@ current error value.</p>
 This callback triggers the update of the error message and also a
 repaint of the widget with the new stylesheet guidelines for the
 current error value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -376,16 +349,14 @@ current error value.</p>
 <code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds the contribution of the error mixin into the general
 status tooltip.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -404,15 +375,12 @@ widget.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the state channel address.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the state channel address.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.StateMixin.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.create_channels" title="Permalink to this definition">¶</a></dt>
@@ -425,16 +393,14 @@ state and state_connected variables.</p>
 <dt id="pcdswidgets.vacuum.mixins.StateMixin.state">
 <code class="descname">state</code><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Property used to query the state of the widget.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -442,14 +408,11 @@ state and state_connected variables.</p>
 <code class="descname">state_connection_changed</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.state_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the connection status changes for the State
 Channel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -460,14 +423,11 @@ Channel.
 This callback triggers the update of the state message and also a
 repaint of the widget with the new stylesheet guidelines for the
 current state value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – The string items</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -477,14 +437,11 @@ current state value.</p>
 This callback triggers the update of the state message and also a
 repaint of the widget with the new stylesheet guidelines for the
 current state value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -492,16 +449,14 @@ current state value.</p>
 <code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds the contribution of the state mixin into the general
 status tooltip.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -521,20 +476,16 @@ widget.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>open_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the open state channel address.</li>
-<li><strong>close_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the close state channel address.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>open_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the open state channel address.</p></li>
+<li><p><strong>close_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the close state channel address.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels" title="Permalink to this definition">¶</a></dt>
@@ -547,17 +498,15 @@ with a reset for the state and interlock_connected variables.</p>
 <dt id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state">
 <code class="descname">state</code><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Property used to query the state of the widget.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The return string will either be <cite>Open</cite>, <cite>Close</cite> or <cite>INVALID</cite> when
-it was not possible to determine the state.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The return string will either be <cite>Open</cite>, <cite>Close</cite> or <cite>INVALID</cite> when
+it was not possible to determine the state.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -565,19 +514,15 @@ it was not possible to determine the state.</td>
 <code class="descname">state_connection_changed</code><span class="sig-paren">(</span><em>which</em>, <em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.state_connection_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the connection status changes for one of the
 channels in this mixin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
-be either “OPEN” or “CLOSE”.</li>
-<li><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</p></li>
+<li><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – True if connected, False otherwise.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -585,20 +530,16 @@ be either “OPEN” or “CLOSE”.</li>
 <code class="descname">state_value_changed</code><span class="sig-paren">(</span><em>which</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.state_value_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback invoked when the value changes for one of the channels in this
 mixin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
-be either “OPEN” or “CLOSE”.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel which will be either 0 or 1 with 1
-meaning that a certain state is active.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The value from the channel which will be either 0 or 1 with 1
+meaning that a certain state is active.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -606,16 +547,14 @@ meaning that a certain state is active.</li>
 <code class="descname">status_tooltip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.status_tooltip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method adds the contribution of the open close state mixin into
 the general status tooltip.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -627,15 +566,12 @@ the general status tooltip.</p>
 <dt id="pcdswidgets.vacuum.mixins.ButtonControl">
 <em class="property">class </em><code class="descclassname">pcdswidgets.vacuum.mixins.</code><code class="descname">ButtonControl</code><span class="sig-paren">(</span><em>command_suffix</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ButtonControl class adds a PyDMEnumButton to the widget for controls.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the command button channel address.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.ButtonControl.assemble_layout">
 <code class="descname">assemble_layout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonControl.assemble_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonControl.assemble_layout" title="Permalink to this definition">¶</a></dt>
@@ -669,20 +605,16 @@ This method also clears the channel address for the control button.</p>
 <dt id="pcdswidgets.vacuum.mixins.LabelControl">
 <em class="property">class </em><code class="descclassname">pcdswidgets.vacuum.mixins.</code><code class="descname">LabelControl</code><span class="sig-paren">(</span><em>readback_suffix</em>, <em>readback_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#LabelControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.LabelControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>The LabelControl class adds a PyDMLabel to the widget for controls.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the readback label channel address.</li>
-<li><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
-with stylesheet</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</p></li>
+<li><p><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.LabelControl.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#LabelControl.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.LabelControl.create_channels" title="Permalink to this definition">¶</a></dt>
@@ -709,22 +641,18 @@ This method also clears the channel address for the control button.</p>
 <em class="property">class </em><code class="descclassname">pcdswidgets.vacuum.mixins.</code><code class="descname">ButtonLabelControl</code><span class="sig-paren">(</span><em>command_suffix</em>, <em>readback_suffix</em>, <em>readback_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonLabelControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the
 widget for controls.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the command button channel address.</li>
-<li><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
-to compose the readback label channel address.</li>
-<li><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
-with stylesheet</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</p></li>
+<li><p><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</p></li>
+<li><p><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels">
 <code class="descname">create_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonLabelControl.create_channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels" title="Permalink to this definition">¶</a></dt>
