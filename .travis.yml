@@ -7,6 +7,10 @@ env:
     # Doctr deploy key for pcdshub/pcdswidgets
     - secure: "ZpbEFHUMVvNorSL19HMT7MD7D4/0q3tk3uyeNqzfVQE0tH0RM437AApZEQ35C4ndKeu97s9uY+Ajs9jfy1N2d/HcApP+n33EX+ufdPbYIL/7eUJnU8yu7paWII1oka76gkQMrJJvVhLzhDa5JtUhs/WR6LmBmYMucKRXaN9UFpwQ13WmNxbHEd71TyY4eYRhq4CNR0JYXKPcl7qVEt3GJ8OG9s71qamyBbCdkZFOylbcKJ0PVVi9OX/UrDarRBQgN7XmUptHocED6kjvmrhjqxg4aZ5c8v+9t00o8dMxHTXituuadcGDhYuic8ZVLm0v6dZxH7fK1hgXxY9t0gWvYv/PSIN7FME5tU9DcTfC36UtMCN5Jkz1ohH5PSJ2AeTeM/akfeiTxusQWrqIWNt32i8HlZvqtUK3Iss9SGQIrgGeusu5S4TqjUb6hgbkDlQmpZ3KqOcoRk/8rBKIfOoqJSs3m5qg0v5Zz95V07K+wsTNuMO0Zb5El+BCHcLGIFleu+m73qxJ1byz0sQhcqAaUt3y3kzxIwOYSOqYJQLCIHXnnFZyIcow6KJZQYO2ib78fpZmNoeXjoO2rA9ZziJuU/nyKKQncJSdKEAplUFG2Uir9r0aRitCsfjtgrUh9fj/n3OXOas8gS0VJ+F4SQUkrhgSwOsFilB4xzHeGYNz/i0="
 
+dist: xenial
+services:
+    - xvfb
+
 matrix:
   include:
     - python: 3.6
@@ -17,23 +21,17 @@ matrix:
     - python: 3.6
       env: PYDM_CHANNEL=pydm-dev
     - python: 3.7
-      dist: xenial
       env:
         - BUILD=1
         - PYDM_CHANNEL=pcds-tag
     - python: 3.7
-      dist: xenial
       env: PYDM_CHANNEL=pydm-dev
   allow_failures:
     - python: 3.7
-      dist: xenial
       env:
         - BUILD=1
         - PYDM_CHANNEL=pcds-tag
 install:
-  - sudo apt-get update
-  # Install windows manager
-  - sudo apt-get install -y xvfb herbstluftwm
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -53,14 +51,6 @@ install:
   # Launch Conda environment
   - source activate test-environment
 
-before_script:
-    #Taken from docs.travis-ci.com/user/gui-and-headless-browsers
-  - "export DISPLAY=:99.0"
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX +render -noreset"
-  - sleep 3 # give xvfb some time to start
-  # Run windows manager
-  - "herbstluftwm &"
-  - sleep 1
 
 script:
   - coverage run run_tests.py --disable-warnings 
