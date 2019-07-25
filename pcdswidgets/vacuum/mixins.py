@@ -659,8 +659,7 @@ class ButtonLabelControl(ButtonControl):
         self.readback_label.setObjectName(readback_name)
         self.readback_label.setAlignment(Qt.AlignCenter)
         super(ButtonLabelControl, self).__init__(command_suffix, **kwargs)
-
-        self.controls_frame.layout().addWidget(self.readback_label)
+        self.controls_frame.layout().insertWidget(0, self.readback_label)
 
     def create_channels(self):
         """
