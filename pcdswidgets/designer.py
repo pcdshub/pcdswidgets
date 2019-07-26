@@ -1,6 +1,6 @@
 from pydm.widgets.qtplugin_base import qtplugin_factory
 
-from .vacuum.gauges import PiraniGauge, HotCathodeGauge, ColdCathodeGauge
+from .vacuum.gauges import RoughGauge, HotCathodeGauge, ColdCathodeGauge
 from .vacuum.others import RGA
 from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
 from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
@@ -31,7 +31,7 @@ PCDSGetterPumpPlugin = qtplugin_factory(GetterPump, group="PCDS Pumps")
 
 
 # Gauges
-PCDSPiraniGaugePlugin = qtplugin_factory(PiraniGauge, group="PCDS Gauges")
+PCDSRoughGaugePlugin = qtplugin_factory(RoughGauge, group="PCDS Gauges")
 PCDSHotCathodeGaugePlugin = qtplugin_factory(HotCathodeGauge,
                                              group="PCDS Gauges")
 PCDSColdCathodeGaugePlugin = qtplugin_factory(ColdCathodeGauge,

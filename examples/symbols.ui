@@ -62,7 +62,7 @@
       </widget>
      </item>
      <item row="5" column="0">
-      <widget class="PiraniGauge" name="PiraniGauge">
+      <widget class="RoughGauge" name="RoughGauge">
        <property name="toolTip">
         <string/>
        </property>
@@ -219,7 +219,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Pirani Gauge</string>
+        <string>Rough Gauge</string>
        </property>
       </widget>
      </item>
@@ -293,7 +293,7 @@
    <header>pcdswidgets.vacuum.pumps</header>
   </customwidget>
   <customwidget>
-   <class>PiraniGauge</class>
+   <class>RoughGauge</class>
    <extends>PCDSSymbolBase</extends>
    <header>pcdswidgets.vacuum.gauges</header>
   </customwidget>
