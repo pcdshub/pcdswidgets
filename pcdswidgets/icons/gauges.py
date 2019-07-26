@@ -4,7 +4,7 @@ from qtpy.QtGui import (QPainterPath)
 from .base import BaseSymbolIcon
 
 
-class PiraniGaugeSymbolIcon(BaseSymbolIcon):
+class RoughGaugeSymbolIcon(BaseSymbolIcon):
     """
     A widget with a pirani gauge symbol drawn in it.
 

@@ -3,13 +3,13 @@ from qtpy.QtCore import QSize
 from .base import PCDSSymbolBase
 from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
                      LabelControl)
-from ..icons.gauges import (PiraniGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
+from ..icons.gauges import (RoughGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
                             ColdCathodeGaugeSymbolIcon)
 
 
-class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
+class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Pirani Gauge with the proper icon and
+    A Symbol Widget representing a Rough Gauge with the proper icon and
     controls.
 
     Parameters
@@ -50,11 +50,11 @@ class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
 
     .. code-block:: css
 
-        PiraniGauge [state="Off"] {
+        RoughGauge [state="Off"] {
             qproperty-brush: red;
             color: gray;
         }
-        PiraniGauge [state="On"] {
+        RoughGauge [state="On"] {
             qproperty-brush: green;
             color: black;
         }
@@ -63,11 +63,11 @@ class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
     _state_suffix = ":PRESS_OK"
     _readback_suffix = ":PRESS"
 
-    NAME = "Pirani Gauge"
+    NAME = "Rough Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = PiraniGaugeSymbolIcon()
-        super(PiraniGauge, self).__init__(
+        self.icon = RoughGaugeSymbolIcon()
+        super(RoughGauge, self).__init__(
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,

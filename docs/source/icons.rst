@@ -14,13 +14,13 @@ Gauges
 ============ ========== ============================================================
 Name         Icon       Import
 ============ ========== ============================================================
-Pirani       |pirani|   ``from pcdswidgets.icons import PiraniGaugeSymbolIcon``
+Rough        |rough|    ``from pcdswidgets.icons import RoughGaugeSymbolIcon``
 Cathode      |cathode|  ``from pcdswidgets.icons import CathodeGaugeSymbolIcon``
 Hot Cathode  |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIcon``
 Cold Cathode |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
 ============ ========== ============================================================
 
-.. |pirani| image:: /_static/icons/PiraniGaugeSymbolIcon.png
+.. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
 .. |cathode| image:: /_static/icons/CathodeGaugeSymbolIcon.png
 .. |hcathode| image:: /_static/icons/HotCathodeGaugeSymbolIcon.png
 .. |ccathode| image:: /_static/icons/ColdCathodeGaugeSymbolIcon.png

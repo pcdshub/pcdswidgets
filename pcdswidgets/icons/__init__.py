@@ -1,4 +1,4 @@
-from .gauges import (PiraniGaugeSymbolIcon, CathodeGaugeSymbolIcon,
+from .gauges import (RoughGaugeSymbolIcon, CathodeGaugeSymbolIcon,
                      HotCathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon)
 from .pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
                     ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
@@ -7,7 +7,7 @@ from .valves import (PneumaticValveSymbolIcon, FastShutterSymbolIcon,
                      NeedleValveSymbolIcon, ProportionalValveSymbolIcon)
 from .others import RGASymbolIcon
 
-__all__ = ['PiraniGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
+__all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
            'HotCathodeGaugeSymbolIcon', 'ColdCathodeGaugeSymbolIcon',
            'IonPumpSymbolIcon', 'TurboPumpSymbolIcon', 'ScrollPumpSymbolIcon',
            'GetterPumpSymbolIcon',
