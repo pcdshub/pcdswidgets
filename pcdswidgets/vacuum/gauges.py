@@ -1,3 +1,5 @@
+from qtpy.QtCore import QSize
+
 from .base import PCDSSymbolBase
 from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
                      LabelControl)
@@ -71,6 +73,9 @@ class PiraniGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
+
+    def sizeHint(self):
+        return QSize(70, 60)
 
 
 class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
@@ -150,6 +155,9 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
             readback_name='pressure',
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 80)
+
 
 class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
                        PCDSSymbolBase):
@@ -228,3 +236,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
+
+    def sizeHint(self):
+        return QSize(180, 80)
