@@ -49,7 +49,7 @@ class RGA(PCDSSymbolBase):
         -------
         size : QSize
         """
-        return QSize(64, 64)
+        return QSize(40, 40)
 
     @Property(str, designable=False)
     def channelsPrefix(self):

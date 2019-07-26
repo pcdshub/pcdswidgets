@@ -92,6 +92,9 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
                                       readback_name='pressure',
                                       **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 80)
+
 
 class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
                 PCDSSymbolBase):
@@ -173,6 +176,9 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+
+    def sizeHint(self):
+        return QSize(180, 80)
 
 
 class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
@@ -256,6 +262,9 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             command_suffix=self._command_suffix,
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 80)
+
 
 class GetterPump(PCDSSymbolBase):
     """
@@ -302,7 +311,7 @@ class GetterPump(PCDSSymbolBase):
         -------
         size : QSize
         """
-        return QSize(64, 64)
+        return QSize(40, 40)
 
     @Property(str, designable=False)
     def channelsPrefix(self):

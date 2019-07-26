@@ -100,6 +100,9 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 70)
+
 
 class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
                     ButtonControl, PCDSSymbolBase):
@@ -192,6 +195,9 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 70)
+
 
 class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
                   ButtonControl, PCDSSymbolBase):
@@ -277,6 +283,9 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 70)
+
 
 class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
@@ -349,6 +358,9 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+
+    def sizeHint(self):
+        return QSize(180, 70)
 
 
 class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
@@ -424,6 +436,9 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
             command_suffix=self._command_suffix,
             **kwargs)
 
+    def sizeHint(self):
+        return QSize(180, 70)
+
 
 class RightAngleManualValve(PCDSSymbolBase):
     """
@@ -471,7 +486,7 @@ class RightAngleManualValve(PCDSSymbolBase):
         -------
         size : QSize
         """
-        return QSize(64, 64)
+        return QSize(40, 40)
 
     @Property(str, designable=False)
     def channelsPrefix(self):
