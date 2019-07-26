@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.1.0rc1+5.gf0931b4 documentation</title>
+  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.1.0rc1+7.g135cf83 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+5.gf0931b4
+                0.1.0rc1+7.g135cf83
               </div>
             
           
@@ -168,13 +168,13 @@
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span>
 <span class="kn">from</span> <span class="nn">.mixins</span> <span class="k">import</span> <span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
                      <span class="n">LabelControl</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..icons.gauges</span> <span class="k">import</span> <span class="p">(</span><span class="n">PiraniGaugeSymbolIcon</span><span class="p">,</span> <span class="n">HotCathodeGaugeSymbolIcon</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">..icons.gauges</span> <span class="k">import</span> <span class="p">(</span><span class="n">RoughGaugeSymbolIcon</span><span class="p">,</span> <span class="n">HotCathodeGaugeSymbolIcon</span><span class="p">,</span>
                             <span class="n">ColdCathodeGaugeSymbolIcon</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="PiraniGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.PiraniGauge">[docs]</a><span class="k">class</span> <span class="nc">PiraniGauge</span><span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<div class="viewcode-block" id="RoughGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.RoughGauge">[docs]</a><span class="k">class</span> <span class="nc">RoughGauge</span><span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A Symbol Widget representing a Pirani Gauge with the proper icon and</span>
+<span class="sd">    A Symbol Widget representing a Rough Gauge with the proper icon and</span>
 <span class="sd">    controls.</span>
 
 <span class="sd">    Parameters</span>
@@ -215,11 +215,11 @@
 
 <span class="sd">    .. code-block:: css</span>
 
-<span class="sd">        PiraniGauge [state=&quot;Off&quot;] {</span>
+<span class="sd">        RoughGauge [state=&quot;Off&quot;] {</span>
 <span class="sd">            qproperty-brush: red;</span>
 <span class="sd">            color: gray;</span>
 <span class="sd">        }</span>
-<span class="sd">        PiraniGauge [state=&quot;On&quot;] {</span>
+<span class="sd">        RoughGauge [state=&quot;On&quot;] {</span>
 <span class="sd">            qproperty-brush: green;</span>
 <span class="sd">            color: black;</span>
 <span class="sd">        }</span>
@@ -228,18 +228,18 @@
     <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_OK&quot;</span>
     <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS&quot;</span>
 
-    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Pirani Gauge&quot;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Rough Gauge&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PiraniGaugeSymbolIcon</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PiraniGauge</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">RoughGaugeSymbolIcon</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RoughGauge</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
             <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PiraniGauge.sizeHint"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.PiraniGauge.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RoughGauge.sizeHint"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.RoughGauge.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span></div></div>
 
 

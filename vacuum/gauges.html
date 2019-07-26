@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gauges &mdash; PCDSWidgets 0.1.0rc1+5.gf0931b4 documentation</title>
+  <title>Gauges &mdash; PCDSWidgets 0.1.0rc1+7.g135cf83 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.1.0rc1+5.gf0931b4
+                0.1.0rc1+7.g135cf83
               </div>
             
           
@@ -93,7 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="valves.html">Valves</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pumps.html">Pumps</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Gauges</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pirani-gauge">Pirani Gauge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rough-gauge">Rough Gauge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#hot-cathode-gauge">Hot Cathode Gauge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cold-cathode-gauge">Cold Cathode Gauge</a></li>
 </ul>
@@ -186,12 +186,12 @@
             
   <div class="section" id="gauges">
 <h1>Gauges<a class="headerlink" href="#gauges" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pirani-gauge">
-<h2>Pirani Gauge<a class="headerlink" href="#pirani-gauge" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="rough-gauge">
+<h2>Rough Gauge<a class="headerlink" href="#rough-gauge" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pcdswidgets.vacuum.gauges.PiraniGauge">
-<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.gauges.</code><code class="sig-name descname">PiraniGauge</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#PiraniGauge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.PiraniGauge" title="Permalink to this definition">¶</a></dt>
-<dd><p>A Symbol Widget representing a Pirani Gauge with the proper icon and
+<dt id="pcdswidgets.vacuum.gauges.RoughGauge">
+<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.gauges.</code><code class="sig-name descname">RoughGauge</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#RoughGauge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.RoughGauge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Symbol Widget representing a Rough Gauge with the proper icon and
 controls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -250,19 +250,19 @@ Properties are also available to offer wider customization possibilities.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">PiraniGauge</span> <span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span><span class="o">]</span> <span class="p">{</span>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">RoughGauge</span> <span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span><span class="o">]</span> <span class="p">{</span>
     <span class="n">qproperty-brush</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
     <span class="k">color</span><span class="p">:</span> <span class="kc">gray</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="nt">PiraniGauge</span> <span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;On&quot;</span><span class="o">]</span> <span class="p">{</span>
+<span class="nt">RoughGauge</span> <span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;On&quot;</span><span class="o">]</span> <span class="p">{</span>
     <span class="n">qproperty-brush</span><span class="p">:</span> <span class="kc">green</span><span class="p">;</span>
     <span class="k">color</span><span class="p">:</span> <span class="kc">black</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="pcdswidgets.vacuum.gauges.PiraniGauge.sizeHint">
-<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#PiraniGauge.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.PiraniGauge.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dt id="pcdswidgets.vacuum.gauges.RoughGauge.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#RoughGauge.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.RoughGauge.sizeHint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suggested initial size for the widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>

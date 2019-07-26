@@ -6,11 +6,11 @@
 ./_images/HotCathodeGaugeSymbolIcon.png
 ./_images/IonPumpSymbolIcon.png
 ./_images/NeedleValveSymbolIcon.png
-./_images/PiraniGaugeSymbolIcon.png
 ./_images/PneumaticValveSymbolIcon.png
 ./_images/ProportionalValveSymbolIcon.png
 ./_images/RGASymbolIcon.png
 ./_images/RightAngleManualValveSymbolIcon.png
+./_images/RoughGaugeSymbolIcon.png
 ./_images/ScrollPumpSymbolIcon.png
 ./_images/TurboPumpSymbolIcon.png
 ./_images/content_location.png
@@ -74,11 +74,11 @@
 ./_static/icons/HotCathodeGaugeSymbolIcon.png
 ./_static/icons/IonPumpSymbolIcon.png
 ./_static/icons/NeedleValveSymbolIcon.png
-./_static/icons/PiraniGaugeSymbolIcon.png
 ./_static/icons/PneumaticValveSymbolIcon.png
 ./_static/icons/ProportionalValveSymbolIcon.png
 ./_static/icons/RGASymbolIcon.png
 ./_static/icons/RightAngleManualValveSymbolIcon.png
+./_static/icons/RoughGaugeSymbolIcon.png
 ./_static/icons/ScrollPumpSymbolIcon.png
 ./_static/icons/TurboPumpSymbolIcon.png
 ./_static/jquery-3.2.1.js

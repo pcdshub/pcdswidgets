@@ -2,10 +2,10 @@
 Gauges
 ========
 
-Pirani Gauge
+Rough Gauge
 ---------------
 
-.. autoclass:: pcdswidgets.vacuum.gauges.PiraniGauge
+.. autoclass:: pcdswidgets.vacuum.gauges.RoughGauge
    :members:
 
 Hot Cathode Gauge
