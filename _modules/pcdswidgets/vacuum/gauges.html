@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.1.0rc1+3.g8335220 documentation</title>
+  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.1.0rc1+5.gf0931b4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+3.g8335220
+                0.1.0rc1+5.gf0931b4
               </div>
             
           
@@ -163,7 +163,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pcdswidgets.vacuum.gauges</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span>
+<span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="k">import</span> <span class="n">QSize</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span>
 <span class="kn">from</span> <span class="nn">.mixins</span> <span class="k">import</span> <span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
                      <span class="n">LabelControl</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..icons.gauges</span> <span class="k">import</span> <span class="p">(</span><span class="n">PiraniGaugeSymbolIcon</span><span class="p">,</span> <span class="n">HotCathodeGaugeSymbolIcon</span><span class="p">,</span>
@@ -235,7 +237,10 @@
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
             <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PiraniGauge.sizeHint"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.PiraniGauge.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="HotCathodeGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.HotCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">HotCathodeGauge</span><span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
@@ -313,7 +318,10 @@
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
             <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HotCathodeGauge.sizeHint"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.HotCathodeGauge.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ColdCathodeGauge"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.ColdCathodeGauge">[docs]</a><span class="k">class</span> <span class="nc">ColdCathodeGauge</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
@@ -392,7 +400,10 @@
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
             <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ColdCathodeGauge.sizeHint"><a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.ColdCathodeGauge.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

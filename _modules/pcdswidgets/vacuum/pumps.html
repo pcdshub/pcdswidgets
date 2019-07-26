@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.pumps &mdash; PCDSWidgets 0.1.0rc1+3.g8335220 documentation</title>
+  <title>pcdswidgets.vacuum.pumps &mdash; PCDSWidgets 0.1.0rc1+5.gf0931b4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+3.g8335220
+                0.1.0rc1+5.gf0931b4
               </div>
             
           
@@ -255,7 +255,10 @@
                                       <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
                                       <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
                                       <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
-                                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+                                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IonPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.IonPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="TurboPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.TurboPump">[docs]</a><span class="k">class</span> <span class="nc">TurboPump</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
@@ -337,7 +340,10 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TurboPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.TurboPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ScrollPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.ScrollPump">[docs]</a><span class="k">class</span> <span class="nc">ScrollPump</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
@@ -419,7 +425,10 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ScrollPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.ScrollPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="GetterPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.GetterPump">[docs]</a><span class="k">class</span> <span class="nc">GetterPump</span><span class="p">(</span><span class="n">PCDSSymbolBase</span><span class="p">):</span>
@@ -467,7 +476,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        size : QSize</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span></div>
 
     <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">channelsPrefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
