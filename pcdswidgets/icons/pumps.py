@@ -1,6 +1,6 @@
 import math
 
-from qtpy.QtCore import (QPointF, QRectF, Property, QLineF, Qt)
+from qtpy.QtCore import (QPointF, QRectF, Property)
 from qtpy.QtGui import (QColor, QBrush, QPainterPath, QPolygonF, QTransform)
 
 from .base import BaseSymbolIcon
