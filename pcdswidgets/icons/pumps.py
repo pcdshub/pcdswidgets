@@ -1,14 +1,14 @@
 import math
 
-from qtpy.QtCore import (QPointF, QRectF, Property, QLineF, Qt)
+from qtpy.QtCore import (QPointF, QRectF, Property)
 from qtpy.QtGui import (QColor, QBrush, QPainterPath, QPolygonF, QTransform)
 
 from .base import BaseSymbolIcon
 
 
-class TurboPumpSymbolIcon(BaseSymbolIcon):
+class ScrollPumpSymbolIcon(BaseSymbolIcon):
     """
-    A widget with a turbo pump symbol drawn in it.
+    A widget with a scroll pump symbol drawn in it.
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(TurboPumpSymbolIcon, self).__init__(parent, **kwargs)
+        super(ScrollPumpSymbolIcon, self).__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)
@@ -101,9 +101,9 @@ class IonPumpSymbolIcon(BaseSymbolIcon):
         painter.drawPolygon(arrow_r)
 
 
-class ScrollPumpSymbolIcon(BaseSymbolIcon):
+class TurboPumpSymbolIcon(BaseSymbolIcon):
     """
-    A widget with a scroll pump symbol drawn in it.
+    A widget with a turbo pump symbol drawn in it.
 
     Parameters
     ----------
@@ -112,18 +112,14 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        # Outer circle
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
-        pen = painter.pen()
-        pen.setWidthF(pen.width()*2)
-        pen.setCapStyle(Qt.FlatCap)
-        painter.setPen(pen)
-        r = 0.5
-        x1 = r + r * math.cos(math.radians(45))
-        y1 = r + r * math.sin(math.radians(45))
-        x2 = r + r * math.cos(math.radians(225))
-        y2 = r + r * math.sin(math.radians(225))
-        painter.drawLine(QLineF(x1, y1, x2, y2))
-        painter.drawLine(QLineF(x2, y1, x1, y2))
+        # Inner concentric circles
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.2, 0.2)
+        painter.drawEllipse(QPointF(0.5, 0.5), 0.1, 0.1)
+        # Inner straight lines
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
+        painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
 
 
 class GetterPumpSymbolIcon(BaseSymbolIcon):
