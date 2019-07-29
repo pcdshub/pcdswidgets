@@ -6,9 +6,9 @@ from qtpy.QtGui import (QColor, QBrush, QPainterPath, QPolygonF, QTransform)
 from .base import BaseSymbolIcon
 
 
-class TurboPumpSymbolIcon(BaseSymbolIcon):
+class ScrollPumpSymbolIcon(BaseSymbolIcon):
     """
-    A widget with a turbo pump symbol drawn in it.
+    A widget with a scroll pump symbol drawn in it.
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(TurboPumpSymbolIcon, self).__init__(parent, **kwargs)
+        super(ScrollPumpSymbolIcon, self).__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)
@@ -101,9 +101,9 @@ class IonPumpSymbolIcon(BaseSymbolIcon):
         painter.drawPolygon(arrow_r)
 
 
-class ScrollPumpSymbolIcon(BaseSymbolIcon):
+class TurboPumpSymbolIcon(BaseSymbolIcon):
     """
-    A widget with a scroll pump symbol drawn in it.
+    A widget with a turbo pump symbol drawn in it.
 
     Parameters
     ----------
