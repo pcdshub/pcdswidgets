@@ -60,6 +60,8 @@ script:
   - set -e
   - |
     if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY_PCDSHUB_PCDSWIDGETS" && $BUILD_DOCS ]]; then
+      # Create symbol icon images for documentation
+      python examples/show_icon.py
       # Create HTML documentation  
       pushd docs
       make html
