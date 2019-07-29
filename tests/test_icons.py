@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor, QBrush
@@ -35,3 +37,10 @@ def icon(qtbot):
 def test_icon_properties(icon, prop, value):
     setattr(icon, prop, value)
     assert getattr(icon, prop) == value
+
+
+def test_icon_clicks(qtbot, icon):
+    mock = Mock()
+    icon.clicked.connect(mock)
+    qtbot.mouseClick(icon, Qt.LeftButton)
+    assert mock.called

@@ -1,4 +1,4 @@
-from qtpy.QtCore import (Property, Qt, QSize)
+from qtpy.QtCore import (Property, Qt, QSize, Signal)
 from qtpy.QtGui import (QColor, QPainter, QBrush, QPen)
 from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption)
 
@@ -14,6 +14,7 @@ class BaseSymbolIcon(QWidget):
     parent : QWidget
         The parent widget for this widget.
     """
+    clicked = Signal()
 
     def __init__(self, parent=None):
         self._brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -211,3 +212,10 @@ class BaseSymbolIcon(QWidget):
         """
         self._rotation = angle
         self.update()
+
+    def mousePressEvent(self, evt):
+        """Clicking the icon fires the ``clicked`` signal"""
+        # Default Qt reaction to the icon press
+        super().mousePressEvent(evt)
+        if evt.button() == Qt.LeftButton:
+            self.clicked.emit()
