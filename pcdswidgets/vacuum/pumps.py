@@ -315,12 +315,12 @@ class GetterPump(PCDSSymbolBase):
 
     @Property(str, designable=False)
     def channelsPrefix(self):
-        pass
+        return super(GetterPump, self).channelsPrefix
 
     @Property(bool, designable=False)
     def showIcon(self):
-        pass
+        return super(GetterPump, self).showIcon
 
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
-        pass
+        return super(GetterPump, self).controlsLocation
