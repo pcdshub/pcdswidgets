@@ -209,6 +209,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             If the value is <= 0 it will expand to fill the space available.
 
         """
+        if not self.icon:
+            return
+
         if size <= 0:
             size = - 1
             min_size = 1
