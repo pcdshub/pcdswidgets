@@ -490,12 +490,12 @@ class RightAngleManualValve(PCDSSymbolBase):
 
     @Property(str, designable=False)
     def channelsPrefix(self):
-        return super(RightAngleManualValve, self).channelsPrefix
+        return super().channelsPrefix
 
     @Property(bool, designable=False)
     def showIcon(self):
-        return super(RightAngleManualValve, self).showIcon
+        return super().showIcon
 
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
-        return super(RightAngleManualValve, self).controlsLocation
+        return super().controlsLocation
