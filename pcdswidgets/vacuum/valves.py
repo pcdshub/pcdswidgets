@@ -81,10 +81,10 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         }
 
     """
-    _interlock_suffix = ":OPN_OK"
-    _error_suffix = ":STATE"
-    _open_state_suffix = ":OPN_DI"
-    _close_state_suffix = ":CLS_DI"
+    _interlock_suffix = ":OPN_OK_RBV"
+    _error_suffix = ":STATE_RBV"
+    _open_state_suffix = ":OPN_DI_RBV"
+    _close_state_suffix = ":CLS_DI_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Pneumatic Valve"
@@ -176,10 +176,10 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         }
 
     """
-    _interlock_suffix = ":OPN_OK"
-    _error_suffix = ":STATE"
-    _open_state_suffix = ":OPN_DI"
-    _close_state_suffix = ":CLS_DI"
+    _interlock_suffix = ":OPN_OK_RBV"
+    _error_suffix = ":STATE_RBV"
+    _open_state_suffix = ":OPN_DI_RBV"
+    _close_state_suffix = ":CLS_DI_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Aperture Valve"
@@ -264,10 +264,10 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         }
 
     """
-    _interlock_suffix = ":VAC_FAULT_OK"
-    _error_suffix = ":ERROR"
-    _open_state_suffix = ":OPN_DI"
-    _close_state_suffix = ":CLS_DI"
+    _interlock_suffix = ":VAC_FAULT_OK_RBV"
+    _error_suffix = ":ERROR_RBV"
+    _open_state_suffix = ":OPN_DI_RBV"
+    _close_state_suffix = ":CLS_DI_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Fast Shutter"
@@ -344,8 +344,8 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _state_suffix = ":STATE"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _state_suffix = ":STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Needle Valve"
@@ -421,8 +421,8 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _state_suffix = ":STATE"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _state_suffix = ":STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Proportional Valve"

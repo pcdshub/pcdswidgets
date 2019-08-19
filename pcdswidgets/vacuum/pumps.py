@@ -73,11 +73,11 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _error_suffix = ":ERROR"
-    _state_suffix = ":HV_DO"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _error_suffix = ":ERROR_RBV"
+    _state_suffix = ":HV_DO_RBV"
     _command_suffix = ":HV_SW"
-    _readback_suffix = ":PRESS"
+    _readback_suffix = ":PRESS_RBV"
 
     NAME = "Ion Pump"
 
@@ -160,9 +160,9 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
-    _interlock_suffix = ":ILK_STATUS"
-    _error_suffix = ":FAULT"
-    _state_suffix = ":STATE"
+    _interlock_suffix = ":ILK_STATUS_RBV"
+    _error_suffix = ":FAULT_RBV"
+    _state_suffix = ":STATE_RBV"
     _command_suffix = ":RUN_SW"
 
     NAME = "Turbo Pump"
@@ -245,9 +245,9 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _error_suffix = ":ERROR"
-    _state_suffix = ":STATE"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _error_suffix = ":ERROR_RBV"
+    _state_suffix = ":STATE_RBV"
     _command_suffix = ":RUN_SW"
 
     NAME = "Scroll Pump"
