@@ -37,3 +37,21 @@ Right Angle Manual Valve
 
 .. autoclass:: pcdswidgets.vacuum.valves.RightAngleManualValve
    :members:
+
+Control Valve
+-------------
+
+.. autoclass:: pcdswidgets.vacuum.valves.ControlValve
+   :members:
+
+Control Only Valve (Normally Closed)
+------------------------------------
+
+.. autoclass:: pcdswidgets.vacuum.valves.ControlOnlyValveNC
+   :members:
+
+Control Only Valve (Normally Open)
+------------------------------------
+
+.. autoclass:: pcdswidgets.vacuum.valves.ControlOnlyValveNO
+   :members:
