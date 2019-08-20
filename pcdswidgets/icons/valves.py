@@ -1,3 +1,5 @@
+import math
+
 from qtpy.QtCore import (QPointF, QRectF, Qt, Property, QLineF)
 from qtpy.QtGui import (QPainterPath, QBrush, QColor, QPolygonF, QTransform)
 
@@ -238,3 +240,34 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
                            QLineF(0.0+t_x, 0.0+t_y, 0.1+t_x, 0.2+t_y),
                            QLineF(0.1+t_x, 0.2+t_y, 0.2+t_x, 0.0+t_y),
                            QLineF(0.2+t_x, 0.0+t_y, 0.2+t_x, 0.2+t_y)])
+
+
+class ControlValveSymbolIcon(PneumaticValveSymbolIcon):
+    """Icon for a Control Valve with readback"""
+    def draw_icon(self, painter):
+        pen = painter.pen()
+        pen.setWidthF(pen.width()*2)
+        pen.setCapStyle(Qt.FlatCap)
+        painter.setPen(pen)
+        # Circle parameters
+        radius = 0.3
+        center = (0.5, 1 - radius)
+        # Draw circle
+        painter.drawEllipse(QPointF(*center),
+                            radius, radius)
+        # X pattern
+        quad = math.cos(math.radians(45)) * radius
+        painter.drawLine(QLineF(center[0] + quad,
+                                center[1] + quad,
+                                center[0] - quad,
+                                center[1] - quad))
+        painter.drawLine(QLineF(center[0] + quad,
+                                center[1] - quad,
+                                center[0] - quad,
+                                center[1] + quad))
+        # Interlock Icon
+        square_dims = (0.4, 0.2)
+        painter.drawLine(QPointF(center[0], center[1] - radius),
+                         QPointF(center[0], square_dims[1]))
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF((1 - square_dims[0])/2., 0, *square_dims))
