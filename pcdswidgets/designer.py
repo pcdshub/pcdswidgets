@@ -5,7 +5,8 @@ from .vacuum.others import RGA
 from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
 from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
                             ProportionalValve, RightAngleManualValve,
-                            ApertureValve)
+                            ApertureValve, ControlValve, ControlOnlyValveNC,
+                            ControlOnlyValveNO)
 
 from .vacuum.base import PCDSSymbolBase
 
@@ -23,6 +24,12 @@ PCDSProportionalValvePlugin = qtplugin_factory(ProportionalValve,
 
 PCDSRightAngleManualValve = qtplugin_factory(RightAngleManualValve,
                                              group="PCDS Valves")
+PCDSControlValve = qtplugin_factory(ControlValve,
+                                    group="PCDS Valves")
+PCDSControlOnlyValveNC = qtplugin_factory(ControlOnlyValveNC,
+                                          group="PCDS Valves")
+PCDSControlOnlyValveNO = qtplugin_factory(ControlOnlyValveNO,
+                                          group="PCDS Valves")
 
 # Pumps
 PCDSIonPumpPlugin = qtplugin_factory(IonPump, group="PCDS Pumps")

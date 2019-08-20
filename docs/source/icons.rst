@@ -38,6 +38,8 @@ Fast Shutter       |fshutter|  ``from pcdswidgets.icons import FastShutterSymbol
 Right Angle Manual |ramvalve|  ``from pcdswidgets.icons import RightAngleManualValveSymbolIcon``
 Needle             |nvalve|    ``from pcdswidgets.icons import NeedleValveSymbolIcon``
 Proportional       |propvalve| ``from pcdswidgets.icons import ProportionalValveSymbolIcon``
+ControlValve       |control|   ``from pcdswidgets.icons import ControlValveSymbolIcon``
+ControlOnlyValve   |cntrlonly| ``from pcdswidgets.icons import ControlOnlyValveSymbolIcon``
 ================== =========== =================================================================
 
 .. |pneuvalve| image:: /_static/icons/PneumaticValveSymbolIcon.png
@@ -46,6 +48,8 @@ Proportional       |propvalve| ``from pcdswidgets.icons import ProportionalValve
 .. |ramvalve| image:: /_static/icons/RightAngleManualValveSymbolIcon.png
 .. |nvalve| image:: /_static/icons/NeedleValveSymbolIcon.png
 .. |propvalve| image:: /_static/icons/ProportionalValveSymbolIcon.png
+.. |control| image:: /_static/icons/ControlValveSymbolIcon.png
+.. |cntrlonly| image:: /_static/icons/ControlOnlyValveSymbolIcon.png
 
 
 Pumps
