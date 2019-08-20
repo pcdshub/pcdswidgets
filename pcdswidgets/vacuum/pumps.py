@@ -160,7 +160,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
-    _interlock_suffix = ":ILK_STATUS_RBV"
+    _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":FAULT_RBV"
     _state_suffix = ":STATE_RBV"
     _command_suffix = ":RUN_SW"
