@@ -1,6 +1,8 @@
 ./_images/ApertureValveSymbolIcon.png
 ./_images/CathodeGaugeSymbolIcon.png
 ./_images/ColdCathodeGaugeSymbolIcon.png
+./_images/ControlOnlyValveSymbolIcon.png
+./_images/ControlValveSymbolIcon.png
 ./_images/FastShutterSymbolIcon.png
 ./_images/GetterPumpSymbolIcon.png
 ./_images/HotCathodeGaugeSymbolIcon.png
@@ -69,6 +71,8 @@
 ./_static/icons/ApertureValveSymbolIcon.png
 ./_static/icons/CathodeGaugeSymbolIcon.png
 ./_static/icons/ColdCathodeGaugeSymbolIcon.png
+./_static/icons/ControlOnlyValveSymbolIcon.png
+./_static/icons/ControlValveSymbolIcon.png
 ./_static/icons/FastShutterSymbolIcon.png
 ./_static/icons/GetterPumpSymbolIcon.png
 ./_static/icons/HotCathodeGaugeSymbolIcon.png
