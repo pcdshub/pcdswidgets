@@ -766,4 +766,3 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
->>>>>>> ENH: ControlValve and variants
