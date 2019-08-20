@@ -271,3 +271,14 @@ class ControlValveSymbolIcon(PneumaticValveSymbolIcon):
                          QPointF(center[0], square_dims[1]))
         painter.setBrush(self._interlock_brush)
         painter.drawRect(QRectF((1 - square_dims[0])/2., 0, *square_dims))
+
+
+class ControlOnlyValveSymbolIcon(BaseSymbolIcon):
+    """Icon for a Control Valve with no readback"""
+    def draw_icon(self, painter):
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
