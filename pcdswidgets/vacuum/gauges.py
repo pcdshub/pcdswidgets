@@ -60,8 +60,8 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         }
 
     """
-    _state_suffix = ":PRESS_OK"
-    _readback_suffix = ":PRESS"
+    _state_suffix = ":PRESS_OK_RBV"
+    _readback_suffix = ":PRESS_RBV"
 
     NAME = "Rough Gauge"
 
@@ -137,9 +137,9 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _state_suffix = ":STATE"
-    _readback_suffix = ":PRESS"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _state_suffix = ":STATE_RBV"
+    _readback_suffix = ":PRESS_RBV"
     _command_suffix = ":HV_SW"
 
     NAME = "Hot Cathode Gauge"
@@ -219,9 +219,9 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
         }
 
     """
-    _interlock_suffix = ":ILK_OK"
-    _state_suffix = ":STATE"
-    _readback_suffix = ":PRESS"
+    _interlock_suffix = ":ILK_OK_RBV"
+    _state_suffix = ":STATE_RBV"
+    _readback_suffix = ":PRESS_RBV"
     _command_suffix = ":HV_SW"
 
     NAME = "Cold Cathode Gauge"
