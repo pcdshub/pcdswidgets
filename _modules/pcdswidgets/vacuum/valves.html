@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.1.0rc1+30.g79de2f1 documentation</title>
+  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.1.0rc1+33.g54a64c1 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+30.g79de2f1
+                0.1.0rc1+33.g54a64c1
               </div>
             
           
@@ -257,7 +257,6 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Pneumatic Valve&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PneumaticValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
@@ -266,6 +265,7 @@
             <span class="n">close_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PneumaticValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -352,7 +352,6 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Aperture Valve&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ApertureValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ApertureValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
@@ -361,6 +360,7 @@
             <span class="n">close_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ApertureValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ApertureValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ApertureValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -440,7 +440,6 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Fast Shutter&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">FastShutterSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FastShutter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
@@ -449,6 +448,7 @@
             <span class="n">close_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">FastShutterSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FastShutter.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.FastShutter.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -518,13 +518,13 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Needle Valve&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">NeedleValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NeedleValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">NeedleValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NeedleValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.NeedleValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -595,13 +595,13 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Proportional Valve&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ProportionalValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ProportionalValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ProportionalValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ProportionalValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ProportionalValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -641,9 +641,9 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Right Angle Manual Valve&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_controls_location</span> <span class="o">=</span> <span class="n">ContentLocation</span><span class="o">.</span><span class="n">Hidden</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RightAngleManualValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RightAngleManualValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.RightAngleManualValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -748,7 +748,6 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
@@ -757,6 +756,7 @@
             <span class="n">close_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ControlValve.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ControlValve.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -837,13 +837,13 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ControlOnlyValveNC.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ControlOnlyValveNC.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
@@ -924,13 +924,13 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_SW&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
