@@ -92,7 +92,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Pneumatic Valve"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = PneumaticValveSymbolIcon()
         super(PneumaticValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -101,6 +100,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = PneumaticValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -187,7 +187,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Aperture Valve"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ApertureValveSymbolIcon()
         super(ApertureValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -196,6 +195,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ApertureValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -275,7 +275,6 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = "Fast Shutter"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = FastShutterSymbolIcon()
         super(FastShutter, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -284,6 +283,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = FastShutterSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -353,13 +353,13 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     NAME = "Needle Valve"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = NeedleValveSymbolIcon()
         super(NeedleValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = NeedleValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -430,13 +430,13 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
     NAME = "Proportional Valve"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ProportionalValveSymbolIcon()
         super(ProportionalValve, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ProportionalValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -476,9 +476,9 @@ class RightAngleManualValve(PCDSSymbolBase):
     NAME = "Right Angle Manual Valve"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = RightAngleManualValveSymbolIcon()
         self._controls_location = ContentLocation.Hidden
         super(RightAngleManualValve, self).__init__(parent=parent, **kwargs)
+        self.icon = RightAngleManualValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         """
@@ -583,7 +583,6 @@ class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ControlValveSymbolIcon()
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -592,6 +591,7 @@ class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             close_suffix=self._close_state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ControlValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -672,13 +672,13 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ControlOnlyValveSymbolIcon()
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
@@ -759,10 +759,10 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
     _command_suffix = ":CLS_SW"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ControlOnlyValveSymbolIcon()
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ControlOnlyValveSymbolIcon(parent=self)

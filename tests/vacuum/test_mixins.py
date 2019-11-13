@@ -9,8 +9,8 @@ from pcdswidgets.vacuum.mixins import (InterlockMixin, ErrorMixin, StateMixin,
 class PCDSSymbolWithIcon(PCDSSymbolBase):
     """Base mixable class"""
     def __init__(self, *args, **kwargs):
-        self.icon = QWidget()
         super().__init__(*args, **kwargs)
+        self.icon = QWidget(parent=self)
 
 
 class Interlock(InterlockMixin, PCDSSymbolWithIcon):

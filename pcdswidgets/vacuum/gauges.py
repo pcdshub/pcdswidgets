@@ -66,13 +66,13 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     NAME = "Rough Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = RoughGaugeSymbolIcon()
         super(RoughGauge, self).__init__(
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
+        self.icon = RoughGaugeSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(70, 60)
@@ -145,7 +145,6 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
     NAME = "Hot Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = HotCathodeGaugeSymbolIcon()
         super(HotCathodeGauge, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -154,6 +153,7 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
+        self.icon = HotCathodeGaugeSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 80)
@@ -227,7 +227,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
     NAME = "Cold Cathode Gauge"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ColdCathodeGaugeSymbolIcon()
         super(ColdCathodeGauge, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -236,6 +235,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
+        self.icon = ColdCathodeGaugeSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 80)

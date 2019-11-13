@@ -8,8 +8,8 @@ from pcdswidgets.icons import RGASymbolIcon
 class BaseSymbol(PCDSSymbolBase):
     """Test Symbol for base class tests"""
     def __init__(self, parent=None):
-        self.icon = RGASymbolIcon()
         super().__init__(parent=parent)
+        self.icon = RGASymbolIcon(parent=self)
 
 
 @pytest.fixture(scope='function')

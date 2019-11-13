@@ -37,9 +37,9 @@ class RGA(PCDSSymbolBase):
     NAME = "Residual Gas Analyzer"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = RGASymbolIcon()
         self._controls_location = ContentLocation.Hidden
         super(RGA, self).__init__(parent=parent, **kwargs)
+        self.icon = RGASymbolIcon(parent=self)
 
     def sizeHint(self):
         """
