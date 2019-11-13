@@ -141,7 +141,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.iconSize = self.iconSize
             self.assemble_layout()
 
-
     @Property(bool)
     def showIcon(self):
         """
