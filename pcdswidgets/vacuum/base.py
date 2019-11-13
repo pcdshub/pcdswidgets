@@ -42,9 +42,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._show_icon = True
         self._show_status_tooltip = True
         self._icon_size = -1
-
-        if not hasattr(self, 'icon'):
-            self.icon = None
+        self._icon = None
 
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
@@ -130,6 +128,18 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self._channels_prefix = prefix
             self.destroy_channels()
             self.create_channels()
+
+    @property
+    def icon(self):
+        return self._icon
+
+    @icon.setter
+    def icon(self, icon):
+        if self._icon != icon:
+            self._icon = icon
+            self.setup_icon()
+            self.iconSize = self.iconSize
+            self.assemble_layout()
 
     @Property(bool)
     def showIcon(self):

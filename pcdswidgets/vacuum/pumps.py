@@ -82,7 +82,6 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     NAME = "Ion Pump"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = IonPumpSymbolIcon()
         super(IonPump, self).__init__(parent=parent,
                                       interlock_suffix=self._interlock_suffix,
                                       error_suffix=self._error_suffix,
@@ -91,6 +90,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
                                       readback_suffix=self._readback_suffix,
                                       readback_name='pressure',
                                       **kwargs)
+        self.icon = IonPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 80)
@@ -168,7 +168,6 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     NAME = "Turbo Pump"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = TurboPumpSymbolIcon()
         super(TurboPump, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -176,6 +175,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = TurboPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 80)
@@ -253,7 +253,6 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     NAME = "Scroll Pump"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = ScrollPumpSymbolIcon()
         super(ScrollPump, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -261,6 +260,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
+        self.icon = ScrollPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 80)
@@ -299,9 +299,9 @@ class GetterPump(PCDSSymbolBase):
     NAME = "Getter Pump"
 
     def __init__(self, parent=None, **kwargs):
-        self.icon = GetterPumpSymbolIcon()
         self._controls_location = ContentLocation.Hidden
         super(GetterPump, self).__init__(parent=parent, **kwargs)
+        self.icon = GetterPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
         """
