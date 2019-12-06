@@ -1,5 +1,7 @@
 from qtpy.QtCore import QSize, Property
 
+from pydm.widgets.display_format import DisplayFormat
+
 from .base import PCDSSymbolBase, ContentLocation
 from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
                      ButtonLabelControl)
@@ -91,6 +93,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
                                       readback_name='pressure',
                                       **kwargs)
         self.icon = IonPumpSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
         return QSize(180, 80)

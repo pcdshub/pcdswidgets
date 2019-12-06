@@ -1,5 +1,7 @@
 from qtpy.QtCore import QSize
 
+from pydm.widgets.display_format import DisplayFormat
+
 from .base import PCDSSymbolBase
 from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
                      LabelControl)
@@ -73,6 +75,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_name='pressure',
             **kwargs)
         self.icon = RoughGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
         return QSize(70, 60)
@@ -154,6 +157,7 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
             readback_name='pressure',
             **kwargs)
         self.icon = HotCathodeGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
         return QSize(180, 80)
@@ -236,6 +240,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_name='pressure',
             **kwargs)
         self.icon = ColdCathodeGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
         return QSize(180, 80)
