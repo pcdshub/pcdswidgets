@@ -58,18 +58,18 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
 
     .. code-block:: css
 
-        IonPump [interlocked="true"] #interlock {
+        IonPump[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        IonPump [interlocked="false"] #interlock {
+        IonPump[interlocked="false"] #interlock {
             border: 0px;
         }
-        IonPump [error="true"] #icon {
+        IonPump[error="true"] #icon {
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;
             qproperty-brush: red;
         }
-        IonPump [state="On"] #icon {
+        IonPump[state="On"] #icon {
             qproperty-penColor: green;
             qproperty-penWidth: 2;
         }
@@ -147,18 +147,18 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
 
     .. code-block:: css
 
-        TurboPump [interlocked="true"] #interlock {
+        TurboPump[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        TurboPump [interlocked="false"] #interlock {
+        TurboPump[interlocked="false"] #interlock {
             border: 0px;
         }
-        TurboPump [error="true"] #icon {
+        TurboPump[error="true"] #icon {
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;
             qproperty-brush: red;
         }
-        TurboPump [state="Accelerating"] #icon {
+        TurboPump[state="Accelerating"] #icon {
             qproperty-centerBrush: red;
         }
 
@@ -232,18 +232,18 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
 
     .. code-block:: css
 
-        ScrollPump [interlocked="true"] #interlock {
+        ScrollPump[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        ScrollPump [interlocked="false"] #interlock {
+        ScrollPump[interlocked="false"] #interlock {
             border: 0px;
         }
-        ScrollPump [error="true"] #icon {
+        ScrollPump[error="true"] #icon {
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;
             qproperty-brush: red;
         }
-        ScrollPump [state="Accelerating"] #icon {
+        ScrollPump[state="Accelerating"] #icon {
             qproperty-centerBrush: red;
         }
 
