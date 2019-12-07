@@ -7,8 +7,6 @@ from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.enum_button import PyDMEnumButton
 from pydm.widgets.label import PyDMLabel
 
-from .base import ContentLocation
-
 
 class InterlockMixin(object):
     """
