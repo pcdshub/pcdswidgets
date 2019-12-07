@@ -542,7 +542,9 @@ class ButtonControl(object):
     """
     def __init__(self, command_suffix, **kwargs):
         self._command_suffix = command_suffix
+        self._orientation = Qt.Horizontal
         self.control_btn = PyDMEnumButton()
+        self.controlButtonHorizontal = True
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(2)
         self.controls_layout.setContentsMargins(0, 10, 0, 0)
@@ -550,20 +552,20 @@ class ButtonControl(object):
         self.controls_frame.setLayout(self.controls_layout)
         self.controls_frame.layout().addWidget(self.control_btn)
 
-    def assemble_layout(self):
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set and adjust the orientation of the control
-        button depending on the location.
-        """
-        super(ButtonControl, self).assemble_layout()
-        if self._controls_location in [ContentLocation.Top,
-                                       ContentLocation.Bottom]:
-            self.control_btn.orientation = Qt.Horizontal
+    @Property(bool)
+    def controlButtonHorizontal(self):
+        return self._orientation == Qt.Horizontal
+
+    @controlButtonHorizontal.setter
+    def controlButtonHorizontal(self, checked):
+        if checked:
+            self._orientation = Qt.Horizontal
             self.control_btn.setMinimumSize(100, 40)
         else:
-            self.control_btn.orientation = Qt.Vertical
-            self.control_btn.setMinimumSize(100, 80)
+            self._orientation = Qt.Vertical
+            self.control_btn.setMinimumSize(40, 80)
+
+        self.control_btn.orientation = self._orientation
 
     def create_channels(self):
         """
