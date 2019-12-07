@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.others &mdash; PCDSWidgets 0.1.0rc1+33.g54a64c1 documentation</title>
+  <title>pcdswidgets.vacuum.others &mdash; PCDSWidgets 0.2.0+2.g451603a documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+33.g54a64c1
+                0.2.0+2.g451603a
               </div>
             
           
@@ -163,10 +163,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pcdswidgets.vacuum.others</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="k">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Property</span>
+<span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Property</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PCDSSymbolBase</span><span class="p">,</span> <span class="n">ContentLocation</span>
-<span class="kn">from</span> <span class="nn">..icons.others</span> <span class="k">import</span> <span class="n">RGASymbolIcon</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PCDSSymbolBase</span><span class="p">,</span> <span class="n">ContentLocation</span>
+<span class="kn">from</span> <span class="nn">..icons.others</span> <span class="kn">import</span> <span class="n">RGASymbolIcon</span>
 
 
 <div class="viewcode-block" id="RGA"><a class="viewcode-back" href="../../../vacuum/others.html#pcdswidgets.vacuum.others.RGA">[docs]</a><span class="k">class</span> <span class="nc">RGA</span><span class="p">(</span><span class="n">PCDSSymbolBase</span><span class="p">):</span>
@@ -201,7 +201,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Residual Gas Analyzer&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_controls_location</span> <span class="o">=</span> <span class="n">ContentLocation</span><span class="o">.</span><span class="n">Hidden</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RGA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">RGASymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>

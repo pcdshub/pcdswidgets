@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.1.0rc1+33.g54a64c1 documentation</title>
+  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.2.0+2.g451603a documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.0rc1+33.g54a64c1
+                0.2.0+2.g451603a
               </div>
             
           
@@ -164,15 +164,15 @@
             
   <h1>Source code for pcdswidgets.vacuum.mixins</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="k">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Qt</span>
-<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="k">import</span> <span class="n">QVBoxLayout</span>
-<span class="kn">from</span> <span class="nn">pydm.widgets.channel</span> <span class="k">import</span> <span class="n">PyDMChannel</span>
-<span class="kn">from</span> <span class="nn">pydm.widgets.enum_button</span> <span class="k">import</span> <span class="n">PyDMEnumButton</span>
-<span class="kn">from</span> <span class="nn">pydm.widgets.label</span> <span class="k">import</span> <span class="n">PyDMLabel</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QVBoxLayout</span>
+<span class="kn">from</span> <span class="nn">pydm.widgets.channel</span> <span class="kn">import</span> <span class="n">PyDMChannel</span>
+<span class="kn">from</span> <span class="nn">pydm.widgets.enum_button</span> <span class="kn">import</span> <span class="n">PyDMEnumButton</span>
+<span class="kn">from</span> <span class="nn">pydm.widgets.label</span> <span class="kn">import</span> <span class="n">PyDMLabel</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">ContentLocation</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">ContentLocation</span>
 
 
 <div class="viewcode-block" id="InterlockMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin">[docs]</a><span class="k">class</span> <span class="nc">InterlockMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -195,7 +195,7 @@
 <span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
 <span class="sd">        to compose the interlock channel address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interlock_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interlock_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="n">interlock_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_connected</span> <span class="o">=</span> <span class="kc">False</span>
@@ -296,7 +296,7 @@
 <span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
 <span class="sd">        to compose the error channel address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span> <span class="o">=</span> <span class="n">error_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -434,7 +434,7 @@
 <span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
 <span class="sd">        to compose the state channel address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span> <span class="o">=</span> <span class="n">state_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -577,7 +577,7 @@
 <span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
 <span class="sd">        to compose the close state channel address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">open_suffix</span><span class="p">,</span> <span class="n">close_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">open_suffix</span><span class="p">,</span> <span class="n">close_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_open_suffix</span> <span class="o">=</span> <span class="n">open_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_close_suffix</span> <span class="o">=</span> <span class="n">close_suffix</span>
 
@@ -705,7 +705,7 @@
 <span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
 <span class="sd">        to compose the command button channel address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span> <span class="o">=</span> <span class="n">command_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span> <span class="o">=</span> <span class="n">PyDMEnumButton</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
@@ -764,7 +764,7 @@
 <span class="sd">        The name to be set to the PyDMLabel so one can refer to it by name</span>
 <span class="sd">        with stylesheet</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span> <span class="o">=</span> <span class="n">readback_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span> <span class="o">=</span> <span class="n">PyDMLabel</span><span class="p">()</span>
@@ -816,7 +816,7 @@
 <span class="sd">        The name to be set to the PyDMLabel so one can refer to it by name</span>
 <span class="sd">        with stylesheet</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span> <span class="o">=</span> <span class="n">readback_suffix</span>
 
