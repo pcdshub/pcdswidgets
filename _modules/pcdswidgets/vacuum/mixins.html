@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.2.0+2.g451603a documentation</title>
+  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.2.0+7.g9321c37 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.0+2.g451603a
+                0.2.0+7.g9321c37
               </div>
             
           
@@ -171,8 +171,6 @@
 <span class="kn">from</span> <span class="nn">pydm.widgets.channel</span> <span class="kn">import</span> <span class="n">PyDMChannel</span>
 <span class="kn">from</span> <span class="nn">pydm.widgets.enum_button</span> <span class="kn">import</span> <span class="n">PyDMEnumButton</span>
 <span class="kn">from</span> <span class="nn">pydm.widgets.label</span> <span class="kn">import</span> <span class="n">PyDMLabel</span>
-
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">ContentLocation</span>
 
 
 <div class="viewcode-block" id="InterlockMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin">[docs]</a><span class="k">class</span> <span class="nc">InterlockMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -707,7 +705,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span> <span class="o">=</span> <span class="n">command_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span> <span class="o">=</span> <span class="n">PyDMEnumButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlButtonHorizontal</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -715,20 +715,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ButtonControl.assemble_layout"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.assemble_layout">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Assembles the widget&#39;s inner layout depending on the ContentLocation</span>
-<span class="sd">        and other configurations set and adjust the orientation of the control</span>
-<span class="sd">        button depending on the location.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ButtonControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">assemble_layout</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controls_location</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ContentLocation</span><span class="o">.</span><span class="n">Top</span><span class="p">,</span>
-                                       <span class="n">ContentLocation</span><span class="o">.</span><span class="n">Bottom</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+    <span class="nd">@controlButtonHorizontal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span>
 
 <div class="viewcode-block" id="ButtonControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
