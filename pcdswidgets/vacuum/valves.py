@@ -1,8 +1,7 @@
 from qtpy.QtCore import QSize, Property
 
 from .base import PCDSSymbolBase, ContentLocation
-from .mixins import (InterlockMixin, ErrorMixin, OpenCloseStateMixin,
-                     StateMixin, ButtonControl)
+from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl)
 from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
                             FastShutterSymbolIcon, NeedleValveSymbolIcon,
                             ProportionalValveSymbolIcon,
@@ -11,7 +10,7 @@ from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
                             ControlOnlyValveSymbolIcon)
 
 
-class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
+class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
                      ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
@@ -52,7 +51,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     |error      |`Vented`, `At Vacuum`, `Differential Pressure` or      |
     |           |`Lost Vacuum`                                          |
     +-----------+-------------------------------------------------------+
-    |state      |`Open`, `Close` or `INVALID`                           |
+    |state      |`Open`, `Closed`, `Moving`, `Invalid`                  |
     +-----------+-------------------------------------------------------+
 
     Examples
@@ -60,24 +59,24 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
 
     .. code-block:: css
 
-        PneumaticValve [interlocked="true"] #interlock {
+        PneumaticValve[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        PneumaticValve [interlocked="false"] #interlock {
+        PneumaticValve[interlocked="false"] #interlock {
             border: 0px;
         }
-        PneumaticValve [interlocked="true"] #icon {
+        PneumaticValve[interlocked="true"] #icon {
             qproperty-interlockBrush: #FF0000;
         }
-        PneumaticValve [interlocked="false"] #icon {
+        PneumaticValve[interlocked="false"] #icon {
             qproperty-interlockBrush: #00FF00;
         }
-        PneumaticValve [error="Lost Vacuum"] #icon {
+        PneumaticValve[error="Lost Vacuum"] #icon {
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;
             qproperty-brush: red;
         }
-        PneumaticValve [state="Open"] #icon {
+        PneumaticValve[state="Open"] #icon {
             qproperty-penColor: green;
             qproperty-penWidth: 2;
         }
@@ -85,8 +84,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     """
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
-    _open_state_suffix = ":OPN_DI_RBV"
-    _close_state_suffix = ":CLS_DI_RBV"
+    _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Pneumatic Valve"
@@ -96,8 +94,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
-            open_suffix=self._open_state_suffix,
-            close_suffix=self._close_state_suffix,
+            state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = PneumaticValveSymbolIcon(parent=self)
@@ -106,7 +103,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         return QSize(180, 70)
 
 
-class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
+class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
                     ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing an Aperture Valve with the proper icon and
@@ -147,7 +144,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     |error      |`Vented`, `At Vacuum`, `Differential Pressure` or      |
     |           |`Lost Vacuum`                                          |
     +-----------+-------------------------------------------------------+
-    |state      |`Open`, `Close` or `INVALID`                           |
+    |state      |`Open`, `Close`, `Moving` or `INVALID`                 |
     +-----------+-------------------------------------------------------+
 
     Examples
@@ -180,8 +177,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     """
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
-    _open_state_suffix = ":OPN_DI_RBV"
-    _close_state_suffix = ":CLS_DI_RBV"
+    _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Aperture Valve"
@@ -191,8 +187,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
-            open_suffix=self._open_state_suffix,
-            close_suffix=self._close_state_suffix,
+            state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = ApertureValveSymbolIcon(parent=self)
@@ -201,7 +196,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
         return QSize(180, 70)
 
 
-class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
+class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
                   ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
@@ -241,7 +236,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     +-----------+-------------------------------------------------------------+
     |error      |`true`, or `false`                                           |
     +-----------+-------------------------------------------------------------+
-    |state      |`Open`, `Close` or `INVALID`                                 |
+    |state      |`Open`, `Close` `Moving` or `INVALID`                        |
     +-----------+-------------------------------------------------------------+
 
     Examples
@@ -268,8 +263,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     """
     _interlock_suffix = ":VAC_FAULT_OK_RBV"
     _error_suffix = ":ERROR_RBV"
-    _open_state_suffix = ":OPN_DI_RBV"
-    _close_state_suffix = ":CLS_DI_RBV"
+    _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     NAME = "Fast Shutter"
@@ -279,8 +273,7 @@ class FastShutter(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
-            open_suffix=self._open_state_suffix,
-            close_suffix=self._close_state_suffix,
+            state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = FastShutterSymbolIcon(parent=self)
@@ -503,7 +496,7 @@ class RightAngleManualValve(PCDSSymbolBase):
         return super().controlsLocation
 
 
-class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
+class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
                    ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Control Valve with the proper icon and
@@ -544,7 +537,7 @@ class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     |error      |`Vented`, `At Vacuum`, `Differential Pressure` or      |
     |           |`Lost Vacuum`                                          |
     +-----------+-------------------------------------------------------+
-    |state      |`Open`, `Close` or `INVALID`                           |
+    |state      |`Open`, `Close` `Moving` or `INVALID`                  |
     +-----------+-------------------------------------------------------+
 
     Examples
@@ -578,8 +571,7 @@ class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
     NAME = 'Control Valve with Readback'
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
-    _open_state_suffix = ":OPN_DI_RBV"
-    _close_state_suffix = ":CLS_DI_RBV"
+    _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
@@ -587,8 +579,7 @@ class ControlValve(InterlockMixin, ErrorMixin, OpenCloseStateMixin,
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
-            open_suffix=self._open_state_suffix,
-            close_suffix=self._close_state_suffix,
+            state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = ControlValveSymbolIcon(parent=self)

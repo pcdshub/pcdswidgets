@@ -110,13 +110,36 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+    def __init__(self, parent=None, **kwargs):
+        super(TurboPumpSymbolIcon, self).__init__(parent, **kwargs)
+        self._center_brush = QBrush(QColor("transparent"))
+
+    @Property(QBrush)
+    def centerBrush(self):
+        return self._center_brush
+
+    @centerBrush.setter
+    def centerBrush(self, new_brush):
+        if new_brush != self._center_brush:
+            self._center_brush = new_brush
+            self.update()
 
     def draw_icon(self, painter):
         # Outer circle
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
+
+        brush = painter.brush()
+        pen = painter.pen()
+
+        painter.setBrush(self.centerBrush)
+
         # Inner concentric circles
         painter.drawEllipse(QPointF(0.5, 0.5), 0.2, 0.2)
         painter.drawEllipse(QPointF(0.5, 0.5), 0.1, 0.1)
+
+        painter.setBrush(brush)
+        painter.setPen(pen)
+
         # Inner straight lines
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)

@@ -52,11 +52,11 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
 
     .. code-block:: css
 
-        RoughGauge [state="Off"] {
+        RoughGauge[state="Off"] {
             qproperty-brush: red;
             color: gray;
         }
-        RoughGauge [state="On"] {
+        RoughGauge[state="On"] {
             qproperty-brush: green;
             color: black;
         }
@@ -128,13 +128,13 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
 
     .. code-block:: css
 
-        HotCathodeGauge [interlocked="true"] #interlock {
+        HotCathodeGauge[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        HotCathodeGauge [interlocked="false"] #interlock {
+        HotCathodeGauge[interlocked="false"] #interlock {
             border: 0px;
         }
-        HotCathodeGauge [state="Error"] #icon {
+        HotCathodeGauge[state="Error"] #icon {
             qproperty-penColor: red;
             qproperty-penWidth: 2;
         }
@@ -211,13 +211,13 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
 
     .. code-block:: css
 
-        ColdCathodeGauge [interlocked="true"] #interlock {
+        ColdCathodeGauge[interlocked="true"] #interlock {
             border: 5px solid red;
         }
-        ColdCathodeGauge [interlocked="false"] #interlock {
+        ColdCathodeGauge[interlocked="false"] #interlock {
             border: 0px;
         }
-        ColdCathodeGauge [state="Error"] #icon {
+        ColdCathodeGauge[state="Error"] #icon {
             qproperty-penColor: red;
             qproperty-penWidth: 2;
         }
