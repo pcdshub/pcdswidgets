@@ -1,3 +1,4 @@
+import os
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Property, Q_ENUMS, QSize
@@ -366,10 +367,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         str
         """
+        status = ""
         if hasattr(self, 'NAME'):
-            return self.NAME
-        else:
-            return ""
+            status = self.NAME
+        if status:
+            status += os.linesep
+        status += "PV Prefix: {}".format(self.channelsPrefix)
+        return status
 
     def destroy_channels(self):
         """
