@@ -18,3 +18,12 @@ def refresh_style(widget):
         child_widget.update()
         if child_widget != widget:
             refresh_style(child_widget)
+
+
+def find_ancestor_for_widget(self, widget, klass):
+    w = widget
+    while w.parent() is not None:
+        w = w.parent()
+        if isinstance(w, klass):
+            return w
+    return None

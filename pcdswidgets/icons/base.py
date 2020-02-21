@@ -4,8 +4,8 @@ from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption, QToolTip,
                             QApplication)
 
 from pydm.utilities import (remove_protocol, is_qt_designer)
+from ..utils import find_ancestor_for_widget
 from ..vacuum.base import PCDSSymbolBase
-
 
 class BaseSymbolIcon(QWidget):
     """
@@ -52,14 +52,6 @@ class BaseSymbolIcon(QWidget):
                 return True
         return False
 
-    def find_symbol_base_parent(self):
-        w = self
-        while w.parent() is not None:
-            w = w.parent()
-            if isinstance(w, PCDSSymbolBase):
-                return w
-        return None
-
     def show_state_channel(self, event):
         """
         Show the State Channel Tooltip and copy address to clipboard
@@ -68,7 +60,7 @@ class BaseSymbolIcon(QWidget):
         EDM. If the parent is not PCDSSymbolBase and does not have a valid
         State Channel nothing will be displayed.
         """
-        p = self.find_symbol_base_parent()
+        p = find_ancestor_for_widget(self, PCDSSymbolBase)
         if not p:
             return
 
