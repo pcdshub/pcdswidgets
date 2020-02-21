@@ -367,6 +367,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         str
         """
+        status = ""
         if hasattr(self, 'NAME'):
             status = self.NAME
         if status:
