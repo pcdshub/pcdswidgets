@@ -7,6 +7,7 @@ from pydm.utilities import (remove_protocol, is_qt_designer)
 from ..utils import find_ancestor_for_widget
 from ..vacuum.base import PCDSSymbolBase
 
+
 class BaseSymbolIcon(QWidget):
     """
     Base class to be used for all the Symbol Icon widgets.
