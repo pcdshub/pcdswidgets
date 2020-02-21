@@ -1,6 +1,10 @@
-from qtpy.QtCore import (Property, Qt, QSize, Signal)
+from qtpy.QtCore import (Property, Qt, QSize, Signal, QEvent)
 from qtpy.QtGui import (QColor, QPainter, QBrush, QPen)
-from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption)
+from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption, QToolTip,
+                            QApplication)
+
+from pydm.utilities import (remove_protocol, is_qt_designer)
+from ..vacuum.base import PCDSSymbolBase
 
 
 class BaseSymbolIcon(QWidget):
@@ -29,8 +33,59 @@ class BaseSymbolIcon(QWidget):
         self._pen.setColor(self._pen_color)
         self._original_pen_style = self._pen_style
         self._original_pen_color = self._pen_color
-        super(BaseSymbolIcon, self).__init__(parent)
+        super(BaseSymbolIcon, self).__init__(parent=parent)
         self.setObjectName("icon")
+        if not is_qt_designer():
+            # We should  install the Event Filter only if we are running
+            # and not at the Designer
+            self.installEventFilter(self)
+
+    def eventFilter(self, obj, event):
+        """
+        EventFilter to redirect "middle click" to :meth:`.show_address_tooltip`
+        """
+        # Override the eventFilter to capture all middle mouse button events,
+        # and show a tooltip if needed.
+        if event.type() == QEvent.MouseButtonPress:
+            if event.button() == Qt.MiddleButton:
+                self.show_state_channel(event)
+                return True
+        return False
+
+    def find_symbol_base_parent(self):
+        w = self
+        while w.parent() is not None:
+            w = w.parent()
+            if isinstance(w, PCDSSymbolBase):
+                return w
+        return None
+
+    def show_state_channel(self, event):
+        """
+        Show the State Channel Tooltip and copy address to clipboard
+
+        This is intended to replicate the behavior of the "middle click" from
+        EDM. If the parent is not PCDSSymbolBase and does not have a valid
+        State Channel nothing will be displayed.
+        """
+        p = self.find_symbol_base_parent()
+        if not p:
+            return
+
+        state_suffix = getattr(p, '_state_suffix', None)
+        if not state_suffix:
+            return
+
+        addr = "{}{}".format(p.channelsPrefix, state_suffix)
+        QToolTip.showText(event.globalPos(), addr)
+        # If the address has a protocol, strip it out before putting it on the
+        # clipboard.
+        copy_text = remove_protocol(addr)
+
+        clipboard = QApplication.clipboard()
+        clipboard.setText(copy_text)
+        event = QEvent(QEvent.Clipboard)
+        QApplication.instance().sendEvent(clipboard, event)
 
     def minimumSizeHint(self):
         return QSize(32, 32)
