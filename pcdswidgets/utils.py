@@ -20,7 +20,7 @@ def refresh_style(widget):
             refresh_style(child_widget)
 
 
-def find_ancestor_for_widget(self, widget, klass):
+def find_ancestor_for_widget(widget, klass):
     w = widget
     while w.parent() is not None:
         w = w.parent()
