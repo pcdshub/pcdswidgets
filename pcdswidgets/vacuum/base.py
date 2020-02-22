@@ -362,7 +362,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                                 QSizePolicy.Expanding)
         self.icon.setVisible(self._show_icon)
         self.iconSize = 32
-        self.icon.clicked.connect(self._handle_icon_click)
+        if hasattr(self.icon, 'clicked'):
+            self.icon.clicked.connect(self._handle_icon_click)
 
     def _handle_icon_click(self):
         if not self.channelsPrefix:
@@ -373,7 +374,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         klass = getattr(self, "OPHYD_CLASS", None)
         if not klass:
             logger.error('No OPHYD_CLASS specified for pcdswidgets %s',
-                         {self.__class__.__name__})
+                         self.__class__.__name__)
+            return
         name = prefix.replace(':', '_')
         display = get_typhos_display(klass=klass, prefix=prefix, name=name)
         if display:
