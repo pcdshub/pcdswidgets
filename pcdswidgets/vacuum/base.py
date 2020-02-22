@@ -1,12 +1,16 @@
 import os
+import logging
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
+from pydm.utilities import remove_protocol
 from qtpy.QtCore import Property, Q_ENUMS, QSize
 from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
                             QSizePolicy, QStyle, QStyleOption)
 
-from ..utils import refresh_style
+from ..utils import refresh_style, get_typhos_display
+
+logger = logging.getLogger(__name__)
 
 
 class ContentLocation:
@@ -358,6 +362,24 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                                 QSizePolicy.Expanding)
         self.icon.setVisible(self._show_icon)
         self.iconSize = 32
+        if hasattr(self.icon, 'clicked'):
+            self.icon.clicked.connect(self._handle_icon_click)
+
+    def _handle_icon_click(self):
+        if not self.channelsPrefix:
+            logger.error('No channel prefix specified.'
+                         'Cannot proceed with opening expert screen.')
+            return
+        prefix = remove_protocol(self.channelsPrefix)
+        klass = getattr(self, "OPHYD_CLASS", None)
+        if not klass:
+            logger.error('No OPHYD_CLASS specified for pcdswidgets %s',
+                         self.__class__.__name__)
+            return
+        name = prefix.replace(':', '_')
+        display = get_typhos_display(klass=klass, prefix=prefix, name=name)
+        if display:
+            display.show()
 
     def status_tooltip(self):
         """
