@@ -88,6 +88,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Pneumatic Valve"
+    OPHYD_CLASS = "pcdsdevices.valve.VGC"
 
     def __init__(self, parent=None, **kwargs):
         super(PneumaticValve, self).__init__(
@@ -181,6 +182,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Aperture Valve"
+    OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(ApertureValve, self).__init__(
@@ -267,6 +269,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Fast Shutter"
+    OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(FastShutter, self).__init__(
@@ -344,6 +347,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     _command_suffix = ":OPN_SW"
 
     NAME = "Needle Valve"
+    OPHYD_CLASS = "pcdsdevices.valve.VCN"
 
     def __init__(self, parent=None, **kwargs):
         super(NeedleValve, self).__init__(
@@ -421,6 +425,7 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
     _command_suffix = ":OPN_SW"
 
     NAME = "Proportional Valve"
+    OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(ProportionalValve, self).__init__(
@@ -569,6 +574,8 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
 
     """
     NAME = 'Control Valve with Readback'
+    OPHYD_CLASS = "pcdsdevices.valve.VVC"
+
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
@@ -658,6 +665,8 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
 
     """
     NAME = 'Normally Closed Control Valve with No Readback'
+    OPHYD_CLASS = "pcdsdevices.valve.VVC"
+
     _interlock_suffix = ":OPN_OK_RBV"
     _state_suffix = ':OPN_DO_RBV'
     _command_suffix = ":OPN_SW"
@@ -745,6 +754,8 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
 
     """
     NAME = 'Normally Open Control Valve with No Readback'
+    OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
+
     _interlock_suffix = ":CLS_OK_RBV"
     _state_suffix = ':CLS_DO_RBV'
     _command_suffix = ":CLS_SW"
