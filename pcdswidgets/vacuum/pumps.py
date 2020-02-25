@@ -77,7 +77,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     """
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
-    _state_suffix = ":HV_DO_RBV"
+    _state_suffix = ":STATE_RBV"
     _command_suffix = ":HV_SW"
     _readback_suffix = ":PRESS_RBV"
 
