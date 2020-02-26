@@ -30,5 +30,3 @@ def find_ancestor_for_widget(widget, klass):
         if isinstance(w, klass):
             return w
     return None
-
-
