@@ -8,7 +8,7 @@ from qtpy.QtGui import QPainter
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
                             QSizePolicy, QStyle, QStyleOption)
 
-from ..utils import refresh_style, get_typhos_display
+from ..utils import refresh_style
 
 logger = logging.getLogger(__name__)
 
@@ -377,7 +377,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                          self.__class__.__name__)
             return
         name = prefix.replace(':', '_')
-        display = get_typhos_display(klass=klass, prefix=prefix, name=name)
+
+        try:
+            import typhos
+        except ImportError:
+            logger.error('Typhos not installed. Cannot create display.')
+            return
+
+        kwargs = {"name": name, "prefix": prefix}
+        display = typhos.TyphosDeviceDisplay.from_class(klass, **kwargs)
+
         if display:
             display.show()
 
