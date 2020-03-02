@@ -295,7 +295,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if not self.interlock:
             return
         layout = self.interlock.layout()
-        if not layout:
+        if layout is None:
             return
         while layout.count() != 0:
             item = layout.itemAt(0)
