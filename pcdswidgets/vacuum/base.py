@@ -40,6 +40,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     def __init__(self, parent=None, **kwargs):
         super(PCDSSymbolBase, self).__init__(parent=parent, **kwargs)
+        self._expert_display = None
         self.interlock = None
         self._channels_prefix = None
         self._rotate_icon = False
@@ -368,8 +369,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     def _handle_icon_click(self):
         if not self.channelsPrefix:
             logger.error('No channel prefix specified.'
-                         'Cannot proceed with opening expert screen.')
+                         'Cannot proceed with opening expert screen for %s.',
+                         self.__class__.__name__)
             return
+
+        if self._expert_display is not None:
+            logger.debug('Bringing existing display to front.')
+            self._expert_display.show()
+            self._expert_display.raise_()
+            return
+
         prefix = remove_protocol(self.channelsPrefix)
         klass = getattr(self, "OPHYD_CLASS", None)
         if not klass:
@@ -386,9 +395,14 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         kwargs = {"name": name, "prefix": prefix}
         display = typhos.TyphosDeviceDisplay.from_class(klass, **kwargs)
+        self._expert_display = display
+        display.destroyed.connect(self._cleanup_expert_display)
 
         if display:
             display.show()
+
+    def _cleanup_expert_display(self, *args, **kwargs):
+        self._expert_display = None
 
     def status_tooltip(self):
         """
