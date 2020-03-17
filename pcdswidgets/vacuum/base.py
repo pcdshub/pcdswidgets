@@ -50,6 +50,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._icon_size = -1
         self._icon = None
 
+        self._ophyd_class = ""
+
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
         self.interlock.setSizePolicy(QSizePolicy.Expanding,
@@ -270,6 +272,34 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if self.icon:
             self.icon.rotation = angle
 
+    @Property(str)
+    def ophydClass(self):
+        """
+        The full qualified name of the Ophyd class to be used for the Expert
+        screen to be generated using Typhos.
+
+        Returns
+        -------
+        str
+        """
+        klass = self._ophyd_class
+        if isinstance(klass, type):
+            return f"{klass.__module__}.{klass.__name__}"
+        return klass
+
+    @ophydClass.setter
+    def ophydClass(self, klass):
+        """
+        The full qualified name of the Ophyd class to be used for the Expert
+        screen to be generated using Typhos.
+
+        Parameters
+        ----------
+        klass : bool
+        """
+        if self.ophydClass != klass:
+            self._ophyd_class = klass
+
     def paintEvent(self, evt):
         """
         Paint events are sent to widgets that need to update themselves,
@@ -380,9 +410,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             return
 
         prefix = remove_protocol(self.channelsPrefix)
-        klass = getattr(self, "OPHYD_CLASS", None)
+        klass = self._ophyd_class
         if not klass:
-            logger.error('No OPHYD_CLASS specified for pcdswidgets %s',
+            logger.error('No ophydClass specified for pcdswidgets %s',
                          self.__class__.__name__)
             return
         name = prefix.replace(':', '_')
