@@ -82,7 +82,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     _readback_suffix = ":PRESS_RBV"
 
     NAME = "Ion Pump"
-    OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(IonPump, self).__init__(parent=parent,
@@ -170,7 +170,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     _command_suffix = ":RUN_SW"
 
     NAME = "Turbo Pump"
-    OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(TurboPump, self).__init__(
@@ -256,7 +256,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     _command_suffix = ":RUN_SW"
 
     NAME = "Scroll Pump"
-    OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(ScrollPump, self).__init__(

@@ -34,6 +34,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     parent : QWidget
         The parent widget for this symbol.
     """
+    EXPERT_OPHYD_CLASS = ""
 
     Q_ENUMS(ContentLocation)
     ContentLocation = ContentLocation
@@ -49,6 +50,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._show_status_tooltip = True
         self._icon_size = -1
         self._icon = None
+
+        self._expert_ophyd_class = self.EXPERT_OPHYD_CLASS or ""
 
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
@@ -270,6 +273,34 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if self.icon:
             self.icon.rotation = angle
 
+    @Property(str)
+    def expertOphydClass(self):
+        """
+        The full qualified name of the Ophyd class to be used for the Expert
+        screen to be generated using Typhos.
+
+        Returns
+        -------
+        str
+        """
+        klass = self._expert_ophyd_class
+        if isinstance(klass, type):
+            return f"{klass.__module__}.{klass.__name__}"
+        return klass
+
+    @expertOphydClass.setter
+    def expertOphydClass(self, klass):
+        """
+        The full qualified name of the Ophyd class to be used for the Expert
+        screen to be generated using Typhos.
+
+        Parameters
+        ----------
+        klass : bool
+        """
+        if self.ophydClass != klass:
+            self._expert_ophyd_class = klass
+
     def paintEvent(self, evt):
         """
         Paint events are sent to widgets that need to update themselves,
@@ -380,9 +411,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             return
 
         prefix = remove_protocol(self.channelsPrefix)
-        klass = getattr(self, "OPHYD_CLASS", None)
+        klass = self.expertOphydClass
         if not klass:
-            logger.error('No OPHYD_CLASS specified for pcdswidgets %s',
+            logger.error('No ophydClass specified for pcdswidgets %s',
                          self.__class__.__name__)
             return
         name = prefix.replace(':', '_')

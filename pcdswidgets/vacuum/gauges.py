@@ -66,7 +66,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     _readback_suffix = ":PRESS_RBV"
 
     NAME = "Rough Gauge"
-    OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
 
     def __init__(self, parent=None, **kwargs):
         super(RoughGauge, self).__init__(
@@ -230,7 +230,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
     _command_suffix = ":HV_SW"
 
     NAME = "Cold Cathode Gauge"
-    OPHYD_CLASS = "pcdsdevices.gauge.GCCPLC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GCCPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(ColdCathodeGauge, self).__init__(
