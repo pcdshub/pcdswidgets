@@ -34,6 +34,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     parent : QWidget
         The parent widget for this symbol.
     """
+    EXPERT_OPHYD_CLASS = ""
 
     Q_ENUMS(ContentLocation)
     ContentLocation = ContentLocation
@@ -50,7 +51,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._icon_size = -1
         self._icon = None
 
-        self._ophyd_class = ""
+        self._expert_ophyd_class = self.EXPERT_OPHYD_CLASS or ""
 
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
@@ -273,7 +274,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.icon.rotation = angle
 
     @Property(str)
-    def ophydClass(self):
+    def expertOphydClass(self):
         """
         The full qualified name of the Ophyd class to be used for the Expert
         screen to be generated using Typhos.
@@ -282,13 +283,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         str
         """
-        klass = self._ophyd_class
+        klass = self._expert_ophyd_class
         if isinstance(klass, type):
             return f"{klass.__module__}.{klass.__name__}"
         return klass
 
-    @ophydClass.setter
-    def ophydClass(self, klass):
+    @expertOphydClass.setter
+    def expertOphydClass(self, klass):
         """
         The full qualified name of the Ophyd class to be used for the Expert
         screen to be generated using Typhos.
@@ -298,7 +299,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         klass : bool
         """
         if self.ophydClass != klass:
-            self._ophyd_class = klass
+            self._expert_ophyd_class = klass
 
     def paintEvent(self, evt):
         """
@@ -410,7 +411,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             return
 
         prefix = remove_protocol(self.channelsPrefix)
-        klass = self._ophyd_class
+        klass = self.expertOphydClass
         if not klass:
             logger.error('No ophydClass specified for pcdswidgets %s',
                          self.__class__.__name__)

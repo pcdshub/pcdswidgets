@@ -66,6 +66,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     _readback_suffix = ":PRESS_RBV"
 
     NAME = "Rough Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
 
     def __init__(self, parent=None, **kwargs):
         super(RoughGauge, self).__init__(
@@ -74,7 +75,6 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-        self.ophydClass = "pcdsdevices.gauge.GaugePLC"
         self.icon = RoughGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -230,6 +230,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
     _command_suffix = ":HV_SW"
 
     NAME = "Cold Cathode Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GCCPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(ColdCathodeGauge, self).__init__(
@@ -240,7 +241,6 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-        self.ophydClass = "pcdsdevices.gauge.GCCPLC"
         self.icon = ColdCathodeGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 

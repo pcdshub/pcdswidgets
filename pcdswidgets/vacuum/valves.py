@@ -88,6 +88,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Pneumatic Valve"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGC"
 
     def __init__(self, parent=None, **kwargs):
         super(PneumaticValve, self).__init__(
@@ -97,7 +98,6 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VGC"
         self.icon = PneumaticValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -182,6 +182,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Aperture Valve"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(ApertureValve, self).__init__(
@@ -191,8 +192,6 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.ophydClass = "pcdsdevices.valve.VRC"
         self.icon = ApertureValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -270,6 +269,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Fast Shutter"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(FastShutter, self).__init__(
@@ -279,7 +279,6 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VRC"
         self.icon = FastShutterSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -348,6 +347,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     _command_suffix = ":OPN_SW"
 
     NAME = "Needle Valve"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VCN"
 
     def __init__(self, parent=None, **kwargs):
         super(NeedleValve, self).__init__(
@@ -356,7 +356,6 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VCN"
         self.icon = NeedleValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -426,6 +425,7 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
     _command_suffix = ":OPN_SW"
 
     NAME = "Proportional Valve"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
         super(ProportionalValve, self).__init__(
@@ -434,7 +434,6 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VRC"
         self.icon = ProportionalValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -575,6 +574,7 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
 
     """
     NAME = 'Control Valve with Readback'
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
@@ -589,7 +589,6 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VVC"
         self.icon = ControlValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -666,6 +665,7 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
 
     """
     NAME = 'Normally Closed Control Valve with No Readback'
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
     _interlock_suffix = ":OPN_OK_RBV"
     _state_suffix = ':OPN_DO_RBV'
@@ -678,7 +678,6 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VVC"
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -755,6 +754,7 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
 
     """
     NAME = 'Normally Open Control Valve with No Readback'
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
 
     _interlock_suffix = ":CLS_OK_RBV"
     _state_suffix = ':CLS_DO_RBV'
@@ -767,5 +767,4 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.valve.VVCNO"
         self.icon = ControlOnlyValveSymbolIcon(parent=self)

@@ -82,6 +82,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     _readback_suffix = ":PRESS_RBV"
 
     NAME = "Ion Pump"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(IonPump, self).__init__(parent=parent,
@@ -92,7 +93,6 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
                                       readback_suffix=self._readback_suffix,
                                       readback_name='pressure',
                                       **kwargs)
-        self.ophydClass = "pcdsdevices.pump.PIPPLC"
         self.icon = IonPumpSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -170,6 +170,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     _command_suffix = ":RUN_SW"
 
     NAME = "Turbo Pump"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(TurboPump, self).__init__(
@@ -179,7 +180,6 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-        self.ophydClass = "pcdsdevices.pump.PTMPLC"
         self.icon = TurboPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -256,6 +256,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     _command_suffix = ":RUN_SW"
 
     NAME = "Scroll Pump"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
 
     def __init__(self, parent=None, **kwargs):
         super(ScrollPump, self).__init__(
@@ -265,8 +266,6 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             **kwargs)
-
-        self.ophydClass = "pcdsdevices.pump.PROPLC"
         self.icon = ScrollPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
