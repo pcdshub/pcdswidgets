@@ -542,6 +542,7 @@ class ButtonControl(object):
         self._command_suffix = command_suffix
         self._orientation = Qt.Horizontal
         self.control_btn = PyDMEnumButton()
+        self.control_btn.checkable = False
         self.controlButtonHorizontal = True
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(2)
