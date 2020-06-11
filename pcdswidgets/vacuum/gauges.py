@@ -62,7 +62,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         }
 
     """
-    _state_suffix = ":PRESS_OK_RBV"
+    _state_suffix = ":STATE_RBV"
     _readback_suffix = ":PRESS_RBV"
 
     NAME = "Rough Gauge"
