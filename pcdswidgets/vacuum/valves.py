@@ -269,7 +269,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Fast Shutter"
-    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VFS"
 
     def __init__(self, parent=None, **kwargs):
         super(FastShutter, self).__init__(
