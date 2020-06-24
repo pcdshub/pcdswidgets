@@ -413,7 +413,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         prefix = remove_protocol(self.channelsPrefix)
         klass = self.expertOphydClass
         if not klass:
-            logger.error('No experOphydClass specified for pcdswidgets %s',
+            logger.error('No expertOphydClass specified for pcdswidgets %s',
                          self.__class__.__name__)
             return
         name = prefix.replace(':', '_')
