@@ -298,7 +298,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         ----------
         klass : bool
         """
-        if self.ophydClass != klass:
+        if self.expertOphydClass != klass:
             self._expert_ophyd_class = klass
 
     def paintEvent(self, evt):
@@ -413,7 +413,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         prefix = remove_protocol(self.channelsPrefix)
         klass = self.expertOphydClass
         if not klass:
-            logger.error('No ophydClass specified for pcdswidgets %s',
+            logger.error('No experOphydClass specified for pcdswidgets %s',
                          self.__class__.__name__)
             return
         name = prefix.replace(':', '_')
