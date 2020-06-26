@@ -256,6 +256,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
             qproperty-penStyle: "Qt::DotLine";
             qproperty-penWidth: 2;
             qproperty-brush: red;
+            qproperty-arrowBrush: #00FF00;
         }
         FastShutter [state="Open"] #icon {
             qproperty-penColor: green;

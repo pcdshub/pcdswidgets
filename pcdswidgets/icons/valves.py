@@ -50,6 +50,19 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+    def __init__(self, parent=None, **kwargs):
+        super(FastShutterSymbolIcon, self).__init__(parent, **kwargs)
+        self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def arrowBrush(self):
+        return self._arrow_brush
+
+    @arrowBrush.setter
+    def arrowBrush(self, new_brush):
+        if new_brush != self._arrow_brush:
+            self._arrow_brush = new_brush
+            self.update()
 
     def draw_icon(self, painter):
         path = QPainterPath(QPointF(0, 0.3))
@@ -59,6 +72,23 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         path.closeSubpath()
         painter.drawPath(path)
 
+        prev_brush = painter.brush()
+        prev_pen = painter.pen()
+
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self._arrow_brush)
+        arrow = QPolygonF(
+            [QPointF(0.4, 0),
+             QPointF(0.4, 0.10),
+             QPointF(0.5, 0.25),
+             QPointF(0.6, 0.10),
+             QPointF(0.6, 0)
+             ]
+        )
+        painter.drawPolygon(arrow)
+
+        painter.setPen(prev_pen)
+        painter.setBrush(prev_brush)
         painter.drawLine(QPointF(0.4, 0), QPointF(0.5, 0.15))
         painter.drawLine(QPointF(0.4, 0.10), QPointF(0.5, 0.25))
         painter.drawLine(QPointF(0.5, 0.15), QPointF(0.6, 0))
