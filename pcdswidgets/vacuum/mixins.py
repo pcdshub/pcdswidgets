@@ -1,11 +1,15 @@
 import os
+import logging
 from functools import partial
 
 from qtpy.QtCore import Property, Qt
-from qtpy.QtWidgets import QVBoxLayout
+from qtpy.QtWidgets import QVBoxLayout, QGridLayout
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.enum_button import PyDMEnumButton
+from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.label import PyDMLabel
+
+logger = logging.getLogger(__name__)
 
 
 class InterlockMixin(object):
@@ -681,3 +685,100 @@ class ButtonLabelControl(ButtonControl):
         """
         super(ButtonLabelControl, self).destroy_channels()
         self.readback_label.channel = None
+
+
+class MultipleButtonControl(object):
+    """
+    The MultipleButtonControl class adds multiple PyDMPushButton instances to
+    the widget for controls.
+
+    Parameters
+    ----------
+    commands : list
+        List of dictionaries containing the specifications for the buttons.
+        Required keys for now are:
+        - suffix: str
+            suffix to be used along with the channelPrefix from PCDSSymbolBase
+            to compose the command button channel address
+        - text: str
+            the text to display at the button
+        - value
+            the value to be written when the button is pressed
+    """
+    def __init__(self, *, commands, **kwargs):
+        self._command_buttons_config = commands
+        self._orientation = Qt.Horizontal
+        self.buttons = []
+        self.create_buttons()
+
+        super(MultipleButtonControl, self).__init__(**kwargs)
+        self.controls_frame.setLayout(QGridLayout())
+        self.controlButtonHorizontal = True
+
+    @Property(bool)
+    def controlButtonHorizontal(self):
+        return self._orientation == Qt.Horizontal
+
+    @controlButtonHorizontal.setter
+    def controlButtonHorizontal(self, checked):
+        self.clear_control_layout()
+
+        self._orientation = Qt.Vertical
+        if checked:
+            self._orientation = Qt.Horizontal
+
+        layout = self.controls_frame.layout()
+
+        if self._orientation == Qt.Vertical:
+            for i, btn in enumerate(self.buttons):
+                layout.addWidget(btn, i, 0)
+        elif self._orientation == Qt.Horizontal:
+            for i, btn in enumerate(self.buttons):
+                layout.addWidget(btn, 0, i)
+
+    def clear_control_layout(self):
+        """
+        Remove all inner widgets from the control layout
+        """
+        layout = self.controls_frame.layout()
+        if not isinstance(layout, QGridLayout):
+            return
+        for col in range(0, layout.columnCount()):
+            for row in range(0, layout.rowCount()):
+                item = layout.itemAtPosition(row, col)
+                if item is not None:
+                    w = item.widget()
+                    if w is not None:
+                        layout.removeWidget(w)
+
+    def create_buttons(self):
+        for btn in self._command_buttons_config:
+            try:
+                text = btn['text']
+                value = btn['value']
+                btn = PyDMPushButton(label=text, pressValue=value)
+                self.buttons.append(btn)
+            except KeyError:
+                logger.exception('Invalid config for MultipleButtonControl.')
+
+    def create_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        created.
+        This method also sets the channel address for the control button.
+        """
+        super(MultipleButtonControl, self).create_channels()
+        if self._channels_prefix:
+            for idx, btn in enumerate(self.buttons):
+                suffix = self._command_buttons_config[idx]['suffix']
+                btn.channel = "{}{}".format(self._channels_prefix, suffix)
+
+    def destroy_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        destroyed.
+        This method also clears the channel address for the control button.
+        """
+        super(MultipleButtonControl, self).destroy_channels()
+        for btn in self.buttons:
+            btn.channel = None
