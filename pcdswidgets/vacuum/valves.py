@@ -1,7 +1,8 @@
 from qtpy.QtCore import QSize, Property
 
 from .base import PCDSSymbolBase, ContentLocation
-from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl)
+from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
+                     MultipleButtonControl)
 from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
                             FastShutterSymbolIcon, NeedleValveSymbolIcon,
                             ProportionalValveSymbolIcon,
@@ -199,7 +200,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
 
 
 class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
-                  ButtonControl, PCDSSymbolBase):
+                  MultipleButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
     controls.
@@ -267,7 +268,10 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
     _interlock_suffix = ":VAC_FAULT_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
-    _command_suffix = ":OPN_SW"
+    _command_buttons = [
+        {"suffix": ":OPN_SW", "text": "OPEN", "value": 1},
+        {"suffix": ":CLS_SW", "text": "CLOSE", "value": 1},
+    ]
 
     NAME = "Fast Shutter"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VFS"
@@ -278,7 +282,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
-            command_suffix=self._command_suffix,
+            commands=self._command_buttons,
             **kwargs)
         self.icon = FastShutterSymbolIcon(parent=self)
 
