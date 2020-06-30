@@ -265,7 +265,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
 
     """
     _interlock_suffix = ":VAC_FAULT_OK_RBV"
-    _error_suffix = ":ERROR_RBV"
+    _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
 
