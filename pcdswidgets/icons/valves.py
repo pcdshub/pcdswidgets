@@ -79,9 +79,9 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         painter.setBrush(self._arrow_brush)
         arrow = QPolygonF(
             [QPointF(0.2, 0),
-             QPointF(0.2, 0.10),
-             QPointF(0.5, 0.30),
-             QPointF(0.8, 0.10),
+             QPointF(0.2, 0.20),
+             QPointF(0.5, 0.40),
+             QPointF(0.8, 0.20),
              QPointF(0.8, 0)
              ]
         )
@@ -90,9 +90,9 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         painter.setPen(prev_pen)
         painter.setBrush(prev_brush)
         painter.drawLine(QPointF(0.2, 0), QPointF(0.5, 0.20))
-        painter.drawLine(QPointF(0.2, 0.10), QPointF(0.5, 0.30))
+        painter.drawLine(QPointF(0.2, 0.20), QPointF(0.5, 0.40))
         painter.drawLine(QPointF(0.5, 0.20), QPointF(0.8, 0))
-        painter.drawLine(QPointF(0.5, 0.30), QPointF(0.8, 0.10))
+        painter.drawLine(QPointF(0.5, 0.40), QPointF(0.8, 0.20))
 
         painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.0))
 
