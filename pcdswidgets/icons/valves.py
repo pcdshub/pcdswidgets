@@ -52,7 +52,7 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     """
     def __init__(self, parent=None, **kwargs):
         super(FastShutterSymbolIcon, self).__init__(parent, **kwargs)
-        self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
+        self._arrow_brush = QBrush(QColor("green"), Qt.SolidPattern)
 
     @Property(QBrush)
     def arrowBrush(self):
@@ -78,21 +78,21 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         painter.setPen(Qt.NoPen)
         painter.setBrush(self._arrow_brush)
         arrow = QPolygonF(
-            [QPointF(0.4, 0),
-             QPointF(0.4, 0.10),
-             QPointF(0.5, 0.25),
-             QPointF(0.6, 0.10),
-             QPointF(0.6, 0)
+            [QPointF(0.2, 0),
+             QPointF(0.2, 0.10),
+             QPointF(0.5, 0.30),
+             QPointF(0.8, 0.10),
+             QPointF(0.8, 0)
              ]
         )
         painter.drawPolygon(arrow)
 
         painter.setPen(prev_pen)
         painter.setBrush(prev_brush)
-        painter.drawLine(QPointF(0.4, 0), QPointF(0.5, 0.15))
-        painter.drawLine(QPointF(0.4, 0.10), QPointF(0.5, 0.25))
-        painter.drawLine(QPointF(0.5, 0.15), QPointF(0.6, 0))
-        painter.drawLine(QPointF(0.5, 0.25), QPointF(0.6, 0.10))
+        painter.drawLine(QPointF(0.2, 0), QPointF(0.5, 0.20))
+        painter.drawLine(QPointF(0.2, 0.10), QPointF(0.5, 0.30))
+        painter.drawLine(QPointF(0.5, 0.20), QPointF(0.8, 0))
+        painter.drawLine(QPointF(0.5, 0.30), QPointF(0.8, 0.10))
 
         painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.0))
 
