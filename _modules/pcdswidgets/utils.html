@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.utils &mdash; PCDSWidgets 0.2.0+7.g9321c37 documentation</title>
+  <title>pcdswidgets.utils &mdash; PCDSWidgets 0.4.0+5.g612d68a documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.0+7.g9321c37
+                0.4.0+5.g612d68a
               </div>
             
           
@@ -163,7 +163,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pcdswidgets.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QWidget</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QWidget</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="refresh_style"><a class="viewcode-back" href="../../utils.html#pcdswidgets.utils.refresh_style">[docs]</a><span class="k">def</span> <span class="nf">refresh_style</span><span class="p">(</span><span class="n">widget</span><span class="p">):</span>
@@ -183,6 +186,15 @@
         <span class="n">child_widget</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">child_widget</span> <span class="o">!=</span> <span class="n">widget</span><span class="p">:</span>
             <span class="n">refresh_style</span><span class="p">(</span><span class="n">child_widget</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="find_ancestor_for_widget"><a class="viewcode-back" href="../../utils.html#pcdswidgets.utils.find_ancestor_for_widget">[docs]</a><span class="k">def</span> <span class="nf">find_ancestor_for_widget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">klass</span><span class="p">):</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">widget</span>
+    <span class="k">while</span> <span class="n">w</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">klass</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">w</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
 </pre></div>
 
            </div>

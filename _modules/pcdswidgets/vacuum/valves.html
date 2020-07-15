@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.2.0+7.g9321c37 documentation</title>
+  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.4.0+5.g612d68a documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.0+7.g9321c37
+                0.4.0+5.g612d68a
               </div>
             
           
@@ -166,7 +166,8 @@
 <span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Property</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PCDSSymbolBase</span><span class="p">,</span> <span class="n">ContentLocation</span>
-<span class="kn">from</span> <span class="nn">.mixins</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.mixins</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
+                     <span class="n">MultipleButtonControl</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..icons.valves</span> <span class="kn">import</span> <span class="p">(</span><span class="n">ApertureValveSymbolIcon</span><span class="p">,</span> <span class="n">PneumaticValveSymbolIcon</span><span class="p">,</span>
                             <span class="n">FastShutterSymbolIcon</span><span class="p">,</span> <span class="n">NeedleValveSymbolIcon</span><span class="p">,</span>
                             <span class="n">ProportionalValveSymbolIcon</span><span class="p">,</span>
@@ -253,6 +254,7 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Pneumatic Valve&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VGC&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PneumaticValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -346,6 +348,7 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Aperture Valve&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VRC&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ApertureValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -362,7 +365,7 @@
 
 
 <div class="viewcode-block" id="FastShutter"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.FastShutter">[docs]</a><span class="k">class</span> <span class="nc">FastShutter</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
-                  <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+                  <span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Fast Shutter with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -419,6 +422,7 @@
 <span class="sd">            qproperty-penStyle: &quot;Qt::DotLine&quot;;</span>
 <span class="sd">            qproperty-penWidth: 2;</span>
 <span class="sd">            qproperty-brush: red;</span>
+<span class="sd">            qproperty-arrowBrush: #00FF00;</span>
 <span class="sd">        }</span>
 <span class="sd">        FastShutter [state=&quot;Open&quot;] #icon {</span>
 <span class="sd">            qproperty-penColor: green;</span>
@@ -427,11 +431,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:VAC_FAULT_OK_RBV&quot;</span>
-    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ERROR_RBV&quot;</span>
+    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
     <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:POS_STATE_RBV&quot;</span>
-    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
+    <span class="n">_command_buttons</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;:OPN_SW&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;:CLS_SW&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">]</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Fast Shutter&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VFS&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FastShutter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -439,7 +447,7 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
-            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="n">commands</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">FastShutterSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
@@ -509,6 +517,7 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Needle Valve&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VCN&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NeedleValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -586,6 +595,7 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Proportional Valve&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VRC&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ProportionalValve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -734,6 +744,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Control Valve with Readback&#39;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVC&quot;</span>
+
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
     <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
     <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:POS_STATE_RBV&quot;</span>
@@ -823,6 +835,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Normally Closed Control Valve with No Readback&#39;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVC&quot;</span>
+
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
     <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s1">&#39;:OPN_DO_RBV&#39;</span>
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
@@ -910,6 +924,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Normally Open Control Valve with No Readback&#39;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVCNO&quot;</span>
+
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_OK_RBV&quot;</span>
     <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s1">&#39;:CLS_DO_RBV&#39;</span>
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_SW&quot;</span>

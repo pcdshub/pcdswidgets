@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.2.0+7.g9321c37 documentation</title>
+  <title>pcdswidgets.vacuum.mixins &mdash; PCDSWidgets 0.4.0+5.g612d68a documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.0+7.g9321c37
+                0.4.0+5.g612d68a
               </div>
             
           
@@ -164,13 +164,17 @@
             
   <h1>Source code for pcdswidgets.vacuum.mixins</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
 <span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Qt</span>
-<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QVBoxLayout</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QGridLayout</span>
 <span class="kn">from</span> <span class="nn">pydm.widgets.channel</span> <span class="kn">import</span> <span class="n">PyDMChannel</span>
 <span class="kn">from</span> <span class="nn">pydm.widgets.enum_button</span> <span class="kn">import</span> <span class="n">PyDMEnumButton</span>
+<span class="kn">from</span> <span class="nn">pydm.widgets.pushbutton</span> <span class="kn">import</span> <span class="n">PyDMPushButton</span>
 <span class="kn">from</span> <span class="nn">pydm.widgets.label</span> <span class="kn">import</span> <span class="n">PyDMLabel</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="InterlockMixin"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin">[docs]</a><span class="k">class</span> <span class="nc">InterlockMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -707,6 +711,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span> <span class="o">=</span> <span class="n">command_suffix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span> <span class="o">=</span> <span class="n">PyDMEnumButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">checkable</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controlButtonHorizontal</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -845,6 +850,104 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="MultipleButtonControl"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl">[docs]</a><span class="k">class</span> <span class="nc">MultipleButtonControl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The MultipleButtonControl class adds multiple PyDMPushButton instances to</span>
+<span class="sd">    the widget for controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    commands : list</span>
+<span class="sd">        List of dictionaries containing the specifications for the buttons.</span>
+<span class="sd">        Required keys for now are:</span>
+
+<span class="sd">        - suffix: str</span>
+<span class="sd">            suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">            to compose the command button channel address</span>
+<span class="sd">        - text: str</span>
+<span class="sd">            the text to display at the button</span>
+<span class="sd">        - value</span>
+<span class="sd">            the value to be written when the button is pressed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">commands</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span> <span class="o">=</span> <span class="n">commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_buttons</span><span class="p">()</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QGridLayout</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlButtonHorizontal</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+    <span class="nd">@controlButtonHorizontal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_control_layout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultipleButtonControl.clear_control_layout"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.clear_control_layout">[docs]</a>    <span class="k">def</span> <span class="nf">clear_control_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all inner widgets from the control layout</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">columnCount</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">itemAtPosition</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">w</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">widget</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="n">w</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">create_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">btn</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">btn</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+                <span class="n">btn</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Invalid config for MultipleButtonControl.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultipleButtonControl.create_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.create_channels">[docs]</a>    <span class="k">def</span> <span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        created.</span>
+<span class="sd">        This method also sets the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;suffix&#39;</span><span class="p">]</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MultipleButtonControl.destroy_channels"><a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.destroy_channels">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        destroyed.</span>
+<span class="sd">        This method also clears the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 </pre></div>
 
            </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.2.0+7.g9321c37 documentation</title>
+  <title>pcdswidgets.vacuum.gauges &mdash; PCDSWidgets 0.4.0+5.g612d68a documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.0+7.g9321c37
+                0.4.0+5.g612d68a
               </div>
             
           
@@ -227,10 +227,11 @@
 <span class="sd">        }</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_OK_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
     <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_RBV&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Rough Gauge&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.gauge.GaugePLC&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RoughGauge</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -394,6 +395,7 @@
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:HV_SW&quot;</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Cold Cathode Gauge&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.gauge.GCCPLC&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ColdCathodeGauge</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>

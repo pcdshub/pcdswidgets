@@ -48,3 +48,9 @@ Button & Label Control
 ----------------------
 .. autoclass:: pcdswidgets.vacuum.mixins.ButtonLabelControl
    :members:
+
+
+Multiple Button Control
+-----------------------
+.. autoclass:: pcdswidgets.vacuum.mixins.MultipleButtonControl
+   :members:
