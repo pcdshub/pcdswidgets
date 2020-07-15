@@ -5,7 +5,6 @@ from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption, QToolTip,
 
 from pydm.utilities import (remove_protocol, is_qt_designer)
 from ..utils import find_ancestor_for_widget
-from ..vacuum.base import PCDSSymbolBase
 
 
 class BaseSymbolIcon(QWidget):
@@ -61,6 +60,8 @@ class BaseSymbolIcon(QWidget):
         EDM. If the parent is not PCDSSymbolBase and does not have a valid
         State Channel nothing will be displayed.
         """
+        from ..vacuum.base import PCDSSymbolBase
+
         p = find_ancestor_for_widget(self, PCDSSymbolBase)
         if not p:
             return
