@@ -52,7 +52,7 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     """
     def __init__(self, parent=None, **kwargs):
         super(FastShutterSymbolIcon, self).__init__(parent, **kwargs)
-        self._arrow_brush = QBrush(QColor("green"), Qt.SolidPattern)
+        self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
 
     @Property(QBrush)
     def arrowBrush(self):
