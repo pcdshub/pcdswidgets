@@ -697,6 +697,7 @@ class MultipleButtonControl(object):
     commands : list
         List of dictionaries containing the specifications for the buttons.
         Required keys for now are:
+
         - suffix: str
             suffix to be used along with the channelPrefix from PCDSSymbolBase
             to compose the command button channel address
