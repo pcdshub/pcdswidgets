@@ -85,7 +85,8 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
 class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
                       PCDSSymbolBase):
     """
-    A Symbol Widget representing a Hot Cathode Gauge with the proper icon and controls.
+    A Symbol Widget representing a Hot Cathode Gauge with the proper icon
+    and controls.
 
     Parameters
     ----------
