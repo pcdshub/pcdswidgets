@@ -1,2 +1,2 @@
 # Smoke import
-import pcdswidgets.designer
+import pcdswidgets.designer  # noqa
