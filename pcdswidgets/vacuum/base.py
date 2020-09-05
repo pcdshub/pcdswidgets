@@ -2,9 +2,9 @@ import os
 import logging
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
-from pydm.utilities import remove_protocol
+from pydm.utilities import remove_protocol, IconFont
 from qtpy.QtCore import Property, Q_ENUMS, QSize
-from qtpy.QtGui import QPainter
+from qtpy.QtGui import QPainter, QCursor
 from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
                             QSizePolicy, QStyle, QStyleOption)
 
@@ -50,6 +50,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._show_status_tooltip = True
         self._icon_size = -1
         self._icon = None
+
+        self._icon_cursor = self.setCursor(
+            QCursor(IconFont().icon("file").pixmap(16, 16))
+        )
 
         self._expert_ophyd_class = self.EXPERT_OPHYD_CLASS or ""
 
@@ -396,6 +400,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.iconSize = 32
         if hasattr(self.icon, 'clicked'):
             self.icon.clicked.connect(self._handle_icon_click)
+            if self._expert_display is not None:
+                self.icon.setCursor(self._icon_cursor)
 
     def _handle_icon_click(self):
         if not self.channelsPrefix:
