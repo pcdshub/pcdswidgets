@@ -5,7 +5,8 @@ from .pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
 from .valves import (PneumaticValveSymbolIcon, FastShutterSymbolIcon,
                      ApertureValveSymbolIcon, RightAngleManualValveSymbolIcon,
                      NeedleValveSymbolIcon, ProportionalValveSymbolIcon,
-                     ControlValveSymbolIcon, ControlOnlyValveSymbolIcon)
+                     ControlValveSymbolIcon, ControlOnlyValveSymbolIcon,
+                     PneumaticValveNOSymbolIcon)
 from .others import RGASymbolIcon
 
 __all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
@@ -16,4 +17,4 @@ __all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
            'ApertureValveSymbolIcon', 'RightAngleManualValveSymbolIcon',
            'NeedleValveSymbolIcon', 'ProportionalValveSymbolIcon',
            'RGASymbolIcon', 'ControlValveSymbolIcon',
-           'ControlOnlyValveSymbolIcon']
+           'ControlOnlyValveSymbolIcon', 'PneumaticValveNOSymbolIcon']

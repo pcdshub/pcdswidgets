@@ -312,3 +312,47 @@ class ControlOnlyValveSymbolIcon(BaseSymbolIcon):
         path.lineTo(1, 0.9)
         path.closeSubpath()
         painter.drawPath(path)
+
+
+class PneumaticValveNOSymbolIcon(BaseSymbolIcon):
+    """
+    A widget with a normally open pneumatic valve symbol drawn in it.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the icon
+    """
+    def __init__(self, parent=None, **kwargs):
+        super(PneumaticValveNOSymbolIcon, self).__init__(parent, **kwargs)
+        self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
+
+    @Property(QBrush)
+    def interlockBrush(self):
+        return self._interlock_brush
+
+    @interlockBrush.setter
+    def interlockBrush(self, new_brush):
+        if new_brush != self._interlock_brush:
+            self._interlock_brush = new_brush
+            self.update()
+
+    def draw_icon(self, painter):
+        path = QPainterPath(QPointF(0, 0.3))
+        path.lineTo(0, 0.9)
+        path.lineTo(1, 0.3)
+        path.lineTo(1, 0.9)
+        path.closeSubpath()
+        painter.drawPath(path)
+        painter.drawLine(QPointF(0.5, 0.6), QPointF(0.5, 0.3))
+        painter.setBrush(self._interlock_brush)
+        painter.drawRect(QRectF(0.2, 0, 0.6, 0.3))
+        # Draw the N
+        n_path = QPainterPath(QPointF(0.25, 0.25))
+        n_path.lineTo(0.25, 0.05)
+        n_path.lineTo(0.45, 0.25)
+        n_path.lineTo(0.45, 0.05)
+        painter.drawPath(n_path)
+
+        # Draw the O
+        painter.drawEllipse(QPointF(0.65, 0.15), 0.1, 0.1)
