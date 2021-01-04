@@ -16,7 +16,7 @@ BasePlugin = qtplugin_factory(PCDSSymbolBase, group="PCDS Symbols")
 PCDSPneumaticValvePlugin = qtplugin_factory(PneumaticValve,
                                             group="PCDS Valves")
 PCDSPneumaticValveNOPlugin = qtplugin_factory(PneumaticValveNO,
-                                            group="PCDS Valves")
+                                              group="PCDS Valves")
 PCDSApertureValvePlugin = qtplugin_factory(ApertureValve, group='PCDS Valves')
 PCDSFastShutterPlugin = qtplugin_factory(FastShutter, group="PCDS Valves")
 

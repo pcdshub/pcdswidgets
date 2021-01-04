@@ -779,8 +779,8 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
 class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
                        ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Normally Open Pneumatic Valve with the proper
-    icon and controls.
+    A Symbol Widget representing a Normally Open Pneumatic Valve with the
+    proper icon and controls.
 
     Parameters
     ----------
