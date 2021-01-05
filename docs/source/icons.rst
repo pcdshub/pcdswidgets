@@ -33,6 +33,7 @@ Valves
 Name               Icon        Import
 ================== =========== =================================================================
 Pneumatic          |pneuvalve| ``from pcdswidgets.icons import PneumaticValveSymbolIcon``
+Pneumatic NO       |pnnovalve| ``from pcdswidgets.icons import PneumaticValveNOSymbolIcon``
 Aperture           |aperture|  ``from pcdswidgets.icons import ApertureValveSymbolIcon``
 Fast Shutter       |fshutter|  ``from pcdswidgets.icons import FastShutterSymbolIcon``
 Right Angle Manual |ramvalve|  ``from pcdswidgets.icons import RightAngleManualValveSymbolIcon``
@@ -43,6 +44,7 @@ ControlOnlyValve   |cntrlonly| ``from pcdswidgets.icons import ControlOnlyValveS
 ================== =========== =================================================================
 
 .. |pneuvalve| image:: /_static/icons/PneumaticValveSymbolIcon.png
+.. |pnnovalve| image:: /_static/icons/PneumaticValveNOSymbolIcon.png
 .. |aperture| image:: /_static/icons/ApertureValveSymbolIcon.png
 .. |fshutter| image:: /_static/icons/FastShutterSymbolIcon.png
 .. |ramvalve| image:: /_static/icons/RightAngleManualValveSymbolIcon.png

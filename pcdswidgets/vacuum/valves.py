@@ -8,7 +8,8 @@ from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
                             ProportionalValveSymbolIcon,
                             RightAngleManualValveSymbolIcon,
                             ControlValveSymbolIcon,
-                            ControlOnlyValveSymbolIcon)
+                            ControlOnlyValveSymbolIcon,
+                            PneumaticValveNOSymbolIcon)
 
 
 class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
@@ -773,3 +774,97 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
+
+
+class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
+                       ButtonControl, PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Normally Open Pneumatic Valve with the
+    proper icon and controls.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |interlock  |QFrame        |The QFrame wrapping this whole widget. |
+    +-----------+--------------+---------------------------------------+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+
+    **Additional Properties**
+
+    +-----------+-------------------------------------------------------+
+    |Property   |Values                                                 |
+    +===========+=======================================================+
+    |interlocked|`true` or `false`                                      |
+    +-----------+-------------------------------------------------------+
+    |error      |`Vented`, `At Vacuum`, `Differential Pressure` or      |
+    |           |`Lost Vacuum`                                          |
+    +-----------+-------------------------------------------------------+
+    |state      |`OPEN`, `CLOSED`, `MOVING`, `INVALID`                  |
+    +-----------+-------------------------------------------------------+
+
+    Examples
+    --------
+
+    .. code-block:: css
+
+        PneumaticValveNO[interlocked="true"] #interlock {
+            border: 5px solid red;
+        }
+        PneumaticValveNO[interlocked="false"] #interlock {
+            border: 0px;
+        }
+        PneumaticValveNO[interlocked="true"] #icon {
+            qproperty-interlockBrush: #FF0000;
+        }
+        PneumaticValveNO[interlocked="false"] #icon {
+            qproperty-interlockBrush: #00FF00;
+        }
+        PneumaticValveNO[error="Lost Vacuum"] #icon {
+            qproperty-penStyle: "Qt::DotLine";
+            qproperty-penWidth: 2;
+            qproperty-brush: red;
+        }
+        PneumaticValveNO[state="OPEN"] #icon {
+            qproperty-penColor: green;
+            qproperty-penWidth: 2;
+        }
+
+    """
+    _interlock_suffix = ":CLS_OK_RBV"
+    _error_suffix = ":STATE_RBV"
+    _state_suffix = ":POS_STATE_RBV"
+    _command_suffix = ":CLS_SW"
+
+    NAME = "Pneumatic Valve NO"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
+
+    def __init__(self, parent=None, **kwargs):
+        super(PneumaticValveNO, self).__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
+            **kwargs)
+        self.icon = PneumaticValveNOSymbolIcon(parent=self)
+
+    def sizeHint(self):
+        return QSize(180, 70)

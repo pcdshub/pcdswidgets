@@ -6,7 +6,7 @@ from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
 from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
                             ProportionalValve, RightAngleManualValve,
                             ApertureValve, ControlValve, ControlOnlyValveNC,
-                            ControlOnlyValveNO)
+                            ControlOnlyValveNO, PneumaticValveNO)
 
 from .vacuum.base import PCDSSymbolBase
 
@@ -15,6 +15,8 @@ BasePlugin = qtplugin_factory(PCDSSymbolBase, group="PCDS Symbols")
 # Valves
 PCDSPneumaticValvePlugin = qtplugin_factory(PneumaticValve,
                                             group="PCDS Valves")
+PCDSPneumaticValveNOPlugin = qtplugin_factory(PneumaticValveNO,
+                                              group="PCDS Valves")
 PCDSApertureValvePlugin = qtplugin_factory(ApertureValve, group='PCDS Valves')
 PCDSFastShutterPlugin = qtplugin_factory(FastShutter, group="PCDS Valves")
 
