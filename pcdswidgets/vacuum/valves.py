@@ -854,7 +854,7 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":CLS_SW"
 
     NAME = "Pneumatic Valve NO"
-    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGC"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
 
     def __init__(self, parent=None, **kwargs):
         super(PneumaticValveNO, self).__init__(
