@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.4.1+2.gec6cb5d documentation</title>
+  <title>pcdswidgets.vacuum.valves &mdash; PCDSWidgets 0.4.2+7.g8504004 documentation</title>
   
 
   
@@ -24,7 +24,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -58,7 +57,7 @@
             
             
               <div class="version">
-                0.4.1+2.gec6cb5d
+                0.4.2+7.g8504004
               </div>
             
           
@@ -173,7 +172,8 @@
                             <span class="n">ProportionalValveSymbolIcon</span><span class="p">,</span>
                             <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">,</span>
                             <span class="n">ControlValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">)</span>
+                            <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">,</span>
+                            <span class="n">PneumaticValveNOSymbolIcon</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PneumaticValve"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValve">[docs]</a><span class="k">class</span> <span class="nc">PneumaticValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
@@ -938,6 +938,100 @@
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PneumaticValveNO"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValveNO">[docs]</a><span class="k">class</span> <span class="nc">PneumaticValveNO</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span>
+                       <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Normally Open Pneumatic Valve with the</span>
+<span class="sd">    proper icon and controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                 |</span>
+<span class="sd">    +===========+=======================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                      |</span>
+<span class="sd">    +-----------+-------------------------------------------------------+</span>
+<span class="sd">    |error      |`Vented`, `At Vacuum`, `Differential Pressure` or      |</span>
+<span class="sd">    |           |`Lost Vacuum`                                          |</span>
+<span class="sd">    +-----------+-------------------------------------------------------+</span>
+<span class="sd">    |state      |`OPEN`, `CLOSED`, `MOVING`, `INVALID`                  |</span>
+<span class="sd">    +-----------+-------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        PneumaticValveNO[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        PneumaticValveNO[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        PneumaticValveNO[interlocked=&quot;true&quot;] #icon {</span>
+<span class="sd">            qproperty-interlockBrush: #FF0000;</span>
+<span class="sd">        }</span>
+<span class="sd">        PneumaticValveNO[interlocked=&quot;false&quot;] #icon {</span>
+<span class="sd">            qproperty-interlockBrush: #00FF00;</span>
+<span class="sd">        }</span>
+<span class="sd">        PneumaticValveNO[error=&quot;Lost Vacuum&quot;] #icon {</span>
+<span class="sd">            qproperty-penStyle: &quot;Qt::DotLine&quot;;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">            qproperty-brush: red;</span>
+<span class="sd">        }</span>
+<span class="sd">        PneumaticValveNO[state=&quot;OPEN&quot;] #icon {</span>
+<span class="sd">            qproperty-penColor: green;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_OK_RBV&quot;</span>
+    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:POS_STATE_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_SW&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Pneumatic Valve NO&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVCNO&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PneumaticValveNO</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+            <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveNOSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PneumaticValveNO.sizeHint"><a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValveNO.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

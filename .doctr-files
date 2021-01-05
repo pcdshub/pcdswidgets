@@ -8,6 +8,7 @@
 ./_images/HotCathodeGaugeSymbolIcon.png
 ./_images/IonPumpSymbolIcon.png
 ./_images/NeedleValveSymbolIcon.png
+./_images/PneumaticValveNOSymbolIcon.png
 ./_images/PneumaticValveSymbolIcon.png
 ./_images/ProportionalValveSymbolIcon.png
 ./_images/RGASymbolIcon.png
@@ -78,6 +79,7 @@
 ./_static/icons/HotCathodeGaugeSymbolIcon.png
 ./_static/icons/IonPumpSymbolIcon.png
 ./_static/icons/NeedleValveSymbolIcon.png
+./_static/icons/PneumaticValveNOSymbolIcon.png
 ./_static/icons/PneumaticValveSymbolIcon.png
 ./_static/icons/ProportionalValveSymbolIcon.png
 ./_static/icons/RGASymbolIcon.png

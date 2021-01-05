@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Valves &mdash; PCDSWidgets 0.4.1+2.gec6cb5d documentation</title>
+  <title>Valves &mdash; PCDSWidgets 0.4.2+7.g8504004 documentation</title>
   
 
   
@@ -24,7 +24,6 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -60,7 +59,7 @@
             
             
               <div class="version">
-                0.4.1+2.gec6cb5d
+                0.4.2+7.g8504004
               </div>
             
           
@@ -92,6 +91,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../vacuum.html#symbol-widgets">Symbol Widgets</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Valves</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pneumatic-valve">Pneumatic Valve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pneumatic-valve-no">Pneumatic Valve - NO</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aperture-valve">Aperture Valve</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fast-shutter">Fast Shutter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#needle-valve">Needle Valve</a></li>
@@ -289,6 +289,117 @@ Properties are also available to offer wider customization possibilities.</p>
 <dl class="py method">
 <dt id="pcdswidgets.vacuum.valves.PneumaticValve.sizeHint">
 <code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/valves.html#PneumaticValve.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.valves.PneumaticValve.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suggested initial size for the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>size</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QSize</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pneumatic-valve-no">
+<h2>Pneumatic Valve - NO<a class="headerlink" href="#pneumatic-valve-no" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pcdswidgets.vacuum.valves.PneumaticValveNO">
+<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.valves.</code><code class="sig-name descname">PneumaticValveNO</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/valves.html#PneumaticValveNO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.valves.PneumaticValveNO" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Symbol Widget representing a Normally Open Pneumatic Valve with the
+proper icon and controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>QWidget</em>) – The parent widget for the symbol</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This widget allow for high customization through the Qt Stylesheets
+mechanism.
+As this widget is composed by internal widgets, their names can be used as
+selectors when writing your stylesheet to be used with this widget.
+Properties are also available to offer wider customization possibilities.</p>
+<p><strong>Internal Components</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Widget Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What is it?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlock</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping this whole widget.</p></td>
+</tr>
+<tr class="row-odd"><td><p>controls</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping the controls panel.</p></td>
+</tr>
+<tr class="row-even"><td><p>icon</p></td>
+<td><p>BaseSymbolIcon</p></td>
+<td><p>The widget containing the icon drawing.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional Properties</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlocked</p></td>
+<td><p><cite>true</cite> or <cite>false</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p>error</p></td>
+<td><p><cite>Vented</cite>, <cite>At Vacuum</cite>, <cite>Differential Pressure</cite> or
+<cite>Lost Vacuum</cite></p></td>
+</tr>
+<tr class="row-even"><td><p>state</p></td>
+<td><p><cite>OPEN</cite>, <cite>CLOSED</cite>, <cite>MOVING</cite>, <cite>INVALID</cite></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-interlockBrush</span><span class="p">:</span> <span class="mh">#FF0000</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-interlockBrush</span><span class="p">:</span> <span class="mh">#00FF00</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">error</span><span class="o">=</span><span class="s2">&quot;Lost Vacuum&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-penStyle</span><span class="p">:</span> <span class="s2">&quot;Qt::DotLine&quot;</span><span class="p">;</span>
+    <span class="n">qproperty-penWidth</span><span class="p">:</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">qproperty-brush</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">PneumaticValveNO</span><span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;OPEN&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-penColor</span><span class="p">:</span> <span class="kc">green</span><span class="p">;</span>
+    <span class="n">qproperty-penWidth</span><span class="p">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pcdswidgets.vacuum.valves.PneumaticValveNO.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/valves.html#PneumaticValveNO.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.valves.PneumaticValveNO.sizeHint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suggested initial size for the widget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
