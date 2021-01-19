@@ -29,12 +29,12 @@ env:
 
 # Uncomment this block if you would like to make the Python PIP test an allowed
 # failure
-#jobs:
-#  allow_failures:
-#    # This makes the PIP based Python 3.6 optional for passing.
-#    # Remove this block if passing tests with PIP is mandatory for your
-#    # package
-#    - name: "Python 3.6 - PIP"
+jobs:
+  allow_failures:
+    # This makes the PIP based Python 3.6 optional for passing.
+    # Remove this block if passing tests with PIP is mandatory for your
+    # package
+    - name: "Python 3.6 - PIP"
 
 import:
   # If your project requires X11 leave the following import
