@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Gauges &mdash; PCDSWidgets 0.5.0+6.gd99d1e0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Others" href="others.html" />
+    <link rel="prev" title="Pumps" href="pumps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PCDSWidgets
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.0+6.gd99d1e0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Widgets</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../vacuum.html">Vacuum Widgets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../vacuum.html#common-properties">Common Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vacuum.html#controls-location">Controls Location</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../vacuum.html#symbol-widgets">Symbol Widgets</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="valves.html">Valves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pumps.html">Pumps</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Gauges</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rough-gauge">Rough Gauge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hot-cathode-gauge">Hot Cathode Gauge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cold-cathode-gauge">Cold Cathode Gauge</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="others.html">Others</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../mixins.html">Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PCDSWidgets</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../vacuum.html">Vacuum Widgets</a> &raquo;</li>
+        
+      <li>Gauges</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/vacuum/gauges.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gauges">
+<h1>Gauges<a class="headerlink" href="#gauges" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rough-gauge">
+<h2>Rough Gauge<a class="headerlink" href="#rough-gauge" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pcdswidgets.vacuum.gauges.RoughGauge">
+<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.gauges.</code><code class="sig-name descname">RoughGauge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#RoughGauge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.RoughGauge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Symbol Widget representing a Rough Gauge with the proper icon and
+controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>QWidget</em>) – The parent widget for the symbol</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This widget allow for high customization through the Qt Stylesheets
+mechanism.
+As this widget is composed by internal widgets, their names can be used as
+selectors when writing your stylesheet to be used with this widget.
+Properties are also available to offer wider customization possibilities.</p>
+<p><strong>Internal Components</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Widget Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What is it?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>controls</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping the controls panel.</p></td>
+</tr>
+<tr class="row-odd"><td><p>icon</p></td>
+<td><p>BaseSymbolIcon</p></td>
+<td><p>The widget containing the icon drawing.</p></td>
+</tr>
+<tr class="row-even"><td><p>pressure</p></td>
+<td><p>PyDMLabel</p></td>
+<td><p>The pressure reading label.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional Properties</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>state</p></td>
+<td><p><cite>On</cite> or <cite>Off</cite></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">RoughGauge</span><span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="n">qproperty-brush</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+    <span class="k">color</span><span class="p">:</span> <span class="kc">gray</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">RoughGauge</span><span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;On&quot;</span><span class="o">]</span> <span class="p">{</span>
+    <span class="n">qproperty-brush</span><span class="p">:</span> <span class="kc">green</span><span class="p">;</span>
+    <span class="k">color</span><span class="p">:</span> <span class="kc">black</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pcdswidgets.vacuum.gauges.RoughGauge.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#RoughGauge.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.RoughGauge.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suggested initial size for the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>size</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QSize</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="hot-cathode-gauge">
+<h2>Hot Cathode Gauge<a class="headerlink" href="#hot-cathode-gauge" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pcdswidgets.vacuum.gauges.HotCathodeGauge">
+<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.gauges.</code><code class="sig-name descname">HotCathodeGauge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#HotCathodeGauge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.HotCathodeGauge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Symbol Widget representing a Hot Cathode Gauge with the proper icon
+and controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>QWidget</em>) – The parent widget for the symbol</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This widget allow for high customization through the Qt Stylesheets
+mechanism.
+As this widget is composed by internal widgets, their names can be used as
+selectors when writing your stylesheet to be used with this widget.
+Properties are also available to offer wider customization possibilities.</p>
+<p><strong>Internal Components</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Widget Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What is it?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlock</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping this whole widget.</p></td>
+</tr>
+<tr class="row-odd"><td><p>controls</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping the controls panel.</p></td>
+</tr>
+<tr class="row-even"><td><p>icon</p></td>
+<td><p>BaseSymbolIcon</p></td>
+<td><p>The widget containing the icon drawing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pressure</p></td>
+<td><p>PyDMLabel</p></td>
+<td><p>The pressure reading label.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional Properties</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlocked</p></td>
+<td><p><cite>true</cite> or <cite>false</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p>state</p></td>
+<td><p><cite>On</cite>, <cite>Off</cite>, <cite>Starting</cite> or <cite>Error</cite></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">HotCathodeGauge</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">HotCathodeGauge</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">HotCathodeGauge</span><span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Error&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-penColor</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+    <span class="n">qproperty-penWidth</span><span class="p">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pcdswidgets.vacuum.gauges.HotCathodeGauge.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#HotCathodeGauge.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.HotCathodeGauge.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suggested initial size for the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>size</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QSize</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="cold-cathode-gauge">
+<h2>Cold Cathode Gauge<a class="headerlink" href="#cold-cathode-gauge" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pcdswidgets.vacuum.gauges.ColdCathodeGauge">
+<em class="property">class </em><code class="sig-prename descclassname">pcdswidgets.vacuum.gauges.</code><code class="sig-name descname">ColdCathodeGauge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#ColdCathodeGauge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.ColdCathodeGauge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Symbol Widget representing a Cold Cathode Gauge with the proper icon and
+controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>QWidget</em>) – The parent widget for the symbol</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This widget allow for high customization through the Qt Stylesheets
+mechanism.
+As this widget is composed by internal widgets, their names can be used as
+selectors when writing your stylesheet to be used with this widget.
+Properties are also available to offer wider customization possibilities.</p>
+<p><strong>Internal Components</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Widget Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What is it?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlock</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping this whole widget.</p></td>
+</tr>
+<tr class="row-odd"><td><p>controls</p></td>
+<td><p>QFrame</p></td>
+<td><p>The QFrame wrapping the controls panel.</p></td>
+</tr>
+<tr class="row-even"><td><p>icon</p></td>
+<td><p>BaseSymbolIcon</p></td>
+<td><p>The widget containing the icon drawing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pressure</p></td>
+<td><p>PyDMLabel</p></td>
+<td><p>The pressure reading label.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional Properties</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>interlocked</p></td>
+<td><p><cite>true</cite> or <cite>false</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p>state</p></td>
+<td><p><cite>On</cite>, <cite>Off</cite>, <cite>Starting</cite> or <cite>Error</cite></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="nt">ColdCathodeGauge</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">ColdCathodeGauge</span><span class="o">[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">interlock</span> <span class="p">{</span>
+    <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">ColdCathodeGauge</span><span class="o">[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Error&quot;</span><span class="o">]</span> <span class="p">#</span><span class="nn">icon</span> <span class="p">{</span>
+    <span class="n">qproperty-penColor</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+    <span class="n">qproperty-penWidth</span><span class="p">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pcdswidgets.vacuum.gauges.ColdCathodeGauge.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pcdswidgets/vacuum/gauges.html#ColdCathodeGauge.sizeHint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pcdswidgets.vacuum.gauges.ColdCathodeGauge.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suggested initial size for the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>size</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>QSize</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="others.html" class="btn btn-neutral float-right" title="Others" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pumps.html" class="btn btn-neutral float-left" title="Pumps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018, SLAC National Accelerator Laboratory.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

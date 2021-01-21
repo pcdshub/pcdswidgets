@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pcdswidgets.vacuum.pumps &mdash; PCDSWidgets 0.5.0+6.gd99d1e0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PCDSWidgets
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.0+6.gd99d1e0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../mixins.html">Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PCDSWidgets</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pcdswidgets.vacuum.pumps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pcdswidgets.vacuum.pumps</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Property</span>
+
+<span class="kn">from</span> <span class="nn">pydm.widgets.display_format</span> <span class="kn">import</span> <span class="n">DisplayFormat</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PCDSSymbolBase</span><span class="p">,</span> <span class="n">ContentLocation</span>
+<span class="kn">from</span> <span class="nn">.mixins</span> <span class="kn">import</span> <span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
+                     <span class="n">ButtonLabelControl</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..icons.pumps</span> <span class="kn">import</span> <span class="p">(</span><span class="n">IonPumpSymbolIcon</span><span class="p">,</span> <span class="n">TurboPumpSymbolIcon</span><span class="p">,</span>
+                           <span class="n">ScrollPumpSymbolIcon</span><span class="p">,</span> <span class="n">GetterPumpSymbolIcon</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="IonPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.IonPump">[docs]</a><span class="k">class</span> <span class="nc">IonPump</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span>
+              <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing an Ion Pump with the proper icon and controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+--------------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                                 |</span>
+<span class="sd">    +===========+==============+============================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget.      |</span>
+<span class="sd">    +-----------+--------------+--------------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.     |</span>
+<span class="sd">    +-----------+--------------+--------------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.     |</span>
+<span class="sd">    +-----------+--------------+--------------------------------------------+</span>
+<span class="sd">    |pressure   |PyDMLabel     |The widget containing the pressure readback.|</span>
+<span class="sd">    +-----------+--------------+--------------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                            |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |error      |`true` or  `false`                                           |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |state      |`On`, `Off`                                                  |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        IonPump[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        IonPump[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        IonPump[error=&quot;true&quot;] #icon {</span>
+<span class="sd">            qproperty-penStyle: &quot;Qt::DotLine&quot;;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">            qproperty-brush: red;</span>
+<span class="sd">        }</span>
+<span class="sd">        IonPump[state=&quot;On&quot;] #icon {</span>
+<span class="sd">            qproperty-penColor: green;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
+    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ERROR_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:HV_SW&quot;</span>
+    <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_RBV&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Ion Pump&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.pump.PIPPLC&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">IonPump</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+                                      <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+                                      <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
+                                      <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+                                      <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+                                      <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
+                                      <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
+                                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">IonPumpSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">displayFormat</span> <span class="o">=</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">Exponential</span>
+
+<div class="viewcode-block" id="IonPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.IonPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TurboPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.TurboPump">[docs]</a><span class="k">class</span> <span class="nc">TurboPump</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
+                <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Turbo Pump with the proper icon and</span>
+<span class="sd">    controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                            |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |error      |`true` or  `false`                                           |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |state      |`On`, `Accelerating` or `Off`                                |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        TurboPump[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        TurboPump[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        TurboPump[error=&quot;true&quot;] #icon {</span>
+<span class="sd">            qproperty-penStyle: &quot;Qt::DotLine&quot;;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">            qproperty-brush: red;</span>
+<span class="sd">        }</span>
+<span class="sd">        TurboPump[state=&quot;Accelerating&quot;] #icon {</span>
+<span class="sd">            qproperty-centerBrush: red;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
+    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:FAULT_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:RUN_SW&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Turbo Pump&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.pump.PTMPLC&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TurboPump</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+            <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">TurboPumpSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TurboPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.TurboPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ScrollPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.ScrollPump">[docs]</a><span class="k">class</span> <span class="nc">ScrollPump</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span>
+                 <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Scroll Pump with the proper icon and</span>
+<span class="sd">    controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                            |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |error      |`true` or  `false`                                           |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |state      |`On`, `Accelerating` or `Off`                                |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        ScrollPump[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        ScrollPump[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        ScrollPump[error=&quot;true&quot;] #icon {</span>
+<span class="sd">            qproperty-penStyle: &quot;Qt::DotLine&quot;;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">            qproperty-brush: red;</span>
+<span class="sd">        }</span>
+<span class="sd">        ScrollPump[state=&quot;Accelerating&quot;] #icon {</span>
+<span class="sd">            qproperty-centerBrush: red;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
+    <span class="n">_error_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ERROR_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:RUN_SW&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Scroll Pump&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.pump.PROPLC&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ScrollPump</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+            <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ScrollPumpSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ScrollPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.ScrollPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="GetterPump"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.GetterPump">[docs]</a><span class="k">class</span> <span class="nc">GetterPump</span><span class="p">(</span><span class="n">PCDSSymbolBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Getter Pump with the proper icon.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Getter Pump&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controls_location</span> <span class="o">=</span> <span class="n">ContentLocation</span><span class="o">.</span><span class="n">Hidden</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GetterPump</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">GetterPumpSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GetterPump.sizeHint"><a class="viewcode-back" href="../../../vacuum/pumps.html#pcdswidgets.vacuum.pumps.GetterPump.sizeHint">[docs]</a>    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Suggested initial size for the widget.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        size : QSize</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span></div>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">channelsPrefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">channelsPrefix</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">showIcon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">showIcon</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="n">ContentLocation</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">controlsLocation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">controlsLocation</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018, SLAC National Accelerator Laboratory.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
