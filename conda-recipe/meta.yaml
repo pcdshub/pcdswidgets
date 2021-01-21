@@ -1,17 +1,19 @@
 {% set data = load_setup_py_data() %}
 
 package:
-    name    : pcdswidgets
-    version : {{ data.get('version') }}
+    name: pcdswidgets
+    version: {{ data.get('version') }}
 
 source:
     path: ..
+
+build:
+    noarch: python
 
 requirements:
     build:
       - python
       - setuptools
-
     run:
       - python
       - pydm >=1.6.0
@@ -19,7 +21,6 @@ requirements:
 test:
     imports:
       - pcdswidgets
-
     requires: 
       - pytest
 
