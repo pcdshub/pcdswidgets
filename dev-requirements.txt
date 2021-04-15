@@ -1,4 +1,3 @@
-codecov
 doctr
 flake8
 pytest
