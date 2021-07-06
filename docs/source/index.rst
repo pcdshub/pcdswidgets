@@ -19,6 +19,14 @@ LCLS PyDM Widget Library
    mixins.rst
    utils.rst
 
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Developer Documentation
+   :hidden:
+
+   dev.rst   
+
 .. toctree::
    :maxdepth: 1
    :caption: Related Projects
