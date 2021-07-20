@@ -41,10 +41,19 @@ class FilterSortWidgetTable(QTableWidget):
         self._watching_cells = False
 
     def channels(self):
+        """
+        Tell PyDM about our table channels so it knows to close them at exit.
+        """
         return self._channels
 
     @QtCore.Property(str)
     def ui_filename(self):
+        """
+        Name of the ui file that is to be repeated to fill the table.
+
+        This is currently required. When this is changed, we'll rebuild the
+        table.
+        """
         return self._ui_filename
 
     @ui_filename.setter
@@ -54,6 +63,9 @@ class FilterSortWidgetTable(QTableWidget):
         self.reinit_table()
 
     def reload_ui_file(self):
+        """
+        Load the UI file and inspect it for PyDM channels.
+        """
         try:
             self._dummy_widget.filename = self.ui_filename
         except Exception:
@@ -72,6 +84,13 @@ class FilterSortWidgetTable(QTableWidget):
     # file contains json list of dicts
     @QtCore.Property(str)
     def macros_filename(self):
+        """
+        Json file defining PyDM macros. Optional.
+
+        This follows the same format as used for the PyDM Template Repeater.
+        If omitted, you should pass in macros using the set_macros method
+        instead.
+        """
         return self._macros_filename
 
     @macros_filename.setter
@@ -80,6 +99,9 @@ class FilterSortWidgetTable(QTableWidget):
         self.reload_macros_file()
 
     def reload_macros_file(self):
+        """
+        Load the macros_filename and call set_macros.
+        """
         if not self.macros_filename:
             return
         try:
@@ -91,11 +113,26 @@ class FilterSortWidgetTable(QTableWidget):
             return
 
     def set_macros(self, macros_list):
+        """
+        Change the PyDM macros we use to load the table widgets.
+
+        This causes the table to be rebuilt.
+
+        Parameters
+        ----------
+        macros_list : list of dict
+            A list where each element is a dictionary that defines the macros
+            to pass in to one instance of the repeated widget. All dicts must
+            have the same keys or this will not work properly.
+        """
         self._macros = macros_list
         self._macro_headers = list(self._macros[0].keys())
         self.reinit_table()
 
     def reinit_table(self):
+        """
+        Rebuild the table based on the ui_filename and the newest macros.
+        """
         if self._watching_cells:
             self.cellChanged.disconnect(self.handle_item_changed)
             self._watching_cells = False
@@ -162,6 +199,22 @@ class FilterSortWidgetTable(QTableWidget):
         self.update_all_filters()
 
     def get_row_values(self, row):
+        """
+        Get the current values for a specific numbered row of the table.
+
+        Parameters
+        ----------
+        row : int
+            The row index to inspect. 0 is the current top row.
+
+        Returns
+        -------
+        values : dict
+            A mapping from str to value for each named widget in the template
+            that has a PyDM channel. There is one additional special str, which
+            is the 'connected' str, which is True if all channels are
+            connected.
+        """
         values = {'connected': True}
         for col in range(1, self.columnCount()):
             item = self.item(row, col)
@@ -171,24 +224,65 @@ class FilterSortWidgetTable(QTableWidget):
         return values
 
     def add_filter(self, filter_name, filt):
+        """
+        Add a new visibility filter to the table.
+
+        Filters are functions with the following signature:
+        filt(dict[str, Any]: values) -> bool
+        Where values is the output from get_row_values,
+        and the boolean return value is True if the row should be displayed.
+        If we have multiple filters, we need all of them to be True to display
+        the row.
+
+        Parameters
+        ----------
+        filter_name : str
+            A name assigned to the filter to help us keep track of it.
+        filt : func
+            A callable with the correct signature.
+        """
         # Filters take in a dict of values from header to value
         # Return True to show, False to hide
         self._filters[filter_name] = filt
         self.update_all_filters()
 
     def remove_filter(self, filter_name):
+        """
+        Remove a specific named visibility filter from the table.
+
+        This is a filter that was previously added using add_filter.
+
+        Parameters
+        ----------
+        filter_name : str
+            A name assigned to the filter to help us keep track of it.
+        """
         del self._filters[filter_name]
         self.update_all_filters()
 
     def clear_filters(self):
+        """
+        Remove all visbility filters from the table.
+        """
         self._filters = {}
         self.update_all_filters()
 
     def update_all_filters(self):
+        """
+        Apply all filters to all rows of the table.
+        """
         for row in range(self.rowCount()):
             self.update_filter(row)
 
     def update_filter(self, row):
+        """
+        Apply all filters to one row of the table.
+
+        Parameters
+        ----------
+        row : int
+            The row index to inspect. 0 is the current top row.
+        """
         if self._filters:
             values = self.get_row_values(row)
             show_row = []
@@ -202,9 +296,28 @@ class FilterSortWidgetTable(QTableWidget):
             self.showRow(row)
 
     def handle_item_changed(self, row, col):
+        """
+        Slot that is run when any element in the table changes.
+
+        Currently, this updates the filters for the row that changed.
+        """
         self.update_filter(row)
 
     def sort_table(self, header, ascending):
+        """
+        Rearrange the ordering of the table based on any of the value fields.
+
+        Parameters
+        ----------
+        header : str
+            The name of any of the value fields to use to sort on. Valid
+            headers are 'index', which is the original sort order, strings that
+            match the macro keys, and strings that match widget names in the
+            template.
+        ascending : bool
+            If True, we'll sort in ascending order. If False, we'll sort in
+            descending order.
+        """
         if ascending:
             order = QtCore.Qt.AscendingOrder
         else:
