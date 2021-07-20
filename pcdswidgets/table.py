@@ -242,7 +242,7 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         # Make sure None sorts as greatest
         if self.get_value() is None:
             return False
-        elif other.get_value is None:
+        elif other.get_value() is None:
             return True
         return self.get_value() < other.get_value()
 
