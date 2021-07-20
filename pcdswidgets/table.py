@@ -1,4 +1,5 @@
 import logging
+import numbers
 import simplejson as json
 
 from pydm.widgets import PyDMEmbeddedDisplay
@@ -26,6 +27,7 @@ class FilterSortWidgetTable(QTableWidget):
         self._macros = []
         self._channel_headers = []
         self._macro_headers = []
+        self._header_map = {}
         self._channels = []
         self._filters = {}
 
@@ -103,6 +105,7 @@ class FilterSortWidgetTable(QTableWidget):
         self.clear()
         self.clearContents()
         self.setRowCount(0)
+        self._header_map = {}
         if not self._macros and self._channel_headers:
             return
         # Column 1 displays widget, 2 is index, the rest hold values
@@ -122,6 +125,7 @@ class FilterSortWidgetTable(QTableWidget):
 
             # Put the widget into the table
             self.setCellWidget(row_position, 0, widget)
+            self._header_map['widget'] = 0
             self.setRowHeight(row_position, widget.height())
 
             # Put the index into the table
@@ -130,6 +134,7 @@ class FilterSortWidgetTable(QTableWidget):
                 default=row_position,
                 )
             self.setItem(row_position, 1, item)
+            self._header_map['index'] = 1
             # Put the macros into the table
             index = 2
             for key, value in macros.items():
@@ -138,6 +143,7 @@ class FilterSortWidgetTable(QTableWidget):
                     default=value,
                     )
                 self.setItem(row_position, index, item)
+                self._header_map[key] = index
                 index += 1
             # Set up the data columns and the channels
             for header in self._channel_headers:
@@ -147,6 +153,7 @@ class FilterSortWidgetTable(QTableWidget):
                     channel=source.channel,
                     )
                 self.setItem(row_position, index, item)
+                self._header_map[header] = index
                 self._channels.append(item.pydm_channel)
                 index += 1
 
@@ -169,10 +176,17 @@ class FilterSortWidgetTable(QTableWidget):
         self._filters[filter_name] = filt
         self.update_all_filters()
 
+    def remove_filter(self, filter_name):
+        del self._filters[filter_name]
+        self.update_all_filters()
+
+    def clear_filters(self):
+        self._filters = {}
+        self.update_all_filters()
+
     def update_all_filters(self):
-        if self._filters:
-            for row in range(self.rowCount()):
-                self.update_filter(row)
+        for row in range(self.rowCount()):
+            self.update_filter(row)
 
     def update_filter(self, row):
         if self._filters:
@@ -184,9 +198,19 @@ class FilterSortWidgetTable(QTableWidget):
                 self.showRow(row)
             else:
                 self.hideRow(row)
+        else:
+            self.showRow(row)
 
     def handle_item_changed(self, row, col):
         self.update_filter(row)
+
+    def sort_table(self, header, ascending):
+        if ascending:
+            order = QtCore.Qt.AscendingOrder
+        else:
+            order = QtCore.Qt.DescendingOrder
+        col = self._header_map[header]
+        self.sortItems(col, order)
 
 
 class ChannelTableWidgetItem(QTableWidgetItem):
@@ -201,20 +225,21 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         Starting value for the cell
     channel : str, optional
         PyDM channel address for value and connection updates.
+    deadband : float, optional
+        Only update the table if the change is more than the deadband.
+        This can help make large tables less resource-hungry.
     """
-    def __init__(self, header, default=None, channel=None, parent=None):
+    def __init__(self, header, default=None, channel=None, deadband=0,
+                 parent=None):
         super().__init__(parent)
         self.header = header
-        if default is None:
-            self._value = None
-        else:
-            self.update_value(default)
+        self.update_value(default)
         self.channel = channel
-        self._type = None
+        self.deadband = deadband
         if channel is None:
-            self.connected = True
+            self.update_connection(True)
         else:
-            self.connected = False
+            self.update_connection(False)
             self.pydm_channel = PyDMChannel(
                 channel,
                 value_slot=self.update_value,
@@ -224,8 +249,15 @@ class ChannelTableWidgetItem(QTableWidgetItem):
 
     def update_value(self, value):
         """
-        Store the value for sorting and display in the table if visible
+        Store the value for sorting and display in the table if visible.
+
+        By setting the text, we also notify the table that a cell has updated.
         """
+        try:
+            if abs(self._value - value) < self.deadband:
+                return
+        except Exception:
+            pass
         self._value = value
         self.setText(str(value))
 
@@ -245,4 +277,3 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         elif other.get_value() is None:
             return True
         return self.get_value() < other.get_value()
-
