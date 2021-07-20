@@ -141,10 +141,10 @@ class FilterSortWidgetTable(QTableWidget):
                 index += 1
             # Set up the data columns and the channels
             for header in self._channel_headers:
-                widget = self.findChild(QtCore.QObject, header)
+                source = widget.findChild(QtCore.QObject, header)
                 item = ChannelTableWidgetItem(
                     header=header,
-                    channel=widget.channel,
+                    channel=source.channel,
                     )
                 self.setItem(row_position, index, item)
                 self._channels.append(item.pydm_channel)
@@ -210,9 +210,11 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         else:
             self.update_value(default)
         self.channel = channel
-        self.connected = False
         self._type = None
-        if channel is not None:
+        if channel is None:
+            self.connected = True
+        else:
+            self.connected = False
             self.pydm_channel = PyDMChannel(
                 channel,
                 value_slot=self.update_value,
