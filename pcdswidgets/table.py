@@ -21,9 +21,9 @@ class FilterSortWidgetTable(QTableWidget):
         super().__init__(*args, **kwargs)
         self._ui_filename = None
         self._macros_filename = None
-        self._dummy_widget = PyDMEmbeddedDisplay(parent=self)
-        self._dummy_widget.hide()
-        self._dummy_widget.loadWhenShown = False
+        self.template_widget = PyDMEmbeddedDisplay(parent=self)
+        self.template_widget.hide()
+        self.template_widget.loadWhenShown = False
         self._macros = []
         self._channel_headers = []
         self._macro_headers = []
@@ -34,9 +34,11 @@ class FilterSortWidgetTable(QTableWidget):
         # Table settings
         self.setShowGrid(True)
         self.setSortingEnabled(True)
+        self.setSelectionMode(self.NoSelection)
         self.horizontalHeader().setStretchLastSection(True)
-        self.horizontalHeader().hide()
         self.verticalHeader().hide()
+
+        self.configurable = False
 
         self._watching_cells = False
 
@@ -67,12 +69,12 @@ class FilterSortWidgetTable(QTableWidget):
         Load the UI file and inspect it for PyDM channels.
         """
         try:
-            self._dummy_widget.filename = self.ui_filename
+            self.template_widget.filename = self.ui_filename
         except Exception:
             logger.exception('')
         # Let's find all the widgets with channels and save their names
         self._channel_headers = []
-        for widget in self._dummy_widget.embedded_widget.children():
+        for widget in self.template_widget.embedded_widget.children():
             try:
                 ch = widget.channels()
             except Exception:
@@ -324,6 +326,35 @@ class FilterSortWidgetTable(QTableWidget):
             order = QtCore.Qt.DescendingOrder
         col = self._header_map[header]
         self.sortItems(col, order)
+
+    @QtCore.Property(bool)
+    def configurable(self):
+        """
+        Whether or not the table can be manipulated from the UI.
+
+        If True, the table rows can be dragged/dropped/rearranged.
+        If False, the table rows can no longer be selected.
+
+        This begins as False if unset.
+        """
+        return self._configurable
+
+    @configurable.setter
+    def configurable(self, conf):
+        self._configurable = conf
+        if conf:
+            self.verticalHeader().setSectionsMovable(True)
+            self.verticalHeader().show()
+        else:
+            self.verticalHeader().setSectionsMovable(False)
+            self.verticalHeader().hide()
+
+    @QtCore.Slot(bool)
+    def request_configurable(self, conf):
+        """
+        Designable slot for toggling config mode.
+        """
+        self.configurable = conf
 
 
 class ChannelTableWidgetItem(QTableWidgetItem):
