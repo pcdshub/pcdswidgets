@@ -36,7 +36,7 @@ class FilterSortWidgetTable(QTableWidget):
         self.setSortingEnabled(True)
         self.setSelectionMode(self.NoSelection)
         self.horizontalHeader().setStretchLastSection(True)
-        self.verticalHeader().hide()
+        self.horizontalHeader().hide()
 
         self.configurable = False
 
