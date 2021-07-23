@@ -320,12 +320,21 @@ class FilterSortWidgetTable(QTableWidget):
             If True, we'll sort in ascending order. If False, we'll sort in
             descending order.
         """
+        self.reset_manual_sort()
         if ascending:
             order = QtCore.Qt.AscendingOrder
         else:
             order = QtCore.Qt.DescendingOrder
         col = self._header_map[header]
         self.sortItems(col, order)
+
+    def reset_manual_sort(self):
+        """
+        Rearrange the table to undo all manual drag/drop sorting.
+        """
+        header = self.verticalHeader()
+        for row in range(self.rowCount()):
+            header.moveSection(header.visualIndex(row), row)
 
     @QtCore.Property(bool)
     def configurable(self):
