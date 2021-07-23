@@ -36,6 +36,7 @@ class FilterSortWidgetTable(QTableWidget):
         self._filters = {}
         self._initial_sort_header = 'index'
         self._initial_sort_ascend = True
+        self._hide_headers = []
 
         # Table settings
         self.setShowGrid(True)
@@ -224,6 +225,8 @@ class FilterSortWidgetTable(QTableWidget):
         sort_menu = menu.addMenu('Sorting')
         for header_name in self._header_map.keys():
             if header_name == 'widget':
+                continue
+            if header_name in self.hide_headers_in_menu:
                 continue
             inner_menu = sort_menu.addMenu(header_name.lower())
             asc = inner_menu.addAction('Ascending')
@@ -424,6 +427,17 @@ class FilterSortWidgetTable(QTableWidget):
         """
         self.sort_table(self.initial_sort_header, self.initial_sort_ascending)
 
+    @QtCore.Property('QStringList')
+    def hide_headers_in_menu(self):
+        """
+        A list of headers that we don't want to see in the sort menu.
+        """
+        return self._hide_headers
+
+    @hide_headers_in_menu.setter
+    def hide_headers_in_menu(self, headers):
+        self._hide_headers = headers
+
     def sort_table(self, header, ascending):
         """
         Rearrange the ordering of the table based on any of the value fields.
@@ -468,7 +482,7 @@ class FilterSortWidgetTable(QTableWidget):
         for row in range(self.rowCount()):
             header.moveSection(header.visualIndex(row), row)
 
-    @QtCore.Property(bool)
+    @QtCore.Property(bool, designable=False)
     def configurable(self):
         """
         Whether or not the table can be manipulated from the UI.
@@ -476,7 +490,7 @@ class FilterSortWidgetTable(QTableWidget):
         If True, the table rows can be dragged/dropped/rearranged.
         If False, the table rows can no longer be selected.
 
-        This begins as False if unset.
+        This begins as False if unset and can be changed in the context menu.
         """
         return self._configurable
 
