@@ -408,7 +408,9 @@ class FilterSortWidgetTable(QTableWidget):
         col = self._header_map[header]
         self.sortItems(col, order)
         if not self.isSortingEnabled():
+            # This triggers a sort
             self.setSortingEnabled(True)
+            # This prevents further sorting updates
             self.setSortingEnabled(False)
 
     def menu_sort(self, checked, header, ascending):
