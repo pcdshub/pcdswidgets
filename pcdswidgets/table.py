@@ -1,7 +1,9 @@
+import dataclasses
 import functools
 import logging
 import numbers
 import simplejson as json
+import typing
 
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
@@ -34,7 +36,7 @@ class FilterSortWidgetTable(QTableWidget):
 
         # Table settings
         self.setShowGrid(True)
-        self.setSortingEnabled(True)
+        self.setSortingEnabled(False)
         self.setSelectionMode(self.NoSelection)
         self.horizontalHeader().setStretchLastSection(True)
         self.horizontalHeader().hide()
@@ -212,7 +214,11 @@ class FilterSortWidgetTable(QTableWidget):
         configure_action.setCheckable(True)
         configure_action.setChecked(self.configurable)
         configure_action.toggled.connect(self.request_configurable)
-        sort_menu = menu.addMenu('Sort')
+        active_sort_action = menu.addAction('Active Re-sort')
+        active_sort_action.setCheckable(True)
+        active_sort_action.setChecked(self.isSortingEnabled())
+        active_sort_action.toggled.connect(self.setSortingEnabled)
+        sort_menu = menu.addMenu('Sorting')
         for header_name in self._header_map.keys():
             if header_name == 'widget':
                 continue
@@ -231,6 +237,17 @@ class FilterSortWidgetTable(QTableWidget):
                     self.menu_sort,
                     header=header_name,
                     ascending=False,
+                    )
+                )
+        filter_menu = menu.addMenu('Filters')
+        for filter_name, filter_info in self._filters.items():
+            inner_action = filter_menu.addAction(filter_name)
+            inner_action.setCheckable(True)
+            inner_action.setChecked(filter_info.active)
+            inner_action.toggled.connect(
+                functools.partial(
+                    self.activate_filter,
+                    filter_name=filter_name,
                     )
                 )
         menu.exec_(QtGui.QCursor.pos())
@@ -260,7 +277,7 @@ class FilterSortWidgetTable(QTableWidget):
                 values['connected'] = False
         return values
 
-    def add_filter(self, filter_name, filt):
+    def add_filter(self, filter_name, filter_func, active=True):
         """
         Add a new visibility filter to the table.
 
@@ -275,12 +292,20 @@ class FilterSortWidgetTable(QTableWidget):
         ----------
         filter_name : str
             A name assigned to the filter to help us keep track of it.
-        filt : func
+        filter_func : func
             A callable with the correct signature.
+        active : bool, optional.
+            True if we want the filter to start as active. An inactive filter
+            does not act on the table until the user requests it from the
+            right-click context menu. Defaults to True.
         """
         # Filters take in a dict of values from header to value
         # Return True to show, False to hide
-        self._filters[filter_name] = filt
+        self._filters[filter_name] = FilterInfo(
+            filter_func=filter_func,
+            active=active,
+            name=filter_name,
+            )
         self.update_all_filters()
 
     def remove_filter(self, filter_name):
@@ -323,14 +348,34 @@ class FilterSortWidgetTable(QTableWidget):
         if self._filters:
             values = self.get_row_values(row)
             show_row = []
-            for filt in self._filters.values():
-                show_row.append(filt(values))
+            for filt_info in self._filters.values():
+                if filt_info.active:
+                    show_row.append(filt_info.filter_func(values))
+                else:
+                    # If inactive, record it as unfiltered/shown
+                    show_row.append(True)
             if all(show_row):
                 self.showRow(row)
             else:
                 self.hideRow(row)
         else:
             self.showRow(row)
+
+    def activate_filter(self, active, filter_name):
+        """
+        Activate or deactivate a filter by name.
+
+        Parameters
+        ----------
+        active : bool
+            True if we want to activate a filter, False if we want to
+            deactivate it.
+        filter_name : str
+            The name associated with the filter, chosen when we add the filter
+            to the table.
+        """
+        self._filters[filter_name].active = active
+        self.update_all_filters()
 
     def handle_item_changed(self, row, col):
         """
@@ -362,6 +407,9 @@ class FilterSortWidgetTable(QTableWidget):
             order = QtCore.Qt.DescendingOrder
         col = self._header_map[header]
         self.sortItems(col, order)
+        if not self.isSortingEnabled():
+            self.setSortingEnabled(True)
+            self.setSortingEnabled(False)
 
     def menu_sort(self, checked, header, ascending):
         """
@@ -486,3 +534,10 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         elif other.get_value() == '':
             return True
         return self.get_value() < other.get_value()
+
+
+@dataclasses.dataclass
+class FilterInfo:
+    filter_func: typing.Callable[[dict], bool]
+    active: bool
+    name: str
