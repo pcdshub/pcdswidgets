@@ -5,6 +5,7 @@ import numbers
 import simplejson as json
 import typing
 
+from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
 from PyQt5.QtGui import QTableWidget, QTableWidgetItem
@@ -33,6 +34,8 @@ class FilterSortWidgetTable(QTableWidget):
         self._header_map = {}
         self._channels = []
         self._filters = {}
+        self._initial_sort_header = 'index'
+        self._initial_sort_ascend = True
 
         # Table settings
         self.setShowGrid(True)
@@ -384,6 +387,42 @@ class FilterSortWidgetTable(QTableWidget):
         Currently, this updates the filters for the row that changed.
         """
         self.update_filter(row)
+
+    @QtCore.Property(str)
+    def initial_sort_header(self):
+        """
+        Column to sort on after initializing.
+
+        Use this to initialize the sort order rather than using the sort_table
+        function.
+        """
+        return self._initial_sort_header
+
+    @initial_sort_header.setter
+    def initial_sort_header(self, header):
+        self._initial_sort_header = header
+        if not is_qt_designer():
+            # Do a sort after a short timer
+            # HACK: this is because it doesn't work if done immediately
+            timer = QtCore.QTimer(parent=self)
+            timer.singleShot(1000, self.initial_sort)
+
+    @QtCore.Property(bool)
+    def initial_sort_ascending(self):
+        """
+        Whether to do the initial sort in ascending or descending order.
+        """
+        return self._initial_sort_ascend
+
+    @initial_sort_ascending.setter
+    def initial_sort_ascending(self, ascending):
+        self._initial_sort_ascend = ascending
+
+    def initial_sort(self):
+        """
+        Called if the user specifies an initial_sort_header.
+        """
+        self.sort_table(self.initial_sort_header, self.initial_sort_ascending)
 
     def sort_table(self, header, ascending):
         """
