@@ -1,3 +1,4 @@
+import functools
 import logging
 import numbers
 import simplejson as json
@@ -158,6 +159,7 @@ class FilterSortWidgetTable(QTableWidget):
             widget.filename = self.ui_filename
             widget.loadWhenShown = False
             widget.disconnectWhenHidden = False
+            self.add_context_menu_to_children(widget.embedded_widget)
 
             row_position = self.rowCount()
             self.insertRow(row_position)
@@ -200,12 +202,37 @@ class FilterSortWidgetTable(QTableWidget):
         self.cellChanged.connect(self.handle_item_changed)
         self.update_all_filters()
 
+    def add_context_menu_to_children(self, widget):
+        for widget in widget.children():
+            widget.contextMenuEvent = self.contextMenuEvent
+
     def contextMenuEvent(self, event):
         menu = QtWidgets.QMenu(parent=self)
         configure_action = menu.addAction('Configure')
         configure_action.setCheckable(True)
         configure_action.setChecked(self.configurable)
         configure_action.toggled.connect(self.request_configurable)
+        sort_menu = menu.addMenu('Sort')
+        for header_name in self._header_map.keys():
+            if header_name == 'widget':
+                continue
+            inner_menu = sort_menu.addMenu(header_name.lower())
+            asc = inner_menu.addAction('Ascending')
+            asc.triggered.connect(
+                functools.partial(
+                    self.menu_sort,
+                    header=header_name,
+                    ascending=True,
+                    )
+                )
+            dec = inner_menu.addAction('Descending')
+            dec.triggered.connect(
+                functools.partial(
+                    self.menu_sort,
+                    header=header_name,
+                    ascending=False,
+                    )
+                )
         menu.exec_(QtGui.QCursor.pos())
 
     def get_row_values(self, row):
@@ -335,6 +362,14 @@ class FilterSortWidgetTable(QTableWidget):
             order = QtCore.Qt.DescendingOrder
         col = self._header_map[header]
         self.sortItems(col, order)
+
+    def menu_sort(self, checked, header, ascending):
+        """
+        sort_table wrapped to recieve the checked bool from a signal.
+
+        Ignore the checked boolean.
+        """
+        self.sort_table(header, ascending)
 
     def reset_manual_sort(self):
         """
