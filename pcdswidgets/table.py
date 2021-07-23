@@ -5,7 +5,7 @@ import simplejson as json
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
 from PyQt5.QtGui import QTableWidget, QTableWidgetItem
-from qtpy import QtCore
+from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 
@@ -199,6 +199,14 @@ class FilterSortWidgetTable(QTableWidget):
         self._watching_cells = True
         self.cellChanged.connect(self.handle_item_changed)
         self.update_all_filters()
+
+    def contextMenuEvent(self, event):
+        menu = QtWidgets.QMenu(parent=self)
+        configure_action = menu.addAction('Configure')
+        configure_action.setCheckable(True)
+        configure_action.setChecked(self.configurable)
+        configure_action.toggled.connect(self.request_configurable)
+        menu.exec_(QtGui.QCursor.pos())
 
     def get_row_values(self, row):
         """
@@ -424,9 +432,22 @@ class ChannelTableWidgetItem(QTableWidgetItem):
         return self._value
 
     def __lt__(self, other):
+        """
+        Two special sorting rules:
+        1. None is the greatest
+        2. Empty string is the greatest string
+
+        This means that disconnected and empty string sort as "high"
+        (sort ascending is most common)
+        """
         # Make sure None sorts as greatest
         if self.get_value() is None:
             return False
         elif other.get_value() is None:
+            return True
+        # Make sure empty string sorts as next greatest
+        elif self.get_value() == '':
+            return False
+        elif other.get_value() == '':
             return True
         return self.get_value() < other.get_value()
