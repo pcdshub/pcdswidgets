@@ -34,7 +34,7 @@ jobs:
     # This makes the PIP based Python 3.6 optional for passing.
     # Remove this block if passing tests with PIP is mandatory for your
     # package
-    - name: "Python 3.6 - PIP"
+    - name: "Python - PIP"
 
 import:
   # If your project requires X11 leave the following import
