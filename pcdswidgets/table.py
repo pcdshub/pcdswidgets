@@ -1,20 +1,18 @@
 import dataclasses
 import functools
 import logging
-import numbers
-import simplejson as json
+import json
 import typing
 
 from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
-from PyQt5.QtGui import QTableWidget, QTableWidgetItem
 from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 
 
-class FilterSortWidgetTable(QTableWidget):
+class FilterSortWidgetTable(QtWidgets.QTableWidget):
     """
     Displays repeated widgets that are sortable and filterable.
 
@@ -512,7 +510,7 @@ class FilterSortWidgetTable(QTableWidget):
         self.configurable = conf
 
 
-class ChannelTableWidgetItem(QTableWidgetItem):
+class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
     """
     QTableWidgetItem that gets values from a PyDMChannel
 
