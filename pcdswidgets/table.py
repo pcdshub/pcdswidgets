@@ -156,7 +156,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             have the same keys or this will not work properly.
         """
         self._macros = macros_list
-        self._macro_headers = list(self._macros[0].keys())
+        self._macro_headers = list(self._macros[0].keys()) if self._macros else []
         self.reinit_table()
 
     def reinit_table(self) -> None:
@@ -168,7 +168,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             self._watching_cells = False
         for channel in self._channels:
             channel.disconnect()
-            self._channels = []
+        self._channels = []
         self.clear()
         self.clearContents()
         self.setRowCount(0)
