@@ -99,7 +99,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         try:
             self.template_widget.filename = self.ui_filename
         except Exception:
-            logger.exception('')
+            logger.exception("Reloading the UI file %s failed", self.ui_filename)
         # Let's find all the widgets with channels and save their names
         self._channel_headers = []
         for widget in self.template_widget.embedded_widget.children():
