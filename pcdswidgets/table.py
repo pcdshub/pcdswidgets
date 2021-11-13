@@ -222,7 +222,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                     )
                 self.setItem(row_position, index, item)
                 self._header_map[header] = index
-                self._channels.append(item.pydm_channel)
+                if item.pydm_channel is not None:
+                    self._channels.append(item.pydm_channel)
                 index += 1
 
         self._watching_cells = True
@@ -563,6 +564,11 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         Only update the table if the change is more than the deadband.
         This can help make large tables less resource-hungry.
     """
+    header: str
+    channel: Optional[str]
+    deadband: float
+    pydm_channel: Optional[PyDMChannel]
+
     def __init__(
         self,
         header: str,
@@ -578,6 +584,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         self.deadband = deadband
         if channel is None:
             self.update_connection(True)
+            self.pydm_channel = None
         else:
             self.update_connection(False)
             self.pydm_channel = PyDMChannel(
