@@ -181,54 +181,71 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         for col in range(1, ncols):
             self.hideColumn(col)
         for macros in self._macros:
-            widget = PyDMEmbeddedDisplay(parent=self)
-            widget.macros = json.dumps(macros)
-            widget.filename = self.ui_filename
-            widget.loadWhenShown = False
-            widget.disconnectWhenHidden = False
-            self.add_context_menu_to_children(widget.embedded_widget)
-
-            row_position = self.rowCount()
-            self.insertRow(row_position)
-
-            # Put the widget into the table
-            self.setCellWidget(row_position, 0, widget)
-            self._header_map['widget'] = 0
-            self.setRowHeight(row_position, widget.height())
-
-            # Put the index into the table
-            item = ChannelTableWidgetItem(
-                header='index',
-                default=row_position,
-                )
-            self.setItem(row_position, 1, item)
-            self._header_map['index'] = 1
-            # Put the macros into the table
-            index = 2
-            for key, value in macros.items():
-                item = ChannelTableWidgetItem(
-                    header=key,
-                    default=value,
-                    )
-                self.setItem(row_position, index, item)
-                self._header_map[key] = index
-                index += 1
-            # Set up the data columns and the channels
-            for header in self._channel_headers:
-                source = widget.findChild(QtCore.QObject, header)
-                item = ChannelTableWidgetItem(
-                    header=header,
-                    channel=source.channel,
-                    )
-                self.setItem(row_position, index, item)
-                self._header_map[header] = index
-                if item.pydm_channel is not None:
-                    self._channels.append(item.pydm_channel)
-                index += 1
+            self.add_row(macros)
 
         self._watching_cells = True
         self.cellChanged.connect(self.handle_item_changed)
         self.update_all_filters()
+
+    def add_row(self, macros: dict[str, str]) -> None:
+        """
+        Adds a single row to the table.
+
+        Each row will be created from the same UI file template.
+        The macros used must have the same keys as all the previously
+        added rows, or else the table will not work correctly.
+
+        Parameters
+        ----------
+        macros : dict of str
+            The macro substitutions for the UI file. These must be
+            strings because we're effectively substituting them into
+            the file's text.
+        """
+        widget = PyDMEmbeddedDisplay(parent=self)
+        widget.macros = json.dumps(macros)
+        widget.filename = self.ui_filename
+        widget.loadWhenShown = False
+        widget.disconnectWhenHidden = False
+        self.add_context_menu_to_children(widget.embedded_widget)
+
+        row_position = self.rowCount()
+        self.insertRow(row_position)
+
+        # Put the widget into the table
+        self.setCellWidget(row_position, 0, widget)
+        self._header_map['widget'] = 0
+        self.setRowHeight(row_position, widget.height())
+
+        # Put the index into the table
+        item = ChannelTableWidgetItem(
+            header='index',
+            default=row_position,
+            )
+        self.setItem(row_position, 1, item)
+        self._header_map['index'] = 1
+        # Put the macros into the table
+        index = 2
+        for key, value in macros.items():
+            item = ChannelTableWidgetItem(
+                header=key,
+                default=value,
+                )
+            self.setItem(row_position, index, item)
+            self._header_map[key] = index
+            index += 1
+        # Set up the data columns and the channels
+        for header in self._channel_headers:
+            source = widget.findChild(QtCore.QObject, header)
+            item = ChannelTableWidgetItem(
+                header=header,
+                channel=source.channel,
+                )
+            self.setItem(row_position, index, item)
+            self._header_map[header] = index
+            if item.pydm_channel is not None:
+                self._channels.append(item.pydm_channel)
+            index += 1
 
     def add_context_menu_to_children(self, widget: QtWidgets.QWidget) -> None:
         """
