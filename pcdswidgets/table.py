@@ -504,12 +504,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         else:
             order = QtCore.Qt.DescendingOrder
         col = self._header_map[header]
-        self.sortItems(col, order)
-        if not self.isSortingEnabled():
-            # This triggers a sort
-            self.setSortingEnabled(True)
-            # This prevents further sorting updates
-            self.setSortingEnabled(False)
+        self.sortByColumn(col, order)
 
     def menu_sort(self, checked: bool, header: str, ascending: bool):
         """
