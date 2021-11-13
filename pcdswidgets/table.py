@@ -392,7 +392,16 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             show_row = []
             for filt_info in self._filters.values():
                 if filt_info.active:
-                    show_row.append(filt_info.filter_func(values))
+                    try:
+                        should_show = filt_info.filter_func(values)
+                    except Exception:
+                        logger.debug(
+                            'Error in filter function %s',
+                            filt_info.name,
+                            exc_info=True,
+                        )
+                        should_show = True
+                    show_row.append(should_show)
                 else:
                     # If inactive, record it as unfiltered/shown
                     show_row.append(True)

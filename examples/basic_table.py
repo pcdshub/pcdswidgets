@@ -22,16 +22,13 @@ class BasicTable(Display):
         )
 
     def neg_filter(self, value_dict):
-        rbv = value_dict['readback']
-        return rbv is None or rbv >= 0
+        return value_dict['readback'] >= 0
 
     def even_filter(self, value_dict):
-        rbv = value_dict['readback']
-        return rbv is None or int(rbv) % 2
+        return value_dict['readback'] % 2
 
     def four_filter(self, value_dict):
-        row_name = value_dict['row_name']
-        return row_name is None or len(row_name) != 4
+        return len(value_dict['row_name']) != 4
 
     def ui_filename(self):
         return os.path.join(os.path.dirname(__file__), 'basic_table.ui')
