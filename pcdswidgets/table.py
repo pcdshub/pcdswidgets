@@ -469,6 +469,11 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         if not is_qt_designer():
             # Do a sort after a short timer
             # HACK: this is because it doesn't work if done immediately
+            # This is due to some combination of qt designer properties being
+            # applied in some random order post-__init__ combined with it
+            # taking a short bit of time for the items to be ready to sort.
+            # Some items will never connect and never be ready to sort,
+            # so for now we'll do a best-effort one-second wait.
             timer = QtCore.QTimer(parent=self)
             timer.singleShot(1000, self.initial_sort)
 
