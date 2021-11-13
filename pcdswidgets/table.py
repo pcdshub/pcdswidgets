@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import dataclasses
 import functools
 import logging
 import json
-import typing
+from typing import Any, Callable, Optional
 
 from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
@@ -10,6 +12,8 @@ from pydm.widgets.channel import PyDMChannel
 from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
+
+FilterFunc = Callable[[dict[str, Any]], bool]
 
 
 class FilterSortWidgetTable(QtWidgets.QTableWidget):
@@ -19,6 +23,25 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     This will allow you to sort or filter based on macros and based on the
     values in each pydm widget.
     """
+    # Public instance variables
+    template_widget: PyDMEmbeddedDisplay
+
+    # Private instance variables
+    _ui_filename: Optional[str]
+    _macros_filename: Optional[str]
+    _macros: list[dict[str, str]]
+    _channel_headers: list[str]
+    _macro_headers: list[str]
+    _header_map: dict[str, int]
+    _channels: list[PyDMChannel]
+    _filters: dict[str, FilterInfo]
+    _initial_sort_header: str
+    _initial_sort_ascend: bool
+    _hide_headers: list[str]
+    _configurable: bool
+    _watching_cells: bool
+
+
     def __init__(self, *args,  **kwargs):
         super().__init__(*args, **kwargs)
         self._ui_filename = None
@@ -47,14 +70,14 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
 
         self._watching_cells = False
 
-    def channels(self):
+    def channels(self) -> list[PyDMChannel]:
         """
         Tell PyDM about our table channels so it knows to close them at exit.
         """
         return self._channels
 
     @QtCore.Property(str)
-    def ui_filename(self):
+    def ui_filename(self) -> str:
         """
         Name of the ui file that is to be repeated to fill the table.
 
@@ -64,12 +87,12 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         return self._ui_filename
 
     @ui_filename.setter
-    def ui_filename(self, filename):
+    def ui_filename(self, filename: str):
         self._ui_filename = filename
         self.reload_ui_file()
         self.reinit_table()
 
-    def reload_ui_file(self):
+    def reload_ui_file(self) -> None:
         """
         Load the UI file and inspect it for PyDM channels.
         """
@@ -90,7 +113,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
 
     # file contains json list of dicts
     @QtCore.Property(str)
-    def macros_filename(self):
+    def macros_filename(self) -> str:
         """
         Json file defining PyDM macros. Optional.
 
@@ -101,11 +124,11 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         return self._macros_filename
 
     @macros_filename.setter
-    def macros_filename(self, filename):
+    def macros_filename(self, filename: str):
         self._macros_filename = filename
         self.reload_macros_file()
 
-    def reload_macros_file(self):
+    def reload_macros_file(self) -> None:
         """
         Load the macros_filename and call set_macros.
         """
@@ -119,7 +142,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             logger.exception('')
             return
 
-    def set_macros(self, macros_list):
+    def set_macros(self, macros_list: list[dict[str, str]]) -> None:
         """
         Change the PyDM macros we use to load the table widgets.
 
@@ -136,7 +159,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         self._macro_headers = list(self._macros[0].keys())
         self.reinit_table()
 
-    def reinit_table(self):
+    def reinit_table(self) -> None:
         """
         Rebuild the table based on the ui_filename and the newest macros.
         """
@@ -206,11 +229,20 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         self.cellChanged.connect(self.handle_item_changed)
         self.update_all_filters()
 
-    def add_context_menu_to_children(self, widget):
+    def add_context_menu_to_children(self, widget: QtWidgets.QWidget) -> None:
+        """
+        Distribute the context menu to child widgets.
+
+        This makes it so you can right click to configure the table from
+        within any of the contained widgets.
+        """
         for widget in widget.children():
             widget.contextMenuEvent = self.contextMenuEvent
 
-    def contextMenuEvent(self, event):
+    def contextMenuEvent(self, _event) -> None:
+        """
+        On right click, create and open a settings menu.
+        """
         menu = QtWidgets.QMenu(parent=self)
         configure_action = menu.addAction('Configure')
         configure_action.setCheckable(True)
@@ -256,7 +288,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                 )
         menu.exec_(QtGui.QCursor.pos())
 
-    def get_row_values(self, row):
+    def get_row_values(self, row: int) -> dict[str, Any]:
         """
         Get the current values for a specific numbered row of the table.
 
@@ -281,12 +313,17 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                 values['connected'] = False
         return values
 
-    def add_filter(self, filter_name, filter_func, active=True):
+    def add_filter(
+        self,
+        filter_name: str,
+        filter_func: FilterFunc,
+        active: bool = True
+    ) -> None:
         """
         Add a new visibility filter to the table.
 
         Filters are functions with the following signature:
-        filt(dict[str, Any]: values) -> bool
+        filt(values: dict[str, Any]) -> bool
         Where values is the output from get_row_values,
         and the boolean return value is True if the row should be displayed.
         If we have multiple filters, we need all of them to be True to display
@@ -312,7 +349,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             )
         self.update_all_filters()
 
-    def remove_filter(self, filter_name):
+    def remove_filter(self, filter_name: str) -> None:
         """
         Remove a specific named visibility filter from the table.
 
@@ -326,21 +363,21 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         del self._filters[filter_name]
         self.update_all_filters()
 
-    def clear_filters(self):
+    def clear_filters(self) -> None:
         """
         Remove all visbility filters from the table.
         """
         self._filters = {}
         self.update_all_filters()
 
-    def update_all_filters(self):
+    def update_all_filters(self) -> None:
         """
         Apply all filters to all rows of the table.
         """
         for row in range(self.rowCount()):
             self.update_filter(row)
 
-    def update_filter(self, row):
+    def update_filter(self, row: int) -> None:
         """
         Apply all filters to one row of the table.
 
@@ -365,7 +402,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         else:
             self.showRow(row)
 
-    def activate_filter(self, active, filter_name):
+    def activate_filter(self, active: bool, filter_name: str) -> None:
         """
         Activate or deactivate a filter by name.
 
@@ -381,7 +418,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         self._filters[filter_name].active = active
         self.update_all_filters()
 
-    def handle_item_changed(self, row, col):
+    def handle_item_changed(self, row: int, col: int) -> None:
         """
         Slot that is run when any element in the table changes.
 
@@ -390,7 +427,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         self.update_filter(row)
 
     @QtCore.Property(str)
-    def initial_sort_header(self):
+    def initial_sort_header(self) -> str:
         """
         Column to sort on after initializing.
 
@@ -400,7 +437,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         return self._initial_sort_header
 
     @initial_sort_header.setter
-    def initial_sort_header(self, header):
+    def initial_sort_header(self, header: str):
         self._initial_sort_header = header
         if not is_qt_designer():
             # Do a sort after a short timer
@@ -409,34 +446,34 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             timer.singleShot(1000, self.initial_sort)
 
     @QtCore.Property(bool)
-    def initial_sort_ascending(self):
+    def initial_sort_ascending(self) -> bool:
         """
         Whether to do the initial sort in ascending or descending order.
         """
         return self._initial_sort_ascend
 
     @initial_sort_ascending.setter
-    def initial_sort_ascending(self, ascending):
+    def initial_sort_ascending(self, ascending: bool):
         self._initial_sort_ascend = ascending
 
-    def initial_sort(self):
+    def initial_sort(self) -> None:
         """
         Called if the user specifies an initial_sort_header.
         """
         self.sort_table(self.initial_sort_header, self.initial_sort_ascending)
 
     @QtCore.Property('QStringList')
-    def hide_headers_in_menu(self):
+    def hide_headers_in_menu(self) -> list[str]:
         """
         A list of headers that we don't want to see in the sort menu.
         """
         return self._hide_headers
 
     @hide_headers_in_menu.setter
-    def hide_headers_in_menu(self, headers):
+    def hide_headers_in_menu(self, headers: list[str]):
         self._hide_headers = headers
 
-    def sort_table(self, header, ascending):
+    def sort_table(self, header: str, ascending: bool) -> None:
         """
         Rearrange the ordering of the table based on any of the value fields.
 
@@ -464,7 +501,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             # This prevents further sorting updates
             self.setSortingEnabled(False)
 
-    def menu_sort(self, checked, header, ascending):
+    def menu_sort(self, checked: bool, header: str, ascending: bool):
         """
         sort_table wrapped to recieve the checked bool from a signal.
 
@@ -472,7 +509,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         """
         self.sort_table(header, ascending)
 
-    def reset_manual_sort(self):
+    def reset_manual_sort(self) -> None:
         """
         Rearrange the table to undo all manual drag/drop sorting.
         """
@@ -481,7 +518,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             header.moveSection(header.visualIndex(row), row)
 
     @QtCore.Property(bool, designable=False)
-    def configurable(self):
+    def configurable(self) -> bool:
         """
         Whether or not the table can be manipulated from the UI.
 
@@ -493,7 +530,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         return self._configurable
 
     @configurable.setter
-    def configurable(self, conf):
+    def configurable(self, conf: bool):
         self._configurable = conf
         if conf:
             self.verticalHeader().setSectionsMovable(True)
@@ -503,7 +540,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             self.verticalHeader().hide()
 
     @QtCore.Slot(bool)
-    def request_configurable(self, conf):
+    def request_configurable(self, conf: bool):
         """
         Designable slot for toggling config mode.
         """
@@ -526,8 +563,14 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         Only update the table if the change is more than the deadband.
         This can help make large tables less resource-hungry.
     """
-    def __init__(self, header, default=None, channel=None, deadband=0,
-                 parent=None):
+    def __init__(
+        self,
+        header: str,
+        default: Optional[Any] = None,
+        channel: Optional[str] = None,
+        deadband: float = 0.0,
+        parent: Optional[QtWidgets.QWidget] = None
+    ):
         super().__init__(parent)
         self.header = header
         self.update_value(default)
@@ -544,7 +587,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
                 )
             self.pydm_channel.connect()
 
-    def update_value(self, value):
+    def update_value(self, value: Any) -> str:
         """
         Store the value for sorting and display in the table if visible.
 
@@ -558,16 +601,16 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         self._value = value
         self.setText(str(value))
 
-    def update_connection(self, connected):
+    def update_connection(self, connected: bool) -> None:
         """
         When our PV connects or disconnects, store the state as an attribute.
         """
         self.connected = connected
 
-    def get_value(self):
+    def get_value(self) -> Any:
         return self._value
 
-    def __lt__(self, other):
+    def __lt__(self, other: ChannelTableWidgetItem) -> bool:
         """
         Two special sorting rules:
         1. None is the greatest
@@ -591,6 +634,6 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
 
 @dataclasses.dataclass
 class FilterInfo:
-    filter_func: typing.Callable[[dict], bool]
+    filter_func: FilterFunc
     active: bool
     name: str
