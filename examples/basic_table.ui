@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="FilterSortWidgetTable" name="FilterSortWidgetTable">
+    <widget class="FilterSortWidgetTable" name="example_table">
      <property name="toolTip">
       <string/>
      </property>
