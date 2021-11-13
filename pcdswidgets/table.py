@@ -112,7 +112,6 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             if ch:
                 self._channel_headers.append(widget.objectName())
 
-    # file contains json list of dicts
     @QtCore.Property(str)
     def macros_filename(self) -> str:
         """
