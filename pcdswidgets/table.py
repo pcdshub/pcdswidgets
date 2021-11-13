@@ -168,7 +168,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             self._watching_cells = False
         for channel in self._channels:
             channel.disconnect()
-            self._channels = []
+        self._channels = []
         self.clear()
         self.clearContents()
         self.setRowCount(0)
