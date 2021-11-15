@@ -13,8 +13,6 @@ from qtpy import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 
-FilterFunc = Callable[[dict[str, Any]], bool]
-
 
 class FilterSortWidgetTable(QtWidgets.QTableWidget):
     """
@@ -334,7 +332,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     def add_filter(
         self,
         filter_name: str,
-        filter_func: FilterFunc,
+        filter_func: Callable[[dict[str, Any]], bool],
         active: bool = True
     ) -> None:
         """
@@ -667,6 +665,6 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
 
 @dataclasses.dataclass
 class FilterInfo:
-    filter_func: FilterFunc
+    filter_func: Callable[[dict[str, Any]], bool]
     active: bool
     name: str
