@@ -339,7 +339,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         Add a new visibility filter to the table.
 
         Filters are functions with the following signature:
-        filt(values: dict[str, Any]) -> bool
+        ``filt(values: dict[str, Any]) -> bool``
         Where values is the output from get_row_values,
         and the boolean return value is True if the row should be displayed.
         If we have multiple filters, we need all of them to be True to display
