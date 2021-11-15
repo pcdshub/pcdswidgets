@@ -427,7 +427,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         else:
             self.showRow(row)
 
-    def activate_filter(self, active: bool, filter_name: str) -> None:
+    def activate_filter(self, filter_name: str, active: bool) -> None:
         """
         Activate or deactivate a filter by name.
 
