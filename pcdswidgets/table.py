@@ -39,7 +39,6 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     _configurable: bool
     _watching_cells: bool
 
-
     def __init__(self, *args,  **kwargs):
         super().__init__(*args, **kwargs)
         self._ui_filename = None
@@ -97,7 +96,10 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         try:
             self.template_widget.filename = self.ui_filename
         except Exception:
-            logger.exception("Reloading the UI file %s failed", self.ui_filename)
+            logger.exception(
+                "Reloading the UI file %s failed",
+                self.ui_filename,
+            )
             return
         # Let's find all the widgets with channels and save their names
         self._channel_headers = []
@@ -154,7 +156,11 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             have the same keys or this will not work properly.
         """
         self._macros = macros_list
-        self._macro_headers = list(self._macros[0].keys()) if self._macros else []
+        self._macro_headers = (
+            list(self._macros[0].keys())
+            if self._macros
+            else []
+        )
         self.reinit_table()
 
     def reinit_table(self) -> None:
