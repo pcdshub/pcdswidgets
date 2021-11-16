@@ -46,8 +46,7 @@ import:
   #   - Python Linter
   #   - Package Linter
   #   - Documentation
-  #   - Python 3.6 - PIP based
-  #   - Python 3.6, 3.7 & 3.8 - Conda base
+  #   - Python - pip/conda
   # - Deploy
   #   - Documentation using doctr
   #   - Conda Package - uploaded to pcds-dev and pcds-tag
