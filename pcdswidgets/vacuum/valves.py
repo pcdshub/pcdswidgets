@@ -957,7 +957,10 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGCDA"
 
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValve, self).__init__(
+        self._cls_interlocked = False
+        self._cls_interlock_connected = False
+        self.cls_interlock_channel = None
+        super(PneumaticValveDA, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -965,9 +968,6 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = PneumaticValveDASymbolIcon(parent=self)
-        self._cls_interlocked = False
-        self._cls_interlock_connected = False
-        self.cls_interlock_channel = None
 
     @Property(bool, designable=False)
     def interlocked(self):

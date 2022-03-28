@@ -17,6 +17,6 @@ from ..valves import * # noqa
 cls = sys.argv[1]
 app = QApplication([])
 widget = globals()[cls]()
-widget.channels_prefix = sys.argv[2]
+widget.channelsPrefix = 'ca://' + sys.argv[2]
 widget.show()
 app.exec()
