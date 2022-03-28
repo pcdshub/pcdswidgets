@@ -1,5 +1,7 @@
 from qtpy.QtCore import QSize, Property
 
+from pydm.widgets.channel import PyDMChannel
+
 from .base import PCDSSymbolBase, ContentLocation
 from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
                      MultipleButtonControl)
@@ -877,6 +879,9 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
     A Symbol Widget representing a dual-acting Pneumatic Valve with
     the proper icon and controls.
 
+    This needs to modify the normal interlock logic because it has
+    two interlock PVs instead of one.
+
     Parameters
     ----------
     parent : QWidget
@@ -942,8 +947,8 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             qproperty-penWidth: 2;
         }
     """
-    _open_interlock_suffix = ":OPN_OK_RBV"
-    _cls_interlock_suffix = ":OPN_OK_RBV"
+    _interlock_suffix = ":OPN_OK_RBV"
+    _cls_interlock_suffix = ":CLS_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
     _command_suffix = ":OPN_SW"
@@ -960,6 +965,89 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             command_suffix=self._command_suffix,
             **kwargs)
         self.icon = PneumaticValveDASymbolIcon(parent=self)
+        self._cls_interlocked = False
+        self._cls_interlock_connected = False
+        self.cls_interlock_channel = None
+
+    @Property(bool, designable=False)
+    def interlocked(self):
+        """
+        Property used to query interlock state.
+
+        Returns
+        -------
+        bool
+        """
+        return self._interlocked or self._cls_interlocked
+
+    def create_channels(self):
+        """
+        This method adds a second interlock channel.
+
+        This second channel is used to check if the closing
+        action of the valve is permitted.
+        """
+        super(PneumaticValveDA, self).create_channels()
+
+        self._cls_interlocked = True
+        self._cls_interlock_connected = False
+
+        self.cls_interlock_channel = PyDMChannel(
+            address="{}{}".format(self._channels_prefix,
+                                  self._cls_interlock_suffix),
+            connection_slot=self.cls_interlock_connection_changed,
+            value_slot=self.cls_interlock_value_changed
+        )
+        self.cls_interlock_channel.connect()
+
+    def cls_interlock_connection_changed(self, conn):
+        """
+        Callback invoked when the connection status changes for the Interlock
+        Channel.
+
+        Neither this nor the open interlock connection state are currently
+        used, but this was included for completeness.
+
+        Parameters
+        ----------
+        conn : bool
+            True if connected, False otherwise.
+        """
+        self._cls_interlock_connected = conn
+
+    def interlock_value_changed(self, value):
+        """
+        Callback invoked when the value changes for the Interlock Channel.
+
+        Parameters
+        ----------
+        value : int
+            The value from the channel will be either 0 or 1 with 0 meaning
+            that the widget is interlocked.
+        """
+        self._interlocked = value == 0
+        self.update_da_interlock()
+
+    def cls_interlock_value_changed(self, value):
+        """
+        Callback invoked when the value changes for the Interlock Channel.
+
+        Parameters
+        ----------
+        value : int
+            The value from the channel will be either 0 or 1 with 0 meaning
+            that the widget is interlocked.
+        """
+        self._cls_interlocked = value == 0
+        self.update_da_interlock()
+
+    def update_da_interlock(self):
+        """
+        Update the double-acting interlock state when either pv changes.
+        """
+        self.controls_frame.setEnabled(not self.interlocked)
+        self.update_stylesheet()
+        self.update_status_tooltip()
 
     def sizeHint(self):
         return QSize(180, 70)
