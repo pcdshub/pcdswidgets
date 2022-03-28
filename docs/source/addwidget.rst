@@ -21,6 +21,7 @@ You'll need to do the following things:
 
 - Add a new icon widget.
 - Add a new valve widget that uses the icon.
+- Add your new widget to the designer.
 - Update stylesheets to be consistent for your new widget.
 - Add a new device class for your widget's expert screen.
 
@@ -67,6 +68,22 @@ and changing the docstrings, attributes, and super calls as appropriate.
 
 For deeper dives, I recommend looking at each mix-in class in isolation to
 understand how that particular feature is implemented.
+
+You can test your new widget quickly by running the helper script:
+
+.. code-block bash
+   python -m pcdswidgets.vacuum.demo PneumaticValveDA CRIX:VGC:11
+
+But you should make some screens with it to explore the finer details.
+
+
+Adding your Widget to the Designer
+----------------------------------
+This is probably the easiest step of the process. Simply import your new widget
+in designer.py and add an appriopriate entry using the qtplugin_factory.
+
+To check that this worked, you can simply open designer. You should see
+your widget added to the list.
 
 
 Stylesheets
