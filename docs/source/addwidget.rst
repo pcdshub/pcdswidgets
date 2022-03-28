@@ -21,8 +21,8 @@ You'll need to do the following things:
 
 - Add a new icon widget.
 - Add a new valve widget that uses the icon.
-- Add a new device class for your widget's expert screen.
 - Update stylesheets to be consistent for your new widget.
+- Add a new device class for your widget's expert screen.
 
 
 Adding a New Icon Widget
@@ -67,3 +67,36 @@ and changing the docstrings, attributes, and super calls as appropriate.
 
 For deeper dives, I recommend looking at each mix-in class in isolation to
 understand how that particular feature is implemented.
+
+
+Stylesheets
+-----------
+For the widget to properly display its state, it needs an entry in the stylesheet.
+For widgets that are exceedingly simple to existing widgets, this might just
+involve copying and pasting existing entries in the stylesheet, and editing the
+copy to refer to your new widget. This is appropriate for adding a new valve type
+for example.
+
+In other cases, you'll need to do involved testing to figure out what stylesheet
+gives the look and feel you want for the widget, and make sure this ends up in
+the master stylesheet.
+
+The master stylesheet is held in the vacuumscreens repo. If it has not moved,
+it can be viewed at
+https://github.com/pcdshub/vacuumscreens/blob/master/styleSheet/masterStyleSheet.qss
+
+To activate this stylesheet for dev use, you need to set your
+PYDM_STYLESHEET environment variable appropriately, e.g.
+
+.. code-block bash
+   export PYDM_STYLESHEET=/some/path/to/my/dev/folder/vacuumscreens/styleSheet.masterStyleSheet.qss
+
+Make sure to open a pull request with your updated stylesheet in that repo and make
+sure that your edits get deployed in dev/prod.
+
+
+The Expert Screen
+-----------------
+We typically build our expert screens out of ophyd objects using the typhos module.
+All the specifics of this are out of scope for this tutorial, but check out
+pcdsdevices for our main repository of device definitions.
