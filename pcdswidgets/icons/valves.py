@@ -1,7 +1,8 @@
 import math
 
 from qtpy.QtCore import (QPointF, QRectF, Qt, Property, QLineF)
-from qtpy.QtGui import (QPainterPath, QBrush, QColor, QPolygonF, QTransform)
+from qtpy.QtGui import (QPainterPath, QBrush, QColor, QPolygonF, QTransform,
+                        QPen)
 
 from .base import BaseSymbolIcon
 
@@ -392,15 +393,19 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         painter.setBrush(self._interlock_brush)
         painter.drawRect(QRectF(0.2, 0, 0.6, 0.3))
 
-        # Set fill color to black
-        painter.setBrush(QBrush(QColor(0, 0, 0)))
+        # Set fill color to black, line width to minimum for arrows
+        black_brush = QBrush(QColor(0, 0, 0))
+        painter.setBrush(black_brush)
+        painter.setPen(QPen(black_brush, 0))
+
+        #painter.setBrush(QBrush(QColor(0, 0, 0)))
 
         # Draw an arrow around 0, 0 pointing right
         # This polygon starts from the tip and works its way around clockwise
         tip_length = 0.2
-        tip_width = 0.07
-        length = 0.26
-        width = 0.03
+        tip_width = 0.1
+        length = 0.2
+        width = 0.02
         rightward_arrow = QPolygonF(
             [QPointF(tip_length, 0.0),
              QPointF(0.0, -tip_width),
@@ -418,8 +423,8 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         # Establish start positions for the arrows
         # This is where the origin goes (0, 0)
         # This is where the triangle meets the line
-        top_start = QPointF(0.53, 0.09)
-        bot_start = QPointF(0.47, 0.21)
+        top_start = QPointF(0.59, 0.15)
+        bot_start = QPointF(0.41, 0.15)
 
         # Assign arrows to positions
         top_arrow = rightward_arrow.translated(top_start)
