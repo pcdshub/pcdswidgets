@@ -1,8 +1,8 @@
 import math
 
-from qtpy.QtCore import (QPointF, QRectF, Qt, Property, QLineF)
-from qtpy.QtGui import (QPainterPath, QBrush, QColor, QPolygonF, QTransform,
-                        QPen)
+from qtpy.QtCore import Property, QLineF, QPointF, QRectF, Qt
+from qtpy.QtGui import (QBrush, QColor, QPainterPath, QPen, QPolygonF,
+                        QTransform)
 
 from .base import BaseSymbolIcon
 
@@ -397,8 +397,6 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         black_brush = QBrush(QColor(0, 0, 0))
         painter.setBrush(black_brush)
         painter.setPen(QPen(black_brush, 0))
-
-        #painter.setBrush(QBrush(QColor(0, 0, 0)))
 
         # Draw an arrow around 0, 0 pointing right
         # This polygon starts from the tip and works its way around clockwise

@@ -4,17 +4,15 @@ Show a fully functional widget. Useful for development.
 Invoke as e.g.
 "python -m pcdswidgets.vacuum.demo PneumaticValveDA CRIX:VGC:11"
 """
-import os
 import sys
 
 import pydm
 from pydm.utilities import setup_renderer
 
-from ..gauges import * # noqa
-from ..others import * # noqa
-from ..pumps import * # noqa
-from ..valves import * # noqa
-
+from ..gauges import *  # noqa
+from ..others import *  # noqa
+from ..pumps import *  # noqa
+from ..valves import *  # noqa
 
 cls = sys.argv[1]
 prefix = sys.argv[2]
