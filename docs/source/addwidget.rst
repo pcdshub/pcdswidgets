@@ -53,6 +53,9 @@ Some tips:
   This is because you may later want to edit the specifics, but if your QPolygon
   is just a list of numbers this will be very hard. A list of variables like
   "arrow_length" are easier to modify later.
+- When designing your shape, note that the widget might need to look good at
+  different sizes. Pay particular care in designing widget icons with small features,
+  these can become indistiguishable as we shrink the shapes down.
 
 
 Adding a New Widget Class
