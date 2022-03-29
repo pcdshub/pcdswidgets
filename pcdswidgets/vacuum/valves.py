@@ -1,18 +1,19 @@
-from qtpy.QtCore import QSize, Property
-
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.pushbutton import PyDMPushButton
+from qtpy.QtCore import Property, QSize, Qt
+from qtpy.QtWidgets import QGridLayout
 
-from .base import PCDSSymbolBase, ContentLocation
-from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
-                     MultipleButtonControl)
-from ..icons.valves import (ApertureValveSymbolIcon, PneumaticValveSymbolIcon,
+from ..icons.valves import (ApertureValveSymbolIcon,
+                            ControlOnlyValveSymbolIcon, ControlValveSymbolIcon,
                             FastShutterSymbolIcon, NeedleValveSymbolIcon,
-                            ProportionalValveSymbolIcon,
-                            RightAngleManualValveSymbolIcon,
-                            ControlValveSymbolIcon,
-                            ControlOnlyValveSymbolIcon,
+                            PneumaticValveDASymbolIcon,
                             PneumaticValveNOSymbolIcon,
-                            PneumaticValveDASymbolIcon)
+                            PneumaticValveSymbolIcon,
+                            ProportionalValveSymbolIcon,
+                            RightAngleManualValveSymbolIcon)
+from .base import ContentLocation, PCDSSymbolBase
+from .mixins import (ButtonControl, ErrorMixin, InterlockMixin,
+                     MultipleButtonControl, StateMixin)
 
 
 class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
@@ -874,13 +875,18 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
 
 
 class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
-                       ButtonControl, PCDSSymbolBase):
+                       PCDSSymbolBase):
     """
     A Symbol Widget representing a dual-acting Pneumatic Valve with
     the proper icon and controls.
 
     This needs to modify the normal interlock logic because it has
     two interlock PVs instead of one.
+
+    This also needs to completely re-implement the button control
+    logic because it needs to have separate PVs for opening and
+    closing the valve, and the ButtonControl mixin assumes one
+    PV with enum values.
 
     Parameters
     ----------
@@ -951,7 +957,8 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
     _cls_interlock_suffix = ":CLS_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
-    _command_suffix = ":OPN_SW"
+    _open_command_suffix = ":OPN_SW"
+    _close_command_suffix = ":CLS_SW"
 
     NAME = "Pneumatic Valve DA"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRCDA"
@@ -960,14 +967,29 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
         self._cls_interlocked = False
         self._cls_interlock_connected = False
         self.cls_interlock_channel = None
+        self.controls_layout = None
         super(PneumaticValveDA, self).__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
-            command_suffix=self._command_suffix,
             **kwargs)
         self.icon = PneumaticValveDASymbolIcon(parent=self)
+        self.open_btn = PyDMPushButton(
+            label='OPEN',
+            pressValue=1,
+        )
+        self.cls_btn = PyDMPushButton(
+            label='CLOSE',
+            pressValue=1,
+        )
+        self.open_btn.setFixedSize(55, 25)
+        self.cls_btn.setFixedSize(55, 25)
+        self.controls_layout = QGridLayout()
+        self.controls_layout.setSpacing(6)
+        self.controls_layout.setContentsMargins(5, 5, 5, 5)
+        self.controls_frame.setLayout(self.controls_layout)
+        self.controlButtonHorizontal = True
 
     @Property(bool, designable=False)
     def interlocked(self):
@@ -980,12 +1002,35 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
         """
         return self._interlocked or self._cls_interlocked
 
+    @Property(bool)
+    def controlButtonHorizontal(self):
+        return self._orientation == Qt.Horizontal
+
+    @controlButtonHorizontal.setter
+    def controlButtonHorizontal(self, checked):
+        if checked:
+            self._orientation = Qt.Horizontal
+        else:
+            self._orientation = Qt.Vertical
+
+        self.rearrange_button_layout()
+
+    def rearrange_button_layout(self):
+        if self._orientation == Qt.Horizontal:
+            self.controls_frame.layout().addWidget(self.open_btn, 0, 1)
+            self.controls_frame.layout().addWidget(self.cls_btn, 0, 0)
+        else:
+            self.controls_frame.layout().addWidget(self.cls_btn, 1, 0)
+            self.controls_frame.layout().addWidget(self.open_btn, 0, 0)
+
     def create_channels(self):
         """
-        This method adds a second interlock channel.
+        Add a second interlock channel and the button channels.
 
-        This second channel is used to check if the closing
+        The second interlock channel is used to check if the closing
         action of the valve is permitted.
+
+        The button channels allow us to open and close the valves.
         """
         super(PneumaticValveDA, self).create_channels()
 
@@ -999,6 +1044,28 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             value_slot=self.cls_interlock_value_changed
         )
         self.cls_interlock_channel.connect()
+
+        self.open_btn.channel = "{}{}".format(
+            self._channels_prefix,
+            self._open_command_suffix,
+        )
+        self.cls_btn.channel = "{}{}".format(
+            self._channels_prefix,
+            self._close_command_suffix,
+        )
+
+    def destroy_channels(self):
+        """
+        Method invoked when the channels associated with the widget must be
+        destroyed.
+        This method also clears the channel address for the control buttons
+        and close interlock.
+        """
+        if self.cls_interlock_channel is not None:
+            self.cls_interlock_channel.disconnect()
+        self.cls_interlock_channel = None
+        self.open_btn.channel = None
+        self.cls_btn.channel = None
 
     def cls_interlock_connection_changed(self, conn):
         """
@@ -1026,6 +1093,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             that the widget is interlocked.
         """
         self._interlocked = value == 0
+        self.open_btn.setEnabled(not self._interlocked)
         self.update_da_interlock()
 
     def cls_interlock_value_changed(self, value):
@@ -1039,13 +1107,13 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             that the widget is interlocked.
         """
         self._cls_interlocked = value == 0
+        self.cls_btn.setEnabled(not self._cls_interlocked)
         self.update_da_interlock()
 
     def update_da_interlock(self):
         """
         Update the double-acting interlock state when either pv changes.
         """
-        self.controls_frame.setEnabled(not self.interlocked)
         self.update_stylesheet()
         self.update_status_tooltip()
 
