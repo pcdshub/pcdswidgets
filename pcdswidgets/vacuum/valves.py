@@ -954,7 +954,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
     _command_suffix = ":OPN_SW"
 
     NAME = "Pneumatic Valve DA"
-    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGCDA"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRCDA"
 
     def __init__(self, parent=None, **kwargs):
         self._cls_interlocked = False
