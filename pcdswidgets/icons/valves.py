@@ -369,7 +369,7 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValveDASymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)

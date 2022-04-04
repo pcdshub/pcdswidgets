@@ -968,7 +968,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
         self._cls_interlock_connected = False
         self.cls_interlock_channel = None
         self.controls_layout = None
-        super(PneumaticValveDA, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -1032,7 +1032,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
 
         The button channels allow us to open and close the valves.
         """
-        super(PneumaticValveDA, self).create_channels()
+        super().create_channels()
 
         self._cls_interlocked = True
         self._cls_interlock_connected = False
