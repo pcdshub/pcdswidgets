@@ -421,13 +421,13 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         # Establish start positions for the arrows
         # This is where the origin goes (0, 0)
         # This is where the triangle meets the line
-        top_start = QPointF(0.59, 0.15)
-        bot_start = QPointF(0.41, 0.15)
+        right_start = QPointF(0.59, 0.15)
+        left_start = QPointF(0.41, 0.15)
 
         # Assign arrows to positions
-        top_arrow = rightward_arrow.translated(top_start)
-        bot_arrow = leftward_arrow.translated(bot_start)
+        right_translated = rightward_arrow.translated(right_start)
+        left_translated = leftward_arrow.translated(left_start)
 
         # Call draw
-        painter.drawPolygon(top_arrow)
-        painter.drawPolygon(bot_arrow)
+        painter.drawPolygon(right_translated)
+        painter.drawPolygon(left_translated)
