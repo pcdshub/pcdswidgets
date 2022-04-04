@@ -120,3 +120,18 @@ The Expert Screen
 We typically build our expert screens out of ophyd objects using the typhos module.
 All the specifics of this are out of scope for this tutorial, but check out
 pcdsdevices for our main repository of device definitions.
+
+
+Documentation
+-------------
+It is important to document your new widget.
+See examples throughout the documentation here.
+
+There are two places to update:
+
+- In the vacuum subfolder, find the relevant file and add your widget
+  to the most logical section
+- In icons.rst, extend the two reference areas with a line for the table
+  and the class-matching icon png name. The icon pngs are created
+  automatically, so make sure your icon is importable from the top-level
+  pcdswidgets.icons and is included in the __all__ tuple there.
