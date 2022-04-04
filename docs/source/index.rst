@@ -25,7 +25,8 @@ LCLS PyDM Widget Library
    :caption: Developer Documentation
    :hidden:
 
-   dev.rst   
+   dev.rst
+   addwidget.rst
 
 .. toctree::
    :maxdepth: 1

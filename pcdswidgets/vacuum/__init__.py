@@ -1,10 +1,13 @@
 __all__ = ['HotCathodeGauge', 'RoughGauge', 'ColdCathodeGauge', 'IonPump',
            'TurboPump', 'ScrollPump', 'GetterPump', 'RGA', 'PneumaticValve',
            'ApertureValve', 'FastShutter', 'NeedleValve', 'ProportionalValve',
-           'RightAngleManualValve']
+           'RightAngleManualValve', 'ControlValve', 'ControlOnlyValveNC',
+           'ControlOnlyValveNO', 'PneumaticValveNO', 'PneumaticValveDA']
 
-from .gauges import HotCathodeGauge, RoughGauge, ColdCathodeGauge
-from .pumps import IonPump, TurboPump, ScrollPump, GetterPump
+from .gauges import ColdCathodeGauge, HotCathodeGauge, RoughGauge
 from .others import RGA
-from .valves import (PneumaticValve, ApertureValve, FastShutter, NeedleValve,
-                     ProportionalValve, RightAngleManualValve)
+from .pumps import GetterPump, IonPump, ScrollPump, TurboPump
+from .valves import (ApertureValve, ControlOnlyValveNC, ControlOnlyValveNO,
+                     ControlValve, FastShutter, NeedleValve, PneumaticValve,
+                     PneumaticValveDA, PneumaticValveNO, ProportionalValve,
+                     RightAngleManualValve)

@@ -14,6 +14,12 @@ Pneumatic Valve - NO
 .. autoclass:: pcdswidgets.vacuum.valves.PneumaticValveNO
    :members:
 
+Pneumatic Valve - DA
+--------------------
+
+.. autoclass:: pcdswidgets.vacuum.valves.PneumaticValveDA
+   :members:
+
 Aperture Valve
 --------------
 

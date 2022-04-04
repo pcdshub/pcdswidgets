@@ -7,7 +7,8 @@ from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
 from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
                             ProportionalValve, RightAngleManualValve,
                             ApertureValve, ControlValve, ControlOnlyValveNC,
-                            ControlOnlyValveNO, PneumaticValveNO)
+                            ControlOnlyValveNO, PneumaticValveNO,
+                            PneumaticValveDA)
 
 from .vacuum.base import PCDSSymbolBase
 
@@ -21,6 +22,8 @@ FilterSortWidgetTablePlugin = qtplugin_factory(FilterSortWidgetTable,
 PCDSPneumaticValvePlugin = qtplugin_factory(PneumaticValve,
                                             group="PCDS Valves")
 PCDSPneumaticValveNOPlugin = qtplugin_factory(PneumaticValveNO,
+                                              group="PCDS Valves")
+PCDSPneumaticValveDAPlugin = qtplugin_factory(PneumaticValveDA,
                                               group="PCDS Valves")
 PCDSApertureValvePlugin = qtplugin_factory(ApertureValve, group='PCDS Valves')
 PCDSFastShutterPlugin = qtplugin_factory(FastShutter, group="PCDS Valves")
