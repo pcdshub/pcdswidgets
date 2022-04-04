@@ -127,7 +127,7 @@ Documentation
 It is important to document your new widget.
 See examples throughout the documentation here.
 
-There are two places to update:
+There are three places to update:
 
 - In the vacuum subfolder, find the relevant file and add your widget
   to the most logical section
@@ -135,3 +135,17 @@ There are two places to update:
   and the class-matching icon png name. The icon pngs are created
   automatically, so make sure your icon is importable from the top-level
   pcdswidgets.icons and is included in the __all__ tuple there.
+- Write detailed docstrings in the new classes you have added
+  (both the icon and widget).
+
+
+Testing
+-------
+Your widget will automatically be tested if imported in the __all__ tuple
+of the vacuum submodule. Make sure to import your new widget in __init__.py
+there and include it in the __all__ tuple.
+
+This will catch basic issues only.
+
+You should also test your widget on real devices to make sure the behavior is
+correct.
