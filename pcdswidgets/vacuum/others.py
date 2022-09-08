@@ -34,6 +34,10 @@ class RGA(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Others",
+       "is_container": False,
+    }
     NAME = "Residual Gas Analyzer"
 
     def __init__(self, parent=None, **kwargs):

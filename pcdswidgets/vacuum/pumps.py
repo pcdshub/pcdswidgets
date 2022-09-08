@@ -74,6 +74,10 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
     _state_suffix = ":STATE_RBV"
@@ -163,6 +167,10 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":FAULT_RBV"
     _state_suffix = ":STATE_RBV"
@@ -249,6 +257,10 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
     _state_suffix = ":STATE_RBV"
@@ -301,6 +313,10 @@ class GetterPump(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     NAME = "Getter Pump"
 
     def __init__(self, parent=None, **kwargs):

@@ -21,6 +21,11 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     This will allow you to sort or filter based on macros and based on the
     values in each pydm widget.
     """
+    _qt_designer_ = {
+       "group": "PCDS Utilities",
+       "is_container": False,
+    }
+
     # Public instance variables
     template_widget: PyDMEmbeddedDisplay
 
