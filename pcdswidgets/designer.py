@@ -1,16 +1,15 @@
 from pydm.widgets.qtplugin_base import qtplugin_factory
 
 from .table import FilterSortWidgetTable
-from .vacuum.gauges import RoughGauge, HotCathodeGauge, ColdCathodeGauge
-from .vacuum.others import RGA
-from .vacuum.pumps import IonPump, TurboPump, ScrollPump, GetterPump
-from .vacuum.valves import (PneumaticValve, FastShutter, NeedleValve,
-                            ProportionalValve, RightAngleManualValve,
-                            ApertureValve, ControlValve, ControlOnlyValveNC,
-                            ControlOnlyValveNO, PneumaticValveNO,
-                            PneumaticValveDA)
-
 from .vacuum.base import PCDSSymbolBase
+from .vacuum.gauges import ColdCathodeGauge, HotCathodeGauge, RoughGauge
+from .vacuum.others import RGA
+from .vacuum.pumps import GetterPump, IonPump, ScrollPump, TurboPump
+from .vacuum.valves import (ApertureValve, ControlOnlyValveNC,
+                            ControlOnlyValveNO, ControlValve, FastShutter,
+                            NeedleValve, PneumaticValve, PneumaticValveDA,
+                            PneumaticValveNO, ProportionalValve,
+                            RightAngleManualValve)
 
 BasePlugin = qtplugin_factory(PCDSSymbolBase, group="PCDS Symbols")
 

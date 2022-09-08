@@ -1,7 +1,7 @@
-from qtpy.QtCore import QSize, Property
+from qtpy.QtCore import Property, QSize
 
-from .base import PCDSSymbolBase, ContentLocation
 from ..icons.others import RGASymbolIcon
+from .base import ContentLocation, PCDSSymbolBase
 
 
 class RGA(PCDSSymbolBase):

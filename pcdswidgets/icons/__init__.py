@@ -1,13 +1,14 @@
-from .gauges import (RoughGaugeSymbolIcon, CathodeGaugeSymbolIcon,
-                     HotCathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon)
-from .pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
-                    ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
-from .valves import (PneumaticValveSymbolIcon, FastShutterSymbolIcon,
-                     ApertureValveSymbolIcon, RightAngleManualValveSymbolIcon,
-                     NeedleValveSymbolIcon, ProportionalValveSymbolIcon,
-                     ControlValveSymbolIcon, ControlOnlyValveSymbolIcon,
-                     PneumaticValveNOSymbolIcon, PneumaticValveDASymbolIcon)
+from .gauges import (CathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon,
+                     HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .others import RGASymbolIcon
+from .pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
+                    ScrollPumpSymbolIcon, TurboPumpSymbolIcon)
+from .valves import (ApertureValveSymbolIcon, ControlOnlyValveSymbolIcon,
+                     ControlValveSymbolIcon, FastShutterSymbolIcon,
+                     NeedleValveSymbolIcon, PneumaticValveDASymbolIcon,
+                     PneumaticValveNOSymbolIcon, PneumaticValveSymbolIcon,
+                     ProportionalValveSymbolIcon,
+                     RightAngleManualValveSymbolIcon)
 
 __all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
            'HotCathodeGaugeSymbolIcon', 'ColdCathodeGaugeSymbolIcon',

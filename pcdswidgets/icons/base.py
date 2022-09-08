@@ -1,9 +1,9 @@
-from qtpy.QtCore import (Property, Qt, QSize, Signal, QEvent)
-from qtpy.QtGui import (QColor, QPainter, QBrush, QPen)
-from qtpy.QtWidgets import (QWidget, QStyle, QStyleOption, QToolTip,
-                            QApplication)
+from pydm.utilities import is_qt_designer, remove_protocol
+from qtpy.QtCore import Property, QEvent, QSize, Qt, Signal
+from qtpy.QtGui import QBrush, QColor, QPainter, QPen
+from qtpy.QtWidgets import (QApplication, QStyle, QStyleOption, QToolTip,
+                            QWidget)
 
-from pydm.utilities import (remove_protocol, is_qt_designer)
 from ..utils import find_ancestor_for_widget
 
 

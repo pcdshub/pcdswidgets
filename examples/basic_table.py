@@ -2,6 +2,7 @@ import os.path
 
 from pydm import Display
 
+
 class BasicTable(Display):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -2,7 +2,6 @@ import pytest
 
 import pcdswidgets.vacuum
 
-
 symbols = [getattr(pcdswidgets.vacuum, symbol)
            for symbol in pcdswidgets.vacuum.__all__]
 

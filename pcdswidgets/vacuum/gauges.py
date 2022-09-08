@@ -1,12 +1,11 @@
+from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from pydm.widgets.display_format import DisplayFormat
-
+from ..icons.gauges import (ColdCathodeGaugeSymbolIcon,
+                            HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .base import PCDSSymbolBase
-from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
-                     LabelControl)
-from ..icons.gauges import (RoughGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
-                            ColdCathodeGaugeSymbolIcon)
+from .mixins import (ButtonLabelControl, InterlockMixin, LabelControl,
+                     StateMixin)
 
 
 class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):

@@ -1,12 +1,11 @@
-from qtpy.QtCore import QSize, Property
-
 from pydm.widgets.display_format import DisplayFormat
+from qtpy.QtCore import Property, QSize
 
-from .base import PCDSSymbolBase, ContentLocation
-from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
-                     ButtonLabelControl)
-from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
-                           ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
+from ..icons.pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
+                           ScrollPumpSymbolIcon, TurboPumpSymbolIcon)
+from .base import ContentLocation, PCDSSymbolBase
+from .mixins import (ButtonControl, ButtonLabelControl, ErrorMixin,
+                     InterlockMixin, StateMixin)
 
 
 class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,

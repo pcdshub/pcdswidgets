@@ -1,13 +1,13 @@
-import os
 import logging
+import os
 from functools import partial
 
-from qtpy.QtCore import Property, Qt
-from qtpy.QtWidgets import QVBoxLayout, QGridLayout
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.enum_button import PyDMEnumButton
-from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.label import PyDMLabel
+from pydm.widgets.pushbutton import PyDMPushButton
+from qtpy.QtCore import Property, Qt
+from qtpy.QtWidgets import QGridLayout, QVBoxLayout
 
 logger = logging.getLogger(__name__)
 

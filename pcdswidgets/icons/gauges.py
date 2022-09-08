@@ -1,5 +1,5 @@
-from qtpy.QtCore import (QPointF, QRectF)
-from qtpy.QtGui import (QPainterPath)
+from qtpy.QtCore import QPointF, QRectF
+from qtpy.QtGui import QPainterPath
 
 from .base import BaseSymbolIcon
 

@@ -1,12 +1,13 @@
-import os
 import logging
+import os
+
+from pydm.utilities import IconFont, remove_protocol
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
-from pydm.utilities import remove_protocol, IconFont
-from qtpy.QtCore import Property, Q_ENUMS, QSize
-from qtpy.QtGui import QPainter, QCursor
-from qtpy.QtWidgets import (QWidget, QFrame, QVBoxLayout, QHBoxLayout,
-                            QSizePolicy, QStyle, QStyleOption)
+from qtpy.QtCore import Q_ENUMS, Property, QSize
+from qtpy.QtGui import QCursor, QPainter
+from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
+                            QStyleOption, QVBoxLayout, QWidget)
 
 from ..utils import refresh_style
 

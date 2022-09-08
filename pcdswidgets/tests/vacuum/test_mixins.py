@@ -2,8 +2,8 @@ import pytest
 from qtpy.QtWidgets import QWidget
 
 from pcdswidgets.vacuum.base import PCDSSymbolBase
-from pcdswidgets.vacuum.mixins import (InterlockMixin, ErrorMixin, StateMixin,
-                                       OpenCloseStateMixin)
+from pcdswidgets.vacuum.mixins import (ErrorMixin, InterlockMixin,
+                                       OpenCloseStateMixin, StateMixin)
 
 
 class PCDSSymbolWithIcon(PCDSSymbolBase):

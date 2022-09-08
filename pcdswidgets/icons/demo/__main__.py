@@ -7,8 +7,7 @@ import sys
 
 from qtpy.QtWidgets import QApplication
 
-from .. import * # noqa
-
+from .. import *  # noqa
 
 cls = sys.argv[1] + 'SymbolIcon'
 app = QApplication([])
