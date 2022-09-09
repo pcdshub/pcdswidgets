@@ -1,4 +1,5 @@
 import logging
+
 from qtpy.QtWidgets import QWidget
 
 logger = logging.getLogger(__name__)

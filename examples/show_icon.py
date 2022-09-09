@@ -1,7 +1,9 @@
 import os
+
 from qtpy.QtWidgets import QApplication, QWidget
 
 import pcdswidgets.icons as icons
+
 
 def screenshot(widget, filename):
     """

@@ -1,12 +1,11 @@
+from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from pydm.widgets.display_format import DisplayFormat
-
+from ..icons.gauges import (ColdCathodeGaugeSymbolIcon,
+                            HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .base import PCDSSymbolBase
-from .mixins import (StateMixin, InterlockMixin, ButtonLabelControl,
-                     LabelControl)
-from ..icons.gauges import (RoughGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
-                            ColdCathodeGaugeSymbolIcon)
+from .mixins import (ButtonLabelControl, InterlockMixin, LabelControl,
+                     StateMixin)
 
 
 class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
@@ -62,6 +61,10 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Gauges",
+       "is_container": False,
+    }
     _state_suffix = ":STATE_RBV"
     _readback_suffix = ":PRESS_RBV"
 
@@ -142,6 +145,10 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Gauges",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
     _readback_suffix = ":PRESS_RBV"
@@ -225,6 +232,10 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Gauges",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
     _readback_suffix = ":PRESS_RBV"

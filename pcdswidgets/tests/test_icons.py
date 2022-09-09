@@ -2,11 +2,10 @@ from unittest.mock import Mock
 
 import pytest
 from qtpy.QtCore import Qt
-from qtpy.QtGui import QColor, QBrush
+from qtpy.QtGui import QBrush, QColor
 
 import pcdswidgets.icons
 from pcdswidgets.icons.base import BaseSymbolIcon
-
 
 icons = [getattr(pcdswidgets.icons, icon)
          for icon in pcdswidgets.icons.__all__]

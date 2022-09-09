@@ -88,6 +88,11 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
+
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
@@ -182,6 +187,10 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
@@ -270,6 +279,10 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":VAC_FAULT_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
@@ -352,6 +365,10 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
     _command_suffix = ":OPN_SW"
@@ -430,6 +447,10 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
     _command_suffix = ":OPN_SW"
@@ -481,6 +502,10 @@ class RightAngleManualValve(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     NAME = "Right Angle Manual Valve"
 
     def __init__(self, parent=None, **kwargs):
@@ -583,6 +608,10 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     NAME = 'Control Valve with Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
@@ -674,6 +703,10 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     NAME = 'Normally Closed Control Valve with No Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
@@ -763,6 +796,10 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     NAME = 'Normally Open Control Valve with No Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
 
@@ -852,6 +889,10 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":CLS_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
@@ -953,6 +994,10 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             qproperty-penWidth: 2;
         }
     """
+    _qt_designer_ = {
+       "group": "PCDS Valves",
+       "is_container": False,
+    }
     _interlock_suffix = ":OPN_OK_RBV"
     _cls_interlock_suffix = ":CLS_OK_RBV"
     _error_suffix = ":STATE_RBV"

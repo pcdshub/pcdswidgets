@@ -1,12 +1,11 @@
-from qtpy.QtCore import QSize, Property
-
 from pydm.widgets.display_format import DisplayFormat
+from qtpy.QtCore import Property, QSize
 
-from .base import PCDSSymbolBase, ContentLocation
-from .mixins import (InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
-                     ButtonLabelControl)
-from ..icons.pumps import (IonPumpSymbolIcon, TurboPumpSymbolIcon,
-                           ScrollPumpSymbolIcon, GetterPumpSymbolIcon)
+from ..icons.pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
+                           ScrollPumpSymbolIcon, TurboPumpSymbolIcon)
+from .base import ContentLocation, PCDSSymbolBase
+from .mixins import (ButtonControl, ButtonLabelControl, ErrorMixin,
+                     InterlockMixin, StateMixin)
 
 
 class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
@@ -75,6 +74,10 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
     _state_suffix = ":STATE_RBV"
@@ -164,6 +167,10 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":FAULT_RBV"
     _state_suffix = ":STATE_RBV"
@@ -250,6 +257,10 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
     _state_suffix = ":STATE_RBV"
@@ -302,6 +313,10 @@ class GetterPump(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+    _qt_designer_ = {
+       "group": "PCDS Pumps",
+       "is_container": False,
+    }
     NAME = "Getter Pump"
 
     def __init__(self, parent=None, **kwargs):
