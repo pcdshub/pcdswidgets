@@ -231,7 +231,7 @@ class BaseSymbolIcon(QWidget):
         if new_width < 0:
             return
         if new_width != self._pen_width:
-            self._pen_width = new_width
+            self._pen_width = int(new_width)
             self._pen.setWidth(self._pen_width)
             self.update()
 
