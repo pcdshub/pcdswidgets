@@ -7,12 +7,12 @@ from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget)
+                            QStyleOption, QVBoxLayout, QWidget, QStackedWidget,
+                            QComboBox, QTabWidget)
 
 from ..utils import refresh_style
 
 logger = logging.getLogger(__name__)
-
 
 class ContentLocation:
     """
@@ -81,6 +81,15 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
+
+
+        self._ui_path = []
+        self._ui_macros = []
+        self._ui_titles = []
+
+        self.tabWidget = None
+        self.embeddedDisplay = None
+
 
     def sizeHint(self):
         """
@@ -416,7 +425,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                          self.__class__.__name__)
             return
 
-        if self._expert_display is not None:
+        if self.tabWidget is not None:
+            self.tabWidget.show()
+        elif self._expert_display is not None:
             logger.debug('Bringing existing display to front.')
             self._expert_display.show()
             self._expert_display.raise_()
@@ -432,6 +443,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         try:
             import typhos
+            from pydm.widgets import PyDMEmbeddedDisplay
+
         except ImportError:
             logger.error('Typhos not installed. Cannot create display.')
             return
@@ -441,8 +454,62 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._expert_display = display
         display.destroyed.connect(self._cleanup_expert_display)
 
-        if display:
-            display.show()
+        if self._ui_path is not None:
+            self.tabWidget = QTabWidget()
+            self.embeddedDisplay = list()
+            self.tabWidget.setTabPosition(2)
+            self.tabWidget.addTab(display, "Typhos")
+
+            for i, files in enumerate(self._ui_path):
+                embedded = PyDMEmbeddedDisplay()
+
+                if i >= len(self._ui_titles):
+                    title = files
+                else:
+                    title = self._ui_titles[i]
+
+                if i >= len(self._ui_macros):
+                    macros = ''
+                else:
+                    macros = self._ui_macros[i]
+
+                embedded.set_macros_and_filename(files, macros) 
+                self.tabWidget.addTab(embedded, title)
+                self.embeddedDisplay.append(embedded)
+
+
+            self.tabWidget.show()
+
+        elif display:
+            display.show() 
+    
+    @Property('QStringList')
+    def ui_path(self):
+        return self._ui_path
+
+    @ui_path.setter
+    def ui_path(self, path):
+        if path != self._ui_path:
+            self._ui_path = path
+
+    @Property('QStringList')
+    def ui_macros(self):
+        return self._ui_macros
+
+    @ui_macros.setter
+    def ui_macros(self, macros):
+        if macros != self.ui_macros:
+            self._ui_macros = macros
+
+    @Property('QStringList')
+    def titles(self):
+        return self._ui_titles
+
+    @titles.setter
+    def titles(self, titles):
+        if titles != self._ui_titles:
+            self._ui_titles = titles
+
 
     def _cleanup_expert_display(self, *args, **kwargs):
         self._expert_display = None
