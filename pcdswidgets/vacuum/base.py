@@ -454,7 +454,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._expert_display = display
         display.destroyed.connect(self._cleanup_expert_display)
 
-        if self._ui_path is not None:
+        if len(self._ui_path) > 0:
             self.tabWidget = QTabWidget()
             self.embeddedDisplay = list()
             self.tabWidget.setTabPosition(2)
