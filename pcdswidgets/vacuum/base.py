@@ -7,8 +7,7 @@ from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget, QStackedWidget,
-                            QComboBox, QTabWidget)
+                            QStyleOption, QVBoxLayout, QWidget, QTabWidget)
 
 from ..utils import refresh_style
 
