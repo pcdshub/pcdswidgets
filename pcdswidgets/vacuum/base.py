@@ -82,9 +82,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.update_status_tooltip()
 
 
-        self._ui_path = []
-        self._ui_macros = []
-        self._ui_titles = []
+        self.ui_file_path = []
+        self.ui_file_macros = []
+        self.ui_file_titles = []
 
         self.tabWidget = None
         self.embeddedDisplay = None
@@ -453,24 +453,24 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._expert_display = display
         display.destroyed.connect(self._cleanup_expert_display)
 
-        if len(self._ui_path) > 0:
+        if len(self.ui_file_path) > 0:
             self.tabWidget = QTabWidget()
             self.embeddedDisplay = list()
             self.tabWidget.setTabPosition(2)
             self.tabWidget.addTab(display, "Typhos")
 
-            for i, files in enumerate(self._ui_path):
+            for i, files in enumerate(self.ui_file_path):
                 embedded = PyDMEmbeddedDisplay()
 
-                if i >= len(self._ui_titles):
+                if i >= len(self.ui_file_titles):
                     title = files
                 else:
-                    title = self._ui_titles[i]
+                    title = self.ui_file_titles[i]
 
-                if i >= len(self._ui_macros):
+                if i >= len(self.ui_file_macros):
                     macros = ''
                 else:
-                    macros = self._ui_macros[i]
+                    macros = self.ui_file_macros[i]
 
                 embedded.set_macros_and_filename(files, macros) 
                 self.tabWidget.addTab(embedded, title)
@@ -484,30 +484,30 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     
     @Property('QStringList')
     def ui_path(self):
-        return self._ui_path
+        return self.ui_file_path
 
     @ui_path.setter
     def ui_path(self, path):
-        if path != self._ui_path:
-            self._ui_path = path
+        if path != self.ui_file_path:
+            self.ui_file_path = path
 
     @Property('QStringList')
     def ui_macros(self):
-        return self._ui_macros
+        return self.ui_file_macros
 
     @ui_macros.setter
     def ui_macros(self, macros):
         if macros != self.ui_macros:
-            self._ui_macros = macros
+            self.ui_file_macros = macros
 
     @Property('QStringList')
     def titles(self):
-        return self._ui_titles
+        return self.ui_file_titles
 
     @titles.setter
     def titles(self, titles):
-        if titles != self._ui_titles:
-            self._ui_titles = titles
+        if titles != self.ui_file_titles:
+            self.ui_file_titles = titles
 
 
     def _cleanup_expert_display(self, *args, **kwargs):
