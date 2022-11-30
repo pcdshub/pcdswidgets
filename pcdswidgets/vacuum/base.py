@@ -7,7 +7,7 @@ from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget, QTabWidget)
+                            QStyleOption, QVBoxLayout, QWidget)
 
 from ..utils import refresh_style
 
@@ -443,6 +443,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         try:
             import typhos
             from pydm.widgets import PyDMEmbeddedDisplay
+            from qtpy.QtWidgets import QTabWidget
 
         except ImportError:
             logger.error('Typhos not installed. Cannot create display.')
