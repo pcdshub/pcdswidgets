@@ -1,5 +1,6 @@
 import logging
 import os
+from itertools import zip_longest
 
 from pydm.utilities import IconFont, remove_protocol
 from pydm.widgets.base import PyDMPrimitiveWidget
@@ -8,12 +9,12 @@ from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget, QTabWidget)
+                            QStyleOption, QTabWidget, QVBoxLayout, QWidget)
 
-from itertools import zip_longest
 from ..utils import refresh_style
 
 logger = logging.getLogger(__name__)
+
 
 class ContentLocation:
     """
@@ -82,15 +83,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
-
-
         self.ui_file_paths = []
+
         self.ui_file_macros = []
         self.ui_file_titles = []
 
         self.tab_widget = None
         self.embedded_displays = list()
-
 
     def sizeHint(self):
         """
@@ -471,15 +470,15 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                 title = title or file_path
                 macros = macros or ''
 
-                embedded.set_macros_and_filename(file_path, macros) 
+                embedded.set_macros_and_filename(file_path, macros)
                 self.tab_widget.addTab(embedded, title)
                 self.embedded_displays.append(embedded)
 
             self.tab_widget.show()
 
         elif display:
-            display.show() 
-    
+            display.show()
+
     @Property('QStringList')
     def ui_paths(self):
         return self.ui_file_paths
@@ -506,7 +505,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     def ui_titles(self, titles):
         if titles != self.ui_file_titles:
             self.ui_file_titles = titles
-
 
     def _cleanup_expert_display(self, *args, **kwargs):
         self._expert_display = None
