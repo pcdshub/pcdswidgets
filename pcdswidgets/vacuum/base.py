@@ -4,11 +4,13 @@ import os
 from pydm.utilities import IconFont, remove_protocol
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget)
+                            QStyleOption, QVBoxLayout, QWidget, QTabWidget)
 
+from itertools import zip_longest
 from ..utils import refresh_style
 
 logger = logging.getLogger(__name__)
@@ -82,12 +84,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.update_status_tooltip()
 
 
-        self.ui_file_path = []
+        self.ui_file_paths = []
         self.ui_file_macros = []
         self.ui_file_titles = []
 
-        self.tabWidget = None
-        self.embeddedDisplay = None
+        self.tab_widget = None
+        self.embedded_displays = list()
 
 
     def sizeHint(self):
@@ -424,8 +426,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                          self.__class__.__name__)
             return
 
-        if self.tabWidget is not None:
-            self.tabWidget.show()
+        if self.tab_widget is not None:
+            logger.debug('Bringing existing custom display to front.')
+            self.tab_widget.show()
+            self.tab_widget.raise_()
+            return
         elif self._expert_display is not None:
             logger.debug('Bringing existing display to front.')
             self._expert_display.show()
@@ -442,9 +447,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         try:
             import typhos
-            from pydm.widgets import PyDMEmbeddedDisplay
-            from qtpy.QtWidgets import QTabWidget
-
         except ImportError:
             logger.error('Typhos not installed. Cannot create display.')
             return
@@ -454,43 +456,38 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._expert_display = display
         display.destroyed.connect(self._cleanup_expert_display)
 
-        if len(self.ui_file_path) > 0:
-            self.tabWidget = QTabWidget()
-            self.embeddedDisplay = list()
-            self.tabWidget.setTabPosition(2)
-            self.tabWidget.addTab(display, "Typhos")
+        if len(self.ui_file_paths) > 0:
+            self.tab_widget = QTabWidget()
+            self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
+            self.tab_widget.addTab(display, "Typhos")
 
-            for i, files in enumerate(self.ui_file_path):
+            for file_path, title, macros in zip_longest(
+                    self.ui_file_paths,
+                    self.ui_file_titles,
+                    self.ui_file_macros
+                    ):
+
                 embedded = PyDMEmbeddedDisplay()
+                title = title or file_path
+                macros = macros or ''
 
-                if i >= len(self.ui_file_titles):
-                    title = files
-                else:
-                    title = self.ui_file_titles[i]
+                embedded.set_macros_and_filename(file_path, macros) 
+                self.tab_widget.addTab(embedded, title)
+                self.embedded_displays.append(embedded)
 
-                if i >= len(self.ui_file_macros):
-                    macros = ''
-                else:
-                    macros = self.ui_file_macros[i]
-
-                embedded.set_macros_and_filename(files, macros) 
-                self.tabWidget.addTab(embedded, title)
-                self.embeddedDisplay.append(embedded)
-
-
-            self.tabWidget.show()
+            self.tab_widget.show()
 
         elif display:
             display.show() 
     
     @Property('QStringList')
-    def ui_path(self):
-        return self.ui_file_path
+    def ui_paths(self):
+        return self.ui_file_paths
 
-    @ui_path.setter
-    def ui_path(self, path):
-        if path != self.ui_file_path:
-            self.ui_file_path = path
+    @ui_paths.setter
+    def ui_paths(self, path):
+        if path != self.ui_file_paths:
+            self.ui_file_paths = path
 
     @Property('QStringList')
     def ui_macros(self):
@@ -502,11 +499,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.ui_file_macros = macros
 
     @Property('QStringList')
-    def titles(self):
+    def ui_titles(self):
         return self.ui_file_titles
 
-    @titles.setter
-    def titles(self, titles):
+    @ui_titles.setter
+    def ui_titles(self, titles):
         if titles != self.ui_file_titles:
             self.ui_file_titles = titles
 
