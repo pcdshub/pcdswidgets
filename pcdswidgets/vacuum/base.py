@@ -1,13 +1,15 @@
 import logging
 import os
+from itertools import zip_longest
 
 from pydm.utilities import IconFont, remove_protocol
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from qtpy.QtCore import Q_ENUMS, Property, QSize
 from qtpy.QtGui import QCursor, QPainter
 from qtpy.QtWidgets import (QFrame, QHBoxLayout, QSizePolicy, QStyle,
-                            QStyleOption, QVBoxLayout, QWidget)
+                            QStyleOption, QTabWidget, QVBoxLayout, QWidget)
 
 from ..utils import refresh_style
 
@@ -81,6 +83,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.setup_icon()
         self.assemble_layout()
         self.update_status_tooltip()
+        self.ui_file_paths = []
+
+        self.ui_file_macros = []
+        self.ui_file_titles = []
+
+        self.tab_widget = None
+        self.embedded_displays = list()
 
     def sizeHint(self):
         """
@@ -416,7 +425,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                          self.__class__.__name__)
             return
 
-        if self._expert_display is not None:
+        if self.tab_widget is not None:
+            logger.debug('Bringing existing custom display to front.')
+            self.tab_widget.show()
+            self.tab_widget.raise_()
+            return
+        elif self._expert_display is not None:
             logger.debug('Bringing existing display to front.')
             self._expert_display.show()
             self._expert_display.raise_()
@@ -441,8 +455,56 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._expert_display = display
         display.destroyed.connect(self._cleanup_expert_display)
 
-        if display:
+        if len(self.ui_file_paths) > 0:
+            self.tab_widget = QTabWidget()
+            self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
+            self.tab_widget.addTab(display, "Typhos")
+
+            for file_path, title, macros in zip_longest(
+                    self.ui_file_paths,
+                    self.ui_file_titles,
+                    self.ui_file_macros
+                    ):
+
+                embedded = PyDMEmbeddedDisplay()
+                title = title or file_path
+                macros = macros or ''
+
+                embedded.set_macros_and_filename(file_path, macros)
+                self.tab_widget.addTab(embedded, title)
+                self.embedded_displays.append(embedded)
+
+            self.tab_widget.show()
+
+        elif display:
             display.show()
+
+    @Property('QStringList')
+    def ui_paths(self):
+        return self.ui_file_paths
+
+    @ui_paths.setter
+    def ui_paths(self, path):
+        if path != self.ui_file_paths:
+            self.ui_file_paths = path
+
+    @Property('QStringList')
+    def ui_macros(self):
+        return self.ui_file_macros
+
+    @ui_macros.setter
+    def ui_macros(self, macros):
+        if macros != self.ui_macros:
+            self.ui_file_macros = macros
+
+    @Property('QStringList')
+    def ui_titles(self):
+        return self.ui_file_titles
+
+    @ui_titles.setter
+    def ui_titles(self, titles):
+        if titles != self.ui_file_titles:
+            self.ui_file_titles = titles
 
     def _cleanup_expert_display(self, *args, **kwargs):
         self._expert_display = None
