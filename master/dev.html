@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &mdash; PCDSWidgets 0.7.2.dev43+g5469691 documentation</title>
+  <title>Configuring the Development Environment &mdash; PCDSWidgets 0.7.2.dev43+g5469691 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,10 +16,10 @@
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
-    <script src="_static/searchtools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding a New Vacuum Widget" href="addwidget.html" />
+    <link rel="prev" title="Utils" href="utils.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
                 0.7.2.dev43+g5469691
               </div>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -55,8 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="dev.html">Configuring the Development Environment</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuring the Development Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addwidget.html">Adding a New Vacuum Widget</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Related Projects</span></p>
@@ -83,8 +83,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Search</li>
+      <li class="breadcrumb-item active">Configuring the Development Environment</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dev.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -92,22 +93,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search functionality.
-    </p>
-  </div>
-  </noscript>
+  <section id="configuring-the-development-environment">
+<h1>Configuring the Development Environment<a class="headerlink" href="#configuring-the-development-environment" title="Permalink to this heading"></a></h1>
+<ol class="arabic simple">
+<li><p>Create a virtual environment with conda or use a preexisting environment.</p></li>
+<li><p>Activate the environment. All following steps assume that you are inside this enviornment.</p></li>
+<li><p>Install pydm, pyqt, and pcdsdevices from the conda-forge channel with <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">pydm</span> <span class="pre">pyqt</span> <span class="pre">pcdsdevices</span></code></p></li>
+<li><p>Clone a copy of pcdswidgets from here <code class="docutils literal notranslate"><span class="pre">https://github.com/pcdshub/pcdswidgets</span></code></p></li>
+<li><p>Move into the newly cloned pcdswidgets directory and run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> to perform a development install of pcdswidgets.</p></li>
+<li><p>In order to ensure that designer loads the new widgets add the newly cloned pcdswidgets directory to the environment variable <code class="docutils literal notranslate"><span class="pre">PYQTDESIGNERPATH</span></code>. For example, use <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYQTDESIGNERPATH=$PWD:$PYQTDESIGNERPATH</span></code> after cd’ing into your pcdswidgets directory.</p></li>
+<li><p>Setup of the environment is now complete. You should be able to make changes to your newly cloned pcdswidgets directory and see those changes reflected in <code class="docutils literal notranslate"><span class="pre">designer</span></code>.</p></li>
+</ol>
+</section>
 
-  
-  <div id="search-results">
-  
-  </div>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="utils.html" class="btn btn-neutral float-left" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="addwidget.html" class="btn btn-neutral float-right" title="Adding a New Vacuum Widget" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
@@ -129,14 +134,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-  <script>
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script id="searchindexloader"></script>
-   
-
+  </script> 
 
 </body>
 </html>

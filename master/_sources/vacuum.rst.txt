@@ -49,4 +49,3 @@ Symbol Widgets
    vacuum/pumps.rst
    vacuum/gauges.rst
    vacuum/others.rst
-
