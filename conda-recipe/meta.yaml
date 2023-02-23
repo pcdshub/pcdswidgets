@@ -1,31 +1,40 @@
-{% set data = load_setup_py_data() %}
+{% set package_name = "pcdswidgets" %}
+{% set import_name = "pcdswidgets" %}
+{% set version = load_file_regex(load_file=os.path.join(import_name, "_version.py"), regex_pattern=".*version = '(\S+)'").group(1) %}
 
 package:
-    name: pcdswidgets
-    version: {{ data.get('version') }}
+  name: {{ package_name }}
+  version: {{ version }}
 
 source:
-    path: ..
+  path: ..
 
 build:
-    noarch: python
-    number: 0
-    script: "{{ PYTHON }} -m pip install . -vv"
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+
 
 requirements:
-    build:
-      - python >=3.7
-      - setuptools
-    run:
-      - python >=3.7
-      - pydm >=1.9.0
-      - qtpy
+  build:
+  - python >=3.7
+  - setuptools_scm
+  - pip
+  run:
+  - python >=3.7
+  - pydm >=1.9.0
+  - qtpy
+
+
 
 test:
-    imports:
-      - pcdswidgets
-    requires:
-      - pytest
+  imports:
+  - pcdswidgets
+  requires:
+  - pytest
+
+
 
 about:
   home: https://github.com/pcdshub/pcdswidgets
