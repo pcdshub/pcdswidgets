@@ -14,27 +14,24 @@ build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
 
-
-
 requirements:
   build:
-  - python >=3.7
+  - python >=3.9
   - setuptools_scm
   - pip
   run:
-  - python >=3.7
+  - python >=3.9
   - pydm >=1.9.0
   - qtpy
-
-
+  - pyqt >=5
 
 test:
   imports:
   - pcdswidgets
   requires:
   - pytest
-
-
+  - pytest-qt
+  - pytest-timeout
 
 about:
   home: https://github.com/pcdshub/pcdswidgets
