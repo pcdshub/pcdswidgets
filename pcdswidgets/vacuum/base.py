@@ -37,9 +37,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     parent : QWidget
         The parent widget for this symbol.
     """
+
     _qt_designer_ = {
-       "group": "PCDS Symbols",
-       "is_container": False,
+        "group": "PCDS Symbols",
+        "is_container": False,
     }
 
     EXPERT_OPHYD_CLASS = ""
@@ -461,11 +462,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.tab_widget.addTab(display, "Typhos")
 
             for file_path, title, macros in zip_longest(
-                    self.ui_file_paths,
-                    self.ui_file_titles,
-                    self.ui_file_macros
-                    ):
-
+                self.ui_file_paths,
+                self.ui_file_titles,
+                self.ui_file_macros
+            ):
                 embedded = PyDMEmbeddedDisplay()
                 title = title or file_path
                 macros = macros or ''

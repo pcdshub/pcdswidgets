@@ -16,8 +16,9 @@ from .mixins import (ButtonControl, ErrorMixin, InterlockMixin,
                      MultipleButtonControl, StateMixin)
 
 
-class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
-                     ButtonControl, PCDSSymbolBase):
+class PneumaticValve(
+    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
     controls.
@@ -88,9 +89,10 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
 
     _interlock_suffix = ":OPN_OK_RBV"
@@ -115,8 +117,9 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
         return QSize(180, 70)
 
 
-class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
-                    ButtonControl, PCDSSymbolBase):
+class ApertureValve(
+    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing an Aperture Valve with the proper icon and
     controls.
@@ -187,9 +190,10 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
@@ -213,8 +217,9 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
         return QSize(180, 70)
 
 
-class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
-                  MultipleButtonControl, PCDSSymbolBase):
+class FastShutter(
+    InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
     controls.
@@ -279,9 +284,10 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":VAC_FAULT_OK_RBV"
     _error_suffix = ":STATE_RBV"
@@ -365,9 +371,10 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
@@ -389,8 +396,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
         return QSize(180, 70)
 
 
-class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
-                        PCDSSymbolBase):
+class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Proportional Valve with the proper icon and
     controls.
@@ -447,9 +453,10 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
@@ -502,9 +509,10 @@ class RightAngleManualValve(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     NAME = "Right Angle Manual Valve"
 
@@ -536,8 +544,9 @@ class RightAngleManualValve(PCDSSymbolBase):
         return super().controlsLocation
 
 
-class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
-                   ButtonControl, PCDSSymbolBase):
+class ControlValve(
+    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing a Control Valve with the proper icon and
     controls.
@@ -608,9 +617,10 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     NAME = 'Control Valve with Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
@@ -634,8 +644,7 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin,
         return QSize(180, 70)
 
 
-class ControlOnlyValveNC(InterlockMixin, StateMixin,
-                         ButtonControl, PCDSSymbolBase):
+class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Normally Closed Control Valve with the
     proper icon and controls.
@@ -703,9 +712,10 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     NAME = 'Normally Closed Control Valve with No Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
@@ -727,8 +737,7 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin,
         return QSize(180, 70)
 
 
-class ControlOnlyValveNO(InterlockMixin, StateMixin,
-                         ButtonControl, PCDSSymbolBase):
+class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Normally Open Control Valve with the
     proper icon and controls.
@@ -796,9 +805,10 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     NAME = 'Normally Open Control Valve with No Readback'
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
@@ -817,8 +827,9 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin,
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
 
-class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
-                       ButtonControl, PCDSSymbolBase):
+class PneumaticValveNO(
+    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing a Normally Open Pneumatic Valve with the
     proper icon and controls.
@@ -889,9 +900,10 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":CLS_OK_RBV"
     _error_suffix = ":STATE_RBV"
@@ -915,8 +927,7 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
         return QSize(180, 70)
 
 
-class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
-                       PCDSSymbolBase):
+class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a dual-acting Pneumatic Valve with
     the proper icon and controls.
@@ -994,9 +1005,10 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin,
             qproperty-penWidth: 2;
         }
     """
+
     _qt_designer_ = {
-       "group": "PCDS Valves",
-       "is_container": False,
+        "group": "PCDS Valves",
+        "is_container": False,
     }
     _interlock_suffix = ":OPN_OK_RBV"
     _cls_interlock_suffix = ":CLS_OK_RBV"

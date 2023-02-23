@@ -22,8 +22,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     values in each pydm widget.
     """
     _qt_designer_ = {
-       "group": "PCDS Utilities",
-       "is_container": False,
+        "group": "PCDS Utilities",
+        "is_container": False,
     }
 
     # Public instance variables
@@ -44,7 +44,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     _configurable: bool
     _watching_cells: bool
 
-    def __init__(self, *args,  **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._ui_filename = None
         self._macros_filename = None
@@ -230,7 +230,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         item = ChannelTableWidgetItem(
             header='index',
             default=row_position,
-            )
+        )
         self.setItem(row_position, 1, item)
         self._header_map['index'] = 1
         # Put the macros into the table
@@ -239,7 +239,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             item = ChannelTableWidgetItem(
                 header=key,
                 default=value,
-                )
+            )
             self.setItem(row_position, index, item)
             self._header_map[key] = index
             index += 1
@@ -249,7 +249,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             item = ChannelTableWidgetItem(
                 header=header,
                 channel=source.channel,
-                )
+            )
             self.setItem(row_position, index, item)
             self._header_map[header] = index
             if item.pydm_channel is not None:
@@ -292,16 +292,16 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                     self.menu_sort,
                     header=header_name,
                     ascending=True,
-                    )
                 )
+            )
             dec = inner_menu.addAction('Descending')
             dec.triggered.connect(
                 functools.partial(
                     self.menu_sort,
                     header=header_name,
                     ascending=False,
-                    )
                 )
+            )
         filter_menu = menu.addMenu('Filters')
         for filter_name, filter_info in self._filters.items():
             inner_action = filter_menu.addAction(filter_name)
@@ -311,8 +311,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                 functools.partial(
                     self.activate_filter,
                     filter_name=filter_name,
-                    )
                 )
+            )
         menu.exec_(QtGui.QCursor.pos())
 
     def get_row_values(self, row: int) -> dict[str, Any]:
@@ -373,7 +373,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             filter_func=filter_func,
             active=active,
             name=filter_name,
-            )
+        )
         self.update_all_filters()
 
     def remove_filter(self, filter_name: str) -> None:
@@ -626,7 +626,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
                 channel,
                 value_slot=self.update_value,
                 connection_slot=self.update_connection,
-                )
+            )
             self.pydm_channel.connect()
 
     def update_value(self, value: Any) -> str:

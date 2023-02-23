@@ -61,9 +61,10 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Gauges",
-       "is_container": False,
+        "group": "PCDS Gauges",
+        "is_container": False,
     }
     _state_suffix = ":STATE_RBV"
     _readback_suffix = ":PRESS_RBV"
@@ -85,8 +86,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         return QSize(70, 60)
 
 
-class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
-                      PCDSSymbolBase):
+class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbolBase):
     """
     A Symbol Widget representing a Hot Cathode Gauge with the proper icon
     and controls.
@@ -145,9 +145,10 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Gauges",
-       "is_container": False,
+        "group": "PCDS Gauges",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
@@ -172,8 +173,7 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin,
         return QSize(180, 80)
 
 
-class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
-                       PCDSSymbolBase):
+class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Cold Cathode Gauge with the proper icon and
     controls.
@@ -232,9 +232,10 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Gauges",
-       "is_container": False,
+        "group": "PCDS Gauges",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _state_suffix = ":STATE_RBV"
