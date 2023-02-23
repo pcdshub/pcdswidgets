@@ -102,7 +102,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGC"
 
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValve, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -200,7 +200,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
-        super(ApertureValve, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -295,7 +295,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VFS"
 
     def __init__(self, parent=None, **kwargs):
-        super(FastShutter, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -377,7 +377,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VCN"
 
     def __init__(self, parent=None, **kwargs):
-        super(NeedleValve, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
@@ -459,7 +459,7 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
     def __init__(self, parent=None, **kwargs):
-        super(ProportionalValve, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
@@ -510,7 +510,7 @@ class RightAngleManualValve(PCDSSymbolBase):
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden
-        super(RightAngleManualValve, self).__init__(parent=parent, **kwargs)
+        super().__init__(parent=parent, **kwargs)
         self.icon = RightAngleManualValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -902,7 +902,7 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin,
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
 
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValveNO, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,

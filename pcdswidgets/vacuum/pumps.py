@@ -88,7 +88,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(IonPump, self).__init__(parent=parent,
+        super().__init__(parent=parent,
                                       interlock_suffix=self._interlock_suffix,
                                       error_suffix=self._error_suffix,
                                       state_suffix=self._state_suffix,
@@ -180,7 +180,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(TurboPump, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -270,7 +270,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(ScrollPump, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -321,7 +321,7 @@ class GetterPump(PCDSSymbolBase):
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden
-        super(GetterPump, self).__init__(parent=parent, **kwargs)
+        super().__init__(parent=parent, **kwargs)
         self.icon = GetterPumpSymbolIcon(parent=self)
 
     def sizeHint(self):

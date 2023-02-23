@@ -33,7 +33,7 @@ class BaseSymbolIcon(QWidget):
         self._pen.setColor(self._pen_color)
         self._original_pen_style = self._pen_style
         self._original_pen_color = self._pen_color
-        super(BaseSymbolIcon, self).__init__(parent=parent)
+        super().__init__(parent=parent)
         self.setObjectName("icon")
         if not is_qt_designer():
             # We should  install the Event Filter only if we are running
@@ -70,7 +70,7 @@ class BaseSymbolIcon(QWidget):
         if not state_suffix:
             return
 
-        addr = "{}{}".format(p.channelsPrefix, state_suffix)
+        addr = f"{p.channelsPrefix}{state_suffix}"
         QToolTip.showText(event.globalPos(), addr)
         # If the address has a protocol, strip it out before putting it on the
         # clipboard.

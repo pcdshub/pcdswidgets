@@ -30,8 +30,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     template_widget: PyDMEmbeddedDisplay
 
     # Private instance variables
-    _ui_filename: Optional[str]
-    _macros_filename: Optional[str]
+    _ui_filename: str | None
+    _macros_filename: str | None
     _macros: list[dict[str, str]]
     _channel_headers: list[str]
     _macro_headers: list[str]
@@ -140,7 +140,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         if not self.macros_filename:
             return
         try:
-            with open(self.macros_filename, 'r') as fd:
+            with open(self.macros_filename) as fd:
                 macros = json.load(fd)
             self.set_macros(macros)
         except Exception:
@@ -600,17 +600,17 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         This can help make large tables less resource-hungry.
     """
     header: str
-    channel: Optional[str]
+    channel: str | None
     deadband: float
-    pydm_channel: Optional[PyDMChannel]
+    pydm_channel: PyDMChannel | None
 
     def __init__(
         self,
         header: str,
-        default: Optional[Any] = None,
-        channel: Optional[str] = None,
+        default: Any | None = None,
+        channel: str | None = None,
         deadband: float = 0.0,
-        parent: Optional[QtWidgets.QWidget] = None
+        parent: QtWidgets.QWidget | None = None
     ):
         super().__init__(parent)
         self.header = header

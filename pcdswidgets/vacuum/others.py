@@ -42,7 +42,7 @@ class RGA(PCDSSymbolBase):
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden
-        super(RGA, self).__init__(parent=parent, **kwargs)
+        super().__init__(parent=parent, **kwargs)
         self.icon = RGASymbolIcon(parent=self)
 
     def sizeHint(self):

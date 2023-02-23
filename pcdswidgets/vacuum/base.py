@@ -48,7 +48,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     ContentLocation = ContentLocation
 
     def __init__(self, parent=None, **kwargs):
-        super(PCDSSymbolBase, self).__init__(parent=parent, **kwargs)
+        super().__init__(parent=parent, **kwargs)
         self._expert_display = None
         self.interlock = None
         self._channels_prefix = None
@@ -337,7 +337,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         opt.initFrom(self)
         self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
         painter.setRenderHint(QPainter.Antialiasing)
-        super(PCDSSymbolBase, self).paintEvent(evt)
+        super().paintEvent(evt)
 
     def clear(self):
         """
@@ -522,7 +522,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             status = self.NAME
         if status:
             status += os.linesep
-        status += "PV Prefix: {}".format(self.channelsPrefix)
+        status += f"PV Prefix: {self.channelsPrefix}"
         return status
 
     def destroy_channels(self):

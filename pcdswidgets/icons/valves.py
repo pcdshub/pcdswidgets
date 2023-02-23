@@ -17,7 +17,7 @@ class PneumaticValveSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValveSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
@@ -52,7 +52,7 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(FastShutterSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
 
     @Property(QBrush)
@@ -128,7 +128,7 @@ class ApertureValveSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(ApertureValveSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
@@ -164,7 +164,7 @@ class NeedleValveSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(NeedleValveSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
@@ -220,7 +220,7 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(ProportionalValveSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
@@ -325,7 +325,7 @@ class PneumaticValveNOSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(PneumaticValveNOSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)

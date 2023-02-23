@@ -12,7 +12,7 @@ from qtpy.QtWidgets import QGridLayout, QVBoxLayout
 logger = logging.getLogger(__name__)
 
 
-class InterlockMixin(object):
+class InterlockMixin:
     """
     The InterlockMixin class adds the interlock channel and `interlocked`
     property to the widget.
@@ -37,7 +37,7 @@ class InterlockMixin(object):
         self._interlocked = False
         self._interlock_connected = False
         self.interlock_channel = None
-        super(InterlockMixin, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @Property(bool, designable=False)
     def interlocked(self):
@@ -56,7 +56,7 @@ class InterlockMixin(object):
         the `interlock_channel` to the widget along with a reset for the
         interlocked and interlock_connected variables.
         """
-        super(InterlockMixin, self).create_channels()
+        super().create_channels()
         if not self._interlock_suffix:
             return
 
@@ -80,10 +80,10 @@ class InterlockMixin(object):
         -------
         str
         """
-        status = super(InterlockMixin, self).status_tooltip()
+        status = super().status_tooltip()
         if status:
             status += os.linesep
-        status += "Interlocked: {}".format(self.interlocked)
+        status += f"Interlocked: {self.interlocked}"
         return status
 
     def interlock_connection_changed(self, conn):
@@ -114,7 +114,7 @@ class InterlockMixin(object):
         self.update_status_tooltip()
 
 
-class ErrorMixin(object):
+class ErrorMixin:
     """
     The ErrorMixin class adds the error channel and `error`
     property to the widget.
@@ -140,7 +140,7 @@ class ErrorMixin(object):
         self._error_enum = []
         self._error_connected = False
         self.error_channel = None
-        super(ErrorMixin, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @Property(str, designable=False)
     def error(self):
@@ -159,7 +159,7 @@ class ErrorMixin(object):
         the `error_channel` to the widget along with a reset for the error and
         error_connected variables.
         """
-        super(ErrorMixin, self).create_channels()
+        super().create_channels()
         if not self._error_suffix:
             return
 
@@ -167,7 +167,7 @@ class ErrorMixin(object):
         self._error = ""
 
         self.error_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix, self._error_suffix),
+            address=f"{self._channels_prefix}{self._error_suffix}",
             connection_slot=self.error_connection_changed,
             value_slot=self.error_value_changed,
             enum_strings_slot=self.error_enum_changed
@@ -183,9 +183,9 @@ class ErrorMixin(object):
         -------
         str
         """
-        status = super(ErrorMixin, self).status_tooltip()
+        status = super().status_tooltip()
         status += os.linesep
-        status += "Error: {}".format(self.error)
+        status += f"Error: {self.error}"
         return status
 
     def error_connection_changed(self, conn):
@@ -252,7 +252,7 @@ class ErrorMixin(object):
         self.update_status_tooltip()
 
 
-class StateMixin(object):
+class StateMixin:
     """
     The StateMixin class adds the state channel and `state` property to the
     widget.
@@ -278,7 +278,7 @@ class StateMixin(object):
         self._state_enum = []
         self._state_connected = False
         self.state_channel = None
-        super(StateMixin, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @Property(str, designable=False)
     def state(self):
@@ -297,7 +297,7 @@ class StateMixin(object):
         the `state_channel` to the widget along with a reset for the
         state and state_connected variables.
         """
-        super(StateMixin, self).create_channels()
+        super().create_channels()
         if not self._state_suffix:
             return
 
@@ -305,7 +305,7 @@ class StateMixin(object):
         self._state = ""
 
         self.state_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix, self._state_suffix),
+            address=f"{self._channels_prefix}{self._state_suffix}",
             connection_slot=self.state_connection_changed,
             value_slot=self.state_value_changed,
             enum_strings_slot=self.state_enum_changed
@@ -321,10 +321,10 @@ class StateMixin(object):
         -------
         str
         """
-        status = super(StateMixin, self).status_tooltip()
+        status = super().status_tooltip()
         if status:
             status += os.linesep
-        status += "State: {}".format(self.state)
+        status += f"State: {self.state}"
         return status
 
     def state_connection_changed(self, conn):
@@ -391,7 +391,7 @@ class StateMixin(object):
         self.update_status_tooltip()
 
 
-class OpenCloseStateMixin(object):
+class OpenCloseStateMixin:
     """
     The OpenCloseStateMixin class adds two channels (Open and Close State) and
     a `state` property based on a combination of the two channels to the
@@ -426,7 +426,7 @@ class OpenCloseStateMixin(object):
 
         self.state_open_channel = None
         self.state_close_channel = None
-        super(OpenCloseStateMixin, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @Property(str, designable=False)
     def state(self):
@@ -452,7 +452,7 @@ class OpenCloseStateMixin(object):
         the `state_open_channel` and `state_close_channel` to the widget along
         with a reset for the state and interlock_connected variables.
         """
-        super(OpenCloseStateMixin, self).create_channels()
+        super().create_channels()
         if not self._open_suffix or not self._close_suffix:
             return
 
@@ -463,14 +463,14 @@ class OpenCloseStateMixin(object):
         self._state = "INVALID"
 
         self.state_open_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix, self._open_suffix),
+            address=f"{self._channels_prefix}{self._open_suffix}",
             connection_slot=partial(self.state_connection_changed, "OPEN"),
             value_slot=partial(self.state_value_changed, "OPEN")
         )
         self.state_open_channel.connect()
 
         self.state_close_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix, self._close_suffix),
+            address=f"{self._channels_prefix}{self._close_suffix}",
             connection_slot=partial(self.state_connection_changed, "CLOSE"),
             value_slot=partial(self.state_value_changed, "CLOSE")
         )
@@ -485,10 +485,10 @@ class OpenCloseStateMixin(object):
         -------
         str
         """
-        status = super(OpenCloseStateMixin, self).status_tooltip()
+        status = super().status_tooltip()
         if status:
             status += os.linesep
-        status += "State: {}".format(self.state)
+        status += f"State: {self.state}"
         return status
 
     def state_connection_changed(self, which, conn):
@@ -532,7 +532,7 @@ class OpenCloseStateMixin(object):
         self.update_status_tooltip()
 
 
-class ButtonControl(object):
+class ButtonControl:
     """
     The ButtonControl class adds a PyDMEnumButton to the widget for controls.
 
@@ -551,7 +551,7 @@ class ButtonControl(object):
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(2)
         self.controls_layout.setContentsMargins(0, 10, 0, 0)
-        super(ButtonControl, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.controls_frame.setLayout(self.controls_layout)
         self.controls_frame.layout().addWidget(self.control_btn)
 
@@ -576,7 +576,7 @@ class ButtonControl(object):
         created.
         This method also sets the channel address for the control button.
         """
-        super(ButtonControl, self).create_channels()
+        super().create_channels()
         if self._channels_prefix:
             self.control_btn.channel = "{}{}".format(self._channels_prefix,
                                                      self._command_suffix)
@@ -587,11 +587,11 @@ class ButtonControl(object):
         destroyed.
         This method also clears the channel address for the control button.
         """
-        super(ButtonControl, self).destroy_channels()
+        super().destroy_channels()
         self.control_btn.channel = None
 
 
-class LabelControl(object):
+class LabelControl:
     """
     The LabelControl class adds a PyDMLabel to the widget for controls.
 
@@ -614,7 +614,7 @@ class LabelControl(object):
         self.controls_layout = QVBoxLayout()
         self.controls_layout.setSpacing(2)
         self.controls_layout.setContentsMargins(0, 10, 0, 0)
-        super(LabelControl, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.controls_frame.setLayout(self.controls_layout)
         self.controls_frame.layout().addWidget(self.readback_label)
 
@@ -624,7 +624,7 @@ class LabelControl(object):
         created.
         This method also sets the channel address for the control button.
         """
-        super(LabelControl, self).create_channels()
+        super().create_channels()
         if self._channels_prefix:
             self.readback_label.channel = "{}{}".format(self._channels_prefix,
                                                         self._readback_suffix)
@@ -635,7 +635,7 @@ class LabelControl(object):
         destroyed.
         This method also clears the channel address for the control button.
         """
-        super(LabelControl, self).destroy_channels()
+        super().destroy_channels()
         self.readback_label.channel = None
 
 
@@ -663,7 +663,7 @@ class ButtonLabelControl(ButtonControl):
         self.readback_label = PyDMLabel()
         self.readback_label.setObjectName(readback_name)
         self.readback_label.setAlignment(Qt.AlignCenter)
-        super(ButtonLabelControl, self).__init__(command_suffix, **kwargs)
+        super().__init__(command_suffix, **kwargs)
         self.controls_frame.layout().insertWidget(0, self.readback_label)
 
     def create_channels(self):
@@ -672,7 +672,7 @@ class ButtonLabelControl(ButtonControl):
         created.
         This method also sets the channel address for the control button.
         """
-        super(ButtonLabelControl, self).create_channels()
+        super().create_channels()
         if self._channels_prefix:
             self.readback_label.channel = "{}{}".format(self._channels_prefix,
                                                         self._readback_suffix)
@@ -683,11 +683,11 @@ class ButtonLabelControl(ButtonControl):
         destroyed.
         This method also clears the channel address for the control button.
         """
-        super(ButtonLabelControl, self).destroy_channels()
+        super().destroy_channels()
         self.readback_label.channel = None
 
 
-class MultipleButtonControl(object):
+class MultipleButtonControl:
     """
     The MultipleButtonControl class adds multiple PyDMPushButton instances to
     the widget for controls.
@@ -712,7 +712,7 @@ class MultipleButtonControl(object):
         self.buttons = []
         self.create_buttons()
 
-        super(MultipleButtonControl, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.controls_frame.setLayout(QGridLayout())
         self.controlButtonHorizontal = True
 
@@ -768,11 +768,11 @@ class MultipleButtonControl(object):
         created.
         This method also sets the channel address for the control button.
         """
-        super(MultipleButtonControl, self).create_channels()
+        super().create_channels()
         if self._channels_prefix:
             for idx, btn in enumerate(self.buttons):
                 suffix = self._command_buttons_config[idx]['suffix']
-                btn.channel = "{}{}".format(self._channels_prefix, suffix)
+                btn.channel = f"{self._channels_prefix}{suffix}"
 
     def destroy_channels(self):
         """
@@ -780,6 +780,6 @@ class MultipleButtonControl(object):
         destroyed.
         This method also clears the channel address for the control button.
         """
-        super(MultipleButtonControl, self).destroy_channels()
+        super().destroy_channels()
         for btn in self.buttons:
             btn.channel = None
