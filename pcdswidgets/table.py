@@ -4,7 +4,7 @@ import dataclasses
 import functools
 import json
 import logging
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
