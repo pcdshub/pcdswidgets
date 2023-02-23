@@ -16,7 +16,7 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(ScrollPumpSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)
@@ -111,7 +111,7 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
         The parent widget for the icon
     """
     def __init__(self, parent=None, **kwargs):
-        super(TurboPumpSymbolIcon, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)

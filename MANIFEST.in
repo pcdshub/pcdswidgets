@@ -1,3 +1,11 @@
-include versioneer.py
 include pcdswidgets/_version.py
+
+include AUTHORS.rst
+include CONTRIBUTING.rst
 include LICENSE.md
+include MANIFEST.in
+include README.md
+
+include dev-requirements.txt
+include docs-requirements.txt
+include requirements.txt

@@ -8,8 +8,9 @@ from .mixins import (ButtonControl, ButtonLabelControl, ErrorMixin,
                      InterlockMixin, StateMixin)
 
 
-class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
-              PCDSSymbolBase):
+class IonPump(
+    InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase
+):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -74,9 +75,10 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Pumps",
-       "is_container": False,
+        "group": "PCDS Pumps",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
@@ -88,14 +90,16 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(IonPump, self).__init__(parent=parent,
-                                      interlock_suffix=self._interlock_suffix,
-                                      error_suffix=self._error_suffix,
-                                      state_suffix=self._state_suffix,
-                                      command_suffix=self._command_suffix,
-                                      readback_suffix=self._readback_suffix,
-                                      readback_name='pressure',
-                                      **kwargs)
+        super().__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name="pressure",
+            **kwargs
+        )
         self.icon = IonPumpSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -103,8 +107,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl,
         return QSize(180, 80)
 
 
-class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
-                PCDSSymbolBase):
+class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Turbo Pump with the proper icon and
     controls.
@@ -167,9 +170,10 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Pumps",
-       "is_container": False,
+        "group": "PCDS Pumps",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":FAULT_RBV"
@@ -180,7 +184,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(TurboPump, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -193,8 +197,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         return QSize(180, 80)
 
 
-class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
-                 PCDSSymbolBase):
+class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Scroll Pump with the proper icon and
     controls.
@@ -257,9 +260,10 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
         }
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Pumps",
-       "is_container": False,
+        "group": "PCDS Pumps",
+        "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
     _error_suffix = ":ERROR_RBV"
@@ -270,7 +274,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl,
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
 
     def __init__(self, parent=None, **kwargs):
-        super(ScrollPump, self).__init__(
+        super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
@@ -313,15 +317,16 @@ class GetterPump(PCDSSymbolBase):
     +-----------+--------------+---------------------------------------+
 
     """
+
     _qt_designer_ = {
-       "group": "PCDS Pumps",
-       "is_container": False,
+        "group": "PCDS Pumps",
+        "is_container": False,
     }
     NAME = "Getter Pump"
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden
-        super(GetterPump, self).__init__(parent=parent, **kwargs)
+        super().__init__(parent=parent, **kwargs)
         self.icon = GetterPumpSymbolIcon(parent=self)
 
     def sizeHint(self):

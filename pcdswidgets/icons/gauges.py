@@ -47,7 +47,7 @@ class HotCathodeGaugeSymbolIcon(CathodeGaugeSymbolIcon):
         The parent widget for the icon
     """
     def draw_icon(self, painter):
-        super(HotCathodeGaugeSymbolIcon, self).draw_icon(painter)
+        super().draw_icon(painter)
         painter.drawLine(QPointF(0.3, 0.1), QPointF(0.3, 0.9))
         painter.drawLine(QPointF(0.3, 0.5), QPointF(0.7, 0.5))
         painter.drawLine(QPointF(0.7, 0.1), QPointF(0.7, 0.9))
@@ -63,5 +63,5 @@ class ColdCathodeGaugeSymbolIcon(CathodeGaugeSymbolIcon):
         The parent widget for the icon
     """
     def draw_icon(self, painter):
-        super(ColdCathodeGaugeSymbolIcon, self).draw_icon(painter)
+        super().draw_icon(painter)
         painter.drawArc(QRectF(0.25, 0.25, 0.5, 0.5), 45*16, 270*16)

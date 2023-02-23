@@ -1,7 +1,3 @@
-doctr
-flake8
 pytest
 pytest-qt
 pytest-timeout
-sphinx
-sphinx_rtd_theme

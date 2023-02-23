@@ -4,7 +4,7 @@ import dataclasses
 import functools
 import json
 import logging
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
@@ -22,16 +22,16 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     values in each pydm widget.
     """
     _qt_designer_ = {
-       "group": "PCDS Utilities",
-       "is_container": False,
+        "group": "PCDS Utilities",
+        "is_container": False,
     }
 
     # Public instance variables
     template_widget: PyDMEmbeddedDisplay
 
     # Private instance variables
-    _ui_filename: Optional[str]
-    _macros_filename: Optional[str]
+    _ui_filename: str | None
+    _macros_filename: str | None
     _macros: list[dict[str, str]]
     _channel_headers: list[str]
     _macro_headers: list[str]
@@ -44,7 +44,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     _configurable: bool
     _watching_cells: bool
 
-    def __init__(self, *args,  **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._ui_filename = None
         self._macros_filename = None
@@ -140,7 +140,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         if not self.macros_filename:
             return
         try:
-            with open(self.macros_filename, 'r') as fd:
+            with open(self.macros_filename) as fd:
                 macros = json.load(fd)
             self.set_macros(macros)
         except Exception:
@@ -230,7 +230,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         item = ChannelTableWidgetItem(
             header='index',
             default=row_position,
-            )
+        )
         self.setItem(row_position, 1, item)
         self._header_map['index'] = 1
         # Put the macros into the table
@@ -239,7 +239,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             item = ChannelTableWidgetItem(
                 header=key,
                 default=value,
-                )
+            )
             self.setItem(row_position, index, item)
             self._header_map[key] = index
             index += 1
@@ -249,7 +249,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             item = ChannelTableWidgetItem(
                 header=header,
                 channel=source.channel,
-                )
+            )
             self.setItem(row_position, index, item)
             self._header_map[header] = index
             if item.pydm_channel is not None:
@@ -292,16 +292,16 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                     self.menu_sort,
                     header=header_name,
                     ascending=True,
-                    )
                 )
+            )
             dec = inner_menu.addAction('Descending')
             dec.triggered.connect(
                 functools.partial(
                     self.menu_sort,
                     header=header_name,
                     ascending=False,
-                    )
                 )
+            )
         filter_menu = menu.addMenu('Filters')
         for filter_name, filter_info in self._filters.items():
             inner_action = filter_menu.addAction(filter_name)
@@ -311,8 +311,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                 functools.partial(
                     self.activate_filter,
                     filter_name=filter_name,
-                    )
                 )
+            )
         menu.exec_(QtGui.QCursor.pos())
 
     def get_row_values(self, row: int) -> dict[str, Any]:
@@ -373,7 +373,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             filter_func=filter_func,
             active=active,
             name=filter_name,
-            )
+        )
         self.update_all_filters()
 
     def remove_filter(self, filter_name: str) -> None:
@@ -600,17 +600,17 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         This can help make large tables less resource-hungry.
     """
     header: str
-    channel: Optional[str]
+    channel: str | None
     deadband: float
-    pydm_channel: Optional[PyDMChannel]
+    pydm_channel: PyDMChannel | None
 
     def __init__(
         self,
         header: str,
-        default: Optional[Any] = None,
-        channel: Optional[str] = None,
+        default: Any | None = None,
+        channel: str | None = None,
         deadband: float = 0.0,
-        parent: Optional[QtWidgets.QWidget] = None
+        parent: QtWidgets.QWidget | None = None
     ):
         super().__init__(parent)
         self.header = header
@@ -626,7 +626,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
                 channel,
                 value_slot=self.update_value,
                 connection_slot=self.update_connection,
-                )
+            )
             self.pydm_channel.connect()
 
     def update_value(self, value: Any) -> str:
