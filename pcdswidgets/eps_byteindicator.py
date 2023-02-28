@@ -1,4 +1,5 @@
 from pydm.widgets import PyDMByteIndicator, PyDMChannel
+from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 from qtpy.QtCore import Property, Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QTabWidget, QVBoxLayout, QWidget
@@ -6,11 +7,11 @@ from qtpy.QtWidgets import QTabWidget, QVBoxLayout, QWidget
 
 class ByteIndicator_NegativeNums(PyDMByteIndicator):
     """
-        Modified Byte Indicator calss. Overides update_indicators
-            fucntion to allow for negative numbers to work for ByteIndicator
+    Modified Byte Indicator Class.
+
+    Overrides update_indicators function to allow for negative numbers to work
+    for PyDmByteIndicator.
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def update_indicators(self):
         if self._shift < 0:
@@ -33,7 +34,7 @@ class ByteIndicator_NegativeNums(PyDMByteIndicator):
 
 class EPSByteIndicator(QWidget):
     """
-        Widget for displaying EPS interlocks
+    Widget for displaying EPS interlocks
     """
 
     _qt_designer_ = {
@@ -41,7 +42,7 @@ class EPSByteIndicator(QWidget):
         "is_container": False,
     }
 
-    template_widget = ByteIndicator_NegativeNums
+    template_widget: ByteIndicator_NegativeNums
 
     _channels_prefix = None
     _value_channel = None
@@ -59,61 +60,61 @@ class EPSByteIndicator(QWidget):
 
     def value_change(self, new_value):
         """
-            Callback function when value changes
+        Callback function when value changes
         """
         self.template_widget.value = new_value
         self.template_widget.update_indicators()
 
     def label_change(self, new_labels):
         """
-            Callback function when the lables change
+        Callback function when the lables change
         """
-        labels = "".join(map(chr, new_labels))
-        labels = labels.partition('\x00')
-        labels = labels[0].split(';')
 
+        labels = parse_value_for_display(value=new_labels, precision=0,
+                                         display_format_type=DisplayFormat.String)
+
+        labels = labels.split(';')
         self.template_widget.numBits = len(labels)
         self.template_widget.labels = labels
         self.template_widget.update_indicators()
 
+    def value_channel(self, connection):
+        self.template_widget._connected = connection
+
     @Property(str)
     def channel(self):
         """
-            PV of Base EPS strcture
+        PV of Base EPS strcture
         """
         return self._channels_prefix
 
     @channel.setter
     def channel(self, ch):
         """
-            Set PV of Base EPS strcture
+        Set PV of Base EPS strcture
         """
         if ch != self._channels_prefix:
             self._value_pv = ch + ":EPS:nFlags_RBV"
             self._label_pv = ch + ":EPS:sFlagDesc_RBV"
 
             _value_channel = PyDMChannel(address=self._value_pv,
+                                         connection_slot=self.value_channel,
                                          value_slot=self.value_change)
 
             _label_channel = PyDMChannel(address=self._label_pv,
                                          value_slot=self.label_change)
-            try:
-                _value_channel.connect()
-                _label_channel.connect()
-            except Exception:
-                print('could not connect to PV')
-                self.template_widget._connected = False
+            _value_channel.connect()
+            _label_channel.connect()
 
             self._channels_prefix = ch
-            self.template_widget._connected = True
 
     @Property(bool)
     def circles(self):
         return self.template_widget.circles
 
     @circles.setter
-    def circles(self, b):
-        self.template_widget.circles = b
+    def circles(self, circles):
+        self.template_widget.circles = circles
 
     @Property(QTabWidget.TabPosition)
     def label_position(self):
