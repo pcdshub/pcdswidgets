@@ -94,8 +94,8 @@ class EPSByteIndicator(QWidget):
         Set PV of Base EPS strcture
         """
         if ch != self._channels_prefix:
-            self._value_pv = ch + ":EPS:nFlags_RBV"
-            self._label_pv = ch + ":EPS:sFlagDesc_RBV"
+            self._value_pv = ch + ":nFlags_RBV"
+            self._label_pv = ch + ":sFlagDesc_RBV"
 
             _value_channel = PyDMChannel(address=self._value_pv,
                                          connection_slot=self.value_channel,
