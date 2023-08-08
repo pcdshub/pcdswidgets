@@ -1,3 +1,4 @@
+docs_versions_menu
 sphinx
 sphinx_rtd_theme
 sphinxcontrib-jquery
