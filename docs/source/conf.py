@@ -16,6 +16,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import datetime
 import os
 import sys
 
@@ -34,7 +35,6 @@ import pcdswidgets  # noqa: E402
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinxcontrib.jquery",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
@@ -42,6 +42,10 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.githubpages",
+    # jquery removed in sphinx 6.0 and used in docs_versions_menu.
+    # See: https://www.sphinx-doc.org/en/master/changes.html
+    "sphinxcontrib.jquery",
+    "docs_versions_menu",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,9 +62,10 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "PCDSWidgets"
-copyright = "2021, SLAC National Accelerator Laboratory"
+project = "pcdswidgets"
+year = datetime.datetime.now().year
 author = "SLAC National Accelerator Laboratory"
+copyright = f"{year}, {author}"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -126,7 +131,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "PCDSWidgetsdoc"
+htmlhelp_basename = "pcdswidgetsdoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -151,8 +156,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "PCDSWidgets.tex",
-        "PCDS Widgets Documentation",
+        "pcdswidgets.tex",
+        "pcdswidgets Documentation",
         "SLAC National Accelerator Laboratory",
         "manual",
     ),
@@ -162,7 +167,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "pcdswidgets", "PCDS Widgets Documentation", [author], 1)]
+man_pages = [(master_doc, "pcdswidgets", "pcdswidgets Documentation", [author], 1)]
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -172,10 +177,10 @@ man_pages = [(master_doc, "pcdswidgets", "PCDS Widgets Documentation", [author],
 texinfo_documents = [
     (
         master_doc,
-        "PCDS Widgets",
-        "PCDS Widgets Documentation",
+        "pcdswidgets",
+        "pcdswidgets Documentation",
         author,
-        "PCDS Widgets",
+        "pcdswidgets",
         "LCLS PyDM Widget Library",
         "Miscellaneous",
     ),
