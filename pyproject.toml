@@ -45,6 +45,7 @@ RoughGauge = "pcdswidgets.vacuum.gauges:RoughGauge"
 HotCathodeGauge = "pcdswidgets.vacuum.gauges:HotCathodeGauge"
 ColdCathodeGauge = "pcdswidgets.vacuum.gauges:ColdCathodeGauge"
 RGA = "pcdswidgets.vacuum.others:RGA"
+EPSByteIndicator = "pcdswidgets.eps_byteindicator:EPSByteIndicator"
 
 [tool.setuptools.packages.find]
 where = [ ".",]
