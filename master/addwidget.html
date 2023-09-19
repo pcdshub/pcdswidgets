@@ -4,19 +4,19 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adding a New Vacuum Widget &mdash; pcdswidgets 0.8.1.dev10+g7df8099 documentation</title>
+  <title>Adding a New Vacuum Widget &mdash; pcdswidgets 0.8.2.dev2+g04b51b5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/docs-versions-menu.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=4af33359"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +35,7 @@
             pcdswidgets
           </a>
               <div class="version">
-                0.8.1.dev10+g7df8099
+                0.8.2.dev2+g04b51b5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -106,11 +106,11 @@
            <div itemprop="articleBody">
              
   <section id="adding-a-new-vacuum-widget">
-<h1>Adding a New Vacuum Widget<a class="headerlink" href="#adding-a-new-vacuum-widget" title="Permalink to this heading"></a></h1>
+<h1>Adding a New Vacuum Widget<a class="headerlink" href="#adding-a-new-vacuum-widget" title="Link to this heading"></a></h1>
 <p>This page details the development process for adding a new vacuum widget.
 It was made during the process of creating the PneumaticValveDA widget.</p>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>You should have the following things in mind before you begin:</p>
 <ul class="simple">
 <li><p>What should the widget look like?</p></li>
@@ -119,7 +119,7 @@ It was made during the process of creating the PneumaticValveDA widget.</p>
 </ul>
 </section>
 <section id="implementation-overview">
-<h2>Implementation Overview<a class="headerlink" href="#implementation-overview" title="Permalink to this heading"></a></h2>
+<h2>Implementation Overview<a class="headerlink" href="#implementation-overview" title="Link to this heading"></a></h2>
 <p>You’ll need to do the following things:</p>
 <ul class="simple">
 <li><p>Add a new icon widget.</p></li>
@@ -130,7 +130,7 @@ It was made during the process of creating the PneumaticValveDA widget.</p>
 </ul>
 </section>
 <section id="adding-a-new-icon-widget">
-<h2>Adding a New Icon Widget<a class="headerlink" href="#adding-a-new-icon-widget" title="Permalink to this heading"></a></h2>
+<h2>Adding a New Icon Widget<a class="headerlink" href="#adding-a-new-icon-widget" title="Link to this heading"></a></h2>
 <p>The icon widgets are stored in pcdswidgets/icons and are implemented by
 using the QtGui painter tools. I suggest you pick a class that almost
 does what you want as a starting point.
@@ -158,7 +158,7 @@ these can become indistiguishable as we shrink the shapes down.</p></li>
 </ul>
 </section>
 <section id="adding-a-new-widget-class">
-<h2>Adding a New Widget Class<a class="headerlink" href="#adding-a-new-widget-class" title="Permalink to this heading"></a></h2>
+<h2>Adding a New Widget Class<a class="headerlink" href="#adding-a-new-widget-class" title="Link to this heading"></a></h2>
 <p>Widget classes in pcdswidgets are constructed from a network of mix-ins and parent
 classes. A good place to start is simply copying the most similar existing
 widget and modifying the specifics to match yours. Barring something extremely
@@ -172,14 +172,14 @@ understand how that particular feature is implemented.</p>
 <p>But you should make some screens with it to explore the finer details.</p>
 </section>
 <section id="adding-your-widget-to-the-designer">
-<h2>Adding your Widget to the Designer<a class="headerlink" href="#adding-your-widget-to-the-designer" title="Permalink to this heading"></a></h2>
+<h2>Adding your Widget to the Designer<a class="headerlink" href="#adding-your-widget-to-the-designer" title="Link to this heading"></a></h2>
 <p>This is probably the easiest step of the process. Simply import your new widget
 in designer.py and add an appriopriate entry using the qtplugin_factory.</p>
 <p>To check that this worked, you can simply open designer. You should see
 your widget added to the list.</p>
 </section>
 <section id="stylesheets">
-<h2>Stylesheets<a class="headerlink" href="#stylesheets" title="Permalink to this heading"></a></h2>
+<h2>Stylesheets<a class="headerlink" href="#stylesheets" title="Link to this heading"></a></h2>
 <p>For the widget to properly display its state, it needs an entry in the stylesheet.
 For widgets that are exceedingly simple to existing widgets, this might just
 involve copying and pasting existing entries in the stylesheet, and editing the
@@ -197,13 +197,13 @@ PYDM_STYLESHEET environment variable appropriately, e.g.</p>
 sure that your edits get deployed in dev/prod.</p>
 </section>
 <section id="the-expert-screen">
-<h2>The Expert Screen<a class="headerlink" href="#the-expert-screen" title="Permalink to this heading"></a></h2>
+<h2>The Expert Screen<a class="headerlink" href="#the-expert-screen" title="Link to this heading"></a></h2>
 <p>We typically build our expert screens out of ophyd objects using the typhos module.
 All the specifics of this are out of scope for this tutorial, but check out
 pcdsdevices for our main repository of device definitions.</p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
 <p>It is important to document your new widget.
 See examples throughout the documentation here.</p>
 <p>There are three places to update:</p>
@@ -219,7 +219,7 @@ pcdswidgets.icons and is included in the __all__ tuple there.</p></li>
 </ul>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
 <p>Your widget will automatically be tested if imported in the __all__ tuple
 of the vacuum submodule. Make sure to import your new widget in __init__.py
 there and include it in the __all__ tuple.</p>
