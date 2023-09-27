@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pcdswidgets.vacuum.gauges &mdash; pcdswidgets 0.8.2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=dbee5847"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/docs-versions-menu.js?v=3d6a1aea"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pcdswidgets
+          </a>
+              <div class="version">
+                0.8.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../mixins.html">Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Configuring the Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../addwidget.html">Adding a New Vacuum Widget</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pcdswidgets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pcdswidgets.vacuum.gauges</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pcdswidgets.vacuum.gauges</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pydm.widgets.display_format</span> <span class="kn">import</span> <span class="n">DisplayFormat</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">QSize</span>
+
+<span class="kn">from</span> <span class="nn">..icons.gauges</span> <span class="kn">import</span> <span class="p">(</span><span class="n">ColdCathodeGaugeSymbolIcon</span><span class="p">,</span>
+                            <span class="n">HotCathodeGaugeSymbolIcon</span><span class="p">,</span> <span class="n">RoughGaugeSymbolIcon</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">PCDSSymbolBase</span>
+<span class="kn">from</span> <span class="nn">.mixins</span> <span class="kn">import</span> <span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span>
+                     <span class="n">StateMixin</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RoughGauge">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.RoughGauge">[docs]</a>
+<span class="k">class</span> <span class="nc">RoughGauge</span><span class="p">(</span><span class="n">StateMixin</span><span class="p">,</span> <span class="n">LabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Rough Gauge with the proper icon and</span>
+<span class="sd">    controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |pressure   |PyDMLabel     |The pressure reading label.            |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |state      |`On` or `Off`                                                |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        RoughGauge[state=&quot;Off&quot;] {</span>
+<span class="sd">            qproperty-brush: red;</span>
+<span class="sd">            color: gray;</span>
+<span class="sd">        }</span>
+<span class="sd">        RoughGauge[state=&quot;On&quot;] {</span>
+<span class="sd">            qproperty-brush: green;</span>
+<span class="sd">            color: black;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Gauges&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_RBV&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Rough Gauge&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.gauge.GaugePLC&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
+            <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">RoughGaugeSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">displayFormat</span> <span class="o">=</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">Exponential</span>
+
+<div class="viewcode-block" id="RoughGauge.sizeHint">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.RoughGauge.sizeHint">[docs]</a>
+    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="HotCathodeGauge">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.HotCathodeGauge">[docs]</a>
+<span class="k">class</span> <span class="nc">HotCathodeGauge</span><span class="p">(</span><span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Hot Cathode Gauge with the proper icon</span>
+<span class="sd">    and controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |pressure   |PyDMLabel     |The pressure reading label.            |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                            |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |state      |`On`, `Off`, `Starting` or `Error`                           |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        HotCathodeGauge[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        HotCathodeGauge[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        HotCathodeGauge[state=&quot;Error&quot;] #icon {</span>
+<span class="sd">            qproperty-penColor: red;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Gauges&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:HV_SW&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Hot Cathode Gauge&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
+            <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">HotCathodeGaugeSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">displayFormat</span> <span class="o">=</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">Exponential</span>
+
+<div class="viewcode-block" id="HotCathodeGauge.sizeHint">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.HotCathodeGauge.sizeHint">[docs]</a>
+    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ColdCathodeGauge">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.ColdCathodeGauge">[docs]</a>
+<span class="k">class</span> <span class="nc">ColdCathodeGauge</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonLabelControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Symbol Widget representing a Cold Cathode Gauge with the proper icon and</span>
+<span class="sd">    controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget</span>
+<span class="sd">        The parent widget for the symbol</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This widget allow for high customization through the Qt Stylesheets</span>
+<span class="sd">    mechanism.</span>
+<span class="sd">    As this widget is composed by internal widgets, their names can be used as</span>
+<span class="sd">    selectors when writing your stylesheet to be used with this widget.</span>
+<span class="sd">    Properties are also available to offer wider customization possibilities.</span>
+
+<span class="sd">    **Internal Components**</span>
+
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |Widget Name|Type          |What is it?                            |</span>
+<span class="sd">    +===========+==============+=======================================+</span>
+<span class="sd">    |interlock  |QFrame        |The QFrame wrapping this whole widget. |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |controls   |QFrame        |The QFrame wrapping the controls panel.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+<span class="sd">    |pressure   |PyDMLabel     |The pressure reading label.            |</span>
+<span class="sd">    +-----------+--------------+---------------------------------------+</span>
+
+<span class="sd">    **Additional Properties**</span>
+
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |Property   |Values                                                       |</span>
+<span class="sd">    +===========+=============================================================+</span>
+<span class="sd">    |interlocked|`true` or `false`                                            |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+<span class="sd">    |state      |`On`, `Off`, `Starting` or `Error`                           |</span>
+<span class="sd">    +-----------+-------------------------------------------------------------+</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        ColdCathodeGauge[interlocked=&quot;true&quot;] #interlock {</span>
+<span class="sd">            border: 5px solid red;</span>
+<span class="sd">        }</span>
+<span class="sd">        ColdCathodeGauge[interlocked=&quot;false&quot;] #interlock {</span>
+<span class="sd">            border: 0px;</span>
+<span class="sd">        }</span>
+<span class="sd">        ColdCathodeGauge[state=&quot;Error&quot;] #icon {</span>
+<span class="sd">            qproperty-penColor: red;</span>
+<span class="sd">            qproperty-penWidth: 2;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Gauges&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:STATE_RBV&quot;</span>
+    <span class="n">_readback_suffix</span> <span class="o">=</span> <span class="s2">&quot;:PRESS_RBV&quot;</span>
+    <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:HV_SW&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Cold Cathode Gauge&quot;</span>
+    <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.gauge.GCCPLC&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
+            <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
+            <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
+            <span class="n">readback_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">,</span>
+            <span class="n">readback_name</span><span class="o">=</span><span class="s1">&#39;pressure&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ColdCathodeGaugeSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">displayFormat</span> <span class="o">=</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">Exponential</span>
+
+<div class="viewcode-block" id="ColdCathodeGauge.sizeHint">
+<a class="viewcode-back" href="../../../vacuum/gauges.html#pcdswidgets.vacuum.gauges.ColdCathodeGauge.sizeHint">[docs]</a>
+    <span class="k">def</span> <span class="nf">sizeHint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QSize</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, SLAC National Accelerator Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vacuum Widgets &mdash; pcdswidgets 0.8.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=dbee5847"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Valves" href="vacuum/valves.html" />
+    <link rel="prev" title="PCDSWidgets" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pcdswidgets
+          </a>
+              <div class="version">
+                0.8.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vacuum Widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#common-properties">Common Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#controls-location">Controls Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#symbol-widgets">Symbol Widgets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vacuum/valves.html">Valves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vacuum/pumps.html">Pumps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vacuum/gauges.html">Gauges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vacuum/others.html">Others</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mixins.html">Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Configuring the Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addwidget.html">Adding a New Vacuum Widget</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pcdswidgets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Vacuum Widgets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vacuum.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vacuum-widgets">
+<h1>Vacuum Widgets<a class="headerlink" href="#vacuum-widgets" title="Link to this heading"></a></h1>
+<p>PCDSWidgets comes with a set of symbol widgets each of them composed by an icon
+and also a control panel.</p>
+<p>Before diving into details for each of the symbol widgets available, it is
+important to highlight what they all have in common.</p>
+<p>All widgets share the same base set of properties.</p>
+<section id="common-properties">
+<h2>Common Properties<a class="headerlink" href="#common-properties" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>channelsPrefix</p></td>
+<td><p>str</p></td>
+<td><p>The prefix to be used when assembling the channels.
+E.g. ca://VALVE1</p></td>
+</tr>
+<tr class="row-odd"><td><p>showIcon</p></td>
+<td><p>bool</p></td>
+<td><p>Whether or not to show the widget icon.</p></td>
+</tr>
+<tr class="row-even"><td><p>showStatusTooltip</p></td>
+<td><p>bool</p></td>
+<td><p>Whether or not to show a tooltip with information
+about interlock, state and error of the widget.</p></td>
+</tr>
+<tr class="row-odd"><td><p>iconSize</p></td>
+<td><p>int</p></td>
+<td><p>The icon size. If the value is greater than 0 it
+the widget will use this value as fixed size
+otherwise it will expand to fill the area available.</p></td>
+</tr>
+<tr class="row-even"><td><p>controlsLocation</p></td>
+<td><p>Enum</p></td>
+<td><p>Controls where the controls frame will be rendered.
+Available options are: Top, Bottom, Left, Right and
+Hidden.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="controls-location">
+<h2>Controls Location<a class="headerlink" href="#controls-location" title="Link to this heading"></a></h2>
+<p>Here is an example of how the widget looks like with each of the <cite>controlsLocation</cite>
+possible values.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/content_location.png"><img alt="Controls Location Demo" src="_images/content_location.png" style="width: 342.0px; height: 443.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">A screenshot of the Pneumatic Valve widget with each of the possible locations for controls.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="symbol-widgets">
+<h2>Symbol Widgets<a class="headerlink" href="#symbol-widgets" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vacuum/valves.html">Valves</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#pneumatic-valve">Pneumatic Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#pneumatic-valve-no">Pneumatic Valve - NO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#pneumatic-valve-da">Pneumatic Valve - DA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#aperture-valve">Aperture Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#fast-shutter">Fast Shutter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#needle-valve">Needle Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#proportional-valve">Proportional Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#right-angle-manual-valve">Right Angle Manual Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#control-valve">Control Valve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#control-only-valve-normally-closed">Control Only Valve (Normally Closed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/valves.html#control-only-valve-normally-open">Control Only Valve (Normally Open)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vacuum/pumps.html">Pumps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/pumps.html#ion-pump">Ion Pump</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/pumps.html#turbo-pump">Turbo Pump</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/pumps.html#scroll-pump">Scroll Pump</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/pumps.html#getter-pump">Getter Pump</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vacuum/gauges.html">Gauges</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/gauges.html#rough-gauge">Rough Gauge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/gauges.html#hot-cathode-gauge">Hot Cathode Gauge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/gauges.html#cold-cathode-gauge">Cold Cathode Gauge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vacuum/others.html">Others</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vacuum/others.html#residual-gas-analyzer">Residual Gas Analyzer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="PCDSWidgets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vacuum/valves.html" class="btn btn-neutral float-right" title="Valves" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, SLAC National Accelerator Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
