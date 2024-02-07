@@ -289,7 +289,7 @@ class FastShutter(
         "group": "PCDS Valves",
         "is_container": False,
     }
-    _interlock_suffix = ":VAC_FAULT_OK_RBV"
+    _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
     _state_suffix = ":POS_STATE_RBV"
     _command_buttons = [
