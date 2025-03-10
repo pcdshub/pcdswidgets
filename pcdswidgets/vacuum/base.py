@@ -8,7 +8,7 @@ from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from qtpy.QtCore import Q_ENUMS, Property, QSize, Qt
 from qtpy.QtGui import QCursor, QPainter
-from qtpy.QtWidgets import (QLabel, QFrame, QHBoxLayout, QSizePolicy, QStyle,
+from qtpy.QtWidgets import (QFrame, QHBoxLayout, QLabel, QSizePolicy, QStyle,
                             QStyleOption, QTabWidget, QVBoxLayout, QWidget)
 
 from ..utils import refresh_style
@@ -74,10 +74,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.interlock.setObjectName("interlock")
         self.interlock.setSizePolicy(QSizePolicy.Expanding,
                                      QSizePolicy.Expanding)
-	
         self.name = QLabel(self)
         self.name.setWordWrap(True)
-        self.name.setSizePolicy(QSizePolicy.Maximum, 
+        self.name.setSizePolicy(QSizePolicy.Maximum,
                                 QSizePolicy.Maximum)
         self.name.setVisible(self._show_name)
         self.name.setAlignment(Qt.AlignCenter)
@@ -151,8 +150,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         location : ContentLocation
         """
-        return self._text_location
-    
+        return self._text_locatio
+
     @textLocation.setter
     def textLocation(self, location):
         """
@@ -288,7 +287,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if value != self._font_size:
             self._font_size = value
             self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
-  
+
     @Property(bool)
     def showStatusTooltip(self):
         """
@@ -473,7 +472,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             # For drawing to screen (Hidden, Top, and Bottom are essentially unsused but are kept so indices remain consistent)
             widget_map = {
                 ContentLocation.Hidden: (QVBoxLayout,
-                                        [self.name, 
+                                        [self.name,
                                         self.icon]),
                 ContentLocation.Top: (QVBoxLayout,
                                     [self.name,
@@ -493,7 +492,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             # For grouping icon and name
             widget_map = {
                 ContentLocation.Hidden: (QVBoxLayout,
-                                        [self.name, 
+                                        [self.name,
                                         self.icon]),
                 ContentLocation.Top: (QVBoxLayout,
                                     [self.name,
