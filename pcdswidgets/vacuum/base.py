@@ -150,7 +150,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         location : ContentLocation
         """
-        return self._text_locatio
+        return self._text_location
 
     @textLocation.setter
     def textLocation(self, location):
@@ -488,7 +488,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                                         grouped_frame]),
             }
 
-        else:
+        elif self.name:
             # For grouping icon and name
             widget_map = {
                 ContentLocation.Hidden: (QVBoxLayout,
@@ -533,6 +533,24 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                                         grouped_frame]),
                 ContentLocation.Right: (QHBoxLayout,
                                         [grouped_frame,
+                                        self.controls_frame]),
+            }
+
+        else:  # Textbox is not initialized, empty icon
+            widget_map = {
+                ContentLocation.Hidden: (QVBoxLayout,
+                                        [self.icon]),
+                ContentLocation.Top: (QVBoxLayout,
+                                    [self.controls_frame,
+                                    self.icon]),
+                ContentLocation.Bottom: (QVBoxLayout,
+                                        [self.icon,
+                                        self.controls_frame]),
+                ContentLocation.Left: (QHBoxLayout,
+                                    [self.controls_frame,
+                                        self.icon]),
+                ContentLocation.Right: (QHBoxLayout,
+                                        [self.icon,
                                         self.controls_frame]),
             }
 
