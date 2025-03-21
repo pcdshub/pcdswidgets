@@ -63,6 +63,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.name = None
         self._show_name = False
         self._font_size = 16
+        self._override_name = None
+        self._override = False
 
         self._icon_cursor = self.setCursor(
             QCursor(IconFont().icon("file").pixmap(16, 16))
@@ -74,13 +76,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.interlock.setObjectName("interlock")
         self.interlock.setSizePolicy(QSizePolicy.Expanding,
                                      QSizePolicy.Expanding)
-        self.name = QLabel(self)
-        self.name.setWordWrap(True)
-        self.name.setSizePolicy(QSizePolicy.Maximum,
-                                QSizePolicy.Maximum)
-        self.name.setVisible(self._show_name)
-        self.name.setAlignment(Qt.AlignCenter)
-        self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
 
         self.controls_frame = QFrame(self)
         self.controls_frame.setObjectName("controls")
@@ -192,12 +187,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         prefix : str
            The prefix to be used for the channels.
         """
+
         if prefix != self._channels_prefix:
             self._channels_prefix = prefix
             self.destroy_channels()
             self.create_channels()
-            format_name = self._channels_prefix.split("//")[-1].split(":")[-3:]
-            self.name.setText(f"{format_name[0]}-\n{'-'.join(format_name[1:])}") # (":".join(self._channels_prefix.split("//")[-1].split(":")[-3:]))
+            if self.name is not None:
+                self.format_name()
 
     @property
     def icon(self):
@@ -260,9 +256,70 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         """
         if value != self._show_name:
             self._show_name = value
-            if self.name:
-                self.name.setVisible(self._show_name)
+            if self.name is None:
+                self.name = QLabel(self)
+                self.name.setWordWrap(True)
+                self.name.setSizePolicy(QSizePolicy.Maximum,
+                                        QSizePolicy.Maximum)
+                self.name.setAlignment(Qt.AlignCenter)
+                self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
+                self.format_name()
+            self.name.setVisible(self._show_name)
             self.assemble_layout()
+
+    @Property(bool)
+    def overrideName(self):
+        """
+        Override the textbox auto-generated from the channel prefix
+
+        Returns
+        -------
+        bool
+        """
+        return self._override
+
+    @overrideName.setter
+    def overrideName(self, value):
+        """
+        Override the textbox auto-generated from the channel prefix
+
+        Returns
+        -------
+        bool
+        """
+        if value != self._override:
+            self._override = value
+            if self._override and self.name is not None:
+                self.name.setText(self._override_name)
+            elif self.name != None:
+                self.format_name()
+
+    @Property(str)
+    def setOverrideName(self):
+        """
+        Set the name when it is overriden
+
+        Returns
+        -------
+        str
+        """
+        return self._override_name
+
+    @setOverrideName.setter
+    def setOverrideName(self, value):
+        """
+        Set the name when it is overriden
+
+        Returns
+        -------
+        str
+        """
+        if value != self._override_name:
+            self._override_name = value
+            if self._override and self.name is not None:
+                self.name.setText(self._override_name)
+            elif self.name is not None:
+                self.format_name()
 
     @Property(int)
     def fontSize(self):
@@ -460,113 +517,68 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.clear()
 
         grouped_frame = QFrame(self)
+        grouped_widgets = QVBoxLayout()  # Default
 
-        # Group name with controls (always QVBoxLayout)
+        # Determine what widgets to group
         if self._text_location in [ContentLocation.Left, ContentLocation.Right] and self._text_location == self._controls_location:
             grouped_widgets = QVBoxLayout()
-            grouped_widgets.addWidget(self.name, alignment=Qt.AlignCenter)
+            if self.name:
+                grouped_widgets.addWidget(self.name, alignment=Qt.AlignCenter)
             grouped_widgets.addWidget(self.controls_frame, alignment=Qt.AlignCenter)
 
             grouped_frame.setLayout(grouped_widgets)
-
-            # For drawing to screen (Hidden, Top, and Bottom are essentially unsused but are kept so indices remain consistent)
-            widget_map = {
-                ContentLocation.Hidden: (QVBoxLayout,
-                                        [self.name,
-                                        self.icon]),
-                ContentLocation.Top: (QVBoxLayout,
-                                    [self.name,
-                                    self.icon]),
-                ContentLocation.Bottom: (QVBoxLayout,
-                                        [self.icon,
-                                        self.name]),
-                ContentLocation.Left: (QHBoxLayout,
-                                    [grouped_frame,
-                                        self.icon]),
-                ContentLocation.Right: (QHBoxLayout,
-                                        [self.icon,
-                                        grouped_frame]),
-            }
-
+            layout_cls = QHBoxLayout
+            if self._controls_location == ContentLocation.Left:
+                widgets = [grouped_frame, self.icon]
+            elif self._controls_location == ContentLocation.Right:
+                widgets = [self.icon, grouped_frame]
         elif self.name:
-            # For grouping icon and name
-            widget_map = {
-                ContentLocation.Hidden: (QVBoxLayout,
-                                        [self.name,
-                                        self.icon]),
-                ContentLocation.Top: (QVBoxLayout,
-                                    [self.name,
-                                    self.icon]),
-                ContentLocation.Bottom: (QVBoxLayout,
-                                        [self.icon,
-                                        self.name]),
-                ContentLocation.Left: (QHBoxLayout,
-                                    [self.name,
-                                        self.icon]),
-                ContentLocation.Right: (QHBoxLayout,
-                                        [self.icon,
-                                        self.name]),
-            }
+            # Group icon and name
+            if self._text_location in [ContentLocation.Left, ContentLocation.Right]:
+                grouped_widgets = QHBoxLayout()
+                icon_and_text = [self.name, self.icon] if self._text_location == ContentLocation.Left else [self.icon, self.name]
+            else:
+                grouped_widgets = QVBoxLayout()
+                icon_and_text = [self.name, self.icon] if self._text_location == ContentLocation.Top else [self.icon, self.name]
 
-            grouped_widgets = widget_map[self._text_location][0]()
-            widgets = widget_map[self._text_location][1]
-
-            for widget in widgets:
+            for widget in icon_and_text:
                 if widget is None:
                     continue
                 grouped_widgets.addWidget(widget, alignment=Qt.AlignCenter)
 
             grouped_frame.setLayout(grouped_widgets)
 
-            # (Layout, items) For drawing to screen
-            widget_map = {
-                ContentLocation.Hidden: (QVBoxLayout,
-                                        [grouped_frame]),
-                ContentLocation.Top: (QVBoxLayout,
-                                    [self.controls_frame,
-                                    grouped_frame]),
-                ContentLocation.Bottom: (QVBoxLayout,
-                                        [grouped_frame,
-                                        self.controls_frame]),
-                ContentLocation.Left: (QHBoxLayout,
-                                    [self.controls_frame,
-                                        grouped_frame]),
-                ContentLocation.Right: (QHBoxLayout,
-                                        [grouped_frame,
-                                        self.controls_frame]),
-            }
-
-        else:  # Textbox is not initialized, empty icon
-            widget_map = {
-                ContentLocation.Hidden: (QVBoxLayout,
-                                        [self.icon]),
-                ContentLocation.Top: (QVBoxLayout,
-                                    [self.controls_frame,
-                                    self.icon]),
-                ContentLocation.Bottom: (QVBoxLayout,
-                                        [self.icon,
-                                        self.controls_frame]),
-                ContentLocation.Left: (QHBoxLayout,
-                                    [self.controls_frame,
-                                        self.icon]),
-                ContentLocation.Right: (QHBoxLayout,
-                                        [self.icon,
-                                        self.controls_frame]),
-            }
+            if self._controls_location in [ContentLocation.Left, ContentLocation.Right]:
+                layout_cls = QHBoxLayout
+                widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Left else [grouped_frame, self.controls_frame]
+            else:
+                layout_cls = QVBoxLayout
+                widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Top else [grouped_frame, self.controls_frame]
+        else:
+            # No name is initialized
+            layout_cls = QVBoxLayout if self._controls_location in [ContentLocation.Hidden, ContentLocation.Top, ContentLocation.Bottom] else QHBoxLayout
+            if self._controls_location == ContentLocation.Top:
+                widgets = [self.controls_frame, self.icon]
+            elif self._controls_location == ContentLocation.Bottom:
+                widgets = [self.icon, self.controls_frame]
+            elif self._controls_location == ContentLocation.Left:
+                widgets = [self.controls_frame, self.icon]
+            elif self._controls_location == ContentLocation.Right:
+                widgets = [self.icon, self.controls_frame]
+            else:
+                widgets = [self.icon]
 
         grouped_widgets.setContentsMargins(0, 0, 0, 0)
         grouped_widgets.setSpacing(0)
 
-        # Draw to the screen
-        layout = widget_map[self._controls_location][0]()
+        # Draw to screen
+        layout = layout_cls()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
         self.interlock.setLayout(layout)
 
-        widgets = widget_map[self._controls_location][1]
-
-        # Hide the controls box if they are not going to be included in layout
+        # Hide the controls box if not in layout
         controls_visible = self._controls_location != ContentLocation.Hidden
         self.controls_frame.setVisible(controls_visible)
 
@@ -727,3 +739,25 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         Set the tooltip on the symbol to the content of status_tooltip.
         """
         self.setToolTip(self.status_tooltip())
+
+    def format_name(self):
+        """
+        Set the name textbox
+        """
+        prefix = self._channels_prefix
+        # Verify prefix is formatted correctly (trusting user to not produce an edge case)
+        if prefix.find("://") != -1:
+            # Grab the protocol
+            protocol = prefix.split("://")[0].lower()
+            if protocol == "ca" or protocol == "pva":
+                numFields = len(prefix.split("//")[-1].split(":"))
+                prefix = prefix.replace(":", "-")
+                if numFields >= 4:
+                    format_name = prefix.split("//")[-1].split("-")[-numFields-1:]
+                    self.name.setText(f"{format_name[0]}-\n{'-'.join(format_name[1:])}")
+                else:
+                    self.name.setText(prefix.split("//")[-1])
+            else:
+                self.name.setText("")
+        else:
+            self.name.setText("")
