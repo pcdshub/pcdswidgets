@@ -185,7 +185,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         Parameters
         ----------
         prefix : str
-           The prefix to be used for the channels.
+            The prefix to be used for the channels.
         """
 
         if prefix != self._channels_prefix:
