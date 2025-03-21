@@ -291,7 +291,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self._override = value
             if self._override and self.name is not None:
                 self.name.setText(self._override_name)
-            elif self.name != None:
+            elif self.name is not None:
                 self.format_name()
 
     @Property(str)
