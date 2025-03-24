@@ -73,11 +73,11 @@ def test_text_location(symbol, location, layout, position):
     symbol.showName(True)
     symbol.textLocation = location
     assert isinstance(symbol.interlock.layout(), layout)
-    widget_layout = symbol.interlock.layout().itemAt(0).itemAt(position).layout()
-    widget = widget_layout.itemAt(0).widget()
+    widget_layout = symbol.interlock.layout().itemAt(0).layout()
+    widget = widget_layout.itemAt(position).widget()
     assert widget == symbol.name
 
-@pytest.mark.parametrize('location,layout,pos1,pos2',
+@pytest.mark.parametrize('location,layout,position',
                          [(ContentLocation.Left, QVBoxLayout, 0),
                           (ContentLocation.Right, QVBoxLayout, 1)],
                          ids=['Left', 'Right'])
@@ -86,6 +86,6 @@ def test_text_and_controls_location(symbol, location, layout, position):
     symbol.showName(True)
     symbol.textLocation = location
     assert isinstance(symbol.interlock.layout(), layout)
-    widget_layout = symbol.interlock.layout().itemAt(position).itemAt(0).layout()
+    widget_layout = symbol.interlock.layout().itemAt(position).layout()
     widget = widget_layout.itemAt(0).widget()
     assert widget == symbol.name
