@@ -60,3 +60,32 @@ def test_icon_fixed_size(symbol):
 def test_icon_rotation(symbol, rotate):
     symbol.rotateIcon = rotate
     assert symbol.icon.rotation == 90 * int(rotate)
+
+
+@pytest.mark.parametrize('location,layout,position',
+                         [(ContentLocation.Top, QVBoxLayout, 0),
+                          (ContentLocation.Bottom, QVBoxLayout, 1),
+                          (ContentLocation.Left, QHBoxLayout, 0),
+                          (ContentLocation.Right, QHBoxLayout, 1)],
+                         ids=['Top', 'Bottom', 'Left', 'Right'])
+def test_text_location(symbol, location, layout, position):
+    symbol.controlsLocation = ContentLocation.Bottom
+    symbol.showName(True)
+    symbol.textLocation = location
+    assert isinstance(symbol.interlock.layout(), layout)
+    widget_layout = symbol.interlock.layout().itemAt(0).itemAt(position).layout()
+    widget = widget_layout.itemAt(0).widget()
+    assert widget == symbol.name
+
+@pytest.mark.parametrize('location,layout,pos1,pos2',
+                         [(ContentLocation.Left, QVBoxLayout, 0),
+                          (ContentLocation.Right, QVBoxLayout, 1)],
+                         ids=['Left', 'Right'])
+def test_text_and_controls_location(symbol, location, layout, position):
+    symbol.controlsLocation = location
+    symbol.showName(True)
+    symbol.textLocation = location
+    assert isinstance(symbol.interlock.layout(), layout)
+    widget_layout = symbol.interlock.layout().itemAt(position).itemAt(0).layout()
+    widget = widget_layout.itemAt(0).widget()
+    assert widget == symbol.name
