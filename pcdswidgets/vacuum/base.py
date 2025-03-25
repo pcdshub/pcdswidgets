@@ -522,7 +522,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         # Determine what widgets to group
         if self._text_location in [ContentLocation.Left, ContentLocation.Right] and self._text_location == self._controls_location:
             grouped_widgets = QVBoxLayout()
-            if self.name:
+            if self.name is not None:
                 grouped_widgets.addWidget(self.name, alignment=Qt.AlignCenter)
             grouped_widgets.addWidget(self.controls_frame, alignment=Qt.AlignCenter)
 
