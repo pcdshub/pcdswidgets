@@ -60,3 +60,43 @@ def test_icon_fixed_size(symbol):
 def test_icon_rotation(symbol, rotate):
     symbol.rotateIcon = rotate
     assert symbol.icon.rotation == 90 * int(rotate)
+
+
+@pytest.mark.parametrize('location,layout,position',
+                         [(ContentLocation.Top, QVBoxLayout, 0),
+                          (ContentLocation.Bottom, QVBoxLayout, 1),
+                          (ContentLocation.Left, QVBoxLayout, 0),
+                          (ContentLocation.Right, QVBoxLayout, 1)],
+                         ids=['Top', 'Bottom', 'Left', 'Right'])
+def test_text_location(symbol, location, layout, position):
+    symbol.controlsLocation = ContentLocation.Bottom
+    symbol.channelsPrefix = "ca://area:function:device:01"
+    symbol.showName = True
+    symbol.textLocation = location
+    assert isinstance(symbol.interlock.layout(), layout)
+    widget_layout = symbol.interlock.layout().itemAt(0).layout().itemAt(0).widget().layout()
+    widget = widget_layout.itemAt(position).widget()
+    assert widget == symbol.name
+
+@pytest.mark.parametrize('location,layout,position',
+                         [(ContentLocation.Left, QHBoxLayout, 0),
+                          (ContentLocation.Right, QHBoxLayout, 1)],
+                         ids=['Left', 'Right'])
+def test_text_and_controls_location(symbol, location, layout, position):
+    symbol.controlsLocation = location
+    symbol.channelsPrefix = "ca://area:function:device:01"
+    symbol.showName = True
+    symbol.textLocation = location
+    assert isinstance(symbol.interlock.layout(), layout)
+    widget_layout = symbol.interlock.layout().itemAt(position).layout().itemAt(0).widget().layout()
+    widget = widget_layout.itemAt(0).widget()
+    assert widget == symbol.name
+
+def test_name_text(symbol):
+    symbol.channelsPrefix = "ca://area:function:device:01"
+    symbol.showName = True
+    assert symbol.name.text() == "area-function-device-01"
+    symbol.overrideName = True
+    assert symbol.name.text() == ""
+    symbol.setOverrideName = "test-override"
+    assert symbol.name.text() == "test-override"
