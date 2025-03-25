@@ -78,6 +78,7 @@ def test_text_location(symbol, location, layout, position):
     widget = widget_layout.itemAt(position).widget()
     assert widget == symbol.name
 
+
 @pytest.mark.parametrize('location,layout,position',
                          [(ContentLocation.Left, QHBoxLayout, 0),
                           (ContentLocation.Right, QHBoxLayout, 1)],
@@ -91,6 +92,7 @@ def test_text_and_controls_location(symbol, location, layout, position):
     widget_layout = symbol.interlock.layout().itemAt(position).layout().itemAt(0).widget().layout()
     widget = widget_layout.itemAt(0).widget()
     assert widget == symbol.name
+
 
 def test_name_text(symbol):
     symbol.channelsPrefix = "ca://area:function:device:01"
