@@ -750,13 +750,8 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             # Grab the protocol
             protocol = prefix.split("://")[0].lower()
             if protocol == "ca" or protocol == "pva":
-                numFields = len(prefix.split("//")[-1].split(":"))
                 prefix = prefix.replace(":", "-")
-                if numFields >= 4:
-                    format_name = prefix.split("//")[-1].split("-")[-numFields-1:]
-                    self.name.setText(f"{format_name[0]}-\n{'-'.join(format_name[1:])}")
-                else:
-                    self.name.setText(prefix.split("//")[-1])
+                self.name.setText(prefix.split("//")[-1])
             else:
                 self.name.setText("")
         else:
