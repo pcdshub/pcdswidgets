@@ -287,11 +287,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         bool
         """
-        if value != self._override:
+        if value != self._override and self.name is not None:
             self._override = value
-            if self._override and self.name is not None:
+            if self._override:
                 self.name.setText(self._override_name)
-            elif self.name is not None:
+            else:
                 self.format_name()
 
     @Property(str)
@@ -314,11 +314,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         str
         """
-        if value != self._override_name:
+        if value != self._override_name and self.name is not None:
             self._override_name = value
-            if self._override and self.name is not None:
+            if self._override:
                 self.name.setText(self._override_name)
-            elif self.name is not None:
+            else:
                 self.format_name()
 
     @Property(int)
@@ -341,7 +341,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         -------
         int
         """
-        if value != self._font_size:
+        if value != self._font_size and self.name is not None:
             self._font_size = value
             self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
 
@@ -522,7 +522,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         # Determine what widgets to group
         if self._text_location in [ContentLocation.Left, ContentLocation.Right] and self._text_location == self._controls_location:
             grouped_widgets = QVBoxLayout()
-            if self.name:
+            if self.name is not None:
                 grouped_widgets.addWidget(self.name, alignment=Qt.AlignCenter)
             grouped_widgets.addWidget(self.controls_frame, alignment=Qt.AlignCenter)
 
@@ -532,7 +532,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                 widgets = [grouped_frame, self.icon]
             elif self._controls_location == ContentLocation.Right:
                 widgets = [self.icon, grouped_frame]
-        elif self.name:
+        elif self.name is not None:
             # Group icon and name
             if self._text_location in [ContentLocation.Left, ContentLocation.Right]:
                 grouped_widgets = QHBoxLayout()
