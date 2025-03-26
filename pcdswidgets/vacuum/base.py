@@ -60,11 +60,18 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self._icon_size = -1
         self._icon = None
 
-        self.name = None
         self._show_name = False
         self._font_size = 16
         self._override_name = None
         self._override = False
+
+        self.name = QLabel(self)
+        self.name.setWordWrap(True)
+        self.name.setSizePolicy(QSizePolicy.Maximum,
+                                QSizePolicy.Maximum)
+        self.name.setAlignment(Qt.AlignCenter)
+        self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
+        self.name.setVisible(self._show_name)
 
         self._icon_cursor = self.setCursor(
             QCursor(IconFont().icon("file").pixmap(16, 16))
@@ -192,8 +199,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self._channels_prefix = prefix
             self.destroy_channels()
             self.create_channels()
-            if self.name is not None:
-                self.format_name()
+            self.format_name()
 
     @property
     def icon(self):
@@ -256,14 +262,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         """
         if value != self._show_name:
             self._show_name = value
-            if self.name is None:
-                self.name = QLabel(self)
-                self.name.setWordWrap(True)
-                self.name.setSizePolicy(QSizePolicy.Maximum,
-                                        QSizePolicy.Maximum)
-                self.name.setAlignment(Qt.AlignCenter)
-                self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
-                self.format_name()
             self.name.setVisible(self._show_name)
             self.assemble_layout()
 
@@ -289,9 +287,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         """
         if value != self._override:
             self._override = value
-            if self._override and self.name is not None:
+            if self._override:
                 self.name.setText(self._override_name)
-            elif self.name is not None:
+            else:
                 self.format_name()
 
     @Property(str)
@@ -316,9 +314,9 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         """
         if value != self._override_name:
             self._override_name = value
-            if self._override and self.name is not None:
+            if self._override:
                 self.name.setText(self._override_name)
-            elif self.name is not None:
+            else:
                 self.format_name()
 
     @Property(int)
@@ -532,7 +530,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
                 widgets = [grouped_frame, self.icon]
             elif self._controls_location == ContentLocation.Right:
                 widgets = [self.icon, grouped_frame]
-        elif self.name:
+        else:
             # Group icon and name
             if self._text_location in [ContentLocation.Left, ContentLocation.Right]:
                 grouped_widgets = QHBoxLayout()
@@ -554,19 +552,19 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             else:
                 layout_cls = QVBoxLayout
                 widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Top else [grouped_frame, self.controls_frame]
-        else:
-            # No name is initialized
-            layout_cls = QVBoxLayout if self._controls_location in [ContentLocation.Hidden, ContentLocation.Top, ContentLocation.Bottom] else QHBoxLayout
-            if self._controls_location == ContentLocation.Top:
-                widgets = [self.controls_frame, self.icon]
-            elif self._controls_location == ContentLocation.Bottom:
-                widgets = [self.icon, self.controls_frame]
-            elif self._controls_location == ContentLocation.Left:
-                widgets = [self.controls_frame, self.icon]
-            elif self._controls_location == ContentLocation.Right:
-                widgets = [self.icon, self.controls_frame]
-            else:
-                widgets = [self.icon]
+#        else:
+#            # No name is initialized
+#            layout_cls = QVBoxLayout if self._controls_location in [ContentLocation.Hidden, ContentLocation.Top, ContentLocation.Bottom] else QHBoxLayout
+#            if self._controls_location == ContentLocation.Top:
+#                widgets = [self.controls_frame, self.icon]
+#            elif self._controls_location == ContentLocation.Bottom:
+#                widgets = [self.icon, self.controls_frame]
+#            elif self._controls_location == ContentLocation.Left:
+#                widgets = [self.controls_frame, self.icon]
+#            elif self._controls_location == ContentLocation.Right:
+#                widgets = [self.icon, self.controls_frame]
+#            else:
+#                widgets = [self.icon]
 
         grouped_widgets.setContentsMargins(0, 0, 0, 0)
         grouped_widgets.setSpacing(0)
