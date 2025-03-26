@@ -552,19 +552,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             else:
                 layout_cls = QVBoxLayout
                 widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Top else [grouped_frame, self.controls_frame]
-#        else:
-#            # No name is initialized
-#            layout_cls = QVBoxLayout if self._controls_location in [ContentLocation.Hidden, ContentLocation.Top, ContentLocation.Bottom] else QHBoxLayout
-#            if self._controls_location == ContentLocation.Top:
-#                widgets = [self.controls_frame, self.icon]
-#            elif self._controls_location == ContentLocation.Bottom:
-#                widgets = [self.icon, self.controls_frame]
-#            elif self._controls_location == ContentLocation.Left:
-#                widgets = [self.controls_frame, self.icon]
-#            elif self._controls_location == ContentLocation.Right:
-#                widgets = [self.icon, self.controls_frame]
-#            else:
-#                widgets = [self.icon]
 
         grouped_widgets.setContentsMargins(0, 0, 0, 0)
         grouped_widgets.setSpacing(0)
