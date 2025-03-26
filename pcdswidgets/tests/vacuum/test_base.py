@@ -30,8 +30,8 @@ def test_symbol_paintEvent_smoke(symbol):
 
 def test_no_controls_content(symbol):
     symbol.controlsLocation = ContentLocation.Hidden
-    widget_layout = symbol.interlock.layout().itemAt(0).layout()
-    widget = widget_layout.itemAt(0).widget()
+    widget_layout = symbol.interlock.layout().itemAt(0).layout().itemAt(0).widget().layout()
+    widget = widget_layout.itemAt(1).widget()
     assert widget == symbol.icon
 
 
