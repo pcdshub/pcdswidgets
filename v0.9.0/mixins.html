@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mixins &mdash; pcdswidgets 0.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=39bb1c6d"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/docs-versions-menu.js?v=3d6a1aea"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Symbol Icons" href="icons.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pcdswidgets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vacuum.html">Vacuum Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mixins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interlock">Interlock</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin"><code class="docutils literal notranslate"><span class="pre">InterlockMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin.create_channels"><code class="docutils literal notranslate"><span class="pre">InterlockMixin.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed"><code class="docutils literal notranslate"><span class="pre">InterlockMixin.interlock_connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed"><code class="docutils literal notranslate"><span class="pre">InterlockMixin.interlock_value_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlocked"><code class="docutils literal notranslate"><span class="pre">InterlockMixin.interlocked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip"><code class="docutils literal notranslate"><span class="pre">InterlockMixin.status_tooltip()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#error">Error</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin"><code class="docutils literal notranslate"><span class="pre">ErrorMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.create_channels"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.error_connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_enum_changed"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.error_enum_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_value_changed"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.error_value_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip"><code class="docutils literal notranslate"><span class="pre">ErrorMixin.status_tooltip()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#state">State</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin"><code class="docutils literal notranslate"><span class="pre">StateMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.create_channels"><code class="docutils literal notranslate"><span class="pre">StateMixin.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.state"><code class="docutils literal notranslate"><span class="pre">StateMixin.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed"><code class="docutils literal notranslate"><span class="pre">StateMixin.state_connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.state_enum_changed"><code class="docutils literal notranslate"><span class="pre">StateMixin.state_enum_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.state_value_changed"><code class="docutils literal notranslate"><span class="pre">StateMixin.state_value_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.StateMixin.status_tooltip"><code class="docutils literal notranslate"><span class="pre">StateMixin.status_tooltip()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#state-open-close">State - Open/Close</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin.state_connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin.state_value_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip"><code class="docutils literal notranslate"><span class="pre">OpenCloseStateMixin.status_tooltip()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#button-control">Button Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonControl"><code class="docutils literal notranslate"><span class="pre">ButtonControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonControl.create_channels"><code class="docutils literal notranslate"><span class="pre">ButtonControl.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonControl.destroy_channels"><code class="docutils literal notranslate"><span class="pre">ButtonControl.destroy_channels()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#label-control">Label Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.LabelControl"><code class="docutils literal notranslate"><span class="pre">LabelControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.LabelControl.create_channels"><code class="docutils literal notranslate"><span class="pre">LabelControl.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.LabelControl.destroy_channels"><code class="docutils literal notranslate"><span class="pre">LabelControl.destroy_channels()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#button-label-control">Button &amp; Label Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl"><code class="docutils literal notranslate"><span class="pre">ButtonLabelControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels"><code class="docutils literal notranslate"><span class="pre">ButtonLabelControl.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl.destroy_channels"><code class="docutils literal notranslate"><span class="pre">ButtonLabelControl.destroy_channels()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-button-control">Multiple Button Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl"><code class="docutils literal notranslate"><span class="pre">MultipleButtonControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.clear_control_layout"><code class="docutils literal notranslate"><span class="pre">MultipleButtonControl.clear_control_layout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.create_channels"><code class="docutils literal notranslate"><span class="pre">MultipleButtonControl.create_channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.destroy_channels"><code class="docutils literal notranslate"><span class="pre">MultipleButtonControl.destroy_channels()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">Configuring the Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addwidget.html">Adding a New Vacuum Widget</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pcdswidgets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Mixins</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mixins.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mixins">
+<h1>Mixins<a class="headerlink" href="#mixins" title="Link to this heading"></a></h1>
+<p>A couple of mixin classes were created to help us make it easy to create new
+symbol widgets and ensure that the code has an uniform behavior.</p>
+<section id="interlock">
+<h2>Interlock<a class="headerlink" href="#interlock" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">InterlockMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interlock_suffix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin" title="Link to this definition"></a></dt>
+<dd><p>The InterlockMixin class adds the interlock channel and <cite>interlocked</cite>
+property to the widget.</p>
+<p>The interlocked property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">interlocked</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>interlock_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the interlock channel address.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.create_channels" title="Link to this definition"></a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>interlock_channel</cite> to the widget along with a reset for the
+interlocked and interlock_connected variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed">
+<span class="sig-name descname"><span class="pre">interlock_connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.interlock_connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection status changes for the Interlock
+Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed">
+<span class="sig-name descname"><span class="pre">interlock_value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.interlock_value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the value changes for the Interlock Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The value from the channel will be either 0 or 1 with 0 meaning
+that the widget is interlocked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin.interlocked">
+<span class="sig-name descname"><span class="pre">interlocked</span></span><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.interlocked" title="Link to this definition"></a></dt>
+<dd><p>Property used to query interlock state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip">
+<span class="sig-name descname"><span class="pre">status_tooltip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#InterlockMixin.status_tooltip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip" title="Link to this definition"></a></dt>
+<dd><p>This method adds the contribution of the interlock mixin into the
+general status tooltip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="error">
+<h2>Error<a class="headerlink" href="#error" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">ErrorMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_suffix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin" title="Link to this definition"></a></dt>
+<dd><p>The ErrorMixin class adds the error channel and <cite>error</cite>
+property to the widget.</p>
+<p>The error property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">error</span><span class="o">=</span><span class="s2">&quot;INVALID&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">purple</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>error_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the error channel address.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.create_channels" title="Link to this definition"></a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>error_channel</cite> to the widget along with a reset for the error and
+error_connected variables.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.error">
+<span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error" title="Link to this definition"></a></dt>
+<dd><p>Property used to query the error state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed">
+<span class="sig-name descname"><span class="pre">error_connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.error_connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection status changes for the Error
+Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.error_enum_changed">
+<span class="sig-name descname"><span class="pre">error_enum_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.error_enum_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_enum_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the enumeration strings change for the Error
+Channel.
+This callback triggers the update of the error message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current error value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – The string items</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.error_value_changed">
+<span class="sig-name descname"><span class="pre">error_value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.error_value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.error_value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the value change for the Error Channel.
+This callback triggers the update of the error message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current error value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip">
+<span class="sig-name descname"><span class="pre">status_tooltip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ErrorMixin.status_tooltip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip" title="Link to this definition"></a></dt>
+<dd><p>This method adds the contribution of the error mixin into the general
+status tooltip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="state">
+<h2>State<a class="headerlink" href="#state" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">StateMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_suffix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin" title="Link to this definition"></a></dt>
+<dd><p>The StateMixin class adds the state channel and <cite>state</cite> property to the
+widget.</p>
+<p>The state property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Vented&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>state_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the state channel address.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.create_channels" title="Link to this definition"></a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>state_channel</cite> to the widget along with a reset for the
+state and state_connected variables.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state" title="Link to this definition"></a></dt>
+<dd><p>Property used to query the state of the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed">
+<span class="sig-name descname"><span class="pre">state_connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.state_connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection status changes for the State
+Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if connected, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.state_enum_changed">
+<span class="sig-name descname"><span class="pre">state_enum_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.state_enum_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state_enum_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the enumeration strings change for the State
+Channel.
+This callback triggers the update of the state message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current state value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – The string items</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.state_value_changed">
+<span class="sig-name descname"><span class="pre">state_value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.state_value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.state_value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the value change for the State Channel.
+This callback triggers the update of the state message and also a
+repaint of the widget with the new stylesheet guidelines for the
+current state value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.StateMixin.status_tooltip">
+<span class="sig-name descname"><span class="pre">status_tooltip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#StateMixin.status_tooltip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.StateMixin.status_tooltip" title="Link to this definition"></a></dt>
+<dd><p>This method adds the contribution of the state mixin into the general
+status tooltip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="state-open-close">
+<h2>State - Open/Close<a class="headerlink" href="#state-open-close" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">OpenCloseStateMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">open_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_suffix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin" title="Link to this definition"></a></dt>
+<dd><p>The OpenCloseStateMixin class adds two channels (Open and Close State) and
+a <cite>state</cite> property based on a combination of the two channels to the
+widget.</p>
+<p>The state property can be used at stylesheet in the following manner:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">*[</span><span class="nt">state</span><span class="o">=</span><span class="s2">&quot;Close&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>open_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the open state channel address.</p></li>
+<li><p><strong>close_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the close state channel address.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels" title="Link to this definition"></a></dt>
+<dd><p>This method invokes <cite>create_channels</cite> from the super classes and adds
+the <cite>state_open_channel</cite> and <cite>state_close_channel</cite> to the widget along
+with a reset for the state and interlock_connected variables.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state" title="Link to this definition"></a></dt>
+<dd><p>Property used to query the state of the widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return string will either be <cite>Open</cite>, <cite>Close</cite> or <cite>INVALID</cite> when
+it was not possible to determine the state.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed">
+<span class="sig-name descname"><span class="pre">state_connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">which</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.state_connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection status changes for one of the
+channels in this mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</p></li>
+<li><p><strong>conn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if connected, False otherwise.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed">
+<span class="sig-name descname"><span class="pre">state_value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">which</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.state_value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the value changes for one of the channels in this
+mixin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – String defining which channel is sending the information. It must
+be either “OPEN” or “CLOSE”.</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The value from the channel which will be either 0 or 1 with 1
+meaning that a certain state is active.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip">
+<span class="sig-name descname"><span class="pre">status_tooltip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#OpenCloseStateMixin.status_tooltip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip" title="Link to this definition"></a></dt>
+<dd><p>This method adds the contribution of the open close state mixin into
+the general status tooltip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="button-control">
+<h2>Button Control<a class="headerlink" href="#button-control" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">ButtonControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command_suffix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonControl" title="Link to this definition"></a></dt>
+<dd><p>The ButtonControl class adds a PyDMEnumButton to the widget for controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonControl.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonControl.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonControl.create_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonControl.destroy_channels">
+<span class="sig-name descname"><span class="pre">destroy_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonControl.destroy_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonControl.destroy_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="label-control">
+<h2>Label Control<a class="headerlink" href="#label-control" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.LabelControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">LabelControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readback_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readback_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#LabelControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.LabelControl" title="Link to this definition"></a></dt>
+<dd><p>The LabelControl class adds a PyDMLabel to the widget for controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</p></li>
+<li><p><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.LabelControl.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#LabelControl.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.LabelControl.create_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.LabelControl.destroy_channels">
+<span class="sig-name descname"><span class="pre">destroy_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#LabelControl.destroy_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.LabelControl.destroy_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="button-label-control">
+<h2>Button &amp; Label Control<a class="headerlink" href="#button-label-control" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonLabelControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">ButtonLabelControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readback_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readback_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonLabelControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl" title="Link to this definition"></a></dt>
+<dd><p>The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the
+widget for controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address.</p></li>
+<li><p><strong>readback_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the readback label channel address.</p></li>
+<li><p><strong>readback_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name to be set to the PyDMLabel so one can refer to it by name
+with stylesheet</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonLabelControl.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.ButtonLabelControl.destroy_channels">
+<span class="sig-name descname"><span class="pre">destroy_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#ButtonLabelControl.destroy_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.ButtonLabelControl.destroy_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="multiple-button-control">
+<h2>Multiple Button Control<a class="headerlink" href="#multiple-button-control" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.MultipleButtonControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pcdswidgets.vacuum.mixins.</span></span><span class="sig-name descname"><span class="pre">MultipleButtonControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#MultipleButtonControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl" title="Link to this definition"></a></dt>
+<dd><p>The MultipleButtonControl class adds multiple PyDMPushButton instances to
+the widget for controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – <p>List of dictionaries containing the specifications for the buttons.
+Required keys for now are:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>suffix: str</dt><dd><p>suffix to be used along with the channelPrefix from PCDSSymbolBase
+to compose the command button channel address</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>text: str</dt><dd><p>the text to display at the button</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>value</dt><dd><p>the value to be written when the button is pressed</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.MultipleButtonControl.clear_control_layout">
+<span class="sig-name descname"><span class="pre">clear_control_layout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#MultipleButtonControl.clear_control_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.clear_control_layout" title="Link to this definition"></a></dt>
+<dd><p>Remove all inner widgets from the control layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.MultipleButtonControl.create_channels">
+<span class="sig-name descname"><span class="pre">create_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#MultipleButtonControl.create_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.create_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+created.
+This method also sets the channel address for the control button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pcdswidgets.vacuum.mixins.MultipleButtonControl.destroy_channels">
+<span class="sig-name descname"><span class="pre">destroy_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pcdswidgets/vacuum/mixins.html#MultipleButtonControl.destroy_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pcdswidgets.vacuum.mixins.MultipleButtonControl.destroy_channels" title="Link to this definition"></a></dt>
+<dd><p>Method invoked when the channels associated with the widget must be
+destroyed.
+This method also clears the channel address for the control button.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="icons.html" class="btn btn-neutral float-left" title="Symbol Icons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pcdswidgets.vacuum.mixins &mdash; pcdswidgets 0.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=39bb1c6d"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/docs-versions-menu.js?v=3d6a1aea"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pcdswidgets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Widgets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../vacuum.html">Vacuum Widgets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../icons.html">Symbol Icons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../mixins.html">Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev.html">Configuring the Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../addwidget.html">Adding a New Vacuum Widget</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Related Projects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/slaclab/pydm">PyDM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub/pcdswidgets">PCDSWidgets GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pcdshub">PCDS-wide GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pcdswidgets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pcdswidgets.vacuum.mixins</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pcdswidgets.vacuum.mixins</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.channel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMChannel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.enum_button</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMEnumButton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.label</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMLabel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.pushbutton</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPushButton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="InterlockMixin">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InterlockMixin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The InterlockMixin class adds the interlock channel and `interlocked`</span>
+<span class="sd">    property to the widget.</span>
+
+<span class="sd">    The interlocked property can be used at stylesheet in the following manner:</span>
+
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        *[interlocked=&quot;true&quot;] {</span>
+<span class="sd">            background-color: red;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    interlock_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the interlock channel address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interlock_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="n">interlock_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interlock_channel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interlocked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Property used to query interlock state.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span>
+
+<div class="viewcode-block" id="InterlockMixin.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
+<span class="sd">        the `interlock_channel` to the widget along with a reset for the</span>
+<span class="sd">        interlocked and interlock_connected variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interlock_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+            <span class="n">address</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">),</span>
+            <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interlock_connection_changed</span><span class="p">,</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interlock_value_changed</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interlock_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="InterlockMixin.status_tooltip">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.status_tooltip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method adds the contribution of the interlock mixin into the</span>
+<span class="sd">        general status tooltip.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">status_tooltip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span>
+        <span class="n">status</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Interlocked: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">interlocked</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="InterlockMixin.interlock_connection_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_connection_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interlock_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the connection status changes for the Interlock</span>
+<span class="sd">        Channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            True if connected, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlock_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
+
+
+<div class="viewcode-block" id="InterlockMixin.interlock_value_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.InterlockMixin.interlock_value_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interlock_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the value changes for the Interlock Channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : int</span>
+<span class="sd">            The value from the channel will be either 0 or 1 with 0 meaning</span>
+<span class="sd">            that the widget is interlocked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span> <span class="o">=</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interlocked</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stylesheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ErrorMixin">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ErrorMixin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The ErrorMixin class adds the error channel and `error`</span>
+<span class="sd">    property to the widget.</span>
+
+<span class="sd">    The error property can be used at stylesheet in the following manner:</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        *[error=&quot;INVALID&quot;] {</span>
+<span class="sd">            color: purple;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    error_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the error channel address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span> <span class="o">=</span> <span class="n">error_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_enum</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_channel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Property used to query the error state.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span>
+
+<div class="viewcode-block" id="ErrorMixin.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
+<span class="sd">        the `error_channel` to the widget along with a reset for the error and</span>
+<span class="sd">        error_connected variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+            <span class="n">address</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">error_connection_changed</span><span class="p">,</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">error_value_changed</span><span class="p">,</span>
+            <span class="n">enum_strings_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">error_enum_changed</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ErrorMixin.status_tooltip">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.status_tooltip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method adds the contribution of the error mixin into the general</span>
+<span class="sd">        status tooltip.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">status_tooltip</span><span class="p">()</span>
+        <span class="n">status</span> <span class="o">+=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span>
+        <span class="n">status</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="ErrorMixin.error_connection_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_connection_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the connection status changes for the Error</span>
+<span class="sd">        Channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            True if connected, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
+
+
+<div class="viewcode-block" id="ErrorMixin.error_enum_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_enum_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the enumeration strings change for the Error</span>
+<span class="sd">        Channel.</span>
+<span class="sd">        This callback triggers the update of the error message and also a</span>
+<span class="sd">        repaint of the widget with the new stylesheet guidelines for the</span>
+<span class="sd">        current error value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        items : tuple</span>
+<span class="sd">            The string items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_enum</span> <span class="o">=</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_error_msg</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ErrorMixin.error_value_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ErrorMixin.error_value_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the value change for the Error Channel.</span>
+<span class="sd">        This callback triggers the update of the error message and also a</span>
+<span class="sd">        repaint of the widget with the new stylesheet guidelines for the</span>
+<span class="sd">        current error value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_error_msg</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_error_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method that updates the error property and triggers an update</span>
+<span class="sd">        on the stylesheet and tooltip.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_enum</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_enum</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stylesheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="StateMixin">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StateMixin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The StateMixin class adds the state channel and `state` property to the</span>
+<span class="sd">    widget.</span>
+
+<span class="sd">    The state property can be used at stylesheet in the following manner:</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        *[state=&quot;Vented&quot;] {</span>
+<span class="sd">            border: 5px solid blue;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the state channel address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span> <span class="o">=</span> <span class="n">state_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_enum</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_channel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Property used to query the state of the widget.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+<div class="viewcode-block" id="StateMixin.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
+<span class="sd">        the `state_channel` to the widget along with a reset for the</span>
+<span class="sd">        state and state_connected variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+            <span class="n">address</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_connection_changed</span><span class="p">,</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_value_changed</span><span class="p">,</span>
+            <span class="n">enum_strings_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state_enum_changed</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="StateMixin.status_tooltip">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.status_tooltip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method adds the contribution of the state mixin into the general</span>
+<span class="sd">        status tooltip.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">status_tooltip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span>
+        <span class="n">status</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;State: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="StateMixin.state_connection_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_connection_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the connection status changes for the State</span>
+<span class="sd">        Channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            True if connected, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
+
+
+<div class="viewcode-block" id="StateMixin.state_enum_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_enum_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_enum_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the enumeration strings change for the State</span>
+<span class="sd">        Channel.</span>
+<span class="sd">        This callback triggers the update of the state message and also a</span>
+<span class="sd">        repaint of the widget with the new stylesheet guidelines for the</span>
+<span class="sd">        current state value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        items : tuple</span>
+<span class="sd">            The string items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_enum</span> <span class="o">=</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_state_msg</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="StateMixin.state_value_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.StateMixin.state_value_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the value change for the State Channel.</span>
+<span class="sd">        This callback triggers the update of the state message and also a</span>
+<span class="sd">        repaint of the widget with the new stylesheet guidelines for the</span>
+<span class="sd">        current state value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_state_msg</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_state_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method that updates the state property and triggers an update</span>
+<span class="sd">        on the stylesheet and tooltip.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_enum</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_enum</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stylesheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="OpenCloseStateMixin">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenCloseStateMixin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The OpenCloseStateMixin class adds two channels (Open and Close State) and</span>
+<span class="sd">    a `state` property based on a combination of the two channels to the</span>
+<span class="sd">    widget.</span>
+
+<span class="sd">    The state property can be used at stylesheet in the following manner:</span>
+
+<span class="sd">    .. code-block:: css</span>
+
+<span class="sd">        *[state=&quot;Close&quot;] {</span>
+<span class="sd">            background-color: blue;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    open_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the open state channel address.</span>
+<span class="sd">    close_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the close state channel address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">open_suffix</span><span class="p">,</span> <span class="n">close_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_suffix</span> <span class="o">=</span> <span class="n">open_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_suffix</span> <span class="o">=</span> <span class="n">close_suffix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_open</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_close</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_open_channel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_close_channel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">designable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Property used to query the state of the widget.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The return string will either be `Open`, `Close` or `INVALID` when</span>
+<span class="sd">            it was not possible to determine the state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_open</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_close</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;INVALID&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state_open</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Open&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Close&quot;</span>
+
+<div class="viewcode-block" id="OpenCloseStateMixin.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method invokes `create_channels` from the super classes and adds</span>
+<span class="sd">        the `state_open_channel` and `state_close_channel` to the widget along</span>
+<span class="sd">        with a reset for the state and interlock_connected variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_suffix</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_close_suffix</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_open</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state_close</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="s2">&quot;INVALID&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_open_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+            <span class="n">address</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_open_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">connection_slot</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_connection_changed</span><span class="p">,</span> <span class="s2">&quot;OPEN&quot;</span><span class="p">),</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_value_changed</span><span class="p">,</span> <span class="s2">&quot;OPEN&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_open_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_close_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
+            <span class="n">address</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">connection_slot</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_connection_changed</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">),</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_value_changed</span><span class="p">,</span> <span class="s2">&quot;CLOSE&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_close_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="OpenCloseStateMixin.status_tooltip">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.status_tooltip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method adds the contribution of the open close state mixin into</span>
+<span class="sd">        the general status tooltip.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">status_tooltip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span>
+        <span class="n">status</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;State: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="OpenCloseStateMixin.state_connection_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_connection_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the connection status changes for one of the</span>
+<span class="sd">        channels in this mixin.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        which : str</span>
+<span class="sd">            String defining which channel is sending the information. It must</span>
+<span class="sd">            be either &quot;OPEN&quot; or &quot;CLOSE&quot;.</span>
+<span class="sd">        conn : bool</span>
+<span class="sd">            True if connected, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;OPEN&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_open_connected</span> <span class="o">=</span> <span class="n">conn</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_connected</span> <span class="o">=</span> <span class="n">conn</span></div>
+
+
+<div class="viewcode-block" id="OpenCloseStateMixin.state_value_changed">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.OpenCloseStateMixin.state_value_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback invoked when the value changes for one of the channels in this</span>
+<span class="sd">        mixin.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        which : str</span>
+<span class="sd">            String defining which channel is sending the information. It must</span>
+<span class="sd">            be either &quot;OPEN&quot; or &quot;CLOSE&quot;.</span>
+<span class="sd">        value : int</span>
+<span class="sd">            The value from the channel which will be either 0 or 1 with 1</span>
+<span class="sd">            meaning that a certain state is active.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;OPEN&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state_open</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state_close</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stylesheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_status_tooltip</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ButtonControl">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ButtonControl</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The ButtonControl class adds a PyDMEnumButton to the widget for controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the command button channel address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span> <span class="o">=</span> <span class="n">command_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span> <span class="o">=</span> <span class="n">PyDMEnumButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">checkable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlButtonHorizontal</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="p">)</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+    <span class="nd">@controlButtonHorizontal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span>
+
+<div class="viewcode-block" id="ButtonControl.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        created.</span>
+<span class="sd">        This method also sets the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
+                                                     <span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ButtonControl.destroy_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonControl.destroy_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        destroyed.</span>
+<span class="sd">        This method also clears the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LabelControl">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LabelControl</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The LabelControl class adds a PyDMLabel to the widget for controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    readback_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the readback label channel address.</span>
+<span class="sd">    readback_name : str</span>
+<span class="sd">        The name to be set to the PyDMLabel so one can refer to it by name</span>
+<span class="sd">        with stylesheet</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span> <span class="o">=</span> <span class="n">readback_suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span> <span class="o">=</span> <span class="n">PyDMLabel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">readback_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">readback_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controls_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LabelControl.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        created.</span>
+<span class="sd">        This method also sets the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LabelControl.destroy_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.LabelControl.destroy_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        destroyed.</span>
+<span class="sd">        This method also clears the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ButtonLabelControl">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ButtonLabelControl</span><span class="p">(</span><span class="n">ButtonControl</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the</span>
+<span class="sd">    widget for controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the command button channel address.</span>
+<span class="sd">    readback_suffix : str</span>
+<span class="sd">        The suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">        to compose the readback label channel address.</span>
+<span class="sd">    readback_name : str</span>
+<span class="sd">        The name to be set to the PyDMLabel so one can refer to it by name</span>
+<span class="sd">        with stylesheet</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_suffix</span><span class="p">,</span> <span class="n">readback_suffix</span><span class="p">,</span> <span class="n">readback_name</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span> <span class="o">=</span> <span class="n">readback_suffix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span> <span class="o">=</span> <span class="n">PyDMLabel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">readback_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">command_suffix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">insertWidget</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ButtonLabelControl.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        created.</span>
+<span class="sd">        This method also sets the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">_readback_suffix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ButtonLabelControl.destroy_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.ButtonLabelControl.destroy_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        destroyed.</span>
+<span class="sd">        This method also clears the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readback_label</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MultipleButtonControl">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultipleButtonControl</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The MultipleButtonControl class adds multiple PyDMPushButton instances to</span>
+<span class="sd">    the widget for controls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    commands : list</span>
+<span class="sd">        List of dictionaries containing the specifications for the buttons.</span>
+<span class="sd">        Required keys for now are:</span>
+
+<span class="sd">        - suffix: str</span>
+<span class="sd">            suffix to be used along with the channelPrefix from PCDSSymbolBase</span>
+<span class="sd">            to compose the command button channel address</span>
+<span class="sd">        - text: str</span>
+<span class="sd">            the text to display at the button</span>
+<span class="sd">        - value</span>
+<span class="sd">            the value to be written when the button is pressed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">commands</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span> <span class="o">=</span> <span class="n">commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_buttons</span><span class="p">()</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QGridLayout</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlButtonHorizontal</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@Property</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+    <span class="nd">@controlButtonHorizontal</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">controlButtonHorizontal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_control_layout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultipleButtonControl.clear_control_layout">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.clear_control_layout">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_control_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all inner widgets from the control layout</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controls_frame</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">columnCount</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">itemAtPosition</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">w</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">widget</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="n">w</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">btn</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">btn</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+                <span class="n">btn</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">pressValue</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Invalid config for MultipleButtonControl.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultipleButtonControl.create_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.create_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        created.</span>
+<span class="sd">        This method also sets the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">btn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">):</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons_config</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;suffix&#39;</span><span class="p">]</span>
+                <span class="n">btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="MultipleButtonControl.destroy_channels">
+<a class="viewcode-back" href="../../../mixins.html#pcdswidgets.vacuum.mixins.MultipleButtonControl.destroy_channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">destroy_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked when the channels associated with the widget must be</span>
+<span class="sd">        destroyed.</span>
+<span class="sd">        This method also clears the channel address for the control button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">destroy_channels</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
