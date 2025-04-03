@@ -111,7 +111,7 @@ class CapacitanceMonometerGaugeSymbolIcon(RoughGaugeSymbolIcon):
 
     def draw_icon(self, painter):
         super().draw_icon(painter)
-        painter.drawLine(QPointF(0.35, 0.4), QPointF(0.35, 0.8))
-        painter.drawLine(QPointF(0.35, 0.4), QPointF(0.5, 0.7))
-        painter.drawLine(QPointF(0.65, 0.4), QPointF(0.65, 0.8))
-        painter.drawLine(QPointF(0.65, 0.4), QPointF(0.5, 0.7))
+        painter.drawLine(QPointF(0.35, 0.45), QPointF(0.35, 0.85))
+        painter.drawLine(QPointF(0.35, 0.45), QPointF(0.5, 0.75))
+        painter.drawLine(QPointF(0.65, 0.45), QPointF(0.65, 0.85))
+        painter.drawLine(QPointF(0.65, 0.45), QPointF(0.5, 0.75))
