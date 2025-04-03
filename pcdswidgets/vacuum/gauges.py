@@ -335,7 +335,6 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
             **kwargs)
         self.icon = ColdCathodeComboGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
-        #self.readback_label.setStyleSheet('background-color: white; border: 1px solid black; color: blue')
 
     def sizeHint(self):
         return QSize(70, 70)
@@ -414,7 +413,6 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
             **kwargs)
         self.icon = HotCathodeComboGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
-        #self.readback_label.setStyleSheet('background-color: white; border: 1px solid black; color: blue')
 
     def sizeHint(self):
         return QSize(70, 70)
@@ -493,7 +491,6 @@ class CapacitanceMonometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
             **kwargs)
         self.icon = CapacitanceMonometerGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
-        #self.readback_label.setStyleSheet('background-color: white; border: 1px solid black; color: blue')
 
     def sizeHint(self):
         return QSize(70, 70)
