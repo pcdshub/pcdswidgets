@@ -1,7 +1,7 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (CapacitanceMonometerGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon, 
+from ..icons.gauges import (CapacitanceManometerGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon, 
                             ColdCathodeGaugeSymbolIcon, HotCathodeComboGaugeSymbolIcon, 
                             HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .base import PCDSSymbolBase
@@ -418,7 +418,7 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
         return QSize(70, 70)
 
 
-class CapacitanceMonometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
+class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Rough Gauge with the proper icon and
     controls.
@@ -489,7 +489,7 @@ class CapacitanceMonometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-        self.icon = CapacitanceMonometerGaugeSymbolIcon(parent=self)
+        self.icon = CapacitanceManometerGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
