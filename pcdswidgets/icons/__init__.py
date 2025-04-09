@@ -1,6 +1,8 @@
-from .gauges import (CathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon,
-                     HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon, CapacitanceManometerGaugeSymbolIcon,
-                     HotCathodeComboGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon)
+from .gauges import (CapacitanceManometerGaugeSymbolIcon,
+                     CathodeGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon,
+                     ColdCathodeGaugeSymbolIcon,
+                     HotCathodeComboGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
+                     RoughGaugeSymbolIcon)
 from .others import RGASymbolIcon
 from .pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
                     ScrollPumpSymbolIcon, TurboPumpSymbolIcon)

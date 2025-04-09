@@ -1,8 +1,10 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (CapacitanceManometerGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon, 
-                            ColdCathodeGaugeSymbolIcon, HotCathodeComboGaugeSymbolIcon, 
+from ..icons.gauges import (CapacitanceManometerGaugeSymbolIcon,
+                            ColdCathodeComboGaugeSymbolIcon,
+                            ColdCathodeGaugeSymbolIcon,
+                            HotCathodeComboGaugeSymbolIcon,
                             HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .base import PCDSSymbolBase
 from .mixins import (ButtonLabelControl, InterlockMixin, LabelControl,

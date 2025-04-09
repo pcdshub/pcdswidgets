@@ -66,6 +66,7 @@ class ColdCathodeGaugeSymbolIcon(CathodeGaugeSymbolIcon):
         super().draw_icon(painter)
         painter.drawArc(QRectF(0.25, 0.25, 0.5, 0.5), 45*16, 270*16)
 
+
 class ColdCathodeComboGaugeSymbolIcon(CathodeGaugeSymbolIcon):
     """
     A widget with a cold cathode and rough gauge symbol drawn in it.
@@ -79,6 +80,7 @@ class ColdCathodeComboGaugeSymbolIcon(CathodeGaugeSymbolIcon):
     path.lineTo(.933, .75)
     path.lineTo(.067, .75)
     path.closeSubpath()
+
     def draw_icon(self, painter):
         super().draw_icon(painter)
         painter.drawPath(self.path)
@@ -98,6 +100,7 @@ class HotCathodeComboGaugeSymbolIcon(ColdCathodeComboGaugeSymbolIcon):
         painter.drawLine(QPointF(0.4, 0.30), QPointF(0.4, 0.65))
         painter.drawLine(QPointF(0.4, 0.45), QPointF(0.6, 0.45))
         painter.drawLine(QPointF(0.6, 0.30), QPointF(0.6, 0.65))
+
 
 class CapacitanceManometerGaugeSymbolIcon(RoughGaugeSymbolIcon):
     """
