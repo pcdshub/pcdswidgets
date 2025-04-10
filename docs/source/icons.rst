@@ -18,12 +18,18 @@ Rough        |rough|    ``from pcdswidgets.icons import RoughGaugeSymbolIcon``
 Cathode      |cathode|  ``from pcdswidgets.icons import CathodeGaugeSymbolIcon``
 Hot Cathode  |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIcon``
 Cold Cathode |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
+Cold Cathode Combo |ccathodecombo| ``from pcdswidgets.icons import ColdCathodeComboGaugeSymbolIcon``
+Hot Cathode Combo |hcathodecombo| ``from pcdswidgets.icons import HotCathodeComboGaugeSymbolIcon``
+Manometer |manometer| ``from pcdswidgets.icons import CapacitanceManometerGaugeSymbolIcon``
 ============ ========== ============================================================
 
 .. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
 .. |cathode| image:: /_static/icons/CathodeGaugeSymbolIcon.png
 .. |hcathode| image:: /_static/icons/HotCathodeGaugeSymbolIcon.png
 .. |ccathode| image:: /_static/icons/ColdCathodeGaugeSymbolIcon.png
+.. |ccathodecombo| image:: /_static/icons/ColdCathodeComboGaugeSymbolIcon.png
+.. |hcathodecombo| image:: /_static/icons/HotCathodeComboGaugeSymbolIcon.png
+.. |manometer| image:: /_static/icons/CapacitanceManometerGaugeSymbolIcon.png
 
 
 Valves
