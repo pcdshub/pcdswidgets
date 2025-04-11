@@ -21,7 +21,7 @@ Cold Cathode        |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeS
 Cold Cathode Combo  |cccombo|  ``from pcdswidgets.icons import ColdCathodeComboGaugeSymbolIcon``
 Hot Cathode Combo   |hccombo|  ``from pcdswidgets.icons import HotCathodeComboGaugeSymbolIcon``
 Manometer           |manom|    ``from pcdswidgets.icons import CapacitanceManometerGaugeSymbolIcon``
-==================== ========== =====================================================================
+=================== ========== ======================================================================
 
 .. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
 .. |cathode| image:: /_static/icons/CathodeGaugeSymbolIcon.png
