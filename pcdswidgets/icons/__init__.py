@@ -1,5 +1,5 @@
-from .gauges import (CapManometerGaugeSymbolIcon,
-                     CathodeGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon,
+from .gauges import (CapManometerGaugeSymbolIcon, CathodeGaugeSymbolIcon,
+                     ColdCathodeComboGaugeSymbolIcon,
                      ColdCathodeGaugeSymbolIcon,
                      HotCathodeComboGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
                      RoughGaugeSymbolIcon)
