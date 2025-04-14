@@ -1,7 +1,7 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (CapacitanceManometerGaugeSymbolIcon,
+from ..icons.gauges import (CapManometerGaugeSymbolIcon,
                             ColdCathodeComboGaugeSymbolIcon,
                             ColdCathodeGaugeSymbolIcon,
                             HotCathodeComboGaugeSymbolIcon,
@@ -491,7 +491,7 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
             readback_suffix=self._readback_suffix,
             readback_name='pressure',
             **kwargs)
-        self.icon = CapacitanceManometerGaugeSymbolIcon(parent=self)
+        self.icon = CapManometerGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):

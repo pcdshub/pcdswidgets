@@ -102,7 +102,7 @@ class HotCathodeComboGaugeSymbolIcon(ColdCathodeComboGaugeSymbolIcon):
         painter.drawLine(QPointF(0.6, 0.30), QPointF(0.6, 0.65))
 
 
-class CapacitanceManometerGaugeSymbolIcon(RoughGaugeSymbolIcon):
+class CapManometerGaugeSymbolIcon(RoughGaugeSymbolIcon):
     """
     A widget with a CMG gauge symbol drawn in it.
 

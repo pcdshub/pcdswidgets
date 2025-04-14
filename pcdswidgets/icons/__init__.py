@@ -1,4 +1,4 @@
-from .gauges import (CapacitanceManometerGaugeSymbolIcon,
+from .gauges import (CapManometerGaugeSymbolIcon,
                      CathodeGaugeSymbolIcon, ColdCathodeComboGaugeSymbolIcon,
                      ColdCathodeGaugeSymbolIcon,
                      HotCathodeComboGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
@@ -22,5 +22,5 @@ __all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
            'NeedleValveSymbolIcon', 'ProportionalValveSymbolIcon',
            'RGASymbolIcon', 'ControlValveSymbolIcon',
            'ControlOnlyValveSymbolIcon', 'PneumaticValveNOSymbolIcon',
-           'PneumaticValveDASymbolIcon', 'CapacitanceManometerGaugeSymbolIcon',
+           'PneumaticValveDASymbolIcon', 'CapManometerGaugeSymbolIcon',
            'HotCathodeComboGaugeSymbolIcon', 'ColdCathodeComboGaugeSymbolIcon']
