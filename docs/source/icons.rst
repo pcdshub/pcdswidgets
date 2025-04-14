@@ -20,7 +20,7 @@ Hot Cathode         |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSy
 Cold Cathode        |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
 Cold Cathode Combo  |cccombo|  ``from pcdswidgets.icons import ColdCathodeComboGaugeSymbolIcon``
 Hot Cathode Combo   |hccombo|  ``from pcdswidgets.icons import HotCathodeComboGaugeSymbolIcon``
-Capactiance Manom   |manom|    ``from pcdswidgets.icons import CapacitanceManometerGaugeSymbolIcon``
+Capactiance Manom   |manom|    ``from pcdswidgets.icons import CapManometerGaugeSymbolIcon``
 =================== ========== ========================================================================
 
 .. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
@@ -29,7 +29,7 @@ Capactiance Manom   |manom|    ``from pcdswidgets.icons import CapacitanceManome
 .. |ccathode| image:: /_static/icons/ColdCathodeGaugeSymbolIcon.png
 .. |cccombo| image:: /_static/icons/ColdCathodeComboGaugeSymbolIcon.png
 .. |hccombo| image:: /_static/icons/HotCathodeComboGaugeSymbolIcon.png
-.. |manom| image:: /_static/icons/CapacitanceManometerGaugeSymbolIcon.png
+.. |manom| image:: /_static/icons/CapManometerGaugeSymbolIcon.png
 
 
 Valves
