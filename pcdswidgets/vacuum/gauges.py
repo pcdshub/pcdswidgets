@@ -1,7 +1,10 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (ColdCathodeGaugeSymbolIcon,
+from ..icons.gauges import (CapManometerGaugeSymbolIcon,
+                            ColdCathodeComboGaugeSymbolIcon,
+                            ColdCathodeGaugeSymbolIcon,
+                            HotCathodeComboGaugeSymbolIcon,
                             HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
 from .base import PCDSSymbolBase
 from .mixins import (ButtonLabelControl, InterlockMixin, LabelControl,
@@ -259,3 +262,237 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
 
     def sizeHint(self):
         return QSize(180, 80)
+
+
+class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and
+    controls.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+    |pressure   |PyDMLabel     |The pressure reading label.            |
+    +-----------+--------------+---------------------------------------+
+
+    **Additional Properties**
+
+    +-----------+-------------------------------------------------------------+
+    |Property   |Values                                                       |
+    +===========+=============================================================+
+    |state      |`On` or `Off`                                                |
+    +-----------+-------------------------------------------------------------+
+
+    Examples
+    --------
+
+    .. code-block:: css
+
+        ColdCathodeComboGauge[state="Off"] {
+            qproperty-brush: red;
+            color: gray;
+        }
+        ColdCathodeComboGauge[state="On"] {
+            qproperty-brush: green;
+            color: black;
+        }
+
+    """
+
+    _qt_designer_ = {
+        "group": "PCDS Gauges",
+        "is_container": False,
+    }
+    _state_suffix = ":STATE_RBV"
+    _readback_suffix = ":PRESS_RBV"
+
+    NAME = "Cold Combo Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(
+            parent=parent,
+            state_suffix=self._state_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
+            **kwargs)
+        self.icon = ColdCathodeComboGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
+
+    def sizeHint(self):
+        return QSize(70, 70)
+
+
+class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and
+    controls.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+    |pressure   |PyDMLabel     |The pressure reading label.            |
+    +-----------+--------------+---------------------------------------+
+
+    **Additional Properties**
+
+    +-----------+-------------------------------------------------------------+
+    |Property   |Values                                                       |
+    +===========+=============================================================+
+    |state      |`On` or `Off`                                                |
+    +-----------+-------------------------------------------------------------+
+
+    Examples
+    --------
+
+    .. code-block:: css
+
+        HotCathodeComboGauge[state="Off"] {
+            qproperty-brush: red;
+            color: gray;
+        }
+        HotCathodeComboGauge[state="On"] {
+            qproperty-brush: green;
+            color: black;
+        }
+
+    """
+
+    _qt_designer_ = {
+        "group": "PCDS Gauges",
+        "is_container": False,
+    }
+    _state_suffix = ":STATE_RBV"
+    _readback_suffix = ":PRESS_RBV"
+
+    NAME = "Hot Combo Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(
+            parent=parent,
+            state_suffix=self._state_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
+            **kwargs)
+        self.icon = HotCathodeComboGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
+
+    def sizeHint(self):
+        return QSize(70, 70)
+
+
+class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Rough Gauge with the proper icon and
+    controls.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+    |pressure   |PyDMLabel     |The pressure reading label.            |
+    +-----------+--------------+---------------------------------------+
+
+    **Additional Properties**
+
+    +-----------+-------------------------------------------------------------+
+    |Property   |Values                                                       |
+    +===========+=============================================================+
+    |state      |`On` or `Off`                                                |
+    +-----------+-------------------------------------------------------------+
+
+    Examples
+    --------
+
+    .. code-block:: css
+
+        CapacitanceMonometerGauge[state="Off"] {
+            qproperty-brush: red;
+            color: gray;
+        }
+        CapacitanceMonometerGauge[state="On"] {
+            qproperty-brush: green;
+            color: black;
+        }
+
+    """
+
+    _qt_designer_ = {
+        "group": "PCDS Gauges",
+        "is_container": False,
+    }
+    _state_suffix = ":STATE_RBV"
+    _readback_suffix = ":PRESS_RBV"
+
+    NAME = "Capacitance Monometer Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(
+            parent=parent,
+            state_suffix=self._state_suffix,
+            readback_suffix=self._readback_suffix,
+            readback_name='pressure',
+            **kwargs)
+        self.icon = CapManometerGaugeSymbolIcon(parent=self)
+        self.readback_label.displayFormat = DisplayFormat.Exponential
+
+    def sizeHint(self):
+        return QSize(70, 70)

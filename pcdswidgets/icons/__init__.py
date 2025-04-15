@@ -1,5 +1,8 @@
-from .gauges import (CathodeGaugeSymbolIcon, ColdCathodeGaugeSymbolIcon,
-                     HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
+from .gauges import (CapManometerGaugeSymbolIcon, CathodeGaugeSymbolIcon,
+                     ColdCathodeComboGaugeSymbolIcon,
+                     ColdCathodeGaugeSymbolIcon,
+                     HotCathodeComboGaugeSymbolIcon, HotCathodeGaugeSymbolIcon,
+                     RoughGaugeSymbolIcon)
 from .others import RGASymbolIcon
 from .pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
                     ScrollPumpSymbolIcon, TurboPumpSymbolIcon)
@@ -19,4 +22,5 @@ __all__ = ['RoughGaugeSymbolIcon', 'CathodeGaugeSymbolIcon',
            'NeedleValveSymbolIcon', 'ProportionalValveSymbolIcon',
            'RGASymbolIcon', 'ControlValveSymbolIcon',
            'ControlOnlyValveSymbolIcon', 'PneumaticValveNOSymbolIcon',
-           'PneumaticValveDASymbolIcon']
+           'PneumaticValveDASymbolIcon', 'CapManometerGaugeSymbolIcon',
+           'HotCathodeComboGaugeSymbolIcon', 'ColdCathodeComboGaugeSymbolIcon']
