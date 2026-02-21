@@ -1,3 +1,0 @@
-pydm>=1.9.0
-qtpy
-PyQt5
