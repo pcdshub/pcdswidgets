@@ -27,7 +27,7 @@ except ImportError:
 
 class {{ ui_name.removesuffix(".ui").title() }}WidgetBase(DesignerWidget):
 {% for widget in widget_names %}
-    {{ widget }}: {{ widget_name_to_class[widget] }}
+    {{ widget }}: "{{ widget_name_to_class[widget] }}"
 {% endfor %}
 
     ui_form = {{ clsname }}

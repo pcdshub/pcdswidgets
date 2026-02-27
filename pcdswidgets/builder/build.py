@@ -138,7 +138,11 @@ def _get_macros(text_with_macro_sub: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    print(sys.argv)
-    designer_ui = sys.argv[1]
-    build_uic(designer_ui)
-    build_base_widget(designer_ui)
+    mode = sys.argv[1]
+    designer_ui = sys.argv[2]
+    if mode == "uic":
+        build_uic(designer_ui)
+    elif mode == "base":
+        build_base_widget(designer_ui)
+    else:
+        raise ValueError(f"Invalid mode {mode}, must be uic or base")
