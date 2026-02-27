@@ -89,3 +89,9 @@ select = ["C", "E", "F", "W", "B", "I"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.pyright.defineConstant]
+PYQT5 = true
+PYSIDE2 = false
+PYQT6 = false
+PYSIDE6 = false
