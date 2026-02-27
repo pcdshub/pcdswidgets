@@ -44,12 +44,15 @@ NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
 PneumaticValveDA = "pcdswidgets.vacuum.valves:PneumaticValveDA"
 PneumaticValveNO = "pcdswidgets.vacuum.valves:PneumaticValveNO"
+PositionerRowTcInterlockWidget = "pcdswidgets.motion.motors:PositionerRowTcInterlockWidget"
+PositionerRowWidget = "pcdswidgets.motion.motors:PositionerRowWidget"
 PositionerWidget = "pcdswidgets.motion.motors:PositionerWidget"
 ProportionalValve = "pcdswidgets.vacuum.valves:ProportionalValve"
 RGA = "pcdswidgets.vacuum.others:RGA"
 RightAngleManualValve = "pcdswidgets.vacuum.valves:RightAngleManualValve"
 RoughGauge = "pcdswidgets.vacuum.gauges:RoughGauge"
 ScrollPump = "pcdswidgets.vacuum.pumps:ScrollPump"
+SmaractOpenLoopWidget = "pcdswidgets.motion.motors:SmaractOpenLoopWidget"
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 
 [project.optional-dependencies]
@@ -64,6 +67,9 @@ test = [
     "pytest-qt>=4.5.0",
     "pytest-timeout>=2.4.0",
 ]
+dev = [
+    "tomlkit>=0.14.0",
+]
 
 [tool.setuptools.packages.find]
 where = [ ".",]
@@ -73,7 +79,6 @@ namespaces = false
 [tool.setuptools.dynamic.readme]
 file = "README.md"
 content-type = "text/markdown"
-
 
 [tool.ruff]
 line-length = 120

@@ -1,3 +1,1 @@
-from .motors import PositionerWidget
-
-__all__ = ["PositionerWidget"]
+from .motors import *  # noqa: F403
