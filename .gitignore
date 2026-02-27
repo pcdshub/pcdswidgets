@@ -106,3 +106,7 @@ venv.bak/
 
 # setuptools_scm
 */_version.py
+
+# pyuic5
+**/ui/*.py
+!**/ui/__init__.py

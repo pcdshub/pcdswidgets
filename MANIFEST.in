@@ -1,4 +1,4 @@
-include pcdswidgets/_version.py
+include **/*.ui
 
 include AUTHORS.rst
 include CONTRIBUTING.rst

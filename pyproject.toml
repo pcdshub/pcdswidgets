@@ -44,6 +44,7 @@ NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
 PneumaticValveDA = "pcdswidgets.vacuum.valves:PneumaticValveDA"
 PneumaticValveNO = "pcdswidgets.vacuum.valves:PneumaticValveNO"
+PositionerWidget = "pcdswidgets.motion.motors:PositionerWidget"
 ProportionalValve = "pcdswidgets.vacuum.valves:ProportionalValve"
 RGA = "pcdswidgets.vacuum.others:RGA"
 RightAngleManualValve = "pcdswidgets.vacuum.valves:RightAngleManualValve"
@@ -75,8 +76,8 @@ content-type = "text/markdown"
 
 
 [tool.ruff]
-line-length = 88
-exclude = [".git", "__pycache__", "build", "dist", "pcdswidgets/_version.py"]
+line-length = 120
+exclude = [".git", "__pycache__", "build", "dist", "*/_version.py", "**/ui/*.py"]
 
 [tool.ruff.lint]
 select = ["C", "E", "F", "W", "B", "I"]

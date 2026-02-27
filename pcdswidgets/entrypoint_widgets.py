@@ -8,10 +8,16 @@ python -m pcdswidgets.entrypoint_widgets
 import inspect
 
 import pcdswidgets.eps_byteindicator
+import pcdswidgets.motion
 import pcdswidgets.table
 import pcdswidgets.vacuum
 
-INCLUDE_MODULES = [pcdswidgets.eps_byteindicator, pcdswidgets.table, pcdswidgets.vacuum]
+INCLUDE_MODULES = [
+    pcdswidgets.eps_byteindicator,
+    pcdswidgets.motion,
+    pcdswidgets.table,
+    pcdswidgets.vacuum,
+]
 
 
 def main():
