@@ -1,3 +1,4 @@
+import dataclasses
 import os
 import re
 import subprocess
@@ -33,12 +34,55 @@ def build_base_widget(designer_ui: str):
 
     See ui_base_widget.j2, which is the jinja template for these output files.
     """
-    # Parse the .ui file and collect information about each widget
+    # Parse the file
+    ui_info = get_ui_info(designer_ui)
+
+    # Bring the info into a good form for the jinja template
+    ui_name = os.path.basename(designer_ui)
+    base_cls = "".join(part.title() for part in ui_name.removesuffix(".ui").split("_")) + "WidgetBase"
+    info_for_jinja = process_widget_macros(ui_info)
+
+    macro_names = sorted(info_for_jinja.macro_set)
+    widget_names = sorted(info_for_jinja.widget_set)
+
+    # Fill the template
+    jinja_template = "ui_base_widget.j2"
+    env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
+    template = env.get_template(jinja_template)
+    jinja_output = template.render(
+        jinja_template=jinja_template,
+        ui_name=ui_name,
+        form_cls=ui_info.form_cls,
+        base_cls=base_cls,
+        macro_names=macro_names,
+        widget_names=widget_names,
+        widget_name_to_class=ui_info.widget_name_to_class,
+        macro_to_widget=info_for_jinja.macro_to_widget,
+        widget_to_macro=info_for_jinja.widget_to_macro,
+        widget_to_pre_templ_strs=info_for_jinja.widget_to_pre_templ_strs,
+        widget_to_pre_templ_lists=info_for_jinja.widget_to_pre_templ_lists,
+    )
+    dst_path = designer_ui.removesuffix(".ui") + "_base.py"
+    with open(dst_path, "w") as fd:
+        fd.write(jinja_output)
+
+
+@dataclasses.dataclass
+class UiInfo:
+    """Information parsed from a .ui file."""
+
+    widget_name_to_class: dict[str, str]
+    widget_macros: dict[str, dict[str, str | list[str]]]
+    form_cls: str
+
+
+def get_ui_info(designer_ui: str) -> UiInfo:
+    """Parse a .ui file and collect information about each widget."""
     # Need a name to class mapping for the IDE type hints
     widget_name_to_class: dict[str, str] = {}
     # Need to keep track of which widget properties have macros
     # widget_macros[widget_name][property_name] == "${MACRO} in context"
-    widget_macros: dict[str, dict[str, str | list[str]]] = {}
+    widget_macros: dict[str, dict[str, str | list[str]]] = defaultdict(dict)
 
     tree = ET.parse(designer_ui)
     for widget in tree.iter("widget"):
@@ -46,46 +90,66 @@ def build_base_widget(designer_ui: str):
         cls = widget.attrib["class"]
         widget_name_to_class[name] = cls
         for prop in widget.findall("property"):
-            # Looking for string and stringlist only
-            str_node = prop.find("string")
-            if str_node is not None and str_node.text is not None:
-                # We have simple text!
-                if "${" in str_node.text:
-                    try:
-                        widget_macros[name][prop.attrib["name"]] = str_node.text
-                    except KeyError:
-                        widget_macros[name] = {prop.attrib["name"]: str_node.text}
-                continue
-            strlist_node = prop.find("stringlist")
-            if strlist_node is not None:
-                # We have a list of strings! Some may have macros.
-                all_str_nodes = strlist_node.findall("string")
-                all_str_literals = [node.text for node in all_str_nodes if node.text is not None]
-                for text in all_str_literals:
-                    if "${" in text:
-                        try:
-                            widget_macros[name][prop.attrib["name"]] = all_str_literals
-                        except KeyError:
-                            widget_macros[name] = {prop.attrib["name"]: all_str_literals}
+            add_prop_to_widget_macros(widget_macros, name, prop)
 
     # Need to get the name of the form class, which is "Ui_" and the name of the top-level widget
     # Usually this ends up being "Ui_Form" with default naming but the user can change this
     top_level_widget = tree.find("widget")
     if top_level_widget is None:
         raise RuntimeError("No top level widget in ui file")
-    form_cls = f"Ui_{top_level_widget.attrib["name"]}"
+    form_cls = f"Ui_{top_level_widget.attrib['name']}"
 
-    # We're done parsing, now we bring the info into a good form for the jinja template
-    ui_name = os.path.basename(designer_ui)
-    base_cls = "".join(part.title() for part in ui_name.removesuffix(".ui").split("_")) + "WidgetBase"
-    macro_set: set[str] = set()
-    widget_set: set[str] = set()
-    macro_to_widget: dict[str, list[str]] = defaultdict(list)
-    widget_to_macro: dict[str, list[str]] = {}
-    widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]] = defaultdict(list)
-    widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]] = defaultdict(list)
+    return UiInfo(
+        widget_name_to_class=widget_name_to_class,
+        widget_macros=widget_macros,
+        form_cls=form_cls,
+    )
 
-    for widget_name, prop_info in widget_macros.items():
+
+def add_prop_to_widget_macros(widget_macros: defaultdict[str, dict[str, str | list[str]]], name: str, prop: ET.Element):
+    """Incorporate a single property into the macros dict if there is a macro in it."""
+    # Looking for string and stringlist only
+    str_node = prop.find("string")
+    if str_node is not None and str_node.text is not None:
+        # We have simple text!
+        if "${" in str_node.text:
+            widget_macros[name][prop.attrib["name"]] = str_node.text
+        return
+    strlist_node = prop.find("stringlist")
+    if strlist_node is not None:
+        # We have a list of strings! Some may have macros.
+        all_str_nodes = strlist_node.findall("string")
+        all_str_literals = [node.text for node in all_str_nodes if node.text is not None]
+        for text in all_str_literals:
+            if "${" in text:
+                widget_macros[name][prop.attrib["name"]] = all_str_literals
+                return
+
+
+@dataclasses.dataclass
+class InfoForJinja:
+    """Distilled widget and macro information for easily filling in the jinja template."""
+
+    macro_set: set[str]
+    widget_set: set[str]
+    macro_to_widget: dict[str, list[str]]
+    widget_to_macro: dict[str, list[str]]
+    widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
+    widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
+
+
+def process_widget_macros(ui_info: UiInfo) -> InfoForJinja:
+    """Convert the raw ui info into a more useful form for filling the jinja template."""
+    ij = InfoForJinja(
+        macro_set=set(),
+        widget_set=set(),
+        macro_to_widget=defaultdict(list),
+        widget_to_macro={},
+        widget_to_pre_templ_strs=defaultdict(list),
+        widget_to_pre_templ_lists=defaultdict(list),
+    )
+
+    for widget_name, prop_info in ui_info.widget_macros.items():
         macros_here = set()
         str_opts: list[tuple[str, str]] = []
         list_opts: list[tuple[str, list[str]]] = []
@@ -99,43 +163,22 @@ def build_base_widget(designer_ui: str):
                     macros_here.update(_get_macros(val))
             else:
                 raise TypeError(f"Invalid macro type: {value_with_macro}")
-        macro_set.update(macros_here)
-        widget_set.add(widget_name)
-        for macro in macro_set:
-            macro_to_widget[macro].append(widget_name)
-        widget_to_macro[widget_name] = sorted(macros_here)
-        widget_to_pre_templ_strs[widget_name].extend(str_opts)
-        widget_to_pre_templ_lists[widget_name].extend(list_opts)
+        ij.macro_set.update(macros_here)
+        ij.widget_set.add(widget_name)
+        for macro in ij.macro_set:
+            ij.macro_to_widget[macro].append(widget_name)
+        ij.widget_to_macro[widget_name] = sorted(macros_here)
+        ij.widget_to_pre_templ_strs[widget_name].extend(str_opts)
+        ij.widget_to_pre_templ_lists[widget_name].extend(list_opts)
 
-    macro_names = sorted(macro_set)
-    widget_names = sorted(widget_set)
-
-    # And last, standard jinja stuff
-    jinja_template = "ui_base_widget.j2"
-    env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
-    template = env.get_template(jinja_template)
-    jinja_output = template.render(
-        jinja_template=jinja_template,
-        ui_name=ui_name,
-        form_cls=form_cls,
-        base_cls=base_cls,
-        macro_names=macro_names,
-        widget_names=widget_names,
-        widget_name_to_class=widget_name_to_class,
-        macro_to_widget=macro_to_widget,
-        widget_to_macro=widget_to_macro,
-        widget_to_pre_templ_strs=widget_to_pre_templ_strs,
-        widget_to_pre_templ_lists=widget_to_pre_templ_lists,
-    )
-    dst_path = designer_ui.removesuffix(".ui") + "_base.py"
-    with open(dst_path, "w") as fd:
-        fd.write(jinja_output)
+    return ij
 
 
 macro_re = re.compile(r"\${(\S+)}")
 
 
 def _get_macros(text_with_macro_sub: str) -> list[str]:
+    """Helper for getting the name of each macro in use in a macro string."""
     return macro_re.findall(text_with_macro_sub)
 
 
