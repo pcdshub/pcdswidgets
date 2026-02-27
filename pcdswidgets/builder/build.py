@@ -73,10 +73,11 @@ def build_base_widget(designer_ui: str):
     top_level_widget = tree.find("widget")
     if top_level_widget is None:
         raise RuntimeError("No top level widget in ui file")
-    clsname = f"Ui_{top_level_widget.attrib["name"]}"
+    form_cls = f"Ui_{top_level_widget.attrib["name"]}"
 
     # We're done parsing, now we bring the info into a good form for the jinja template
     ui_name = os.path.basename(designer_ui)
+    base_cls = "".join(part.title() for part in ui_name.removesuffix(".ui").split("_")) + "WidgetBase"
     macro_set: set[str] = set()
     widget_set: set[str] = set()
     macro_to_widget: dict[str, list[str]] = defaultdict(list)
@@ -116,7 +117,8 @@ def build_base_widget(designer_ui: str):
     jinja_output = template.render(
         jinja_template=jinja_template,
         ui_name=ui_name,
-        clsname=clsname,
+        form_cls=form_cls,
+        base_cls=base_cls,
         macro_names=macro_names,
         widget_names=widget_names,
         widget_name_to_class=widget_name_to_class,

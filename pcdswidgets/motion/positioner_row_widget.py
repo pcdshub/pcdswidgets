@@ -1,7 +1,7 @@
-from pcdswidgets.builder.ui.positioner_row_base import Positioner_RowWidgetBase
+from pcdswidgets.builder.ui.positioner_row_base import PositionerRowWidgetBase
 
 
-class PositionerRowWidget(Positioner_RowWidgetBase):
+class PositionerRowWidget(PositionerRowWidgetBase):
     _qt_designer_ = {
         "group": "PCDS Motion",
         "is_container": False,

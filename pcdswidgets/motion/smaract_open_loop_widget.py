@@ -1,7 +1,7 @@
-from pcdswidgets.builder.ui.smaract_open_loop_base import Smaract_Open_LoopWidgetBase
+from pcdswidgets.builder.ui.smaract_open_loop_base import SmaractOpenLoopWidgetBase
 
 
-class SmaractOpenLoopWidget(Smaract_Open_LoopWidgetBase):
+class SmaractOpenLoopWidget(SmaractOpenLoopWidgetBase):
     _qt_designer_ = {
         "group": "PCDS Motion",
         "is_container": False,
