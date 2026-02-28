@@ -11,19 +11,25 @@ set of common properties that can be used to tweak its look and feel.
 Gauges
 ------
 
-============ ========== ============================================================
-Name         Icon       Import
-============ ========== ============================================================
-Rough        |rough|    ``from pcdswidgets.icons import RoughGaugeSymbolIcon``
-Cathode      |cathode|  ``from pcdswidgets.icons import CathodeGaugeSymbolIcon``
-Hot Cathode  |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIcon``
-Cold Cathode |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
-============ ========== ============================================================
+=================== ========== ========================================================================
+Name                Icon       Import
+=================== ========== ========================================================================
+Rough               |rough|    ``from pcdswidgets.icons import RoughGaugeSymbolIcon``
+Cathode             |cathode|  ``from pcdswidgets.icons import CathodeGaugeSymbolIcon``
+Hot Cathode         |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIcon``
+Cold Cathode        |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
+Cold Cathode Combo  |cccombo|  ``from pcdswidgets.icons import ColdCathodeComboGaugeSymbolIcon``
+Hot Cathode Combo   |hccombo|  ``from pcdswidgets.icons import HotCathodeComboGaugeSymbolIcon``
+Capactiance Manom   |manom|    ``from pcdswidgets.icons import CapManometerGaugeSymbolIcon``
+=================== ========== ========================================================================
 
 .. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
 .. |cathode| image:: /_static/icons/CathodeGaugeSymbolIcon.png
 .. |hcathode| image:: /_static/icons/HotCathodeGaugeSymbolIcon.png
 .. |ccathode| image:: /_static/icons/ColdCathodeGaugeSymbolIcon.png
+.. |cccombo| image:: /_static/icons/ColdCathodeComboGaugeSymbolIcon.png
+.. |hccombo| image:: /_static/icons/HotCathodeComboGaugeSymbolIcon.png
+.. |manom| image:: /_static/icons/CapManometerGaugeSymbolIcon.png
 
 
 Valves
