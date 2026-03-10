@@ -1,6 +1,5 @@
 include **/*.ui
 
-include Makefile
 include AUTHORS.rst
 include CONTRIBUTING.rst
 include LICENSE.md
