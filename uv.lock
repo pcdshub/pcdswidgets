@@ -327,7 +327,7 @@ dependencies = [
 dev = [
     { name = "tomlkit" },
 ]
-docs = [
+doc = [
     { name = "docs-versions-menu" },
     { name = "sphinx" },
     { name = "sphinx-rtd-theme" },
@@ -341,19 +341,19 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "docs-versions-menu", marker = "extra == 'docs'", specifier = ">=0.5.2" },
+    { name = "docs-versions-menu", marker = "extra == 'doc'", specifier = ">=0.5.2" },
     { name = "pydm", specifier = ">=1.9.0" },
     { name = "pyqt5", specifier = ">=5.15.11" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=9.0.2" },
     { name = "pytest-qt", marker = "extra == 'test'", specifier = ">=4.5.0" },
     { name = "pytest-timeout", marker = "extra == 'test'", specifier = ">=2.4.0" },
     { name = "qtpy", specifier = ">=2.4.3" },
-    { name = "sphinx", marker = "extra == 'docs'", specifier = ">=9.1.0" },
-    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = ">=3.1.0" },
-    { name = "sphinxcontrib-jquery", marker = "extra == 'docs'", specifier = ">=4.1" },
+    { name = "sphinx", marker = "extra == 'doc'", specifier = ">=9.1.0" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'doc'", specifier = ">=3.1.0" },
+    { name = "sphinxcontrib-jquery", marker = "extra == 'doc'", specifier = ">=4.1" },
     { name = "tomlkit", marker = "extra == 'dev'", specifier = ">=0.14.0" },
 ]
-provides-extras = ["docs", "test", "dev"]
+provides-extras = ["doc", "test", "dev"]
 
 [[package]]
 name = "pluggy"
