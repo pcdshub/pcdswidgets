@@ -43,7 +43,7 @@ def test_built_is_importable(ui_source: Path):
             form_classes.append(cls)
 
     assert len(base_classes) == 1
-    assert isinstance(base_classes[0], DesignerWidget)
+    assert issubclass(base_classes[0], DesignerWidget)
 
     assert len(form_classes) == 1
     assert hasattr(form_classes[0], "setupUi")
