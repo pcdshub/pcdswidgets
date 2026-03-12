@@ -31,9 +31,11 @@ test:
   imports:
   - pcdswidgets
   requires:
+  - jinja2 >=3
   - pytest
   - pytest-qt
   - pytest-timeout
+  - tomlkit >=0.14.0
 
 about:
   home: https://github.com/pcdshub/pcdswidgets
