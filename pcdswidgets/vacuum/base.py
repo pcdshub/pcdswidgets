@@ -8,8 +8,17 @@ from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from qtpy.QtCore import Q_ENUMS, Property, QSize, Qt
 from qtpy.QtGui import QCursor, QPainter
-from qtpy.QtWidgets import (QFrame, QHBoxLayout, QLabel, QSizePolicy, QStyle,
-                            QStyleOption, QTabWidget, QVBoxLayout, QWidget)
+from qtpy.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QSizePolicy,
+    QStyle,
+    QStyleOption,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ..utils import refresh_style
 
@@ -21,6 +30,7 @@ class ContentLocation:
     Enum Class to be used by the widgets to configure the Controls Content
     Location.
     """
+
     Hidden = 0
     Top = 1
     Bottom = 2
@@ -67,35 +77,30 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         self.name = QLabel(self)
         self.name.setWordWrap(True)
-        self.name.setSizePolicy(QSizePolicy.Maximum,
-                                QSizePolicy.Maximum)
+        self.name.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.name.setAlignment(Qt.AlignCenter)
         self.name.setStyleSheet(f"font-size: {self._font_size}px; background: transparent")
         self.name.setVisible(self._show_name)
 
-        self._icon_cursor = self.setCursor(
-            QCursor(IconFont().icon("file").pixmap(16, 16))
-        )
+        self._icon_cursor = self.setCursor(QCursor(IconFont().icon("file").pixmap(16, 16)))
 
         self._expert_ophyd_class = self.EXPERT_OPHYD_CLASS or ""
 
         self.interlock = QFrame(self)
         self.interlock.setObjectName("interlock")
-        self.interlock.setSizePolicy(QSizePolicy.Expanding,
-                                     QSizePolicy.Expanding)
+        self.interlock.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.controls_frame = QFrame(self)
         self.controls_frame.setObjectName("controls")
-        self.controls_frame.setSizePolicy(QSizePolicy.Maximum,
-                                          QSizePolicy.Maximum)
+        self.controls_frame.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.setLayout(QVBoxLayout())
         self.layout().setSpacing(0)
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.interlock)
 
-        if not hasattr(self, '_controls_location'):
+        if not hasattr(self, "_controls_location"):
             self._controls_location = ContentLocation.Bottom
-        if not hasattr(self, '_text_lcoation'):
+        if not hasattr(self, "_text_lcoation"):
             self._text_location = ContentLocation.Top
 
         self.setup_icon()
@@ -398,18 +403,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             return
 
         if size <= 0:
-            size = - 1
+            size = -1
             min_size = 1
             max_size = 999999
-            self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                    QSizePolicy.Expanding)
+            self.icon.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.icon.setMinimumSize(min_size, min_size)
             self.icon.setMaximumSize(max_size, max_size)
 
         else:
             self.icon.setFixedSize(size, size)
-            self.icon.setSizePolicy(QSizePolicy.Fixed,
-                                    QSizePolicy.Fixed)
+            self.icon.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self._icon_size = size
         self.icon.update()
@@ -518,7 +521,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         grouped_widgets = QVBoxLayout()  # Default
 
         # Determine what widgets to group
-        if self._text_location in [ContentLocation.Left, ContentLocation.Right] and self._text_location == self._controls_location:
+        if (
+            self._text_location in [ContentLocation.Left, ContentLocation.Right]
+            and self._text_location == self._controls_location
+        ):
             grouped_widgets = QVBoxLayout()
             if self.name is not None:
                 grouped_widgets.addWidget(self.name, alignment=Qt.AlignCenter)
@@ -534,10 +540,14 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             # Group icon and name
             if self._text_location in [ContentLocation.Left, ContentLocation.Right]:
                 grouped_widgets = QHBoxLayout()
-                icon_and_text = [self.name, self.icon] if self._text_location == ContentLocation.Left else [self.icon, self.name]
+                icon_and_text = (
+                    [self.name, self.icon] if self._text_location == ContentLocation.Left else [self.icon, self.name]
+                )
             else:
                 grouped_widgets = QVBoxLayout()
-                icon_and_text = [self.name, self.icon] if self._text_location == ContentLocation.Top else [self.icon, self.name]
+                icon_and_text = (
+                    [self.name, self.icon] if self._text_location == ContentLocation.Top else [self.icon, self.name]
+                )
 
             for widget in icon_and_text:
                 if widget is None:
@@ -548,10 +558,18 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
             if self._controls_location in [ContentLocation.Left, ContentLocation.Right]:
                 layout_cls = QHBoxLayout
-                widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Left else [grouped_frame, self.controls_frame]
+                widgets = (
+                    [self.controls_frame, grouped_frame]
+                    if self._controls_location == ContentLocation.Left
+                    else [grouped_frame, self.controls_frame]
+                )
             else:
                 layout_cls = QVBoxLayout
-                widgets = [self.controls_frame, grouped_frame] if self._controls_location == ContentLocation.Top else [grouped_frame, self.controls_frame]
+                widgets = (
+                    [self.controls_frame, grouped_frame]
+                    if self._controls_location == ContentLocation.Top
+                    else [grouped_frame, self.controls_frame]
+                )
 
         grouped_widgets.setContentsMargins(0, 0, 0, 0)
         grouped_widgets.setSpacing(0)
@@ -579,29 +597,29 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if not self.icon:
             return
         self.icon.setMinimumSize(16, 16)
-        self.icon.setSizePolicy(QSizePolicy.Expanding,
-                                QSizePolicy.Expanding)
+        self.icon.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.icon.setVisible(self._show_icon)
         self.iconSize = 32
-        if hasattr(self.icon, 'clicked'):
+        if hasattr(self.icon, "clicked"):
             self.icon.clicked.connect(self._handle_icon_click)
             if self._expert_display is not None:
                 self.icon.setCursor(self._icon_cursor)
 
     def _handle_icon_click(self):
         if not self.channelsPrefix:
-            logger.error('No channel prefix specified.'
-                         'Cannot proceed with opening expert screen for %s.',
-                         self.__class__.__name__)
+            logger.error(
+                "No channel prefix specified." "Cannot proceed with opening expert screen for %s.",
+                self.__class__.__name__,
+            )
             return
 
         if self.tab_widget is not None:
-            logger.debug('Bringing existing custom display to front.')
+            logger.debug("Bringing existing custom display to front.")
             self.tab_widget.show()
             self.tab_widget.raise_()
             return
         elif self._expert_display is not None:
-            logger.debug('Bringing existing display to front.')
+            logger.debug("Bringing existing display to front.")
             self._expert_display.show()
             self._expert_display.raise_()
             return
@@ -609,15 +627,14 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         prefix = remove_protocol(self.channelsPrefix)
         klass = self.expertOphydClass
         if not klass:
-            logger.error('No expertOphydClass specified for pcdswidgets %s',
-                         self.__class__.__name__)
+            logger.error("No expertOphydClass specified for pcdswidgets %s", self.__class__.__name__)
             return
-        name = prefix.replace(':', '_')
+        name = prefix.replace(":", "_")
 
         try:
             import typhos
         except ImportError:
-            logger.error('Typhos not installed. Cannot create display.')
+            logger.error("Typhos not installed. Cannot create display.")
             return
 
         kwargs = {"name": name, "prefix": prefix}
@@ -630,14 +647,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
             self.tab_widget.addTab(display, "Typhos")
 
-            for file_path, title, macros in zip_longest(
-                self.ui_file_paths,
-                self.ui_file_titles,
-                self.ui_file_macros
-            ):
+            for file_path, title, macros in zip_longest(self.ui_file_paths, self.ui_file_titles, self.ui_file_macros):
                 embedded = PyDMEmbeddedDisplay()
                 title = title or file_path
-                macros = macros or ''
+                macros = macros or ""
 
                 embedded.set_macros_and_filename(file_path, macros)
                 self.tab_widget.addTab(embedded, title)
@@ -648,7 +661,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         elif display:
             display.show()
 
-    @Property('QStringList')
+    @Property("QStringList")
     def ui_paths(self):
         return self.ui_file_paths
 
@@ -657,7 +670,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if path != self.ui_file_paths:
             self.ui_file_paths = path
 
-    @Property('QStringList')
+    @Property("QStringList")
     def ui_macros(self):
         return self.ui_file_macros
 
@@ -666,7 +679,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if macros != self.ui_macros:
             self.ui_file_macros = macros
 
-    @Property('QStringList')
+    @Property("QStringList")
     def ui_titles(self):
         return self.ui_file_titles
 
@@ -687,7 +700,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         str
         """
         status = ""
-        if hasattr(self, 'NAME'):
+        if hasattr(self, "NAME"):
             status = self.NAME
         if status:
             status += os.linesep

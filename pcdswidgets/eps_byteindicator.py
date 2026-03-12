@@ -19,9 +19,8 @@ class ByteIndicator_NegativeNums(PyDMByteIndicator):
         else:
             value = int(self.value) >> self._shift
 
-        bits = [(value >> i) & 1
-                for i in range(self._num_bits)]
-        for bit, indicator in zip(bits, self._indicators):
+        bits = [(value >> i) & 1 for i in range(self._num_bits)]
+        for bit, indicator in zip(bits, self._indicators, strict=False):
             if self._connected:
                 if self._alarm_state == 3:
                     c = self._invalid_color
@@ -70,10 +69,9 @@ class EPSByteIndicator(QWidget):
         Callback function when the lables change
         """
 
-        labels = parse_value_for_display(value=new_labels, precision=0,
-                                         display_format_type=DisplayFormat.String)
+        labels = parse_value_for_display(value=new_labels, precision=0, display_format_type=DisplayFormat.String)
 
-        labels = labels.split(';')
+        labels = labels.split(";")
         self.template_widget.numBits = len(labels)
         self.template_widget.labels = labels
         self.template_widget.update_indicators()
@@ -97,12 +95,11 @@ class EPSByteIndicator(QWidget):
             self._value_pv = ch + ":nFlags_RBV"
             self._label_pv = ch + ":sFlagDesc_RBV"
 
-            _value_channel = PyDMChannel(address=self._value_pv,
-                                         connection_slot=self.value_channel,
-                                         value_slot=self.value_change)
+            _value_channel = PyDMChannel(
+                address=self._value_pv, connection_slot=self.value_channel, value_slot=self.value_change
+            )
 
-            _label_channel = PyDMChannel(address=self._label_pv,
-                                         value_slot=self.label_change)
+            _label_channel = PyDMChannel(address=self._label_pv, value_slot=self.label_change)
             _value_channel.connect()
             _label_channel.connect()
 

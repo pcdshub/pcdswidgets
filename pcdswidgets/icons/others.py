@@ -13,6 +13,7 @@ class RGASymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     path = QPainterPath(QPointF(0, 0))
     path.lineTo(1, 0)
     path.lineTo(1, 0.33)

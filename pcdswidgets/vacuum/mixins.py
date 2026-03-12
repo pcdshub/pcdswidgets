@@ -32,6 +32,7 @@ class InterlockMixin:
         The suffix to be used along with the channelPrefix from PCDSSymbolBase
         to compose the interlock channel address.
     """
+
     def __init__(self, interlock_suffix, **kwargs):
         self._interlock_suffix = interlock_suffix
         self._interlocked = False
@@ -64,10 +65,9 @@ class InterlockMixin:
         self._interlock_connected = False
 
         self.interlock_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix,
-                                  self._interlock_suffix),
+            address="{}{}".format(self._channels_prefix, self._interlock_suffix),
             connection_slot=self.interlock_connection_changed,
-            value_slot=self.interlock_value_changed
+            value_slot=self.interlock_value_changed,
         )
         self.interlock_channel.connect()
 
@@ -133,6 +133,7 @@ class ErrorMixin:
         The suffix to be used along with the channelPrefix from PCDSSymbolBase
         to compose the error channel address.
     """
+
     def __init__(self, error_suffix, **kwargs):
         self._error_suffix = error_suffix
         self._error = ""
@@ -170,7 +171,7 @@ class ErrorMixin:
             address=f"{self._channels_prefix}{self._error_suffix}",
             connection_slot=self.error_connection_changed,
             value_slot=self.error_value_changed,
-            enum_strings_slot=self.error_enum_changed
+            enum_strings_slot=self.error_enum_changed,
         )
         self.error_channel.connect()
 
@@ -271,6 +272,7 @@ class StateMixin:
         The suffix to be used along with the channelPrefix from PCDSSymbolBase
         to compose the state channel address.
     """
+
     def __init__(self, state_suffix, **kwargs):
         self._state_suffix = state_suffix
         self._state = ""
@@ -308,7 +310,7 @@ class StateMixin:
             address=f"{self._channels_prefix}{self._state_suffix}",
             connection_slot=self.state_connection_changed,
             value_slot=self.state_value_changed,
-            enum_strings_slot=self.state_enum_changed
+            enum_strings_slot=self.state_enum_changed,
         )
         self.state_channel.connect()
 
@@ -414,6 +416,7 @@ class OpenCloseStateMixin:
         The suffix to be used along with the channelPrefix from PCDSSymbolBase
         to compose the close state channel address.
     """
+
     def __init__(self, open_suffix, close_suffix, **kwargs):
         self._open_suffix = open_suffix
         self._close_suffix = close_suffix
@@ -465,14 +468,14 @@ class OpenCloseStateMixin:
         self.state_open_channel = PyDMChannel(
             address=f"{self._channels_prefix}{self._open_suffix}",
             connection_slot=partial(self.state_connection_changed, "OPEN"),
-            value_slot=partial(self.state_value_changed, "OPEN")
+            value_slot=partial(self.state_value_changed, "OPEN"),
         )
         self.state_open_channel.connect()
 
         self.state_close_channel = PyDMChannel(
             address=f"{self._channels_prefix}{self._close_suffix}",
             connection_slot=partial(self.state_connection_changed, "CLOSE"),
-            value_slot=partial(self.state_value_changed, "CLOSE")
+            value_slot=partial(self.state_value_changed, "CLOSE"),
         )
         self.state_close_channel.connect()
 
@@ -542,6 +545,7 @@ class ButtonControl:
         The suffix to be used along with the channelPrefix from PCDSSymbolBase
         to compose the command button channel address.
     """
+
     def __init__(self, command_suffix, **kwargs):
         self._command_suffix = command_suffix
         self._orientation = Qt.Horizontal
@@ -578,8 +582,7 @@ class ButtonControl:
         """
         super().create_channels()
         if self._channels_prefix:
-            self.control_btn.channel = "{}{}".format(self._channels_prefix,
-                                                     self._command_suffix)
+            self.control_btn.channel = "{}{}".format(self._channels_prefix, self._command_suffix)
 
     def destroy_channels(self):
         """
@@ -604,8 +607,8 @@ class LabelControl:
         The name to be set to the PyDMLabel so one can refer to it by name
         with stylesheet
     """
-    def __init__(self, readback_suffix, readback_name,
-                 **kwargs):
+
+    def __init__(self, readback_suffix, readback_name, **kwargs):
         self._readback_suffix = readback_suffix
         self.readback_label = PyDMLabel()
         if readback_name:
@@ -626,8 +629,7 @@ class LabelControl:
         """
         super().create_channels()
         if self._channels_prefix:
-            self.readback_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
+            self.readback_label.channel = "{}{}".format(self._channels_prefix, self._readback_suffix)
 
     def destroy_channels(self):
         """
@@ -656,8 +658,8 @@ class ButtonLabelControl(ButtonControl):
         The name to be set to the PyDMLabel so one can refer to it by name
         with stylesheet
     """
-    def __init__(self, command_suffix, readback_suffix, readback_name,
-                 **kwargs):
+
+    def __init__(self, command_suffix, readback_suffix, readback_name, **kwargs):
         self._readback_suffix = readback_suffix
 
         self.readback_label = PyDMLabel()
@@ -674,8 +676,7 @@ class ButtonLabelControl(ButtonControl):
         """
         super().create_channels()
         if self._channels_prefix:
-            self.readback_label.channel = "{}{}".format(self._channels_prefix,
-                                                        self._readback_suffix)
+            self.readback_label.channel = "{}{}".format(self._channels_prefix, self._readback_suffix)
 
     def destroy_channels(self):
         """
@@ -706,6 +707,7 @@ class MultipleButtonControl:
         - value
             the value to be written when the button is pressed
     """
+
     def __init__(self, *, commands, **kwargs):
         self._command_buttons_config = commands
         self._orientation = Qt.Horizontal
@@ -755,12 +757,12 @@ class MultipleButtonControl:
     def create_buttons(self):
         for btn in self._command_buttons_config:
             try:
-                text = btn['text']
-                value = btn['value']
+                text = btn["text"]
+                value = btn["value"]
                 btn = PyDMPushButton(label=text, pressValue=value)
                 self.buttons.append(btn)
             except KeyError:
-                logger.exception('Invalid config for MultipleButtonControl.')
+                logger.exception("Invalid config for MultipleButtonControl.")
 
     def create_channels(self):
         """
@@ -771,7 +773,7 @@ class MultipleButtonControl:
         super().create_channels()
         if self._channels_prefix:
             for idx, btn in enumerate(self.buttons):
-                suffix = self._command_buttons_config[idx]['suffix']
+                suffix = self._command_buttons_config[idx]["suffix"]
                 btn.channel = f"{self._channels_prefix}{suffix}"
 
     def destroy_channels(self):

@@ -3,22 +3,23 @@ from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy.QtCore import Property, QSize, Qt
 from qtpy.QtWidgets import QGridLayout
 
-from ..icons.valves import (ApertureValveSymbolIcon,
-                            ControlOnlyValveSymbolIcon, ControlValveSymbolIcon,
-                            FastShutterSymbolIcon, NeedleValveSymbolIcon,
-                            PneumaticValveDASymbolIcon,
-                            PneumaticValveNOSymbolIcon,
-                            PneumaticValveSymbolIcon,
-                            ProportionalValveSymbolIcon,
-                            RightAngleManualValveSymbolIcon)
+from ..icons.valves import (
+    ApertureValveSymbolIcon,
+    ControlOnlyValveSymbolIcon,
+    ControlValveSymbolIcon,
+    FastShutterSymbolIcon,
+    NeedleValveSymbolIcon,
+    PneumaticValveDASymbolIcon,
+    PneumaticValveNOSymbolIcon,
+    PneumaticValveSymbolIcon,
+    ProportionalValveSymbolIcon,
+    RightAngleManualValveSymbolIcon,
+)
 from .base import ContentLocation, PCDSSymbolBase
-from .mixins import (ButtonControl, ErrorMixin, InterlockMixin,
-                     MultipleButtonControl, StateMixin)
+from .mixins import ButtonControl, ErrorMixin, InterlockMixin, MultipleButtonControl, StateMixin
 
 
-class PneumaticValve(
-    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
-):
+class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Pneumatic Valve with the proper icon and
     controls.
@@ -110,16 +111,15 @@ class PneumaticValve(
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = PneumaticValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
 
 
-class ApertureValve(
-    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
-):
+class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing an Aperture Valve with the proper icon and
     controls.
@@ -210,16 +210,15 @@ class ApertureValve(
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ApertureValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         return QSize(180, 70)
 
 
-class FastShutter(
-    InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl, PCDSSymbolBase
-):
+class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Fast Shutter with the proper icon and
     controls.
@@ -307,7 +306,8 @@ class FastShutter(
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             commands=self._command_buttons,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = FastShutterSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -389,7 +389,8 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = NeedleValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -471,7 +472,8 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBas
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ProportionalValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -544,9 +546,7 @@ class RightAngleManualValve(PCDSSymbolBase):
         return super().controlsLocation
 
 
-class ControlValve(
-    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
-):
+class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Control Valve with the proper icon and
     controls.
@@ -622,7 +622,7 @@ class ControlValve(
         "group": "PCDS Valves",
         "is_container": False,
     }
-    NAME = 'Control Valve with Readback'
+    NAME = "Control Valve with Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
     _interlock_suffix = ":OPN_OK_RBV"
@@ -637,7 +637,8 @@ class ControlValve(
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ControlValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -717,11 +718,11 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
         "group": "PCDS Valves",
         "is_container": False,
     }
-    NAME = 'Normally Closed Control Valve with No Readback'
+    NAME = "Normally Closed Control Valve with No Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
     _interlock_suffix = ":OPN_OK_RBV"
-    _state_suffix = ':OPN_DO_RBV'
+    _state_suffix = ":OPN_DO_RBV"
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
@@ -730,7 +731,8 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -810,11 +812,11 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
         "group": "PCDS Valves",
         "is_container": False,
     }
-    NAME = 'Normally Open Control Valve with No Readback'
+    NAME = "Normally Open Control Valve with No Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
 
     _interlock_suffix = ":CLS_OK_RBV"
-    _state_suffix = ':CLS_DO_RBV'
+    _state_suffix = ":CLS_DO_RBV"
     _command_suffix = ":CLS_SW"
 
     def __init__(self, parent=None, **kwargs):
@@ -823,13 +825,12 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
             interlock_suffix=self._interlock_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
 
-class PneumaticValveNO(
-    InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase
-):
+class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
     A Symbol Widget representing a Normally Open Pneumatic Valve with the
     proper icon and controls.
@@ -920,7 +921,8 @@ class PneumaticValveNO(
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = PneumaticValveNOSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -1030,14 +1032,15 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
             interlock_suffix=self._interlock_suffix,
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = PneumaticValveDASymbolIcon(parent=self)
         self.open_btn = PyDMPushButton(
-            label='OPEN',
+            label="OPEN",
             pressValue=1,
         )
         self.cls_btn = PyDMPushButton(
-            label='CLOSE',
+            label="CLOSE",
             pressValue=1,
         )
         self.open_btn.setFixedSize(55, 25)
@@ -1095,10 +1098,9 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
         self._cls_interlock_connected = False
 
         self.cls_interlock_channel = PyDMChannel(
-            address="{}{}".format(self._channels_prefix,
-                                  self._cls_interlock_suffix),
+            address="{}{}".format(self._channels_prefix, self._cls_interlock_suffix),
             connection_slot=self.cls_interlock_connection_changed,
-            value_slot=self.cls_interlock_value_changed
+            value_slot=self.cls_interlock_value_changed,
         )
         self.cls_interlock_channel.connect()
 

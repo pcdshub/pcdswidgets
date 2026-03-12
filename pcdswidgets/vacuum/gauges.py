@@ -1,14 +1,16 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (CapManometerGaugeSymbolIcon,
-                            ColdCathodeComboGaugeSymbolIcon,
-                            ColdCathodeGaugeSymbolIcon,
-                            HotCathodeComboGaugeSymbolIcon,
-                            HotCathodeGaugeSymbolIcon, RoughGaugeSymbolIcon)
+from ..icons.gauges import (
+    CapManometerGaugeSymbolIcon,
+    ColdCathodeComboGaugeSymbolIcon,
+    ColdCathodeGaugeSymbolIcon,
+    HotCathodeComboGaugeSymbolIcon,
+    HotCathodeGaugeSymbolIcon,
+    RoughGaugeSymbolIcon,
+)
 from .base import PCDSSymbolBase
-from .mixins import (ButtonLabelControl, InterlockMixin, LabelControl,
-                     StateMixin)
+from .mixins import ButtonLabelControl, InterlockMixin, LabelControl, StateMixin
 
 
 class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
@@ -80,8 +82,9 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = RoughGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -167,8 +170,9 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbol
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = HotCathodeGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -255,8 +259,9 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = ColdCathodeGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -333,8 +338,9 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = ColdCathodeComboGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -411,8 +417,9 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = HotCathodeComboGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
@@ -489,8 +496,9 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
             parent=parent,
             state_suffix=self._state_suffix,
             readback_suffix=self._readback_suffix,
-            readback_name='pressure',
-            **kwargs)
+            readback_name="pressure",
+            **kwargs,
+        )
         self.icon = CapManometerGaugeSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
