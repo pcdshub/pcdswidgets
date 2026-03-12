@@ -33,14 +33,14 @@ def main():
 
 
 def get_widget_entrypoint_data() -> list[tuple[str, str]]:
-    key_val: list[tuple[str, str]] = []
+    key_val_set: set[tuple[str, str]] = set()
     for module in iter_submodules():
         for name, obj in inspect.getmembers(module, inspect.isclass):
             if name in SKIP_WIDGETS:
                 continue
             if hasattr(obj, "_qt_designer_"):
-                key_val.append((name, f"{obj.__module__}:{name}"))
-    key_val.sort()
+                key_val_set.add((name, f"{obj.__module__}:{name}"))
+    key_val = sorted(key_val_set)
     return key_val
 
 
