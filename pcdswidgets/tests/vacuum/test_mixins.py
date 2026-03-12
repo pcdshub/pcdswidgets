@@ -85,14 +85,14 @@ def test_interlock_value_changed(interlock, interlock_bit):
 def test_error_value_changed(error):
     orig_tooltip = error.status_tooltip()
     error.error_value_changed(1)
-    error.error == "Good"
+    assert error.error == "Good"
     assert orig_tooltip != error.status_tooltip()
 
 
 def test_state_value_changed(state):
     orig_tooltip = state.status_tooltip()
     state.state_value_changed(1)
-    state.state == "Good"
+    assert state.state == "Good"
     assert orig_tooltip != state.status_tooltip()
 
 

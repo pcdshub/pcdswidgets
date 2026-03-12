@@ -260,8 +260,8 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         This makes it so you can right click to configure the table from
         within any of the contained widgets.
         """
-        for widget in widget.children():
-            widget.contextMenuEvent = self.contextMenuEvent
+        for child_widget in widget.children():
+            child_widget.contextMenuEvent = self.contextMenuEvent
 
     def contextMenuEvent(self, _event) -> None:
         """

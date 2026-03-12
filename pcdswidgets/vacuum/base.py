@@ -112,7 +112,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         self.ui_file_titles = []
 
         self.tab_widget = None
-        self.embedded_displays = list()
+        self.embedded_displays = []
 
     def sizeHint(self):
         """
@@ -507,7 +507,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         # empty widget.
         QWidget().setLayout(self.interlock.layout())
 
-    def assemble_layout(self):
+    def assemble_layout(self):  # noqa: C901
         """
         Assembles the widget's inner layout depending on the ContentLocation
         and other configurations set.
