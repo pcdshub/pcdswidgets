@@ -66,12 +66,14 @@ doc = [
     "sphinxcontrib-jquery>=4.1",
 ]
 test = [
+    "jinja2>=3",
     "pytest>=9.0.2",
     "pytest-qt>=4.5.0",
     "pytest-timeout>=2.4.0",
     "tomlkit>=0.14.0",
 ]
 dev = [
+    "jinja2>=3",
     "tomlkit>=0.14.0",
 ]
 

@@ -325,6 +325,7 @@ dependencies = [
 
 [package.optional-dependencies]
 dev = [
+    { name = "jinja2" },
     { name = "tomlkit" },
 ]
 doc = [
@@ -334,6 +335,7 @@ doc = [
     { name = "sphinxcontrib-jquery" },
 ]
 test = [
+    { name = "jinja2" },
     { name = "pytest" },
     { name = "pytest-qt" },
     { name = "pytest-timeout" },
@@ -343,6 +345,8 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "docs-versions-menu", marker = "extra == 'doc'", specifier = ">=0.5.2" },
+    { name = "jinja2", marker = "extra == 'dev'", specifier = ">=3" },
+    { name = "jinja2", marker = "extra == 'test'", specifier = ">=3" },
     { name = "pydm", specifier = ">=1.9.0" },
     { name = "pyqt5", specifier = ">=5.15.11" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=9.0.2" },
