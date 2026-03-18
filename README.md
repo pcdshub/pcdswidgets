@@ -13,6 +13,49 @@ pip install -e .
 
 
 ## Adding Widgets
+### Widget Sizing
+Device control widgets should fall into exactly one of three size classes.
+Widgets can be smaller than the maximum of their size class by up to 10% before being flagged by CI.
+
+To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
+and are permissible sizes as recorded below.
+It's recommended to used fixed sizing when possible because dynamic sizing is hard to do right.
+
+Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
+
+#### Full Size
+- Width: 250px
+- Height: 120px
+
+#### Compact Size
+- Width: 75px
+- Height: 75px
+
+#### Row Size
+- Width: 680px
+- Height: 40px
+
+#### Widgets that aren't control widgets (containers, etc.)
+These should not have a maximum or a minimum size- they should be usable at any size.
+
+#### Widgets created before 2026
+These may have a variety of sizes because we had no standards, and will not be checked in CI.
+
+
+### Widget Naming
+Device control widgets should be named based on the type of device that they control.
+The name should be specific enough to distinguish it from other widgets, but general enough to cover all devices that can be used.
+Widgets are named using CamelCase and must end with the size, e.g. `MotorRecordFull`
+
+There is no need to end a widget name with "Widget".
+
+Widgets with ui files, such as the composite widgets, should have parity between the ui file name and the widget name, for example `motor_record_full.ui` for `MotorRecordFull`, as well as the module that contains the widget which should be called `motor_record_full.py`.
+
+Widgets should never be renamed between tags, this will break existing screens.
+
+Widgets named before 2026 may break some of these rules because we don't want to rename them.
+
+
 ### Adding a Symbol-based Widget
 This is how you would add e.g. a pump or valve widget with a custom drawing symbol and some color awareness.
 

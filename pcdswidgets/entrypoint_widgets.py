@@ -14,6 +14,7 @@ from typing import Iterator, cast
 
 import tomlkit as tk
 import tomlkit.items as tki
+from qtpy.QtWidgets import QWidget
 
 SKIP_WIDGETS = [
     "PCDSSymbolBase",
@@ -34,14 +35,30 @@ def main():
 
 def get_widget_entrypoint_data() -> list[tuple[str, str]]:
     key_val_set: set[tuple[str, str]] = set()
+    for name, WidgetCls in iter_all_widgets():
+        key_val_set.add((name, f"{WidgetCls.__module__}:{name}"))
+    key_val = sorted(key_val_set)
+    return key_val
+
+
+def iter_all_widgets() -> Iterator[tuple[str, type[QWidget]]]:
+    """
+    Recursively yield all widgets to export from pcdswidgets.
+
+    Yields
+    ------
+    name, widget: str, QWidget
+    """
+    seen: set[str] = set()
     for module in iter_submodules():
         for name, obj in inspect.getmembers(module, inspect.isclass):
             if name in SKIP_WIDGETS:
                 continue
-            if hasattr(obj, "_qt_designer_"):
-                key_val_set.add((name, f"{obj.__module__}:{name}"))
-    key_val = sorted(key_val_set)
-    return key_val
+            if name in seen:
+                continue
+            if issubclass(obj, QWidget) and hasattr(obj, "_qt_designer_"):
+                seen.add(name)
+                yield (name, obj)
 
 
 def iter_submodules(package: str = "pcdswidgets") -> Iterator[ModuleType]:
