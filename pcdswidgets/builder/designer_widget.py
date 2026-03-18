@@ -25,7 +25,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     # Loaded from uic
     ui_form: ClassVar[type[_UiForm]]
     # Tells PyDM to include in designer
-    _qt_designer_: dict[str, Any]
+    _qt_designer_: ClassVar[dict[str, Any]]
     # Macro name to widget names that include that macro
     _macro_to_widget: ClassVar[dict[str, list[str]]]
     # Widget name to required macros: all must be non-empty before updating
