@@ -109,7 +109,7 @@ class MacroEditExtension:
         return [self.edit_macros_action]
 
     def open_dialog(self):
-        dialog = MacroValueEditor(self.widget, parent=None)
+        dialog = MacroValueEditor(self.widget, parent=self.widget)
         dialog.exec_()
 
 
