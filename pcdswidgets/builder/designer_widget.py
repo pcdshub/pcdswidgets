@@ -7,6 +7,7 @@ from typing import Any, ClassVar, Protocol
 
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
+from pydm.widgets.designer_settings import update_property_for_widget
 from pydm.widgets.qtplugin_extensions import RulesExtension
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
@@ -158,7 +159,7 @@ class MacroValueEditor(QDialog):
 
     def save_changes(self):
         for macro_name, widget in self.edit_widgets.items():
-            self.widget._set_macro(macro_name, widget.text())
+            update_property_for_widget(self.widget, macro_name.lower(), widget.text())
         if self.sender() == self.save_button:
             self.accept()
 
