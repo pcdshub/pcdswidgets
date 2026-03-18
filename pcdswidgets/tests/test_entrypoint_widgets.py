@@ -80,5 +80,7 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
             "must end with Full, Compact, or Row to signal size class."
         )
 
-    assert min_w <= widget.minimumWidth() <= widget.maximumWidth() <= max_w
-    assert min_h <= widget.minimumHeight() <= widget.maximumHeight() <= max_h
+    assert widget.minimumWidth() >= min_w, f"{widget_name}'s minimum width is too small."
+    assert widget.maximumWidth() <= max_w, f"{widget_name}'s maximum width is too large."
+    assert widget.minimumHeight() >= min_h, f"{widget_name}'s minimum height is too small."
+    assert widget.maximumHeight() <= max_h, f"{widget_name}'s maximum height is too large."
