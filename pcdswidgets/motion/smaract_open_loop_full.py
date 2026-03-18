@@ -1,9 +1,9 @@
 from pydm.widgets.qtplugins import ifont
 
-from pcdswidgets.builder.ui.smaract_open_loop_base import SmaractOpenLoopWidgetBase
+from pcdswidgets.builder.ui.smaract_open_loop_full_base import SmaractOpenLoopFullBase
 
 
-class SmaractOpenLoopWidget(SmaractOpenLoopWidgetBase):
+class SmaractOpenLoopFull(SmaractOpenLoopFullBase):
     _qt_designer_ = {
         "group": "PCDS Motion",
         "is_container": False,

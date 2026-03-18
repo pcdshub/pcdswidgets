@@ -66,7 +66,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PositionerRowWidget" name="PositionerRowWidget">
+       <widget class="MotorRecordRow" name="MotorRecordRow">
         <property name="toolTip">
          <string/>
         </property>
@@ -251,9 +251,9 @@
    <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
-   <class>PositionerRowWidget</class>
+   <class>MotorRecordRow</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.motion.positioner_row_widget</header>
+   <header>pcdswidgets.motion.motor_record_row</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -39,7 +39,7 @@ def build_base_widget(designer_ui: str):
 
     # Bring the info into a good form for the jinja template
     ui_name = os.path.basename(designer_ui)
-    base_cls = "".join(part.title() for part in ui_name.removesuffix(".ui").split("_")) + "WidgetBase"
+    base_cls = "".join(part.title() for part in ui_name.removesuffix(".ui").split("_")) + "Base"
     info_for_jinja = process_widget_macros(ui_info)
 
     macro_names = sorted(info_for_jinja.macro_set)

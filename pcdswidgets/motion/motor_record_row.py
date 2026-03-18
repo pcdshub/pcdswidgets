@@ -1,9 +1,9 @@
 from pydm.widgets.qtplugins import ifont
 
-from pcdswidgets.builder.ui.positioner_row_base import PositionerRowWidgetBase
+from pcdswidgets.builder.ui.motor_record_row_base import MotorRecordRowBase
 
 
-class PositionerRowWidget(PositionerRowWidgetBase):
+class MotorRecordRow(MotorRecordRowBase):
     _qt_designer_ = {
         "group": "PCDS Motion",
         "is_container": False,

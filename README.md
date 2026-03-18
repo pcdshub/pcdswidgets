@@ -109,12 +109,12 @@ If the widget has been added and is included in the pyproject.toml file, it will
 #### Widget Classes
 The widget class looks something like:
 ```
-from pcdswidgets.builder.ui.my_widget_base import MyWidgetBase
+from pcdswidgets.builder.ui.some_name_base import SomeNameBase
 
 
-class MyWidget(MyWidgetBase):
+class SomeName(SomeNameBase):
     _qt_designer_ = {
-        "group": "My Category",
+        "group": "Some Category",
         "is_container": False,
     }
 ```

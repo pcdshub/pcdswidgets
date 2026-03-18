@@ -1,9 +1,9 @@
 from pydm.widgets.qtplugins import ifont
 
-from pcdswidgets.builder.ui.positioner_row_tc_interlock_base import PositionerRowTcInterlockWidgetBase
+from pcdswidgets.builder.ui.motor_record_tc_interlock_row_base import MotorRecordTcInterlockRowBase
 
 
-class PositionerRowTcInterlockWidget(PositionerRowTcInterlockWidgetBase):
+class MotorRecordTcInterlockRow(MotorRecordTcInterlockRowBase):
     _qt_designer_ = {
         "group": "PCDS Motion",
         "is_container": False,
