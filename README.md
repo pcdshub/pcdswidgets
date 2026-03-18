@@ -121,6 +121,21 @@ class SomeName(SomeNameBase):
 
 If you like, you can extend these classes to add additional python code to use at runtime.
 
+#### Icons
+If you want to set a non-default icon for the designer widget list, you can include a QIcon or a string
+in the "icon" key of the `_qt_designer_` variable:
+```
+    _qt_designer_ = {
+        "group": "Some Category",
+        "is_container": False,
+        "icon": "expand-arrows-alt",
+    }
+```
+
+If this is a string, we'll convert it to a QIcon using Pydm's IconFont.
+This uses a portable version of fontawesome, try running `qta-browser`
+and look through everything with the `fa` prefix to browse options.
+
 
 #### Limitations
 - Widgets that contain PyDMEmbeddedWidget are not supported: bootstrap these by turning the contents into widgets themselves.

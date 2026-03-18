@@ -5,9 +5,12 @@ Helper for using designer to layout widgets.
 from string import Template
 from typing import Any, ClassVar, Protocol
 
+from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.qtplugin_extensions import RulesExtension
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
+
+ifont = IconFont()
 
 
 class _UiForm(Protocol):
@@ -43,6 +46,12 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 cls._qt_designer_["extensions"] = new_ext
             except AttributeError:
                 ...
+        # Interpret strings as icons so we don't have to import IconFont everywhere
+        try:
+            if isinstance(cls._qt_designer_["icon"], str):
+                cls._qt_designer_["icon"] = ifont.icon(cls._qt_designer_["icon"])
+        except (AttributeError, KeyError):
+            ...
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
