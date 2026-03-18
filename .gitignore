@@ -110,3 +110,6 @@ venv.bak/
 # pyuic5
 **/ui/*.py
 !**/ui/__init__.py
+
+# vscode
+.vscode/*
