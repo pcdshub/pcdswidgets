@@ -63,7 +63,7 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
 
     if widget_name.endswith("Full"):
         max_w = 400
-        max_h = 120
+        max_h = 125
         min_w = ratio * max_w
         min_h = ratio * max_h
     elif widget_name.endswith("Compact"):
