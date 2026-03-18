@@ -55,7 +55,7 @@ RGA = "pcdswidgets.vacuum.others:RGA"
 RightAngleManualValve = "pcdswidgets.vacuum.valves:RightAngleManualValve"
 RoughGauge = "pcdswidgets.vacuum.gauges:RoughGauge"
 ScrollPump = "pcdswidgets.vacuum.pumps:ScrollPump"
-SmaractOpenLoopFull = "pcdswidgets.motion.smaract_open_loop_full:SmaractOpenLoopFull"
+SmaractOpenLoopRow = "pcdswidgets.motion.smaract_open_loop_row:SmaractOpenLoopRow"
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 
 [project.optional-dependencies]

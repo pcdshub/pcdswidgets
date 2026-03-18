@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>753</width>
-    <height>55</height>
+    <height>45</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,8 +24,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1000</width>
-    <height>55</height>
+    <width>800</width>
+    <height>50</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -90,43 +90,43 @@
         <property name="text">
          <string>&gt;&gt;</string>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="PyDMToolTip" stdset="0">
+        <property name="PyDMToolTip">
          <string/>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.TWF</string>
         </property>
-        <property name="passwordProtected" stdset="0">
+        <property name="passwordProtected">
          <bool>false</bool>
         </property>
-        <property name="password" stdset="0">
+        <property name="password">
          <string/>
         </property>
-        <property name="protectedPassword" stdset="0">
+        <property name="protectedPassword">
          <string/>
         </property>
-        <property name="showConfirmDialog" stdset="0">
+        <property name="showConfirmDialog">
          <bool>false</bool>
         </property>
-        <property name="confirmMessage" stdset="0">
+        <property name="confirmMessage">
          <string>Are you sure you want to proceed?</string>
         </property>
-        <property name="pressValue" stdset="0">
+        <property name="pressValue">
          <string>1</string>
         </property>
-        <property name="releaseValue" stdset="0">
+        <property name="releaseValue">
          <string>None</string>
         </property>
-        <property name="relativeChange" stdset="0">
+        <property name="relativeChange">
          <bool>false</bool>
         </property>
-        <property name="writeWhenRelease" stdset="0">
+        <property name="writeWhenRelease">
          <bool>false</bool>
         </property>
        </widget>
@@ -148,38 +148,38 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>true</bool>
         </property>
-        <property name="PyDMToolTip" stdset="0">
+        <property name="PyDMToolTip">
          <string/>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.HLS</string>
         </property>
-        <property name="onColor" stdset="0">
+        <property name="onColor">
          <color>
           <red>255</red>
           <green>165</green>
           <blue>0</blue>
          </color>
         </property>
-        <property name="showLabels" stdset="0">
+        <property name="showLabels">
          <bool>false</bool>
         </property>
-        <property name="bigEndian" stdset="0">
+        <property name="bigEndian">
          <bool>false</bool>
         </property>
-        <property name="circles" stdset="0">
+        <property name="circles">
          <bool>false</bool>
         </property>
-        <property name="numBits" stdset="0">
+        <property name="numBits">
          <number>1</number>
         </property>
-        <property name="labels" stdset="0">
+        <property name="labels">
          <stringlist>
           <string>Bit 0</string>
          </stringlist>
@@ -216,13 +216,13 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.DESC</string>
         </property>
-        <property name="displayFormat" stdset="0">
+        <property name="displayFormat">
          <enum>PyDMLabel::String</enum>
         </property>
        </widget>
@@ -251,22 +251,22 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="precision" stdset="0">
+        <property name="precision">
          <number>0</number>
         </property>
-        <property name="showUnits" stdset="0">
+        <property name="showUnits">
          <bool>false</bool>
         </property>
-        <property name="precisionFromPV" stdset="0">
+        <property name="precisionFromPV">
          <bool>true</bool>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.EGU</string>
         </property>
        </widget>
@@ -276,10 +276,10 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="commands" stdset="0">
+        <property name="commands">
          <stringlist>
           <string>motor-expert-screen ${MOTOR}</string>
          </stringlist>
@@ -308,22 +308,22 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="precision" stdset="0">
+        <property name="precision">
          <number>3</number>
         </property>
-        <property name="showUnits" stdset="0">
+        <property name="showUnits">
          <bool>false</bool>
         </property>
-        <property name="precisionFromPV" stdset="0">
+        <property name="precisionFromPV">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.TWV</string>
         </property>
        </widget>
@@ -345,41 +345,41 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>true</bool>
         </property>
-        <property name="PyDMToolTip" stdset="0">
+        <property name="PyDMToolTip">
          <string/>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.LLS</string>
         </property>
-        <property name="onColor" stdset="0">
+        <property name="onColor">
          <color>
           <red>255</red>
           <green>165</green>
           <blue>0</blue>
          </color>
         </property>
-        <property name="showLabels" stdset="0">
+        <property name="showLabels">
          <bool>false</bool>
         </property>
-        <property name="bigEndian" stdset="0">
+        <property name="bigEndian">
          <bool>false</bool>
         </property>
-        <property name="circles" stdset="0">
+        <property name="circles">
          <bool>false</bool>
         </property>
-        <property name="numBits" stdset="0">
+        <property name="numBits">
          <number>1</number>
         </property>
-        <property name="shift" stdset="0">
+        <property name="shift">
          <number>0</number>
         </property>
-        <property name="labels" stdset="0">
+        <property name="labels">
          <stringlist>
           <string>Bit 0</string>
          </stringlist>
@@ -413,25 +413,25 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
-        <property name="precision" stdset="0">
+        <property name="precision">
          <number>3</number>
         </property>
-        <property name="showUnits" stdset="0">
+        <property name="showUnits">
          <bool>false</bool>
         </property>
-        <property name="precisionFromPV" stdset="0">
+        <property name="precisionFromPV">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>true</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.RBV</string>
         </property>
-        <property name="displayFormat" stdset="0">
+        <property name="displayFormat">
          <enum>PyDMLabel::Decimal</enum>
         </property>
        </widget>
@@ -462,31 +462,31 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>true</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.MOVN</string>
         </property>
-        <property name="showLabels" stdset="0">
+        <property name="showLabels">
          <bool>false</bool>
         </property>
-        <property name="bigEndian" stdset="0">
+        <property name="bigEndian">
          <bool>false</bool>
         </property>
-        <property name="circles" stdset="0">
+        <property name="circles">
          <bool>true</bool>
         </property>
-        <property name="numBits" stdset="0">
+        <property name="numBits">
          <number>1</number>
         </property>
-        <property name="shift" stdset="0">
+        <property name="shift">
          <number>0</number>
         </property>
-        <property name="labels" stdset="0">
+        <property name="labels">
          <stringlist>
           <string>Bit 0</string>
          </stringlist>
@@ -507,43 +507,43 @@
         <property name="text">
          <string>&lt;&lt;</string>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="PyDMToolTip" stdset="0">
+        <property name="PyDMToolTip">
          <string/>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.TWR</string>
         </property>
-        <property name="passwordProtected" stdset="0">
+        <property name="passwordProtected">
          <bool>false</bool>
         </property>
-        <property name="password" stdset="0">
+        <property name="password">
          <string/>
         </property>
-        <property name="protectedPassword" stdset="0">
+        <property name="protectedPassword">
          <string/>
         </property>
-        <property name="showConfirmDialog" stdset="0">
+        <property name="showConfirmDialog">
          <bool>false</bool>
         </property>
-        <property name="confirmMessage" stdset="0">
+        <property name="confirmMessage">
          <string>Are you sure you want to proceed?</string>
         </property>
-        <property name="pressValue" stdset="0">
+        <property name="pressValue">
          <string>1</string>
         </property>
-        <property name="releaseValue" stdset="0">
+        <property name="releaseValue">
          <string>None</string>
         </property>
-        <property name="relativeChange" stdset="0">
+        <property name="relativeChange">
          <bool>false</bool>
         </property>
-        <property name="writeWhenRelease" stdset="0">
+        <property name="writeWhenRelease">
          <bool>false</bool>
         </property>
        </widget>
@@ -571,10 +571,10 @@
         <property name="text">
          <string>Stop</string>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.STOP</string>
         </property>
-        <property name="pressValue" stdset="0">
+        <property name="pressValue">
          <string>1</string>
         </property>
        </widget>
@@ -604,25 +604,25 @@
         <property name="toolTip">
          <string/>
         </property>
-        <property name="precision" stdset="0">
+        <property name="precision">
          <number>3</number>
         </property>
-        <property name="showUnits" stdset="0">
+        <property name="showUnits">
          <bool>false</bool>
         </property>
-        <property name="precisionFromPV" stdset="0">
+        <property name="precisionFromPV">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveContent" stdset="0">
+        <property name="alarmSensitiveContent">
          <bool>false</bool>
         </property>
-        <property name="alarmSensitiveBorder" stdset="0">
+        <property name="alarmSensitiveBorder">
          <bool>false</bool>
         </property>
-        <property name="channel" stdset="0">
+        <property name="channel">
          <string>ca://${MOTOR}.VAL</string>
         </property>
-        <property name="displayFormat" stdset="0">
+        <property name="displayFormat">
          <enum>PyDMLineEdit::Default</enum>
         </property>
        </widget>

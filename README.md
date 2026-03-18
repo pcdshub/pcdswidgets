@@ -15,7 +15,7 @@ pip install -e .
 ## Adding Widgets
 ### Widget Sizing
 Device control widgets should fall into exactly one of three size classes.
-Widgets can be smaller than the maximum of their size class by up to 10% before being flagged by CI.
+Widgets can be smaller than the maximum of their size class by up to 20% before being flagged by CI.
 
 To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
 and are permissible sizes as recorded below.
@@ -24,16 +24,18 @@ It's recommended to used fixed sizing when possible because dynamic sizing is ha
 Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
 #### Full Size
-- Width: 250px
-- Height: 120px
+- Width: 400px
+- Height: 125px
 
 #### Compact Size
-- Width: 75px
+- Width: 100px
 - Height: 75px
 
 #### Row Size
-- Width: 680px
-- Height: 40px
+- Width: 800px
+- Height: 50px
+
+Rows are also allowed to be double-height, e.g. 100px height.
 
 #### Widgets that aren't control widgets (containers, etc.)
 These should not have a maximum or a minimum size- they should be usable at any size.

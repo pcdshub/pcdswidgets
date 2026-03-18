@@ -66,19 +66,19 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showIcon" stdset="0">
+       <property name="showIcon">
         <bool>true</bool>
        </property>
-       <property name="redirectCommandOutput" stdset="0">
+       <property name="redirectCommandOutput">
         <bool>false</bool>
        </property>
-       <property name="allowMultipleExecutions" stdset="0">
+       <property name="allowMultipleExecutions">
         <bool>false</bool>
        </property>
-       <property name="titles" stdset="0">
+       <property name="titles">
         <stringlist/>
        </property>
-       <property name="commands" stdset="0">
+       <property name="commands">
         <stringlist>
          <string>edm -eolc -x -m MOTOR=${MOTOR} /reg/g/pcds/epics/ioc/common/smaract/R1.0.8/motorScreens/mcs2_openloop.edl</string>
         </stringlist>
@@ -109,25 +109,25 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="precision" stdset="0">
+       <property name="precision">
         <number>0</number>
        </property>
-       <property name="showUnits" stdset="0">
+       <property name="showUnits">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV" stdset="0">
+       <property name="precisionFromPV">
         <bool>true</bool>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>true</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}.DESC</string>
        </property>
-       <property name="displayFormat" stdset="0">
+       <property name="displayFormat">
         <enum>PyDMLabel::String</enum>
        </property>
       </widget>
@@ -166,25 +166,25 @@
        <property name="maxLength">
         <number>12</number>
        </property>
-       <property name="precision" stdset="0">
+       <property name="precision">
         <number>0</number>
        </property>
-       <property name="showUnits" stdset="0">
+       <property name="showUnits">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV" stdset="0">
+       <property name="precisionFromPV">
         <bool>true</bool>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>true</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}:TOTAL_STEP_COUNT</string>
        </property>
-       <property name="displayFormat" stdset="0">
+       <property name="displayFormat">
         <enum>PyDMLineEdit::Decimal</enum>
        </property>
       </widget>
@@ -203,40 +203,40 @@
        <property name="text">
         <string>&gt;&gt;</string>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>false</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}:STEP_FORWARD.PROC</string>
        </property>
-       <property name="passwordProtected" stdset="0">
+       <property name="passwordProtected">
         <bool>false</bool>
        </property>
-       <property name="password" stdset="0">
+       <property name="password">
         <string/>
        </property>
-       <property name="protectedPassword" stdset="0">
+       <property name="protectedPassword">
         <string/>
        </property>
-       <property name="showConfirmDialog" stdset="0">
+       <property name="showConfirmDialog">
         <bool>false</bool>
        </property>
-       <property name="confirmMessage" stdset="0">
+       <property name="confirmMessage">
         <string>Are you sure you want to proceed?</string>
        </property>
-       <property name="pressValue" stdset="0">
+       <property name="pressValue">
         <string>1</string>
        </property>
-       <property name="releaseValue" stdset="0">
+       <property name="releaseValue">
         <string>None</string>
        </property>
-       <property name="relativeChange" stdset="0">
+       <property name="relativeChange">
         <bool>true</bool>
        </property>
-       <property name="writeWhenRelease" stdset="0">
+       <property name="writeWhenRelease">
         <bool>false</bool>
        </property>
       </widget>
@@ -263,22 +263,22 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="precision" stdset="0">
+       <property name="precision">
         <number>0</number>
        </property>
-       <property name="showUnits" stdset="0">
+       <property name="showUnits">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV" stdset="0">
+       <property name="precisionFromPV">
         <bool>true</bool>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>false</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}:STEP_COUNT</string>
        </property>
       </widget>
@@ -306,40 +306,40 @@
        <property name="text">
         <string>Stop</string>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>false</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}.STOP</string>
        </property>
-       <property name="passwordProtected" stdset="0">
+       <property name="passwordProtected">
         <bool>false</bool>
        </property>
-       <property name="password" stdset="0">
+       <property name="password">
         <string/>
        </property>
-       <property name="protectedPassword" stdset="0">
+       <property name="protectedPassword">
         <string/>
        </property>
-       <property name="showConfirmDialog" stdset="0">
+       <property name="showConfirmDialog">
         <bool>false</bool>
        </property>
-       <property name="confirmMessage" stdset="0">
+       <property name="confirmMessage">
         <string>Are you sure you want to proceed?</string>
        </property>
-       <property name="pressValue" stdset="0">
+       <property name="pressValue">
         <string>1</string>
        </property>
-       <property name="releaseValue" stdset="0">
+       <property name="releaseValue">
         <string>None</string>
        </property>
-       <property name="relativeChange" stdset="0">
+       <property name="relativeChange">
         <bool>false</bool>
        </property>
-       <property name="writeWhenRelease" stdset="0">
+       <property name="writeWhenRelease">
         <bool>false</bool>
        </property>
       </widget>
@@ -358,40 +358,40 @@
        <property name="text">
         <string>&lt;&lt;</string>
        </property>
-       <property name="alarmSensitiveContent" stdset="0">
+       <property name="alarmSensitiveContent">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder" stdset="0">
+       <property name="alarmSensitiveBorder">
         <bool>false</bool>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <string>ca://${MOTOR}:STEP_REVERSE.PROC</string>
        </property>
-       <property name="passwordProtected" stdset="0">
+       <property name="passwordProtected">
         <bool>false</bool>
        </property>
-       <property name="password" stdset="0">
+       <property name="password">
         <string/>
        </property>
-       <property name="protectedPassword" stdset="0">
+       <property name="protectedPassword">
         <string/>
        </property>
-       <property name="showConfirmDialog" stdset="0">
+       <property name="showConfirmDialog">
         <bool>false</bool>
        </property>
-       <property name="confirmMessage" stdset="0">
+       <property name="confirmMessage">
         <string>Are you sure you want to proceed?</string>
        </property>
-       <property name="pressValue" stdset="0">
+       <property name="pressValue">
         <string>1</string>
        </property>
-       <property name="releaseValue" stdset="0">
+       <property name="releaseValue">
         <string>None</string>
        </property>
-       <property name="relativeChange" stdset="0">
+       <property name="relativeChange">
         <bool>true</bool>
        </property>
-       <property name="writeWhenRelease" stdset="0">
+       <property name="writeWhenRelease">
         <bool>false</bool>
        </property>
       </widget>

@@ -24,8 +24,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>650</width>
-    <height>200</height>
+    <width>400</width>
+    <height>125</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -112,13 +112,13 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="alarmSensitiveBorder" stdset="0">
+          <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.DESC</string>
           </property>
-          <property name="displayFormat" stdset="0">
+          <property name="displayFormat">
            <enum>PyDMLabel::String</enum>
           </property>
          </widget>
@@ -159,16 +159,16 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="alarmSensitiveBorder" stdset="0">
+          <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.MOVN</string>
           </property>
-          <property name="showLabels" stdset="0">
+          <property name="showLabels">
            <bool>false</bool>
           </property>
-          <property name="circles" stdset="0">
+          <property name="circles">
            <bool>true</bool>
           </property>
          </widget>
@@ -200,7 +200,7 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="showLabels" stdset="0">
+          <property name="showLabels">
            <bool>false</bool>
           </property>
          </widget>
@@ -238,10 +238,10 @@
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.RBV</string>
           </property>
-          <property name="displayFormat" stdset="0">
+          <property name="displayFormat">
            <enum>PyDMLabel::Decimal</enum>
           </property>
          </widget>
@@ -257,7 +257,7 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="showLabels" stdset="0">
+          <property name="showLabels">
            <bool>false</bool>
           </property>
          </widget>
@@ -295,10 +295,10 @@
           <property name="text">
            <string>Stop</string>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.STOP</string>
           </property>
-          <property name="pressValue" stdset="0">
+          <property name="pressValue">
            <string>1</string>
           </property>
          </widget>
@@ -350,19 +350,19 @@
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
-          <property name="precision" stdset="0">
+          <property name="precision">
            <number>4</number>
           </property>
-          <property name="precisionFromPV" stdset="0">
+          <property name="precisionFromPV">
            <bool>false</bool>
           </property>
-          <property name="alarmSensitiveBorder" stdset="0">
+          <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.VAL</string>
           </property>
-          <property name="displayFormat" stdset="0">
+          <property name="displayFormat">
            <enum>PyDMLineEdit::Decimal</enum>
           </property>
          </widget>
@@ -408,25 +408,25 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="precision" stdset="0">
+          <property name="precision">
            <number>0</number>
           </property>
-          <property name="showUnits" stdset="0">
+          <property name="showUnits">
            <bool>false</bool>
           </property>
-          <property name="precisionFromPV" stdset="0">
+          <property name="precisionFromPV">
            <bool>true</bool>
           </property>
-          <property name="alarmSensitiveContent" stdset="0">
+          <property name="alarmSensitiveContent">
            <bool>false</bool>
           </property>
-          <property name="alarmSensitiveBorder" stdset="0">
+          <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="PyDMToolTip" stdset="0">
+          <property name="PyDMToolTip">
            <string/>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.EGU</string>
           </property>
          </widget>
@@ -473,13 +473,13 @@
           <property name="text">
            <string>&lt;&lt;</string>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.TWR</string>
           </property>
-          <property name="pressValue" stdset="0">
+          <property name="pressValue">
            <string>1</string>
           </property>
-          <property name="relativeChange" stdset="0">
+          <property name="relativeChange">
            <bool>true</bool>
           </property>
          </widget>
@@ -515,16 +515,16 @@
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
-          <property name="precision" stdset="0">
+          <property name="precision">
            <number>4</number>
           </property>
-          <property name="precisionFromPV" stdset="0">
+          <property name="precisionFromPV">
            <bool>false</bool>
           </property>
-          <property name="alarmSensitiveBorder" stdset="0">
+          <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.TWV</string>
           </property>
          </widget>
@@ -555,13 +555,13 @@
           <property name="text">
            <string>&gt;&gt;</string>
           </property>
-          <property name="channel" stdset="0">
+          <property name="channel">
            <string>ca://${MOTOR}.TWF</string>
           </property>
-          <property name="pressValue" stdset="0">
+          <property name="pressValue">
            <string>1</string>
           </property>
-          <property name="relativeChange" stdset="0">
+          <property name="relativeChange">
            <bool>true</bool>
           </property>
          </widget>
@@ -593,7 +593,7 @@
           <property name="toolTip">
            <string/>
           </property>
-          <property name="commands" stdset="0">
+          <property name="commands">
            <stringlist>
             <string>motor-expert-screen ${MOTOR}</string>
            </stringlist>

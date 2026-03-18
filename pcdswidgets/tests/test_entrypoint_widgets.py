@@ -58,22 +58,26 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
     """
     widget = WidgetCls()
     qtbot.addWidget(widget)
+    # 20% smaller is OK
+    ratio = 0.8
 
     if widget_name.endswith("Full"):
-        max_w = 250
+        max_w = 400
         max_h = 120
-        min_w = 0.9 * max_w
-        min_h = 0.9 * max_h
+        min_w = ratio * max_w
+        min_h = ratio * max_h
     elif widget_name.endswith("Compact"):
-        max_w = 75
+        max_w = 100
         max_h = 75
-        min_w = 0.9 * max_w
-        min_h = 0.9 * max_h
+        min_w = ratio * max_w
+        min_h = ratio * max_h
     elif widget_name.endswith("Row"):
-        max_w = 680
-        max_h = 40
-        min_w = 0.9 * max_w
-        min_h = 0.9 * max_h
+        max_w = 800
+        max_h = 50
+        min_w = ratio * max_w
+        min_h = ratio * max_h
+        # Allow double rows
+        max_h = max_h * 2
     else:
         raise ValueError(
             f"Widget named {widget_name} does not follow naming convention: "
