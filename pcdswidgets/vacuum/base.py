@@ -608,7 +608,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     def _handle_icon_click(self):
         if not self.channelsPrefix:
             logger.error(
-                "No channel prefix specified." "Cannot proceed with opening expert screen for %s.",
+                "No channel prefix specified.Cannot proceed with opening expert screen for %s.",
                 self.__class__.__name__,
             )
             return
