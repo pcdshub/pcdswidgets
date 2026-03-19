@@ -100,7 +100,7 @@ The steps are:
    - This will create two .py files, one with the layouts and one with some scaffolding for macro conversions.
 5. Create a widget class
    - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
-   - Keeping these in separate files can avoid circular import errors and lets us include widgets inside widgets
+   - Keep these in separate files to avoid circular import errors from including widgets inside widgets
    - Import from the _base module created from your .ui file and subclass
 6. make, again
    - This will include your widget in pyproject.toml
