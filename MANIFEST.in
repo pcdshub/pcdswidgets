@@ -1,5 +1,3 @@
-include **/*.ui
-
 include AUTHORS.rst
 include CONTRIBUTING.rst
 include LICENSE.md
