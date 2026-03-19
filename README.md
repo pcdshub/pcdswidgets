@@ -141,4 +141,4 @@ and look through everything with the `fa` prefix to browse options.
 
 #### Limitations
 - Widgets that contain PyDMEmbeddedWidget are not supported: bootstrap these by turning the contents into widgets themselves.
-- The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the widget class in python, giving your widgets more unique names will help give more useful type hints, automatically.
+- The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
