@@ -99,7 +99,7 @@ The steps are:
 4. make
    - This will create two .py files, one with the layouts and one with some scaffolding for macro conversions.
 5. Create a widget class
-   - Look around for examples, e.g. pcdswidgets/motion/positioner_widget.py
+   - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
    - Keeping these in separate files can avoid circular import errors and lets us include widgets inside widgets
    - Import from the _base module created from your .ui file and subclass
 6. make, again
