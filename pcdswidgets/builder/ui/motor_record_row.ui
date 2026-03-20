@@ -309,13 +309,13 @@
          <string/>
         </property>
         <property name="precision">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="showUnits">
          <bool>false</bool>
         </property>
         <property name="precisionFromPV">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="alarmSensitiveContent">
          <bool>false</bool>
@@ -414,13 +414,13 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="precision">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="showUnits">
          <bool>false</bool>
         </property>
         <property name="precisionFromPV">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="alarmSensitiveContent">
          <bool>false</bool>
@@ -605,13 +605,13 @@
          <string/>
         </property>
         <property name="precision">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="showUnits">
          <bool>false</bool>
         </property>
         <property name="precisionFromPV">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="alarmSensitiveContent">
          <bool>false</bool>
