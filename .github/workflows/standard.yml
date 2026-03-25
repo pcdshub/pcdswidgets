@@ -21,5 +21,7 @@ jobs:
       conda-testing-extras: ""
       # Extras to be installed only for pip-based testing:
       pip-testing-extras: "PyQt5"
+      # Extras to be installed only for docs builds (pip)
+      docs-build-extras: "PyQt5"
       # Set if using setuptools-scm for the conda-build workflow
       use-setuptools-scm: true
