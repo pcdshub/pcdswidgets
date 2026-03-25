@@ -1,4 +1,4 @@
-.PHONY: all build clean
+.PHONY: all build clean venv
 
 UI_SOURCE := $(wildcard pcdswidgets/builder/ui/*.ui)
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
@@ -24,3 +24,6 @@ $(PY_BASE): $(UI_SOURCE) $(PY_SOURCE) $(JINJA_SOURCE)
 
 pyproject.toml: $(PY_SOURCE)
 	python -m pcdswidgets.entrypoint_widgets
+
+venv:
+	./build_local_venv.sh

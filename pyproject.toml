@@ -11,7 +11,6 @@ name = "pcdswidgets"
 requires-python = ">=3.12"
 dependencies = [
     "pydm>=1.9.0",
-    "pyqt5>=5.15.11",
     "qtpy>=2.4.3",
 ]
 
@@ -59,6 +58,10 @@ SmaractOpenLoopRow = "pcdswidgets.motion.smaract_open_loop_row:SmaractOpenLoopRo
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 
 [project.optional-dependencies]
+dev = [
+    "jinja2>=3",
+    "tomlkit>=0.14.0",
+]
 doc = [
     "docs-versions-menu>=0.5.2",
     "sphinx>=9.1.0",
@@ -70,10 +73,6 @@ test = [
     "pytest>=9.0.2",
     "pytest-qt>=4.5.0",
     "pytest-timeout>=2.4.0",
-    "tomlkit>=0.14.0",
-]
-dev = [
-    "jinja2>=3",
     "tomlkit>=0.14.0",
 ]
 
