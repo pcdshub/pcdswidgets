@@ -165,7 +165,7 @@ def process_widget_macros(ui_info: UiInfo) -> InfoForJinja:
                 raise TypeError(f"Invalid macro type: {value_with_macro}")
         ij.macro_set.update(macros_here)
         ij.widget_set.add(widget_name)
-        for macro in ij.macro_set:
+        for macro in macros_here:
             ij.macro_to_widget[macro].append(widget_name)
         ij.widget_to_macro[widget_name] = sorted(macros_here)
         ij.widget_to_pre_templ_strs[widget_name].extend(str_opts)
