@@ -1,7 +1,7 @@
+import argparse
 import dataclasses
 import os
 import re
-import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
@@ -184,11 +184,22 @@ def _get_macros(text_with_macro_sub: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    mode = sys.argv[1]
-    designer_ui = sys.argv[2]
-    if mode == "uic":
-        build_uic(designer_ui)
-    elif mode == "base":
-        build_base_widget(designer_ui)
+    parser = argparse.ArgumentParser(
+        "pcdswidgets.builder.build",
+        description="Automatically build the form or base class files associated with a widget .ui file.",
+    )
+    parser.add_argument(
+        "mode",
+        choices=["uic", "base"],
+        help="Choose 'uic' to build the pyuic form file or 'base' to build the pcdswidgets base class.",
+    )
+    parser.add_argument("designer_ui", help="Path to the designer .ui file to use as the source for the build.")
+    args = parser.parse_args()
+
+    if args.mode == "uic":
+        build_uic(args.designer_ui)
+    elif args.mode == "base":
+        build_base_widget(args.designer_ui)
     else:
-        raise ValueError(f"Invalid mode {mode}, must be uic or base")
+        # Currently unreachable, probably
+        raise ValueError(f"Invalid mode {args.mode}, must be uic or base")
