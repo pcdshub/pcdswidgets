@@ -1,12 +1,12 @@
 import dataclasses
 import os
 import re
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
 from jinja2 import Environment, PackageLoader
+from qtpy.uic import compileUi
 
 
 def build_uic(designer_ui: str):
@@ -17,7 +17,8 @@ def build_uic(designer_ui: str):
     some_name.ui -> some_name_form.py
     """
     form_output = f"{os.path.splitext(designer_ui)[0]}_form.py"
-    subprocess.run(f"pyuic5 -o {form_output} {designer_ui}".split(" "))
+    with open(form_output, "w") as fd:
+        compileUi(designer_ui, fd)
 
 
 def build_base_widget(designer_ui: str):
