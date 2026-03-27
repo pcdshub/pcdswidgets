@@ -175,7 +175,7 @@ def process_widget_macros(ui_info: UiInfo) -> InfoForJinja:
     return ij
 
 
-macro_re = re.compile(r"\${(\S+)}")
+macro_re = re.compile(r"\${(\S+?)}")
 
 
 def _get_macros(text_with_macro_sub: str) -> list[str]:
