@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from collections import defaultdict
 
 from jinja2 import Environment, PackageLoader
-from qtpy.uic import compileUi
+from qtpy.uic import compileUi  # type: ignore
 
 
 def build_uic(designer_ui: str):
