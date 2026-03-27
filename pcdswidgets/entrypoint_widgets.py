@@ -23,6 +23,7 @@ SKIP_WIDGETS = [
 SKIP_MODULES = [
     ".tests",
     ".demo",
+    ".ui",
 ]
 
 
