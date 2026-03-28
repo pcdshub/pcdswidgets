@@ -9,7 +9,32 @@ Pick your favorite:
 - conda install pcdswidgets
 
 ### Dev
-pip install -e .
+A helper script is included here: `build_local_venv.sh` (or, `make venv`).
+
+This will create a `.venv` virtual environment that will be ready to go
+to help you run designer and test your custom widgets.
+To work, this requires a suitable base environment to already exist on
+your system: one with pyqt and designer python plugin support,
+which I've found to be tricky to set up in a scripted way in recent years.
+
+These base environments are stored centrally at LCLS and are
+specified in `base_env_vars.sh`.
+
+You can run the `build_local_venv.sh` again (or, `make venv`)
+to update the environment with any new widgets you've added since the last run.
+
+Once this environment is created, you can use `try_in_designer.sh` to
+make sure your widgets are exporting cleanly in an editable way in designer.
+
+You can also use `try_in_pydm.sh` to launch a version of `pydm` that includes
+your new widgets.
+
+You can alternatively build your own environment:
+
+- pip install -e .
+- uv sync
+
+Or whatever your favorite method is.
 
 
 ## Adding Widgets
@@ -96,16 +121,18 @@ The steps are:
    - Iterate, update the widget until you like it.
 3. Bring it here
    - Copy your .ui file in the pcdswidgets/builder/ui folder.
-4. make
+4. `make`
    - This will create two .py files, one with the layouts and one with some scaffolding for macro conversions.
 5. Create a widget class
    - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
    - Keep these in separate files to avoid circular import errors from including widgets inside widgets
    - Import from the _base module created from your .ui file and subclass
-6. make, again
+6. `make`, again
    - This will include your widget in pyproject.toml
+7. `make venv`
+   - The recommended way to update your testing virtual environment.
 
-If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets.
+If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets and pydm.
 
 
 #### Widget Classes
@@ -142,3 +169,4 @@ and look through everything with the `fa` prefix to browse options.
 #### Limitations
 - Widgets that contain PyDMEmbeddedWidget are not supported: bootstrap these by turning the contents into widgets themselves.
 - The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
+- Only direct QString and QStringList properties are supported. We still need to implement support for item-based QString widgets such as QListWidget.
