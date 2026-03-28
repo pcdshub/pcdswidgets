@@ -77,8 +77,8 @@ class {{ base_cls }}(DesignerWidget):
             "{{ macro }}": "",
 {% endfor %}
         }
-
 {% for macro in macro_names %}
+
     def get_{{ macro.lower() }}(self) -> str:
         return self._get_macro("{{ macro }}")
 
