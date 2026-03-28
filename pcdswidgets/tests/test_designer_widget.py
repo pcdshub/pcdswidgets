@@ -18,12 +18,12 @@ def test_widget(qtbot: QtBot) -> TestWidget:
     return widget
 
 
-def test_has_expected_hints(test_widget: TestWidget):
-    hints = inspect.get_annotations(TestWidget)
+def test_has_expected_hints():
+    hints = inspect.get_annotations(PytestBase)
 
     for label_name in ("name_label", "num_label", "name_num_label"):
-        assert hints[label_name] is QLabel
-    assert hints["one_two_shell"] is PyDMShellCommand
+        assert hints[label_name] == "QLabel"
+    assert hints["one_two_shell"] == "PyDMShellCommand"
 
 
 def test_has_expected_widgets(test_widget: TestWidget):
@@ -37,12 +37,12 @@ def test_has_expected_macro_to_widget(test_widget: TestWidget):
     assert set(test_widget._macro_to_widget.keys()) == {"NAME", "NUM", "ONE", "TWO"}
     assert set(test_widget._macro_to_widget["NAME"]) == {"name_label", "name_num_label"}
     assert set(test_widget._macro_to_widget["NUM"]) == {"num_label", "name_num_label"}
-    assert [test_widget._macro_to_widget["ONE"]] == ["one_two_shell"]
+    assert test_widget._macro_to_widget["ONE"] == ["one_two_shell"]
     assert test_widget._macro_to_widget["TWO"] == ["one_two_shell"]
 
 
 def test_has_expected_widget_to_macro(test_widget: TestWidget):
-    assert set(test_widget._widget_to_macro.keys()) == {"name_label", "num_label", "name_num_label", "one_two_list"}
+    assert set(test_widget._widget_to_macro.keys()) == {"name_label", "num_label", "name_num_label", "one_two_shell"}
     assert test_widget._widget_to_macro["name_label"] == ["NAME"]
     assert test_widget._widget_to_macro["num_label"] == ["NUM"]
     assert set(test_widget._widget_to_macro["name_num_label"]) == {"NAME", "NUM"}
@@ -60,7 +60,7 @@ def test_has_expected_widget_to_pre_template(test_widget: TestWidget):
     assert test_widget._widget_to_pre_template["num_label"] == [("text", "Num: ${NUM}")]
     assert test_widget._widget_to_pre_template["name_num_label"] == [("text", "${NAME}:${NUM}")]
     assert test_widget._widget_to_pre_template["one_two_shell"] == [
-        ("commands", ["One: ${ONE}", "Two: ${TWO}", "${ONE}:${TWO}"])
+        ("commands", ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"])
     ]
 
 
@@ -98,16 +98,16 @@ def test_macro_substitution_labels(test_widget: TestWidget):
 
 
 def test_macro_substitution_list_widget(test_widget: TestWidget):
-    assert test_widget.one_two_shell.readCommands() == ["One: ${ONE}", "Two: ${TWO}", "${ONE}:${TWO}"]
+    assert test_widget.one_two_shell.readCommands() == ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"]
 
     test_widget.setProperty("one", "UNO")
 
-    assert test_widget.one_two_shell.readCommands() == ["One: ${ONE}", "Two: ${TWO}", "${ONE}:${TWO}"]
+    assert test_widget.one_two_shell.readCommands() == ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"]
 
     test_widget.setProperty("two", "DOS")
 
-    assert test_widget.one_two_shell.readCommands() == ["One: UNO", "Two: DOS", "UNO:DOS"]
+    assert test_widget.one_two_shell.readCommands() == ["echo UNO", "echo DOS", "echo UNO:DOS"]
 
     test_widget.setProperty("one", "ICHI")
 
-    assert test_widget.one_two_shell.readCommands() == ["One: ICHI", "Two: DOS", "ICHI:DOS"]
+    assert test_widget.one_two_shell.readCommands() == ["echo ICHI", "echo DOS", "echo ICHI:DOS"]
