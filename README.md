@@ -36,6 +36,8 @@ You can alternatively build your own environment:
 
 Or whatever your favorite method is.
 
+Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS!
+
 
 ## Adding Widgets
 ### Widget Sizing
@@ -107,6 +109,8 @@ If the widget has been added and is included in the pyproject.toml file, it will
 ### Adding a Composite Widget
 This is how you would convert a .ui file with macro substitution that is normally used with PyDMEmbeddedDisplay into a designer widget served from here.
 
+Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS!
+
 This is not required, but you would do this to make your widget globally available and easier to add to screens.
 
 This requires only basic Python knowledge.
@@ -121,18 +125,35 @@ The steps are:
    - Iterate, update the widget until you like it.
 3. Bring it here
    - Copy your .ui file in the pcdswidgets/builder/ui folder.
-4. `make`
+4. Activate your virtual environment
+   - `make venv`
+   - `source .venv/bin/activate`
+5. `make`
    - This will create two .py files, one with the layouts and one with some scaffolding for macro conversions.
-5. Create a widget class
+6. Create a widget class
    - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
    - Keep these in separate files to avoid circular import errors from including widgets inside widgets
    - Import from the _base module created from your .ui file and subclass
-6. `make`, again
+7. `make`, again
    - This will include your widget in pyproject.toml
-7. `make venv`
+8. `make venv`, one last time
    - The recommended way to update your testing virtual environment.
 
 If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets and pydm.
+
+You can then use:
+```
+try_in_designer.sh
+```
+To open designer with your new widget
+(Which, reminder: only works on rocky9 at LCLS)
+
+
+You can also:
+```
+try_in_pydm.sh
+```
+To run a pydm screen that has your new widget.
 
 
 #### Widget Classes
