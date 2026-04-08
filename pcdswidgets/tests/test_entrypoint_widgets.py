@@ -20,6 +20,10 @@ def test_entrypoint_has_all_widgets():
         assert pydm_widgets.select(name=name)[name].value == entrypoint
 
 
+container_widgets = [
+    "FilterSortWidgetTable",
+]
+
 # Don't check widgets from before we made sizing/naming standards
 exempt_widgets = [
     "ApertureValve",
@@ -31,7 +35,6 @@ exempt_widgets = [
     "ControlValve",
     "EPSByteIndicator",
     "FastShutter",
-    "FilterSortWidgetTable",
     "GetterPump",
     "HotCathodeComboGauge",
     "HotCathodeGauge",
@@ -46,7 +49,7 @@ exempt_widgets = [
     "RoughGauge",
     "ScrollPump",
     "TurboPump",
-]
+] + container_widgets
 
 
 @pytest.mark.parametrize(
@@ -88,3 +91,17 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
     assert widget.maximumWidth() <= max_w, f"{widget_name}'s maximum width is too large."
     assert widget.minimumHeight() >= min_h, f"{widget_name}'s minimum height is too small."
     assert widget.maximumHeight() <= max_h, f"{widget_name}'s maximum height is too large."
+
+
+@pytest.mark.parametrize("widget_name,WidgetCls", [elem for elem in iter_all_widgets() if elem[0] in container_widgets])
+def test_container_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
+    """
+    Ensure that container widgets have no maximum size.
+    """
+    widget = WidgetCls()
+    qtbot.addWidget(widget)
+
+    # The max size is currently 16777215
+    # Pick a smaller but still absurd number as the threshold
+    assert widget.maximumWidth() >= 100000, f"{widget_name}'s minimum width is too small."
+    assert widget.maximumHeight() >= 100000, f"{widget_name}'s minimum height is too small."
