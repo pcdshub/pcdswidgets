@@ -103,5 +103,5 @@ def test_container_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtb
 
     # The max size is currently 16777215
     # Pick a smaller but still absurd number as the threshold
-    assert widget.maximumWidth() >= 100000, f"{widget_name}'s minimum width is too small."
-    assert widget.maximumHeight() >= 100000, f"{widget_name}'s minimum height is too small."
+    assert widget.maximumWidth() >= 100000, f"{widget_name}'s maximum width is too small."
+    assert widget.maximumHeight() >= 100000, f"{widget_name}'s maximum height is too small."
