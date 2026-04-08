@@ -134,6 +134,7 @@ The steps are:
    - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
    - Keep these in separate files to avoid circular import errors from including widgets inside widgets
    - Import from the _base module created from your .ui file and subclass
+   - Note: do not put this in the tests, demo, or ui folders! The tests folder is not scanned for production-level widgets!
 7. `make`, again
    - This will include your widget in pyproject.toml
 8. `make venv`, one last time
