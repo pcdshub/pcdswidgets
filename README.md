@@ -184,7 +184,7 @@ in the "icon" key of the `_qt_designer_` variable:
 
 If this is a string, we'll convert it to a QIcon using Pydm's IconFont.
 This uses a portable version of fontawesome, try running `qta-browser`
-and look through everything with the `fa` prefix to browse options.
+and look through everything with the `fa5s` prefix to browse options.
 
 
 #### Limitations
