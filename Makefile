@@ -13,22 +13,18 @@ build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
 
 # Need to re-run form and base if the ui file is updated
 $(PY_FORM): pcdswidgets/generated/%_form.py: pcdswidgets/ui/%.ui
-	@source .venv/bin/activate
-	python -m pcdswidgets.builder.build uic $^
+	.venv/bin/python -m pcdswidgets.builder.build uic $^
 
 $(PY_BASE): pcdswidgets/generated/%_base.py: pcdswidgets/ui/%.ui
-	@source .venv/bin/activate
-	python -m pcdswidgets.builder.build base $^
+	.venv/bin/python -m pcdswidgets.builder.build base $^
 
 # Only run if the target is missing: user can edit these
 $(PY_MAIN):
-	@source .venv/bin/activate
-	python -m pcdswidgets.builder.build main $(@:pcdswidgets/%.py=pcdswidgets/ui/%.ui)
+	.venv/bin/python -m pcdswidgets.builder.build main $(@:pcdswidgets/%.py=pcdswidgets/ui/%.ui)
 
 # Rerun if any python file is updated
 pyproject.toml: $(PY_SOURCE)
-	@source .venv/bin/activate
-	python -m pcdswidgets.builder.entrypoint_finder
+	.venv/bin/python -m pcdswidgets.builder.entrypoint_finder
 
 venv:
 	./build_local_venv.sh
