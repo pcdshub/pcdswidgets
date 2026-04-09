@@ -87,7 +87,7 @@ content-type = "text/markdown"
 
 [tool.ruff]
 line-length = 120
-exclude = [".git", "__pycache__", "build", "dist", "*/_version.py", "**/ui/*.py"]
+exclude = [".git", "__pycache__", "build", "dist", "*/_version.py", "generated"]
 
 [tool.ruff.lint]
 select = ["C", "E", "F", "W", "B", "I"]
