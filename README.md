@@ -74,11 +74,12 @@ These may have a variety of sizes because we had no standards, and will not be c
 ### Widget Naming
 Device control widgets should be named based on the type of device that they control.
 The name should be specific enough to distinguish it from other widgets, but general enough to cover all devices that can be used.
-Widgets are named using CamelCase and must end with the size, e.g. `MotorRecordFull`
+Widgets are named using CamelCase and must end with the size, e.g. `MotorRecordClassicFull`.
+Avoid using names that might preclude different styles or versions of the same. For example, `MyDeviceFull` isn't specific enough. Give is a name like `MyDeviceRetroFull` or something like this that is more apt for your use case, so someone else could charitably make `MyDeviceResizableFull` and we can easily differentiate them.
 
 There is no need to end a widget name with "Widget".
 
-Widgets with ui files, such as the composite widgets, should have parity between the ui file name and the widget name, for example `motor_record_full.ui` for `MotorRecordFull`, as well as the module that contains the widget which should be called `motor_record_full.py`.
+Widgets with ui files, such as the composite widgets, should have parity between the ui file name and the widget name, for example `motor_record_classic_full.ui` for `MotorRecordClassicFull`, as well as the module that contains the widget which should be called `motor_record_classic_full.py`.
 
 Widgets should never be renamed between tags, this will break existing screens.
 

@@ -2,7 +2,7 @@
 Helper module for creating the [project.entry-points."pydm.widget"]
 section in pyproject.toml
 
-python -m pcdswidgets.entrypoint_widgets
+python -m pcdswidgets.builder.entrypoint_finder
 """
 
 import importlib
@@ -15,6 +15,8 @@ from typing import Iterator, cast
 import tomlkit as tk
 import tomlkit.items as tki
 from qtpy.QtWidgets import QWidget
+
+import pcdswidgets
 
 SKIP_WIDGETS = [
     "PCDSSymbolBase",
@@ -77,7 +79,7 @@ def iter_submodules(package: str = "pcdswidgets") -> Iterator[ModuleType]:
 
 
 def get_pyproj_path() -> Path:
-    return Path(__file__).parent.parent / "pyproject.toml"
+    return Path(pcdswidgets.__file__).parent / "pyproject.toml"
 
 
 def get_current_widget_table() -> tuple[tki.Table, tk.TOMLDocument]:

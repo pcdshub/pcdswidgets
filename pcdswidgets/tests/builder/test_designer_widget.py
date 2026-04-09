@@ -1,11 +1,10 @@
 import inspect
 
 import pytest
+from pcdswidgets.builder.ui.pytest_base import PytestBase
 from pydm.widgets.shell_command import PyDMShellCommand
 from pytestqt.qtbot import QtBot
 from qtpy.QtWidgets import QLabel
-
-from pcdswidgets.builder.ui.pytest_base import PytestBase
 
 
 class TestWidget(PytestBase): ...

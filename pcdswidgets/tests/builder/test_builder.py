@@ -4,9 +4,10 @@ from pathlib import Path
 
 import pytest
 
+import pcdswidgets
 from pcdswidgets.builder.designer_widget import DesignerWidget
 
-UI_SOURCES = sorted((Path(__file__).parent.parent / "builder" / "ui").glob("*.ui"))
+UI_SOURCES = sorted((Path(pcdswidgets.__file__) / "ui").rglob("*.ui"))
 
 
 @pytest.mark.parametrize("ui_source", UI_SOURCES)

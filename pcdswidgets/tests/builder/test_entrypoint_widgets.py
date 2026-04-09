@@ -4,7 +4,7 @@ import pytest
 from pydm.config import ENTRYPOINT_WIDGET
 from qtpy.QtWidgets import QWidget
 
-from pcdswidgets.entrypoint_widgets import get_widget_entrypoint_data, iter_all_widgets
+from pcdswidgets.builder.entrypoint_finder import get_widget_entrypoint_data, iter_all_widgets
 
 
 def test_entrypoint_has_all_widgets():

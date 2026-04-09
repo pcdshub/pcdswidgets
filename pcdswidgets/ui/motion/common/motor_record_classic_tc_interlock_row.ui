@@ -253,7 +253,7 @@
   <customwidget>
    <class>MotorRecordRow</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.motion.motor_record_row</header>
+   <header>pcdswidgets.motion.common.motor_record_classic_row</header>
   </customwidget>
  </customwidgets>
  <resources/>

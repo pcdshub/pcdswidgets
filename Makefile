@@ -1,29 +1,38 @@
-.PHONY: all build clean venv
+.PHONY: all build venv venv-again
 
-UI_SOURCE := $(wildcard pcdswidgets/builder/ui/*.ui)
+UI_SOURCE := $(wildcard pcdswidgets/ui/*/*/*.ui)
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
-JINJA_SOURCE := $(wildcard pcdswidgets/builder/*.j2)
 
-PY_FORM  := $(UI_SOURCE:.ui=_form.py)
-PY_BASE   := $(UI_SOURCE:.ui=_base.py)
+PY_FORM := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_form.py)
+PY_BASE := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_base.py)
+PY_MAIN := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/%.py)
 
-all: build pyproject.toml
+all: venv build pyproject.toml venv-again
 
-# make build is for pip, etc. so pyproject.toml doesn't change at build time
-build: $(PY_FORM) $(PY_BASE)
+build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
 
-clean:
-	rm $(PY_FORM)
-	rm $(PY_BASE)
+# Need to re-run form and base if the ui file is updated
+$(PY_FORM): pcdswidgets/generated/%_form.py: pcdswidgets/ui/%.ui
+	@source .venv/bin/activate
+	python -m pcdswidgets.builder.build uic $^
 
-$(PY_FORM): $(UI_SOURCE) $(PY_SOURCE) $(JINJA_SOURCE)
-	python -m pcdswidgets.builder.build uic $(@:_form.py=.ui)
+$(PY_BASE): pcdswidgets/generated/%_base.py: pcdswidgets/ui/%.ui
+	@source .venv/bin/activate
+	python -m pcdswidgets.builder.build base $^
 
-$(PY_BASE): $(UI_SOURCE) $(PY_SOURCE) $(JINJA_SOURCE)
-	python -m pcdswidgets.builder.build base $(@:_base.py=.ui)
+# Only run if the target is missing: user can edit these
+$(PY_MAIN):
+	@source .venv/bin/activate
+	python -m pcdswidgets.builder.build main $(@:pcdswidgets/%.py=pcdswidgets/ui/%.ui)
 
+# Rerun if any python file is updated
 pyproject.toml: $(PY_SOURCE)
-	python -m pcdswidgets.entrypoint_widgets
+	@source .venv/bin/activate
+	python -m pcdswidgets.builder.entrypoint_finder
 
 venv:
+	./build_local_venv.sh
+
+# For running again after pyproject.toml is regenerated
+venv-again:
 	./build_local_venv.sh
