@@ -3,13 +3,13 @@ Originally generated from jinja template ui_main_widget.j2
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
+from pcdswidgets.builder.designer_options import DesignerOptions
 from {{ absolute_import_path }} import {{ base_cls }}
-from pcdswigets.builder.designer_options import DesignerOptions
 
 
 class {{ main_cls }}({{ base_cls }}):
     designer_options = DesignerOptions(
         group="{{ default_group }}",
-        is_containter=False,
+        is_container=False,
         icon=None,
     )

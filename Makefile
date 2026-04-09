@@ -1,4 +1,4 @@
-.PHONY: all build venv venv-again
+.PHONY: all build venv venv-2 venv-3
 
 UI_SOURCE := $(wildcard pcdswidgets/ui/*/*/*.ui)
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
@@ -7,7 +7,8 @@ PY_FORM := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_form.py)
 PY_BASE := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_base.py)
 PY_MAIN := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/%.py)
 
-all: venv build pyproject.toml venv-again
+# We need to update the venv before and after each of our steps
+all: venv build venv-2 pyproject.toml venv-3
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
 
@@ -29,6 +30,10 @@ pyproject.toml: $(PY_SOURCE)
 venv:
 	./build_local_venv.sh
 
-# For running again after pyproject.toml is regenerated
-venv-again:
+# For running the second time after the py files are generated
+venv-2:
+	./build_local_venv.sh
+
+# For running the third time after pyproject.toml is regenerated
+venv-3:
 	./build_local_venv.sh

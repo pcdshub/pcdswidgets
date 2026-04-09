@@ -11,6 +11,8 @@ from pydm.widgets.designer_settings import update_property_for_widget
 from pydm.widgets.qtplugin_extensions import RulesExtension
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
+from .designer_options import DesignerOptions
+
 ifont = IconFont()
 
 
@@ -25,6 +27,8 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
 
     # Loaded from uic
     ui_form: ClassVar[type[_UiForm]]
+    # Used to generate _qt_designer_
+    designer_options: ClassVar[DesignerOptions]
     # Tells PyDM to include in designer
     _qt_designer_: ClassVar[dict[str, Any]]
     # Macro name to widget names that include that macro
@@ -38,7 +42,22 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
 
     def __init_subclass__(cls):
         super().__init_subclass__()
-        # Extend the _qt_designer_ marker if it exists to include a quick editor for macro vals
+        # Create _qt_designer_ for pydm if designer_options is present
+        if hasattr(cls, "designer_options"):
+            cls._qt_designer_ = {
+                "group": cls.designer_options.group,
+                "is_container": cls.designer_options.is_container,
+            }
+            icon_name = cls.designer_options.icon
+            if icon_name is not None:
+                cls._qt_designer_["icon"] = icon_name
+        # Interpret strings as icons so we don't have to import IconFont everywhere
+        try:
+            if isinstance(cls._qt_designer_["icon"], str):
+                cls._qt_designer_["icon"] = ifont.icon(cls._qt_designer_["icon"])
+        except (AttributeError, KeyError):
+            ...
+        # Include a quick editor for macro vals
         new_ext = [MacroEditExtension, RulesExtension]
         try:
             cls._qt_designer_["extensions"].extend(new_ext)
@@ -47,12 +66,6 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 cls._qt_designer_["extensions"] = new_ext
             except AttributeError:
                 ...
-        # Interpret strings as icons so we don't have to import IconFont everywhere
-        try:
-            if isinstance(cls._qt_designer_["icon"], str):
-                cls._qt_designer_["icon"] = ifont.icon(cls._qt_designer_["icon"])
-        except (AttributeError, KeyError):
-            ...
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

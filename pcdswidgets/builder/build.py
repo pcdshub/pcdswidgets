@@ -9,6 +9,8 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader
 from qtpy.uic import compileUi  # type: ignore
 
+import pcdswidgets
+
 
 def build_uic(designer_ui: str, output_dir: str = ""):
     """
@@ -22,7 +24,7 @@ def build_uic(designer_ui: str, output_dir: str = ""):
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_form.py")
     with open(output_file, "w") as fd:
         compileUi(designer_ui, fd)
-    build_inits(base_dir=output_dir_path)
+    build_inits(base_dir=up_but_not_top(output_dir_path))
 
 
 def build_base_widget(designer_ui: str, output_dir: str = ""):
@@ -72,7 +74,7 @@ def build_base_widget(designer_ui: str, output_dir: str = ""):
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_base.py")
     with open(output_file, "w") as fd:
         fd.write(jinja_output)
-    build_inits(base_dir=output_dir_path)
+    build_inits(base_dir=up_but_not_top(output_dir_path))
 
 
 def build_main_widget(designer_ui: str, output_dir: str = ""):
@@ -86,17 +88,16 @@ def build_main_widget(designer_ui: str, output_dir: str = ""):
     """
     # Collect some info
     designer_path = Path(designer_ui)
-    module_parts = ["pcdswidgets"]
+    module_parts = ["pcdswidgets", "generated"]
     seen_ui = False
-    for path_part in designer_path.parts:
+    for path_part in designer_path.parts[:-1]:
         if path_part == "ui":
             seen_ui = True
         elif seen_ui:
             module_parts.append(path_part)
-    module_parts.append(os.path.basename(designer_ui).replace(".ui", "base"))
+    module_parts.append(os.path.basename(designer_ui).replace(".ui", "_base"))
     absolute_import_path = ".".join(module_parts)
-    group_parts = module_parts[1:-2]
-    default_group = f"PCDS {' '.join(group_parts)}"
+    default_group = f"PCDS {module_parts[2].title()} {module_parts[3].title()}"
     # Fill the template
     jinja_template = "ui_main_widget.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
@@ -112,7 +113,7 @@ def build_main_widget(designer_ui: str, output_dir: str = ""):
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", ".py")
     with open(output_file, "w") as fd:
         fd.write(jinja_output)
-    build_inits(base_dir=output_dir_path)
+    build_inits(base_dir=up_but_not_top(output_dir_path))
 
 
 def build_inits(base_dir: str | Path):
@@ -124,10 +125,20 @@ def build_inits(base_dir: str | Path):
     candidates: set[Path] = set()
     base_dir = Path(base_dir)
     for path in base_dir.rglob("*"):
-        if not path.name.startswith(".") and "__pycache__" not in path.parts:
+        if not str(path).startswith(".") and "__pycache__" not in path.parts:
             candidates.add(path.with_name("__init__.py"))
     for cand_path in candidates:
         cand_path.touch()
+
+
+def up_but_not_top(base_dir: str | Path):
+    this_path = Path(base_dir).resolve()
+    pcdswidgets_base_path = Path(pcdswidgets.__file__).parent
+    while this_path.parent != pcdswidgets_base_path:
+        this_path = this_path.parent
+        if this_path.parent == this_path:
+            return Path(base_dir)
+    return this_path
 
 
 def get_output_path(designer_ui: str | Path, default_base: str, output_dir: str | Path = "") -> Path:

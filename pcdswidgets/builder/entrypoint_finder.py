@@ -79,7 +79,7 @@ def iter_submodules(package: str = "pcdswidgets") -> Iterator[ModuleType]:
 
 
 def get_pyproj_path() -> Path:
-    return Path(pcdswidgets.__file__).parent / "pyproject.toml"
+    return Path(pcdswidgets.__file__).parent.parent / "pyproject.toml"
 
 
 def get_current_widget_table() -> tuple[tki.Table, tk.TOMLDocument]:
