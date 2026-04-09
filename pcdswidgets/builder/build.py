@@ -18,14 +18,14 @@ def build_uic(designer_ui: str, output_dir: str = ""):
     some_name.ui -> some_name_form.py
     """
     output_dir_path = get_output_path(designer_ui=designer_ui, default_base="generated", output_dir=output_dir)
-    output_dir_path.mkdir(parents=True)
+    output_dir_path.mkdir(parents=True, exist_ok=True)
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_form.py")
     with open(output_file, "w") as fd:
         compileUi(designer_ui, fd)
-    build_inits(base_dir=output_dir)
+    build_inits(base_dir=output_dir_path)
 
 
-def build_base_widget(designer_ui: str, output_dir: str | Path = ""):
+def build_base_widget(designer_ui: str, output_dir: str = ""):
     """
     Create a .py file with a suitable base widget for inclusion in designer.
 
@@ -67,15 +67,15 @@ def build_base_widget(designer_ui: str, output_dir: str | Path = ""):
         widget_to_pre_templ_strs=info_for_jinja.widget_to_pre_templ_strs,
         widget_to_pre_templ_lists=info_for_jinja.widget_to_pre_templ_lists,
     )
-    output_dir = get_output_path(designer_ui=designer_ui, default_base="generated", output_dir=output_dir)
-    output_dir.mkdir(parents=True)
-    output_file = output_dir / os.path.basename(designer_ui).replace(".ui", "_base.py")
+    output_dir_path = get_output_path(designer_ui=designer_ui, default_base="generated", output_dir=output_dir)
+    output_dir_path.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_base.py")
     with open(output_file, "w") as fd:
         fd.write(jinja_output)
-    build_inits(base_dir=output_dir)
+    build_inits(base_dir=output_dir_path)
 
 
-def build_main_widget(designer_ui: str, output_dir: str | Path = ""):
+def build_main_widget(designer_ui: str, output_dir: str = ""):
     """
     Create a .py file that will be included in designer as-is.
 
@@ -98,7 +98,7 @@ def build_main_widget(designer_ui: str, output_dir: str | Path = ""):
     group_parts = module_parts[1:-2]
     default_group = f"PCDS {' '.join(group_parts)}"
     # Fill the template
-    jinja_template = "ui_base_widget.j2"
+    jinja_template = "ui_main_widget.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
     template = env.get_template(jinja_template)
     jinja_output = template.render(
@@ -107,12 +107,12 @@ def build_main_widget(designer_ui: str, output_dir: str | Path = ""):
         main_cls=get_main_class_name(designer_ui=designer_ui),
         default_group=default_group,
     )
-    output_dir = get_output_path(designer_ui=designer_ui, default_base="", output_dir=output_dir)
-    output_dir.mkdir(parents=True)
-    output_file = output_dir / os.path.basename(designer_ui).replace(".ui", ".py")
+    output_dir_path = get_output_path(designer_ui=designer_ui, default_base="", output_dir=output_dir)
+    output_dir_path.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", ".py")
     with open(output_file, "w") as fd:
         fd.write(jinja_output)
-    build_inits(base_dir=output_dir)
+    build_inits(base_dir=output_dir_path)
 
 
 def build_inits(base_dir: str | Path):
