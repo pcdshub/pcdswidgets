@@ -76,19 +76,24 @@ These may have a variety of sizes because we had no standards, and will not be c
 
 
 ### Widget Naming
-Device control widgets should be named based on the type of device that they control.
-The name should be specific enough to distinguish it from other widgets, but general enough to cover all devices that can be used.
-Widgets are named using CamelCase and must end with the size, e.g. `MotorRecordClassicFull`.
-Avoid using names that might preclude different styles or versions of the same. For example, `MyDeviceFull` isn't specific enough. Give is a name like `MyDeviceRetroFull` or something like this that is more apt for your use case, so someone else could charitably make `MyDeviceResizableFull` and we can easily differentiate them.
+Widget names should contain three parts:
 
-There is no need to end a widget name with "Widget".
+- Type of device controlled
+- Descriptor word to differentiate this widget from other possible widgets with the same device type and size
+- Size class signifier
 
-Widgets with ui files, such as the composite widgets, should have parity between the ui file name and the widget name, for example `motor_record_classic_full.ui` for `MotorRecordClassicFull`, as well as the module that contains the widget which should be called `motor_record_classic_full.py`.
+Other guidelines:
 
-Widgets should never be renamed between tags, this will break existing screens.
+- The name should not be unnecessarily long, but avoid abbreviations.
+- The name should use CamelCase to match qt and python class naming conventions.
 
-Widgets named before 2026 may break some of these rules because we don't want to rename them.
-Renaming a widget is to be avoided whenever possible due to breaking consumers that include the old names in their ui files.
+  - For example, the first widget added in 2026 was `MotorClassicFull`, because it controls generic epics record motors, is inspired by the classic EDM style, and has the full size class.
+
+- If multiple devices are controlled, include them in order of importance, e.g. `MotorTcClassicRow`.
+- There is no need to end a widget name with "Widget". Please avoid this.
+- Widgets with ui files, such as the composite widgets, should have parity between the ui file name and the widget name, for example `motor_classic_full.ui` for `MotorClassicFull`.
+- Widgets should never be renamed between tags, this will break existing screens.
+- Widgets named before 2026 may break some of these rules because we don't want to rename them.
 
 
 ### Adding a Symbol-based Vacuum Widget

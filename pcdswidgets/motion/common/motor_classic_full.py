@@ -5,10 +5,10 @@ This file can be safely edited to change the runtime behavior of the widget.
 """
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.generated.motion.common.motor_record_classic_full_base import MotorRecordClassicFullBase
+from pcdswidgets.generated.motion.common.motor_classic_full_base import MotorClassicFullBase
 
 
-class MotorRecordClassicFull(MotorRecordClassicFullBase):
+class MotorClassicFull(MotorClassicFullBase):
     designer_options = DesignerOptions(
         group="ECS Motion Common",
         is_container=False,

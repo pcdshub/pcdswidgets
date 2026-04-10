@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_record_classic_row.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_classic_row.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #

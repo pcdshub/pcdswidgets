@@ -5,12 +5,10 @@ This file can be safely edited to change the runtime behavior of the widget.
 """
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.generated.motion.common.motor_record_classic_tc_interlock_row_base import (
-    MotorRecordClassicTcInterlockRowBase,
-)
+from pcdswidgets.generated.motion.common.motor_classic_row_base import MotorClassicRowBase
 
 
-class MotorRecordClassicTcInterlockRow(MotorRecordClassicTcInterlockRowBase):
+class MotorClassicRow(MotorClassicRowBase):
     designer_options = DesignerOptions(
         group="ECS Motion Common",
         is_container=False,

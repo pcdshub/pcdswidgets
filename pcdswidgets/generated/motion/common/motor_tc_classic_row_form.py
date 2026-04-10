@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_record_classic_tc_interlock_row.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_tc_classic_row.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -12,7 +12,7 @@ from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
 
-from pcdswidgets.motion.common.motor_record_classic_row import MotorRecordClassicRow
+from pcdswidgets.motion.common.motor_classic_row import MotorClassicRow
 
 
 class Ui_Form(object):
@@ -33,10 +33,10 @@ class Ui_Form(object):
         self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.MotorRecordClassicRow = MotorRecordClassicRow(self.frame)
-        self.MotorRecordClassicRow.setToolTip("")
-        self.MotorRecordClassicRow.setObjectName("MotorRecordClassicRow")
-        self.verticalLayout_2.addWidget(self.MotorRecordClassicRow)
+        self.MotorClassicRow = MotorClassicRow(self.frame)
+        self.MotorClassicRow.setToolTip("")
+        self.MotorClassicRow.setObjectName("MotorClassicRow")
+        self.verticalLayout_2.addWidget(self.MotorClassicRow)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -99,7 +99,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.MotorRecordClassicRow.setProperty("motor", _translate("Form", "${MOTOR}"))
+        self.MotorClassicRow.setProperty("motor", _translate("Form", "${MOTOR}"))
         self.label.setText(_translate("Form", "Motor temperature: "))
         self.temperature_label.setChannel(_translate("Form", "ca://${MOTOR}:ILOCK:TC_TEMP_RBV"))
         self.label_2.setText(_translate("Form", "Interlock:"))
