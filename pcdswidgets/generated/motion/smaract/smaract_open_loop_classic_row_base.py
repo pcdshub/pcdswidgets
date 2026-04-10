@@ -4,22 +4,22 @@ ui_name = smaract_open_loop_classic_row.ui
 form_cls = Ui_Form
 base_cls = SmaractOpenLoopClassicRowBase
 macro_names = ['MOTOR']
-widget_names = ['PyDMLabel_name', 'PyDMLineEdit', 'PyDMLineEdit_setpoint', 'PyDMPushButton_stop', 'PyDMPushButton_twkL', 'PyDMPushButton_twkR', 'PyDMShellCommand']
-widget_name_to_class = {'Form': 'QWidget', 'PyDMShellCommand': 'PyDMShellCommand', 'PyDMLabel_name': 'PyDMLabel', 'PyDMLineEdit_setpoint': 'PyDMLineEdit', 'PyDMPushButton_twkR': 'PyDMPushButton', 'PyDMLineEdit': 'PyDMLineEdit', 'PyDMPushButton_stop': 'PyDMPushButton', 'PyDMPushButton_twkL': 'PyDMPushButton', 'label': 'QLabel'}
 
 Other long required variables:
+widget_names: list[str]
+widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
 widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
 widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 """
-
-from pydm.widgets import *
-from qtpy.QtWidgets import *
+# ruff: noqa: E501
+# ruff: noqa: F403
+# ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
 
-from .smaract_open_loop_classic_row_form import Ui_Form
+from .smaract_open_loop_classic_row_form import *
 
 try:
     from qtpy.QtCore import pyqtProperty

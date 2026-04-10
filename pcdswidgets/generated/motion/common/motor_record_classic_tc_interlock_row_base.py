@@ -4,22 +4,22 @@ ui_name = motor_record_classic_tc_interlock_row.ui
 form_cls = Ui_Form
 base_cls = MotorRecordClassicTcInterlockRowBase
 macro_names = ['MOTOR']
-widget_names = ['MotorRecordClassicRow', 'interlock_indicator', 'temperature_label']
-widget_name_to_class = {'Form': 'QWidget', 'frame': 'QFrame', 'MotorRecordClassicRow': 'MotorRecordClassicRow', 'label': 'QLabel', 'temperature_label': 'PyDMLabel', 'label_2': 'QLabel', 'interlock_indicator': 'PyDMByteIndicator'}
 
 Other long required variables:
+widget_names: list[str]
+widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
 widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
 widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 """
-
-from pydm.widgets import *
-from qtpy.QtWidgets import *
+# ruff: noqa: E501
+# ruff: noqa: F403
+# ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
 
-from .motor_record_classic_tc_interlock_row_form import Ui_Form
+from .motor_record_classic_tc_interlock_row_form import *
 
 try:
     from qtpy.QtCore import pyqtProperty

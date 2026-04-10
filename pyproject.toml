@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = [ "setuptools>=45", "setuptools_scm[toml]>=6.2", "jinja2>=3", "pyqt5>=5.15.11", "qtpy>=2.4.3"]
+requires = [ "setuptools>=45", "setuptools_scm[toml]>=6.2" ]
 
 [project]
 classifiers = [ "Development Status :: 5 - Production/Stable", "Natural Language :: English", "Programming Language :: Python :: 3",]
@@ -60,6 +60,7 @@ TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 [project.optional-dependencies]
 dev = [
     "jinja2>=3",
+    "ruff>=0.15.9",
     "tomlkit>=0.14.0",
 ]
 doc = [
@@ -87,7 +88,7 @@ content-type = "text/markdown"
 
 [tool.ruff]
 line-length = 120
-exclude = [".git", "__pycache__", "build", "dist", "*/_version.py", "generated"]
+exclude = [".git", "__pycache__", "build", "dist", "*/_version.py"]
 
 [tool.ruff.lint]
 select = ["C", "E", "F", "W", "B", "I"]

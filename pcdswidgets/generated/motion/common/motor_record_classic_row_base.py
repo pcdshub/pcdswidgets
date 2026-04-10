@@ -4,22 +4,22 @@ ui_name = motor_record_classic_row.ui
 form_cls = Ui_Form
 base_cls = MotorRecordClassicRowBase
 macro_names = ['MOTOR']
-widget_names = ['PyDMByteIndicator', 'PyDMByteIndicator_2', 'PyDMByteIndicator_mvn', 'PyDMLabel', 'PyDMLabel_name', 'PyDMLabel_rbv', 'PyDMLineEdit', 'PyDMLineEdit_setpoint', 'PyDMPushButton_stop', 'PyDMPushButton_twkL', 'PyDMPushButton_twkR', 'PyDMShellCommand']
-widget_name_to_class = {'Form': 'QWidget', 'main_frame': 'QFrame', 'PyDMPushButton_twkR': 'PyDMPushButton', 'PyDMByteIndicator_2': 'PyDMByteIndicator', 'PyDMLabel_name': 'PyDMLabel', 'PyDMLabel': 'PyDMLabel', 'PyDMShellCommand': 'PyDMShellCommand', 'PyDMLineEdit': 'PyDMLineEdit', 'PyDMByteIndicator': 'PyDMByteIndicator', 'PyDMLabel_rbv': 'PyDMLabel', 'PyDMByteIndicator_mvn': 'PyDMByteIndicator', 'PyDMPushButton_twkL': 'PyDMPushButton', 'PyDMPushButton_stop': 'PyDMPushButton', 'PyDMLineEdit_setpoint': 'PyDMLineEdit'}
 
 Other long required variables:
+widget_names: list[str]
+widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
 widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
 widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 """
-
-from pydm.widgets import *
-from qtpy.QtWidgets import *
+# ruff: noqa: E501
+# ruff: noqa: F403
+# ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
 
-from .motor_record_classic_row_form import Ui_Form
+from .motor_record_classic_row_form import *
 
 try:
     from qtpy.QtCore import pyqtProperty

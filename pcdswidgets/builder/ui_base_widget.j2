@@ -4,21 +4,21 @@ ui_name = {{ ui_name }}
 form_cls = {{ form_cls }}
 base_cls = {{ base_cls }}
 macro_names = {{ macro_names }}
-widget_names = {{ widget_names }}
-widget_name_to_class = {{ widget_name_to_class }}
 
 Other long required variables:
+widget_names: list[str]
+widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
 widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
 widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 """
-
-from qtpy.QtWidgets import *
-from pydm.widgets import *
+# ruff: noqa: E501
+# ruff: noqa: F403
+# ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
-from .{{ ui_name.removesuffix(".ui") }}_form import {{ form_cls }}
+from .{{ ui_name.removesuffix(".ui") }}_form import *
 
 try:
     from qtpy.QtCore import pyqtProperty

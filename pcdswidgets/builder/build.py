@@ -4,12 +4,11 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from collections import defaultdict
+from io import StringIO
 from pathlib import Path
 
 from jinja2 import Environment, PackageLoader
 from qtpy.uic import compileUi  # type: ignore
-
-import pcdswidgets
 
 
 def build_uic(designer_ui: str, output_dir: str = ""):
@@ -19,12 +18,33 @@ def build_uic(designer_ui: str, output_dir: str = ""):
     The files are named systematically with patterns like:
     some_name.ui -> some_name_form.py
     """
+    string_io = StringIO()
+    compileUi(designer_ui, string_io)
+
+    comment_lines = []
+    import_lines = []
+    impl_lines = []
+
+    for line in string_io.getvalue().split("\n"):
+        if line.startswith("from"):
+            import_lines.append(line.replace("PyQt5", "qtpy"))
+            continue
+        if import_lines:
+            impl_lines.append(line)
+        elif line:
+            comment_lines.append(line)
+
+    comment_lines.append("#")
+    comment_lines.append("# Augmented by pcdswidgets.builder.build")
+    comment_lines.append("# ruff: noqa: E501")
+
     output_dir_path = get_output_path(designer_ui=designer_ui, default_base="generated", output_dir=output_dir)
     output_dir_path.mkdir(parents=True, exist_ok=True)
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_form.py")
     with open(output_file, "w") as fd:
-        compileUi(designer_ui, fd)
-    build_inits(base_dir=up_but_not_top(output_dir_path))
+        fd.writelines(cl + "\n" for cl in comment_lines)
+        fd.writelines(il + "\n" for il in import_lines)
+        fd.writelines(impl + "\n" for impl in impl_lines)
 
 
 def build_base_widget(designer_ui: str, output_dir: str = ""):
@@ -74,7 +94,6 @@ def build_base_widget(designer_ui: str, output_dir: str = ""):
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_base.py")
     with open(output_file, "w") as fd:
         fd.write(jinja_output)
-    build_inits(base_dir=up_but_not_top(output_dir_path))
 
 
 def build_main_widget(designer_ui: str, output_dir: str = ""):
@@ -112,33 +131,7 @@ def build_main_widget(designer_ui: str, output_dir: str = ""):
     output_dir_path.mkdir(parents=True, exist_ok=True)
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", ".py")
     with open(output_file, "w") as fd:
-        fd.write(jinja_output)
-    build_inits(base_dir=up_but_not_top(output_dir_path))
-
-
-def build_inits(base_dir: str | Path):
-    """
-    Create blank __init__.py files wherever they are needed in generated directories.
-
-    This makes Python treat these directories as Python modules.
-    """
-    candidates: set[Path] = set()
-    base_dir = Path(base_dir)
-    for path in base_dir.rglob("*"):
-        if not str(path).startswith(".") and "__pycache__" not in path.parts:
-            candidates.add(path.with_name("__init__.py"))
-    for cand_path in candidates:
-        cand_path.touch()
-
-
-def up_but_not_top(base_dir: str | Path):
-    this_path = Path(base_dir).resolve()
-    pcdswidgets_base_path = Path(pcdswidgets.__file__).parent
-    while this_path.parent != pcdswidgets_base_path:
-        this_path = this_path.parent
-        if this_path.parent == this_path:
-            return Path(base_dir)
-    return this_path
+        fd.write(jinja_output + "\n")
 
 
 def get_output_path(designer_ui: str | Path, default_base: str, output_dir: str | Path = "") -> Path:
