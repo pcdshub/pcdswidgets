@@ -44,6 +44,6 @@ pyproject.toml: $(PY_SOURCE)
 venv:
 	./build_local_venv.sh
 
-# For running the again after pyproject.toml is generated
+# For running the again after pyproject.toml is generated in make all
 venv-again:
 	./build_local_venv.sh
