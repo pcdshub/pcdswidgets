@@ -101,3 +101,6 @@ PYQT5 = true
 PYSIDE2 = false
 PYQT6 = false
 PYSIDE6 = false
+
+[tool.uv]
+exclude-newer = "7 days"

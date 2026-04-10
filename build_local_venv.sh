@@ -41,7 +41,8 @@ elif [[ "$MODE" == "venv" ]]; then
     fi
     source .venv/bin/activate
     echo "Updating .venv using pip"
-    pip install -e '.[dev,doc,test]'
+    PKG_CUTOFF="$(date --date "7 days ago" --iso-8601)"
+    pip install -e '.[dev,doc,test]' --uploaded-prior-to "${PKG_CUTOFF}"
 else
     echo "Unhandled mode ${MODE}"
 fi
