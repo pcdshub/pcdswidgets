@@ -32,11 +32,15 @@ your new widgets.
 You can alternatively build your own environment:
 
 - pip install -e .
+
+or
+
 - uv sync
 
 Or whatever your favorite method is.
 
-Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS!
+Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS.
+This is due to complications in build process.
 
 
 ## Adding Widgets
@@ -84,9 +88,10 @@ Widgets with ui files, such as the composite widgets, should have parity between
 Widgets should never be renamed between tags, this will break existing screens.
 
 Widgets named before 2026 may break some of these rules because we don't want to rename them.
+Renaming a widget is to be avoided whenever possible due to breaking consumers that include the old names in their ui files.
 
 
-### Adding a Symbol-based Widget
+### Adding a Symbol-based Vacuum Widget
 This is how you would add e.g. a pump or valve widget with a custom drawing symbol and some color awareness.
 
 This will require at least some familiarity with Python and with the structure of this module.
@@ -102,94 +107,84 @@ The steps are:
    - Include your icon as self.icon
    - Add relevant properties as needed, or inherit them from the existing mixins
    - include the _qt_designer_ class attribute
-3. make, to update pyproject.toml with new widget locations
+3. make, to update pyproject.toml and the venv with new widget locations
 
 If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets.
 
 
 ### Adding a Composite Widget
-This is how you would convert a .ui file with macro substitution that is normally used with PyDMEmbeddedDisplay into a designer widget served from here.
+This is how you would convert a .ui file with macro substitution that is normally used with `PyDMEmbeddedDisplay` into a designer widget served from here.
 
 Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS!
 
-This is not required, but you would do this to make your widget globally available and easier to add to screens.
+This is not required, but you would do this to make your widget globally available, trivially discoverable, and easier to add to screens.
+The alternative is to pass your widget around via filepath in `PyDMEmbeddedDisplay`, which works but doesn't have the above advantages.
 
 This requires only basic Python knowledge.
 
 The steps are:
 
 1. Create a widget as a PyDM screen
-   - Use qt designer to define the layout (saves a .ui file)
-   - Use PyDM macros to define user inputs
+   - Use qt `designer` to define the layout (saves a .ui file)
+   - Use `PyDM` macros to define user inputs
 2. Try it!
-   - Use PyDMEmbeddedDisplay to include your widget in other screens
+   - Use `PyDMEmbeddedDisplay` to include your widget in other screens
    - Iterate, update the widget until you like it.
 3. Bring it here
-   - Copy your .ui file in the pcdswidgets/builder/ui folder.
-4. Activate your virtual environment
-   - `make venv`
-   - `source .venv/bin/activate`
-5. `make`
-   - This will create two .py files, one with the layouts and one with some scaffolding for macro conversions.
-6. Create a widget class
-   - Look around for examples, e.g. pcdswidgets/motion/motor_record_full.py
-   - Keep these in separate files to avoid circular import errors from including widgets inside widgets
-   - Import from the _base module created from your .ui file and subclass
-   - Note: do not put this in the tests, demo, or ui folders! The tests folder is not scanned for production-level widgets!
-7. `make`, again
-   - This will include your widget in pyproject.toml
-8. `make venv`, one last time
-   - The recommended way to update your testing virtual environment.
+   - Create a directory under ui, if needed: the form must be `pcdswidgets/ui/$subsystem/$type`
+   - Examples of subsystem: motion, vacuum
+   - Examples of type: common, smaract, beckhoff
+   - Pick a name for the ui file following the widget naming rules above
+   - Copy in your .ui file to the correct folder with the new name
+4. `make`
+   - This should have created two python files in `generated`, which are not to be edited by hand.
+   - It also creates a python file in `pcdswidgets/$subsystem/$type` which can be edited by hand if you'd like to.
+   - It will also create some number of `__init__.py` files to make the generated filetrees valid Python modules.
+5. Try it out
+   - Run `./try_in_designer.sh` and make a test screen. (Which, reminder: only works on rocky9 at LCLS)
+   - After you've made a test screen, then do `./try_in_pydm.sh my_screen.ui` for further testing.
+6. Pick an icon (optional)
+   - You can select an icon for your widget to use in designer. See the sections below about designer settings and icons.
+7. Make a PR!
+   - Commit
+   - Take some screenshots (in designer, and in pydm)
 
-If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets and pydm.
+Some notes:
 
-You can then use:
-```
-try_in_designer.sh
-```
-To open designer with your new widget
-(Which, reminder: only works on rocky9 at LCLS)
-
-
-You can also:
-```
-try_in_pydm.sh
-```
-To run a pydm screen that has your new widget.
+- If you edit the ui file, you should `make` again, or your changes will not take effect.
+- If you change your mind about which subsystem and type directory you'd like to use, you must manually delete the generated files from the old location.
 
 
 #### Widget Classes
-The widget class looks something like:
+The widget classes look something like:
 ```
-from pcdswidgets.builder.ui.some_name_base import SomeNameBase
-
-
-class SomeName(SomeNameBase):
-    _qt_designer_ = {
-        "group": "Some Category",
-        "is_container": False,
-    }
+class MyClassFull(MyClassFullBase):
+    designer_options = DesignerOptions(
+        group="ECS Subsystem Type",
+        is_container=False,
+        icon=None,
+    )
 ```
 
 If you like, you can extend these classes to add additional python code to use at runtime.
 
 #### Icons
 If you want to set a non-default icon for the designer widget list, you can include a QIcon or a string
-in the "icon" key of the `_qt_designer_` variable:
+in the "icon" attribute of the `DesignerOptions` dataclass:
 ```
-    _qt_designer_ = {
-        "group": "Some Category",
-        "is_container": False,
-        "icon": "expand-arrows-alt",
-    }
+    designer_options = DesignerOptions(
+        group="ECS Subsystem Type",
+        is_container=False,
+        icon="expand-arrows-alt",
+    )
 ```
 
-If this is a string, we'll convert it to a QIcon using Pydm's IconFont.
-This uses a portable version of fontawesome, try running `qta-browser`
+If this is a string, we'll convert it to a `QIcon` using `Pydm`'s `IconFont`.
+This uses a portable version of `fontawesome`, try running `qta-browser`
 and look through everything with the `fa5s` prefix to browse options.
 
 
 #### Limitations
-- Widgets that contain PyDMEmbeddedWidget are not supported: bootstrap these by turning the contents into widgets themselves.
+- Widgets that contain `PyDMEmbeddedWidget` are not supported: bootstrap these by turning the contents into widgets themselves.
 - The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
 - Only direct QString and QStringList properties are supported. We still need to implement support for item-based QString widgets such as QListWidget.
