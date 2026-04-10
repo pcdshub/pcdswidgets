@@ -188,3 +188,4 @@ and look through everything with the `fa5s` prefix to browse options.
 - Widgets that contain `PyDMEmbeddedWidget` are not supported: bootstrap these by turning the contents into widgets themselves.
 - The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
 - Only direct QString and QStringList properties are supported. We still need to implement support for item-based QString widgets such as QListWidget.
+- The ordering of the designer widget categories is chaotic. This will require an update to PyDM to resolve.
