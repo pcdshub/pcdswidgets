@@ -200,8 +200,46 @@
           <property name="toolTip">
            <string/>
           </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>true</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}.LLS</string>
+          </property>
+          <property name="blinkOnChange">
+           <bool>false</bool>
+          </property>
+          <property name="toggleMode">
+           <bool>false</bool>
+          </property>
+          <property name="blinkInterval">
+           <number>99</number>
+          </property>
           <property name="showLabels">
            <bool>false</bool>
+          </property>
+          <property name="bigEndian">
+           <bool>false</bool>
+          </property>
+          <property name="circles">
+           <bool>false</bool>
+          </property>
+          <property name="numBits">
+           <number>1</number>
+          </property>
+          <property name="shift">
+           <number>0</number>
+          </property>
+          <property name="labels">
+           <stringlist>
+            <string>Bit 0</string>
+           </stringlist>
           </property>
          </widget>
         </item>
@@ -257,8 +295,46 @@
           <property name="toolTip">
            <string/>
           </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>true</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}.HLS</string>
+          </property>
+          <property name="blinkOnChange">
+           <bool>false</bool>
+          </property>
+          <property name="toggleMode">
+           <bool>false</bool>
+          </property>
+          <property name="blinkInterval">
+           <number>99</number>
+          </property>
           <property name="showLabels">
            <bool>false</bool>
+          </property>
+          <property name="bigEndian">
+           <bool>false</bool>
+          </property>
+          <property name="circles">
+           <bool>false</bool>
+          </property>
+          <property name="numBits">
+           <number>1</number>
+          </property>
+          <property name="shift">
+           <number>0</number>
+          </property>
+          <property name="labels">
+           <stringlist>
+            <string>Bit 0</string>
+           </stringlist>
           </property>
          </widget>
         </item>

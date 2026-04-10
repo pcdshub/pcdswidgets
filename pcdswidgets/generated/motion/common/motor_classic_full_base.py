@@ -28,6 +28,8 @@ except ImportError:
 
 
 class MotorClassicFullBase(DesignerWidget):
+    PyDMByteIndicator_hls: "PyDMByteIndicator"
+    PyDMByteIndicator_lls: "PyDMByteIndicator"
     PyDMByteIndicator_mvn: "PyDMByteIndicator"
     PyDMLabel_egu: "PyDMLabel"
     PyDMLabel_name: "PyDMLabel"
@@ -44,7 +46,9 @@ class MotorClassicFullBase(DesignerWidget):
         "MOTOR": [
             "PyDMLabel_name",
             "PyDMByteIndicator_mvn",
+            "PyDMByteIndicator_lls",
             "PyDMLabel_rbv",
+            "PyDMByteIndicator_hls",
             "PyDMPushButton_stop",
             "PyDMLineEdit_setpoint",
             "PyDMLabel_egu",
@@ -55,6 +59,12 @@ class MotorClassicFullBase(DesignerWidget):
         ],
     }
     _widget_to_macro = {
+        "PyDMByteIndicator_hls": [
+            "MOTOR",
+        ],
+        "PyDMByteIndicator_lls": [
+            "MOTOR",
+        ],
         "PyDMByteIndicator_mvn": [
             "MOTOR",
         ],
@@ -87,6 +97,12 @@ class MotorClassicFullBase(DesignerWidget):
         ],
     }
     _widget_to_pre_template = {
+        "PyDMByteIndicator_hls": [
+            ("channel", "ca://${MOTOR}.HLS"),
+        ],
+        "PyDMByteIndicator_lls": [
+            ("channel", "ca://${MOTOR}.LLS"),
+        ],
         "PyDMByteIndicator_mvn": [
             ("channel", "ca://${MOTOR}.MOVN"),
         ],
