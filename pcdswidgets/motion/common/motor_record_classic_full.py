@@ -10,7 +10,7 @@ from pcdswidgets.generated.motion.common.motor_record_classic_full_base import M
 
 class MotorRecordClassicFull(MotorRecordClassicFullBase):
     designer_options = DesignerOptions(
-        group="PCDS Motion Common",
+        group="ECS Motion Common",
         is_container=False,
         icon=None,
     )

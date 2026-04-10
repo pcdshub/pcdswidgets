@@ -68,7 +68,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _state_suffix = ":STATE_RBV"
@@ -153,7 +153,7 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbol
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -241,7 +241,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -324,7 +324,7 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _state_suffix = ":STATE_RBV"
@@ -403,7 +403,7 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _state_suffix = ":STATE_RBV"
@@ -482,7 +482,7 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Gauges",
+        "group": "ECS Vacuum Gauges",
         "is_container": False,
     }
     _state_suffix = ":STATE_RBV"

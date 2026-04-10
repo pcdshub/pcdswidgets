@@ -36,7 +36,7 @@ class RGA(PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Others",
+        "group": "ECS Vacuum Others",
         "is_container": False,
     }
     NAME = "Residual Gas Analyzer"

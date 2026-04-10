@@ -10,7 +10,7 @@ from pcdswidgets.generated.motion.smaract.smaract_open_loop_classic_row_base imp
 
 class SmaractOpenLoopClassicRow(SmaractOpenLoopClassicRowBase):
     designer_options = DesignerOptions(
-        group="PCDS Motion Smaract",
+        group="ECS Motion Smaract",
         is_container=False,
         icon=None,
     )

@@ -37,7 +37,7 @@ class EPSByteIndicator(QWidget):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Utilities",
+        "group": "ECS EPS",
         "is_container": False,
     }
 

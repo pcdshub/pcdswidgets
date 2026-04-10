@@ -48,11 +48,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         The parent widget for this symbol.
     """
 
-    _qt_designer_ = {
-        "group": "PCDS Symbols",
-        "is_container": False,
-    }
-
     EXPERT_OPHYD_CLASS = ""
 
     Q_ENUMS(ContentLocation)

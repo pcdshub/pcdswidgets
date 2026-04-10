@@ -73,7 +73,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -168,7 +168,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -259,7 +259,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -317,7 +317,7 @@ class GetterPump(PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     NAME = "Getter Pump"

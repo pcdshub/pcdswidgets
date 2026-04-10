@@ -23,7 +23,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Utilities",
+        "group": "ECS Containers",
         "is_container": False,
     }
 

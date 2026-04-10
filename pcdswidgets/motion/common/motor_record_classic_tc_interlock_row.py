@@ -12,7 +12,7 @@ from pcdswidgets.generated.motion.common.motor_record_classic_tc_interlock_row_b
 
 class MotorRecordClassicTcInterlockRow(MotorRecordClassicTcInterlockRowBase):
     designer_options = DesignerOptions(
-        group="PCDS Motion Common",
+        group="ECS Motion Common",
         is_container=False,
         icon=None,
     )

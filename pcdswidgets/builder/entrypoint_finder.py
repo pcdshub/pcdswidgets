@@ -18,9 +18,7 @@ from qtpy.QtWidgets import QWidget
 
 import pcdswidgets
 
-SKIP_WIDGETS = [
-    "PCDSSymbolBase",
-]
+SKIP_WIDGETS = []
 
 SKIP_MODULES = [
     ".tests",

@@ -116,7 +116,7 @@ def build_main_widget(designer_ui: str, output_dir: str = ""):
             module_parts.append(path_part)
     module_parts.append(os.path.basename(designer_ui).replace(".ui", "_base"))
     absolute_import_path = ".".join(module_parts)
-    default_group = f"PCDS {module_parts[2].title()} {module_parts[3].title()}"
+    default_group = f"ECS {module_parts[2].title()} {module_parts[3].title()}"
     # Fill the template
     jinja_template = "ui_main_widget.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))

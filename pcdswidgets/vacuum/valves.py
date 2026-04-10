@@ -92,7 +92,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDS
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
 
@@ -192,7 +192,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSS
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":OPN_OK_RBV"
@@ -285,7 +285,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl,
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":OPN_OK_RBV"
@@ -373,7 +373,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -456,7 +456,7 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBas
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -513,7 +513,7 @@ class RightAngleManualValve(PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     NAME = "Right Angle Manual Valve"
@@ -619,7 +619,7 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSy
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     NAME = "Control Valve with Readback"
@@ -715,7 +715,7 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     NAME = "Normally Closed Control Valve with No Readback"
@@ -809,7 +809,7 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     NAME = "Normally Open Control Valve with No Readback"
@@ -903,7 +903,7 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PC
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":CLS_OK_RBV"
@@ -1009,7 +1009,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Valves",
+        "group": "ECS Vacuum Valves",
         "is_container": False,
     }
     _interlock_suffix = ":OPN_OK_RBV"
