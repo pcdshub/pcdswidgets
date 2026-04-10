@@ -60,7 +60,7 @@ TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 [project.optional-dependencies]
 dev = [
     "jinja2>=3",
-    "ruff>=0.15.9",
+    "ruff>=0.15.8",
     "tomlkit>=0.14.0",
 ]
 doc = [

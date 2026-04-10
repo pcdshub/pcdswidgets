@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.12"
 
 [options]
-exclude-newer = "2026-04-02T21:24:40.825174043Z"
+exclude-newer = "2026-04-03T02:16:30.640878921Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -356,7 +356,7 @@ requires-dist = [
     { name = "pytest-qt", marker = "extra == 'test'", specifier = ">=4.5.0" },
     { name = "pytest-timeout", marker = "extra == 'test'", specifier = ">=2.4.0" },
     { name = "qtpy", specifier = ">=2.4.3" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.15.9" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.15.8" },
     { name = "sphinx", marker = "extra == 'doc'", specifier = ">=9.1.0" },
     { name = "sphinx-rtd-theme", marker = "extra == 'doc'", specifier = ">=3.1.0" },
     { name = "sphinxcontrib-jquery", marker = "extra == 'doc'", specifier = ">=4.1" },

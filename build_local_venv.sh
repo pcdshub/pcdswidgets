@@ -38,6 +38,10 @@ elif [[ "$MODE" == "venv" ]]; then
     if [[ ! -d ".venv" ]]; then
         echo "Building new .venv using venv module"
         "$PYTHON_EXE" -m venv --system-site-packages .venv
+        PIP_VER="$("${PYTHON_EXE}" -c "import pip; print(pip.__version__)")"
+        source .venv/bin/activate
+        echo "Updating pip to match base env"
+        pip install pip=="${PIP_VER}"
     fi
     source .venv/bin/activate
     echo "Updating .venv using pip"
