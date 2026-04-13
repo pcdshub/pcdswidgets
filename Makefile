@@ -1,4 +1,4 @@
-.PHONY: all build inits venv venv-again
+.PHONY: all build inits venv
 
 UI_SOURCE := $(wildcard pcdswidgets/ui/*/*/*.ui)
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
@@ -12,8 +12,14 @@ BUILD_CMD := $(BIN)/python -m pcdswidgets.builder.build
 CHECK_FIX := $(BIN)/ruff check --exit-zero --fix --quiet
 FORMAT := $(BIN)/ruff format --quiet
 
-# We need to update the venv before and after each of our steps
-all: venv build pyproject.toml venv-again
+# We need to update the venv before doing any step and after doing all of them
+# The order matters here, except the py files in the build target could be done in any order
+all:
+	$(MAKE) venv
+	$(MAKE) build
+	$(MAKE) inits
+	$(MAKE) pyproject.toml
+	$(MAKE) venv
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN) inits
 
@@ -42,8 +48,4 @@ pyproject.toml: $(PY_SOURCE)
 	$(BIN)/python -m pcdswidgets.builder.entrypoint_finder
 
 venv:
-	./build_local_venv.sh
-
-# For running the again after pyproject.toml is generated in make all
-venv-again:
 	./build_local_venv.sh
