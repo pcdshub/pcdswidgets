@@ -15,6 +15,11 @@ from qtpy.QtWidgets import QApplication, QGridLayout, QLabel, QMainWindow, QScro
 
 
 def show_icon_options():
+    """
+    Show a simple qt window with a grid of valid rendered icons alongside their names.
+
+    This is the full set of usable icons from pydm's iconfont.
+    """
     app = QApplication([])
     main_window = QMainWindow()
     scroll_area = QScrollArea()
@@ -59,6 +64,9 @@ def show_icon_options():
 
 
 def generate_icon_options():
+    """
+    Generate icon_options.py, which contains a large enum with icon options.
+    """
     jinja_template = "icon_options.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
     template = env.get_template(jinja_template)
@@ -72,6 +80,9 @@ def generate_icon_options():
 
 
 def get_icon_options() -> list[str]:
+    """
+    Returns the names of all the icons present in pydm's iconfont with valid rendering.
+    """
     # The charmap file is everything that pydm recognizes as an icon, including things it has no image data for
     with open(Path(iconfont.__file__).parent / "fontawesome-charmap.json", "r") as fd:
         charmap: dict[str, str] = json.load(fd)
