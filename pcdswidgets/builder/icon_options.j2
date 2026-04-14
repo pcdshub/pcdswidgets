@@ -10,5 +10,5 @@ from enum import StrEnum
 class IconOptions(StrEnum):
     NONE = ""
 {% for opt in options %}
-    {{ opt.replace("-", "_").replace("5", "a5") }} = "{{ opt }}"
+    {{ opt.replace("-", "_") }} = "{{ opt }}"
 {% endfor %}

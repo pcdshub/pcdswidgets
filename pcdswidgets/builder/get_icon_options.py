@@ -53,7 +53,7 @@ def show_icon_options():
             curr = 0
             row += 1
 
-    main_window.resize(800, 600)
+    main_window.resize(1200, 600)
     main_window.show()
     app.exec_()
 
@@ -72,9 +72,19 @@ def generate_icon_options():
 
 
 def get_icon_options() -> list[str]:
+    # The charmap file is everything that pydm recognizes as an icon, including things it has no image data for
     with open(Path(iconfont.__file__).parent / "fontawesome-charmap.json", "r") as fd:
         charmap: dict[str, str] = json.load(fd)
-    return list(charmap)
+
+    # The glyph map is everything actually present in the otf file pydm uses
+    # I got this map by uploading the otf file to fontdrop.info and copying the glyphIndexMap in the cmap verbatim
+    # There are probably other ways to get this info, but this one avoided adding a dependency here
+    with open(Path(__file__).parent / "valid_glyph_map.json", "r") as fd:
+        glyph_map: dict[str, int] = json.load(fd)
+    valid_hex = {hex(int(key))[2:] for key in glyph_map}
+
+    # If something is present in both, it's a valid icon!
+    return [name for name, hexval in charmap.items() if hexval in valid_hex]
 
 
 if __name__ == "__main__":
