@@ -99,22 +99,22 @@ Other guidelines:
 ### Adding a Symbol-based Vacuum Widget
 This is how you would add e.g. a pump or valve widget with a custom drawing symbol and some color awareness.
 
-This will require at least some familiarity with Python and with the structure of this module.
+This will require at least some familiarity with `Python`, `Qt`, `PyQt`, `pydm`, and with the structure of this module.
 
 Largely: refer back to the existing widgets.
 
 The steps are:
 
-1. Create a new subclass of BaseSymbolIcon in the icons subfolder
+1. Create a new subclass of `BaseSymbolIcon` in the icons subfolder
    - Define a path
    - Implement draw_icon
-2. Create a new subclass of PCDSSymbolBase
+2. Create a new subclass of `PCDSSymbolBase`
    - Include your icon as self.icon
    - Add relevant properties as needed, or inherit them from the existing mixins
-   - include the _qt_designer_ class attribute
-3. make, to update pyproject.toml and the venv with new widget locations
+   - include the `_qt_designer_` class attribute
+3. `make`, to update `pyproject.toml` and the venv with new widget locations
 
-If the widget has been added and is included in the pyproject.toml file, it will appear in designer after installing pcdswidgets.
+If the widget has been added and is included in the `pyproject.toml` file, it will appear in designer after installing pcdswidgets.
 
 
 ### Adding a Composite Widget
@@ -125,9 +125,15 @@ Note that we can currently only run designer with custom widgets on our Rocky9 O
 This is not required, but you would do this to make your widget globally available, trivially discoverable, and easier to add to screens.
 The alternative is to pass your widget around via filepath in `PyDMEmbeddedDisplay`, which works but doesn't have the above advantages.
 
-This requires only basic Python knowledge.
+This requires basic `python` knowledge as well as familiarity with making `pydm` displays.
 
-The steps are:
+Here are some supplemental pages from the official `pydm` docs that you should understand before adding a widget:
+
+- [PyDM Macro Substitution](https://slaclab.github.io/pydm/tutorials/intro/macros.html)
+- [Creating a small (widget) ui file with macros](https://slaclab.github.io/pydm/tutorials/action/designer_inline.html)
+- [Creating a screen that uses embedded displays](https://slaclab.github.io/pydm/tutorials/action/designer_main.html)
+
+The steps for creating a new widget are:
 
 1. Create a widget as a PyDM screen
    - Use qt `designer` to define the layout (saves a .ui file)
@@ -136,7 +142,7 @@ The steps are:
    - Use `PyDMEmbeddedDisplay` to include your widget in other screens
    - Iterate, update the widget until you like it.
 3. Bring it here
-   - Create a directory under ui, if needed: the form must be `pcdswidgets/ui/$subsystem/$type`
+   - Create a directory under ui, if needed, or use a suitable existing directory: the form must be `pcdswidgets/ui/$subsystem/$type`
    - Examples of subsystem: motion, vacuum
    - Examples of type: common, smaract, beckhoff
    - Pick a name for the ui file following the widget naming rules above
@@ -167,26 +173,31 @@ class MyClassFull(MyClassFullBase):
     designer_options = DesignerOptions(
         group="ECS Subsystem Type",
         is_container=False,
-        icon=None,
+        icon=IconOptions.NONE,
     )
 ```
 
 If you like, you can extend these classes to add additional python code to use at runtime.
 
 #### Icons
-If you want to set a non-default icon for the designer widget list, you can include a QIcon or a string
-in the "icon" attribute of the `DesignerOptions` dataclass:
+If you want to set a non-default icon for the designer widget list,
+there are a bunch of standard icons distributed by pydm that are accessible using the IconOptions enum.
+Set this in the `icon` option of `DesignerOptions`.
+
 ```
     designer_options = DesignerOptions(
         group="ECS Subsystem Type",
         is_container=False,
-        icon="expand-arrows-alt",
+        icon=IconOptions.expand_arrows_alt,
     )
 ```
 
-If this is a string, we'll convert it to a `QIcon` using `Pydm`'s `IconFont`.
-This uses a portable version of `fontawesome`, try running `qta-browser`
-and look through everything with the `fa5s` prefix to browse options.
+We'll convert these enums to a `QIcon` using `Pydm`'s `IconFont`.
+This uses a portable version of `fontawesome`, try running `show_icon_options.sh`
+to see all of the icons rendered in a grid.
+
+If you want to make your own icon, you can create a custom `QIcon` using any method you wish
+and include it as the `icon` option here.
 
 
 #### Limitations
@@ -194,3 +205,4 @@ and look through everything with the `fa5s` prefix to browse options.
 - The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
 - Only direct QString and QStringList properties are supported. We still need to implement support for item-based QString widgets such as QListWidget.
 - The ordering of the designer widget categories is chaotic. This will require an update to PyDM to resolve.
+- In pydm, you can edit a ui file by hand and add a macro anywhere. This is not supported for composite widgets.
