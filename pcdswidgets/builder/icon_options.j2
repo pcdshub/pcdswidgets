@@ -1,0 +1,14 @@
+"""
+Define the IconOptions enum, which helps us keep track of which string icon names are valid.
+
+This is a file generated from icon_options.j2
+"""
+
+from enum import StrEnum
+
+
+class IconOptions(StrEnum):
+    NONE = ""
+{% for opt in options %}
+    {{ opt.replace("-", "_").replace("5", "a5") }} = "{{ opt }}"
+{% endfor %}

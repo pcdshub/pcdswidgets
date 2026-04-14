@@ -12,6 +12,7 @@ from pydm.widgets.qtplugin_extensions import RulesExtension
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
 from .designer_options import DesignerOptions
+from .icon_options import IconOptions
 
 ifont = IconFont()
 
@@ -48,13 +49,17 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 "group": cls.designer_options.group,
                 "is_container": cls.designer_options.is_container,
             }
-            icon_name = cls.designer_options.icon
-            if icon_name is not None:
-                cls._qt_designer_["icon"] = icon_name
-        # Interpret strings as icons so we don't have to import IconFont everywhere
+            icon_obj = cls.designer_options.icon
+            if icon_obj is not None:
+                cls._qt_designer_["icon"] = icon_obj
+        # Interpret enum as icons for ease of selection
         try:
-            if isinstance(cls._qt_designer_["icon"], str):
-                cls._qt_designer_["icon"] = ifont.icon(cls._qt_designer_["icon"])
+            icon = cls._qt_designer_["icon"]
+            if isinstance(icon, IconOptions):
+                if str(icon):
+                    cls._qt_designer_["icon"] = ifont.icon(str(icon))
+                else:
+                    del cls._qt_designer_["icon"]
         except (AttributeError, KeyError):
             ...
         # Include a quick editor for macro vals
