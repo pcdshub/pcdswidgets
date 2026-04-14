@@ -42,7 +42,8 @@ def build_inits(base_dir: Path):
         if "__pycache__" not in path.parts:
             candidates.add(path.with_name("__init__.py"))
     for cand_path in candidates:
-        cand_path.touch()
+        if not cand_path.exists():
+            cand_path.touch()
 
 
 if __name__ == "__main__":
