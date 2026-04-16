@@ -66,9 +66,9 @@ This is due to complications in the build process.
 
 
 ## Adding Widgets Tutorial
-There are two kinds of widgets in `pcdswidgets`:
-composite widgets, which start their lifecycles as standard `pydm` screens,
-and symbol-based widgets, which start their lifecycles here in `pcdswidgets`.
+There are two kinds of widgets in `pcdswidgets`
+1. Composite widgets, which start their lifecycles as standard `pydm` screens and are composed entirely of smaller standard widgets.
+2. Symbol-based widgets, which start their lifecycles here in `pcdswidgets` and feature fully custom symbol components.
 
 This tutorial will first go through how to add composite widgets, and then how to add symbol-based widgets. It is expected that most contributors will be adding composite widgets.
 
@@ -97,7 +97,7 @@ If you don't know how to do this, refer to the `pydm` documentation:
 - [Creating a small (widget) ui file with macros](https://slaclab.github.io/pydm/tutorials/action/designer_inline.html)
 - [Creating a screen that uses embedded displays](https://slaclab.github.io/pydm/tutorials/action/designer_main.html)
 
-Before getting too deep, however, please consider widget sizing.
+Before getting too deep, however, please consider widget sizing:
 
 
 ### Widget Sizing
@@ -105,7 +105,6 @@ We have some strict guidelines on widget sizing. These are established to give u
 
 Device control widgets should fall into exactly one of three size classes.
 (Note: we can add more size classes if necessary).
-Widgets can be smaller than the maximum of their size class by up to 20% before being flagged by CI.
 
 To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
 and are permissible sizes as recorded below.
@@ -119,9 +118,10 @@ Widgets should always be maintained to work at the original designed size, becau
 | Compact | 100 px | 75 px |
 | Row | 800 px | 50 px |
 
-Rows are also allowed to be double-height, e.g. 100px height.
-
-Note: widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
+Note:
+- All widgets area allowed to be smaller than the mazimum of their size class by up to 20%.
+- Rows are also allowed to be double-height, e.g. 100px height.
+- Widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
 
 
 ### Environment Setup
@@ -143,9 +143,9 @@ and `try_in_designer.sh` will open a designer window with the existing `pcdswidg
 ### Adding Your Composite Widget: Part 1
 1. Decide on your widget category: this is the subsystem and the type of the widget.
    - Example subsystems include "motion" and "vacuum".
-   - Example types include "common", "smaract", and "beckhoff"
+   - Example types include "common", "smaract", and "beckhoff".
 
-2. Copy your `.ui` file into `pcdswidgets` in the correct folder: `pcdswidgets/ui/${subsystem}/${type}`
+2. Copy your `.ui` file into `pcdswidgets` in the folder corresponding with your choices in step 1: `pcdswidgets/ui/${subsystem}/${type}`
    - Example: `pcdswidgets/ui/motion/beckhoff`
    - If this folder does not exist, consider if an existing folder is appropriate.
    - If no existing folder is appropriate, feel free to create a new folder.
@@ -162,8 +162,8 @@ Widget names and ui filenames should have one to one correspondance and contain 
 - Size class signifier
 
 For casing:
-- ui filenames should be lowercase_with_underscores for ease of working with filenames
-- class names should use CamelCase to match qt and python naming conventions
+- `.ui` filenames should be lowercase_with_underscores for ease of working with filenames.
+- Class names should use CamelCase to match qt and python naming conventions.
   - The class name will be generated automatically from the ui filename.
 
 Examples:
@@ -187,10 +187,10 @@ Other guidelines:
 
 ### Adding Your Composite Widget: Part 2
 4. Run `make` to generate the code and update the project metadata.
-   - This will generate at least three `.py` files and add a row to `pyproject.toml`
+   - This will generate at least three `.py` files and add a row to `pyproject.toml`.
    - Do not edit the files in `generated`.
 5. Try it out!
-   - Run `./try_in_designer.sh` and make a test screen. (Which, reminder: only works on rocky9 at LCLS)
+   - Run `./try_in_designer.sh` and make a test screen. (Which, reminder: only works on rocky9 at LCLS).
    - After you've made a test screen, then do `./try_in_pydm.sh my_screen.ui` for further testing.
    - Make sure to take screenshots to include in your pull request.
 
@@ -201,13 +201,14 @@ The next few sections are optional.
 Some notes:
 
 - If you edit the ui file, you should `make` again, or your changes will not take effect.
-- If you change your mind about which subsystem and type directory you'd like to use, you must manually delete the generated files from the old location.
+- If you change your mind about which subsystem and type directory you'd like to use, you must manually delete the generated files from the old locations.
 
 
 ### Optional: Edit the Designer Settings
-One of the built files is not in `generated`, instead it is in `pcdswidgets/ui/${subsystem}/${type}`.
+One of the built files is in `pcdswidgets/ui/${subsystem}/${type}`.
 
-This file is free to edit and, among other thing, contains a `DesignerOptions` specification for the widget.
+Unlike the files in `generated`, this file is free to edit,
+and, among other thing, contains a `DesignerOptions` specification for the widget.
 
 This looks something like:
 
@@ -223,7 +224,7 @@ class MyClassFull(MyClassFullBase):
 The editable options are:
 - `group`, which determines which category the widget sorts into in the designer sidebar.
 - `is_container`, which tells designer if we should be able to drag other widgets into this one in designer.
-- `icon`, which tells designer which icon to use in the designer sidebar (see next section)
+- `icon`, which tells designer which icon to use in the designer sidebar (see next section).
 
 
 ### Optional: Choose a Designer Icon
@@ -248,10 +249,10 @@ class MyClassFull(MyClassFullBase):
 ```
 
 2. Create your own `QIcon`
-   - You can use the qt APIs to create your own icon object
-   - For example: from a `.png`
-   - Please refer to the qt/pyqt docs for how to do this
-   - You can set `icon=your_qicon_object` in your `DesignerOptions` to include your custom icon
+   - You can use the `Qt` APIs to create your own icon object.
+   - For example: you can create an icon from a `.png`.
+   - Please refer to the `Qt`/`PyQt` docs for how to do this.
+   - You can set `icon=your_qicon_object` in your `DesignerOptions` to include your custom icon.
 
 
 ### Optional: Add Logic to a Composite Widget
@@ -260,15 +261,15 @@ when your widget is included in a screen.
 This means you can add code to the widget to override and extend any built-in behavior.
 
 There are a few things to keep in mind when you do this:
-1. If you override `__init__`, you must call `super().__init__(parent)` before doing any other `qt`-related operations.
+1. If you override `__init__`, you must call `super().__init__(parent)` before doing any other `Qt`-related operations.
 2. There is no way to pass custom arguments to `__init__` in `designer`.
-   Any parameterization should be done via qt properties, which will show up in the sidebar.
+   - Any parameterization should be done via `Qt` properties, which will show up in the sidebar.
    - If you do this, do not assume that the properties will be set in any particular order.
-     Make your code work regardless of which order the properties are set in.
+   - Make your code work regardless of which order the properties are set in.
 3. Be wary of backwards compatibility.
-   - Removing preoperties from a widget will break existing screens.
+   - Removing properties from a widget will break existing screens.
 
-Here is an example where we add a single configuration parameter that does nothing.
+Here is an example where we add a single configuration parameter that does nothing. In practice, you would also change something meaningful about the widget during the setter.
 
 ```
 try:
@@ -306,7 +307,7 @@ class MyClassFull(MyClassFullBase):
 - In `pydm`, you can edit a ui file by hand and add a macro anywhere. This is not supported for composite widgets.
 
 
-### Adding a Symbol-based Vacuum Widget
+### Adding a Symbol-based Widget
 This is how you would add e.g. a pump or valve widget with a custom drawing symbol and some color awareness.
 
 This will require at least some familiarity with `Python`, `Qt`, `PyQt`, `pydm`, and with the structure of this module.
@@ -315,13 +316,19 @@ Largely: refer back to the existing widgets.
 
 The steps are:
 
-1. Create a new subclass of `BaseSymbolIcon` in the icons subfolder
+1. Create a new subclass of `BaseSymbolIcon` in the icons subfolder.
    - Define a path
    - Implement draw_icon
-2. Create a new subclass of `PCDSSymbolBase`
+2. Create a new subclass of `PCDSSymbolBase`.
    - Include your icon as self.icon
    - Add relevant properties as needed, or inherit them from the existing mixins
    - include the `_qt_designer_` class attribute
-3. `make`, to update `pyproject.toml` and the venv with new widget locations
+3. `make`, to update `pyproject.toml` and the venv with new widget locations.
 
-If the widget has been added and is included in the `pyproject.toml` file, it will appear in designer after installing pcdswidgets.
+If the widget has been added and is included in the `pyproject.toml` file, it will appear in designer after installing `pcdswidgets`.
+
+Note:
+- At time of writing, all symbol-based widgets are vacuum widgets, and as such all the symbol-related code is in the vacuum folder.
+  - If you would like to make a non-vacuum widget in this style, you should first refactor to pull out the base icon and symbol code, then edit the readme here to remove this note.
+- The colors of all the existing vacuum symbol widgets is based on stylesheet rules. We keep the latest version of the stylesheet in use at LCLS in another module: see [lcls-twincat-vacuum](https://github.com/pcdshub/lcls-pydm-vacuum/blob/master/styleSheet/masterStyleSheet.qss).
+  - You are not required to continue the stylesheet pattern if you add new symbol widgets.
