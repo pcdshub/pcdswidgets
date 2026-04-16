@@ -4,6 +4,7 @@ Show a fully functional widget. Useful for development.
 Invoke as e.g.
 "python -m pcdswidgets.vacuum.demo PneumaticValveDA CRIX:VGC:11"
 """
+
 import sys
 
 import pydm
@@ -26,6 +27,6 @@ app = pydm.PyDMApplication(
 )
 
 widget = globals()[cls]()
-widget.channelsPrefix = 'ca://' + sys.argv[2]
+widget.channelsPrefix = "ca://" + sys.argv[2]
 app.main_window.set_display_widget(widget)
 app.exec()

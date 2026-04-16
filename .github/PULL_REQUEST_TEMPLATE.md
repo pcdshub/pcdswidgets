@@ -15,6 +15,15 @@
 <!--  Include where the changes made have been documented. -->
 <!--  This can simply be  a comment in the code or updating a docstring -->
 
-<!--
-## Screenshots (if appropriate):
--->
+## Screenshots
+<!--  Include a screenshot of the related widgets in designer and in pydm -->
+
+## Pre-merge Checklist
+- [ ] Screenshots of these widgets in designer are included above (`try_in_designer.sh`)
+- [ ] Screenshots of these widgets working in PyDM are included above (`try_in_pydm.sh`)
+- [ ] Code works interactively
+- [ ] Code contains descriptive docstrings, including context and API
+- [ ] New/changed functions and methods are covered in the test suite where possible
+- [ ] New/changed widgets are part of the test suite (semi-automatic)
+- [ ] Test suite passes locally
+- [ ] Test suite passes on GitHub Actions

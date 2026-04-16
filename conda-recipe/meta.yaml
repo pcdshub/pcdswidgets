@@ -19,6 +19,9 @@ requirements:
   - python >=3.9
   - setuptools_scm
   - pip
+  - jinja2 >=3
+  - qtpy
+  - pyqt >=5
   run:
   - python >=3.9
   - pydm >=1.9.0
@@ -29,9 +32,11 @@ test:
   imports:
   - pcdswidgets
   requires:
+  - jinja2 >=3
   - pytest
   - pytest-qt
   - pytest-timeout
+  - tomlkit >=0.14.0
 
 about:
   home: https://github.com/pcdshub/pcdswidgets

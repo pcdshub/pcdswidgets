@@ -76,9 +76,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -106,3 +103,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# setuptools_scm
+*/_version.py
+
+# pyuic5
+**/ui/*.py
+!**/ui/__init__.py
+
+# vscode
+.vscode/*

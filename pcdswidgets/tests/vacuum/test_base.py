@@ -7,12 +7,13 @@ from pcdswidgets.vacuum.base import ContentLocation, PCDSSymbolBase
 
 class BaseSymbol(PCDSSymbolBase):
     """Test Symbol for base class tests"""
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.icon = RGASymbolIcon(parent=self)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def symbol(qtbot):
     symbol = BaseSymbol()
     qtbot.addWidget(symbol)
@@ -35,12 +36,16 @@ def test_no_controls_content(symbol):
     assert widget == symbol.icon
 
 
-@pytest.mark.parametrize('location,layout,position',
-                         [(ContentLocation.Top, QVBoxLayout, 0),
-                          (ContentLocation.Bottom, QVBoxLayout, 1),
-                          (ContentLocation.Left, QHBoxLayout, 0),
-                          (ContentLocation.Right, QHBoxLayout, 1)],
-                         ids=['Top', 'Bottom', 'Left', 'Right'])
+@pytest.mark.parametrize(
+    "location,layout,position",
+    [
+        (ContentLocation.Top, QVBoxLayout, 0),
+        (ContentLocation.Bottom, QVBoxLayout, 1),
+        (ContentLocation.Left, QHBoxLayout, 0),
+        (ContentLocation.Right, QHBoxLayout, 1),
+    ],
+    ids=["Top", "Bottom", "Left", "Right"],
+)
 def test_controls_content_location(symbol, location, layout, position):
     symbol.controlsLocation = location
     assert isinstance(symbol.interlock.layout(), layout)
@@ -56,18 +61,22 @@ def test_icon_fixed_size(symbol):
     assert symbol.icon.height() == size
 
 
-@pytest.mark.parametrize('rotate', (False, True), ids=('Standard', 'Rotated'))
+@pytest.mark.parametrize("rotate", (False, True), ids=("Standard", "Rotated"))
 def test_icon_rotation(symbol, rotate):
     symbol.rotateIcon = rotate
     assert symbol.icon.rotation == 90 * int(rotate)
 
 
-@pytest.mark.parametrize('location,layout,position',
-                         [(ContentLocation.Top, QVBoxLayout, 0),
-                          (ContentLocation.Bottom, QVBoxLayout, 1),
-                          (ContentLocation.Left, QVBoxLayout, 0),
-                          (ContentLocation.Right, QVBoxLayout, 1)],
-                         ids=['Top', 'Bottom', 'Left', 'Right'])
+@pytest.mark.parametrize(
+    "location,layout,position",
+    [
+        (ContentLocation.Top, QVBoxLayout, 0),
+        (ContentLocation.Bottom, QVBoxLayout, 1),
+        (ContentLocation.Left, QVBoxLayout, 0),
+        (ContentLocation.Right, QVBoxLayout, 1),
+    ],
+    ids=["Top", "Bottom", "Left", "Right"],
+)
 def test_text_location(symbol, location, layout, position):
     symbol.controlsLocation = ContentLocation.Bottom
     symbol.channelsPrefix = "ca://area:function:device:01"
@@ -79,10 +88,11 @@ def test_text_location(symbol, location, layout, position):
     assert widget == symbol.name
 
 
-@pytest.mark.parametrize('location,layout,position',
-                         [(ContentLocation.Left, QHBoxLayout, 0),
-                          (ContentLocation.Right, QHBoxLayout, 1)],
-                         ids=['Left', 'Right'])
+@pytest.mark.parametrize(
+    "location,layout,position",
+    [(ContentLocation.Left, QHBoxLayout, 0), (ContentLocation.Right, QHBoxLayout, 1)],
+    ids=["Left", "Right"],
+)
 def test_text_and_controls_location(symbol, location, layout, position):
     symbol.controlsLocation = location
     symbol.channelsPrefix = "ca://area:function:device:01"

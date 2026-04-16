@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>191</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="name_label">
+     <property name="toolTip">
+      <string>${NAME}</string>
+     </property>
+     <property name="text">
+      <string>Name: ${NAME}</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="num_label">
+     <property name="text">
+      <string>Num: ${NUM}</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="name_num_label">
+     <property name="text">
+      <string>${NAME}:${NUM}</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PyDMShellCommand" name="one_two_shell">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="channel">
+      <string/>
+     </property>
+     <property name="PyDMIcon">
+      <string/>
+     </property>
+     <property name="showConfirmDialog">
+      <bool>false</bool>
+     </property>
+     <property name="runCommandsInFullShell">
+      <bool>false</bool>
+     </property>
+     <property name="confirmMessage">
+      <string>Are you sure you want to proceed?</string>
+     </property>
+     <property name="environmentVariables">
+      <string/>
+     </property>
+     <property name="showIcon">
+      <bool>true</bool>
+     </property>
+     <property name="allowMultipleExecutions">
+      <bool>false</bool>
+     </property>
+     <property name="titles">
+      <stringlist/>
+     </property>
+     <property name="commands">
+      <stringlist>
+       <string>echo ${ONE}</string>
+       <string>echo ${TWO}</string>
+       <string>echo ${ONE}:${TWO}</string>
+      </stringlist>
+     </property>
+     <property name="passwordProtected">
+      <bool>false</bool>
+     </property>
+     <property name="password">
+      <string/>
+     </property>
+     <property name="protectedPassword">
+      <string/>
+     </property>
+     <property name="showCurrentlyRunningIndication">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMShellCommand</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.shell_command</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

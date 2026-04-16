@@ -12,7 +12,7 @@ def screenshot(widget, filename):
     s = str(filename) + ".png"
     print("Filename: ", s)
     p = QWidget.grab(widget)
-    p.save(s, 'png')
+    p.save(s, "png")
 
 
 app = QApplication([])
@@ -22,8 +22,6 @@ for ic_name in icons.__all__:
     tp = ic()
     tp.setFixedSize(64, 64)
     tp.show()
-    path = os.path.join(os.path.dirname(__file__), '..', 'docs', 'source',
-                        '_static', "icons",
-                        tp.__class__.__name__)
+    path = os.path.join(os.path.dirname(__file__), "..", "docs", "source", "_static", "icons", tp.__class__.__name__)
 
     screenshot(tp, path)

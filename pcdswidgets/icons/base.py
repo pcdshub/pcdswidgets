@@ -1,8 +1,7 @@
 from pydm.utilities import is_qt_designer, remove_protocol
 from qtpy.QtCore import Property, QEvent, QSize, Qt, Signal
 from qtpy.QtGui import QBrush, QColor, QPainter, QPen
-from qtpy.QtWidgets import (QApplication, QStyle, QStyleOption, QToolTip,
-                            QWidget)
+from qtpy.QtWidgets import QApplication, QStyle, QStyleOption, QToolTip, QWidget
 
 from ..utils import find_ancestor_for_widget
 
@@ -18,6 +17,7 @@ class BaseSymbolIcon(QWidget):
     parent : QWidget
         The parent widget for this widget.
     """
+
     clicked = Signal()
 
     def __init__(self, parent=None):
@@ -66,7 +66,7 @@ class BaseSymbolIcon(QWidget):
         if not p:
             return
 
-        state_suffix = getattr(p, '_state_suffix', None)
+        state_suffix = getattr(p, "_state_suffix", None)
         if not state_suffix:
             return
 

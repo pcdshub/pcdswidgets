@@ -1,16 +1,12 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Property, QSize
 
-from ..icons.pumps import (GetterPumpSymbolIcon, IonPumpSymbolIcon,
-                           ScrollPumpSymbolIcon, TurboPumpSymbolIcon)
+from ..icons.pumps import GetterPumpSymbolIcon, IonPumpSymbolIcon, ScrollPumpSymbolIcon, TurboPumpSymbolIcon
 from .base import ContentLocation, PCDSSymbolBase
-from .mixins import (ButtonControl, ButtonLabelControl, ErrorMixin,
-                     InterlockMixin, StateMixin)
+from .mixins import ButtonControl, ButtonLabelControl, ErrorMixin, InterlockMixin, StateMixin
 
 
-class IonPump(
-    InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase
-):
+class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
     """
     A Symbol Widget representing an Ion Pump with the proper icon and controls.
 
@@ -77,7 +73,7 @@ class IonPump(
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -98,7 +94,7 @@ class IonPump(
             command_suffix=self._command_suffix,
             readback_suffix=self._readback_suffix,
             readback_name="pressure",
-            **kwargs
+            **kwargs,
         )
         self.icon = IonPumpSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
@@ -172,7 +168,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -190,7 +186,8 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = TurboPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -262,7 +259,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     _interlock_suffix = ":ILK_OK_RBV"
@@ -280,7 +277,8 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
             error_suffix=self._error_suffix,
             state_suffix=self._state_suffix,
             command_suffix=self._command_suffix,
-            **kwargs)
+            **kwargs,
+        )
         self.icon = ScrollPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
@@ -319,7 +317,7 @@ class GetterPump(PCDSSymbolBase):
     """
 
     _qt_designer_ = {
-        "group": "PCDS Pumps",
+        "group": "ECS Vacuum Pumps",
         "is_container": False,
     }
     NAME = "Getter Pump"

@@ -15,6 +15,7 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
@@ -47,8 +48,7 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
 
         painter.drawArc(QRectF(0.3, 0.3, 0.4, 0.4), 90 * 16, -270 * 16)
 
-        arrow = QPolygonF(
-            [QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, -0.025)])
+        arrow = QPolygonF([QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, -0.025)])
         painter.setBrush(QBrush(QColor(0, 0, 0)))
         painter.drawPolygon(arrow.translated(circle_arrow_point))
 
@@ -72,22 +72,21 @@ class IonPumpSymbolIcon(BaseSymbolIcon):
         curve_start = QPointF(0.5, 0.7)
         bend_angle = 25
         curve_end_l = QPointF(
-            0.4 * math.cos(math.radians(90 + bend_angle)) + 0.5,
-            -0.4 * math.sin(math.radians(90 + bend_angle)) + 0.5)
+            0.4 * math.cos(math.radians(90 + bend_angle)) + 0.5, -0.4 * math.sin(math.radians(90 + bend_angle)) + 0.5
+        )
         c1 = QPointF(0.5, 0.4)
         path = QPainterPath(curve_start)
         path.quadTo(c1, curve_end_l)
         painter.drawPath(path)
         curve_end_r = QPointF(
-            0.4 * math.cos(math.radians(90 - bend_angle)) + 0.5,
-            -0.4 * math.sin(math.radians(90 - bend_angle)) + 0.5)
+            0.4 * math.cos(math.radians(90 - bend_angle)) + 0.5, -0.4 * math.sin(math.radians(90 - bend_angle)) + 0.5
+        )
         path = QPainterPath(curve_start)
         path.quadTo(c1, curve_end_r)
         painter.drawPath(path)
         # Draw the arrow end-caps
         painter.setBrush(QBrush(QColor(0, 0, 0)))
-        arrow = QPolygonF(
-            [QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, 0.025)])
+        arrow = QPolygonF([QPointF(-0.025, 0.0), QPointF(0.025, 0.0), QPointF(0.0, 0.025)])
         painter.drawPolygon(arrow.translated(bottom_arrow_point))
         t = QTransform()
         t.rotate(180.0 - 25.0)
@@ -110,6 +109,7 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
@@ -165,13 +165,15 @@ class GetterPumpSymbolIcon(BaseSymbolIcon):
 
         top_arrow_point = QPointF(0.35, 0.15)
         arrow = QPolygonF(
-            [QPointF(-0.08, 0.0),
-             QPointF(-0.005, 0.0),
-             QPointF(-0.005, 0.15),
-             QPointF(0.005, 0.15),
-             QPointF(0.005, 0.0),
-             QPointF(0.08, 0.0),
-             QPointF(0.00, -0.08)]
+            [
+                QPointF(-0.08, 0.0),
+                QPointF(-0.005, 0.0),
+                QPointF(-0.005, 0.15),
+                QPointF(0.005, 0.15),
+                QPointF(0.005, 0.0),
+                QPointF(0.08, 0.0),
+                QPointF(0.00, -0.08),
+            ]
         )
 
         t = QTransform()

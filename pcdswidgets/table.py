@@ -21,8 +21,9 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
     This will allow you to sort or filter based on macros and based on the
     values in each pydm widget.
     """
+
     _qt_designer_ = {
-        "group": "PCDS Utilities",
+        "group": "ECS Containers",
         "is_container": False,
     }
 
@@ -57,7 +58,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         self._header_map = {}
         self._channels = []
         self._filters = {}
-        self._initial_sort_header = 'index'
+        self._initial_sort_header = "index"
         self._initial_sort_ascend = True
         self._hide_headers = []
 
@@ -144,7 +145,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                 macros = json.load(fd)
             self.set_macros(macros)
         except Exception:
-            logger.exception('')
+            logger.exception("")
             return
 
     def set_macros(self, macros_list: list[dict[str, str]]) -> None:
@@ -161,11 +162,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             have the same keys or this will not work properly.
         """
         self._macros = macros_list
-        self._macro_headers = (
-            list(self._macros[0].keys())
-            if self._macros
-            else []
-        )
+        self._macro_headers = list(self._macros[0].keys()) if self._macros else []
         self.reinit_table()
 
     def reinit_table(self) -> None:
@@ -223,16 +220,16 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
 
         # Put the widget into the table
         self.setCellWidget(row_position, 0, widget)
-        self._header_map['widget'] = 0
+        self._header_map["widget"] = 0
         self.setRowHeight(row_position, widget.height())
 
         # Put the index into the table
         item = ChannelTableWidgetItem(
-            header='index',
+            header="index",
             default=row_position,
         )
         self.setItem(row_position, 1, item)
-        self._header_map['index'] = 1
+        self._header_map["index"] = 1
         # Put the macros into the table
         index = 2
         for key, value in macros.items():
@@ -263,30 +260,30 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         This makes it so you can right click to configure the table from
         within any of the contained widgets.
         """
-        for widget in widget.children():
-            widget.contextMenuEvent = self.contextMenuEvent
+        for child_widget in widget.children():
+            child_widget.contextMenuEvent = self.contextMenuEvent
 
     def contextMenuEvent(self, _event) -> None:
         """
         On right click, create and open a settings menu.
         """
         menu = QtWidgets.QMenu(parent=self)
-        configure_action = menu.addAction('Configure')
+        configure_action = menu.addAction("Configure")
         configure_action.setCheckable(True)
         configure_action.setChecked(self.configurable)
         configure_action.toggled.connect(self.request_configurable)
-        active_sort_action = menu.addAction('Active Re-sort')
+        active_sort_action = menu.addAction("Active Re-sort")
         active_sort_action.setCheckable(True)
         active_sort_action.setChecked(self.isSortingEnabled())
         active_sort_action.toggled.connect(self.setSortingEnabled)
-        sort_menu = menu.addMenu('Sorting')
+        sort_menu = menu.addMenu("Sorting")
         for header_name in self._header_map.keys():
-            if header_name == 'widget':
+            if header_name == "widget":
                 continue
             if header_name in self.hide_headers_in_menu:
                 continue
             inner_menu = sort_menu.addMenu(header_name.lower())
-            asc = inner_menu.addAction('Ascending')
+            asc = inner_menu.addAction("Ascending")
             asc.triggered.connect(
                 functools.partial(
                     self.menu_sort,
@@ -294,7 +291,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                     ascending=True,
                 )
             )
-            dec = inner_menu.addAction('Descending')
+            dec = inner_menu.addAction("Descending")
             dec.triggered.connect(
                 functools.partial(
                     self.menu_sort,
@@ -302,7 +299,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                     ascending=False,
                 )
             )
-        filter_menu = menu.addMenu('Filters')
+        filter_menu = menu.addMenu("Filters")
         for filter_name, filter_info in self._filters.items():
             inner_action = filter_menu.addAction(filter_name)
             inner_action.setCheckable(True)
@@ -332,20 +329,15 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
             is the 'connected' str, which is True if all channels are
             connected.
         """
-        values = {'connected': True}
+        values = {"connected": True}
         for col in range(1, self.columnCount()):
             item = self.item(row, col)
             values[item.header] = item.get_value()
             if not item.connected:
-                values['connected'] = False
+                values["connected"] = False
         return values
 
-    def add_filter(
-        self,
-        filter_name: str,
-        filter_func: Callable[[dict[str, Any]], bool],
-        active: bool = True
-    ) -> None:
+    def add_filter(self, filter_name: str, filter_func: Callable[[dict[str, Any]], bool], active: bool = True) -> None:
         """
         Add a new visibility filter to the table.
 
@@ -422,7 +414,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
                         should_show = filt_info.filter_func(values)
                     except Exception:
                         logger.debug(
-                            'Error in filter function %s',
+                            "Error in filter function %s",
                             filt_info.name,
                             exc_info=True,
                         )
@@ -503,7 +495,7 @@ class FilterSortWidgetTable(QtWidgets.QTableWidget):
         """
         self.sort_table(self.initial_sort_header, self.initial_sort_ascending)
 
-    @QtCore.Property('QStringList')
+    @QtCore.Property("QStringList")
     def hide_headers_in_menu(self) -> list[str]:
         """
         A list of headers that we don't want to see in the sort menu.
@@ -599,6 +591,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         Only update the table if the change is more than the deadband.
         This can help make large tables less resource-hungry.
     """
+
     header: str
     channel: str | None
     deadband: float
@@ -610,7 +603,7 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         default: Any | None = None,
         channel: str | None = None,
         deadband: float = 0.0,
-        parent: QtWidgets.QWidget | None = None
+        parent: QtWidgets.QWidget | None = None,
     ):
         super().__init__(parent)
         self.header = header
@@ -667,9 +660,9 @@ class ChannelTableWidgetItem(QtWidgets.QTableWidgetItem):
         elif other.get_value() is None:
             return True
         # Make sure empty string sorts as next greatest
-        elif self.get_value() == '':
+        elif self.get_value() == "":
             return False
-        elif other.get_value() == '':
+        elif other.get_value() == "":
             return True
         return self.get_value() < other.get_value()
 

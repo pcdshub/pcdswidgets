@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>725</width>
+    <height>100</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>725</width>
+    <height>100</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>100</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="MotorClassicRow" name="MotorClassicRow">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="motor" stdset="0">
+         <string>${MOTOR}</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Motor temperature: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLabel" name="temperature_label">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="precision">
+           <number>1</number>
+          </property>
+          <property name="showUnits">
+           <bool>false</bool>
+          </property>
+          <property name="precisionFromPV">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>true</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:ILOCK:TC_TEMP_RBV</string>
+          </property>
+          <property name="enableRichText">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Interlock:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMByteIndicator" name="interlock_indicator">
+          <property name="minimumSize">
+           <size>
+            <width>15</width>
+            <height>15</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>15</width>
+            <height>15</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>1</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>true</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:ILOCK:ACTIVE_RBV</string>
+          </property>
+          <property name="onColor">
+           <color>
+            <red>255</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </property>
+          <property name="offColor">
+           <color>
+            <red>0</red>
+            <green>255</green>
+            <blue>0</blue>
+           </color>
+          </property>
+          <property name="showLabels">
+           <bool>false</bool>
+          </property>
+          <property name="bigEndian">
+           <bool>false</bool>
+          </property>
+          <property name="circles">
+           <bool>false</bool>
+          </property>
+          <property name="labelPosition">
+           <enum>QTabWidget::West</enum>
+          </property>
+          <property name="numBits">
+           <number>1</number>
+          </property>
+          <property name="shift">
+           <number>0</number>
+          </property>
+          <property name="labels">
+           <stringlist>
+            <string>Bit 0</string>
+           </stringlist>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>MotorClassicRow</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.motion.common.motor_classic_row</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

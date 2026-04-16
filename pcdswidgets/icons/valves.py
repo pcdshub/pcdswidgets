@@ -1,8 +1,7 @@
 import math
 
 from qtpy.QtCore import Property, QLineF, QPointF, QRectF, Qt
-from qtpy.QtGui import (QBrush, QColor, QPainterPath, QPen, QPolygonF,
-                        QTransform)
+from qtpy.QtGui import QBrush, QColor, QPainterPath, QPen, QPolygonF, QTransform
 
 from .base import BaseSymbolIcon
 
@@ -16,6 +15,7 @@ class PneumaticValveSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -51,6 +51,7 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
@@ -79,12 +80,7 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
         painter.setPen(Qt.NoPen)
         painter.setBrush(self._arrow_brush)
         arrow = QPolygonF(
-            [QPointF(0.2, 0),
-             QPointF(0.2, 0.20),
-             QPointF(0.5, 0.40),
-             QPointF(0.8, 0.20),
-             QPointF(0.8, 0)
-             ]
+            [QPointF(0.2, 0), QPointF(0.2, 0.20), QPointF(0.5, 0.40), QPointF(0.8, 0.20), QPointF(0.8, 0)]
         )
         painter.drawPolygon(arrow)
 
@@ -107,6 +103,7 @@ class RightAngleManualValveSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def draw_icon(self, painter):
         path = QPainterPath(QPointF(0, 0))
         path.lineTo(1, 1)
@@ -127,6 +124,7 @@ class ApertureValveSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -163,6 +161,7 @@ class NeedleValveSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -191,13 +190,15 @@ class NeedleValveSymbolIcon(BaseSymbolIcon):
 
         top_arrow_point = QPointF(0.65, 0.36)
         arrow = QPolygonF(
-            [QPointF(-0.09, 0.0),
-             QPointF(-0.005, 0.0),
-             QPointF(-0.005, 0.8),
-             QPointF(0.005, 0.8),
-             QPointF(0.005, 0.0),
-             QPointF(0.09, 0.0),
-             QPointF(0.00, -0.25)]
+            [
+                QPointF(-0.09, 0.0),
+                QPointF(-0.005, 0.0),
+                QPointF(-0.005, 0.8),
+                QPointF(0.005, 0.8),
+                QPointF(0.005, 0.0),
+                QPointF(0.09, 0.0),
+                QPointF(0.00, -0.25),
+            ]
         )
 
         t = QTransform()
@@ -219,6 +220,7 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -250,13 +252,15 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
 
         top_arrow_point = QPointF(0.65, 0.42)
         arrow = QPolygonF(
-            [QPointF(-0.07, 0.0),
-             QPointF(-0.005, 0.0),
-             QPointF(-0.005, 0.8),
-             QPointF(0.005, 0.8),
-             QPointF(0.005, 0.0),
-             QPointF(0.07, 0.0),
-             QPointF(0.00, -0.25)]
+            [
+                QPointF(-0.07, 0.0),
+                QPointF(-0.005, 0.0),
+                QPointF(-0.005, 0.8),
+                QPointF(0.005, 0.8),
+                QPointF(0.005, 0.0),
+                QPointF(0.07, 0.0),
+                QPointF(0.00, -0.25),
+            ]
         )
 
         t = QTransform()
@@ -267,45 +271,43 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
 
         t_x = 0.4
         t_y = 0.05
-        painter.drawLines([QLineF(0.0+t_x, 0.0+t_y, 0.0+t_x, 0.2+t_y),
-                           QLineF(0.0+t_x, 0.0+t_y, 0.1+t_x, 0.2+t_y),
-                           QLineF(0.1+t_x, 0.2+t_y, 0.2+t_x, 0.0+t_y),
-                           QLineF(0.2+t_x, 0.0+t_y, 0.2+t_x, 0.2+t_y)])
+        painter.drawLines(
+            [
+                QLineF(0.0 + t_x, 0.0 + t_y, 0.0 + t_x, 0.2 + t_y),
+                QLineF(0.0 + t_x, 0.0 + t_y, 0.1 + t_x, 0.2 + t_y),
+                QLineF(0.1 + t_x, 0.2 + t_y, 0.2 + t_x, 0.0 + t_y),
+                QLineF(0.2 + t_x, 0.0 + t_y, 0.2 + t_x, 0.2 + t_y),
+            ]
+        )
 
 
 class ControlValveSymbolIcon(PneumaticValveSymbolIcon):
     """Icon for a Control Valve with readback"""
+
     def draw_icon(self, painter):
         pen = painter.pen()
-        pen.setWidthF(pen.width()*2)
+        pen.setWidthF(pen.width() * 2)
         pen.setCapStyle(Qt.FlatCap)
         painter.setPen(pen)
         # Circle parameters
         radius = 0.3
         center = (0.5, 1 - radius)
         # Draw circle
-        painter.drawEllipse(QPointF(*center),
-                            radius, radius)
+        painter.drawEllipse(QPointF(*center), radius, radius)
         # X pattern
         quad = math.cos(math.radians(45)) * radius
-        painter.drawLine(QLineF(center[0] + quad,
-                                center[1] + quad,
-                                center[0] - quad,
-                                center[1] - quad))
-        painter.drawLine(QLineF(center[0] + quad,
-                                center[1] - quad,
-                                center[0] - quad,
-                                center[1] + quad))
+        painter.drawLine(QLineF(center[0] + quad, center[1] + quad, center[0] - quad, center[1] - quad))
+        painter.drawLine(QLineF(center[0] + quad, center[1] - quad, center[0] - quad, center[1] + quad))
         # Interlock Icon
         square_dims = (0.4, 0.2)
-        painter.drawLine(QPointF(center[0], center[1] - radius),
-                         QPointF(center[0], square_dims[1]))
+        painter.drawLine(QPointF(center[0], center[1] - radius), QPointF(center[0], square_dims[1]))
         painter.setBrush(self._interlock_brush)
-        painter.drawRect(QRectF((1 - square_dims[0])/2., 0, *square_dims))
+        painter.drawRect(QRectF((1 - square_dims[0]) / 2.0, 0, *square_dims))
 
 
 class ControlOnlyValveSymbolIcon(BaseSymbolIcon):
     """Icon for a Control Valve with no readback"""
+
     def draw_icon(self, painter):
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
@@ -324,6 +326,7 @@ class PneumaticValveNOSymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -368,6 +371,7 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
     parent : QWidget
         The parent widget for the icon
     """
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
@@ -405,13 +409,15 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
         length = 0.2
         width = 0.02
         rightward_arrow = QPolygonF(
-            [QPointF(tip_length, 0.0),
-             QPointF(0.0, -tip_width),
-             QPointF(0.0, -width),
-             QPointF(-length, -width),
-             QPointF(-length, width),
-             QPointF(0.0, width),
-             QPointF(0.0, tip_width)]
+            [
+                QPointF(tip_length, 0.0),
+                QPointF(0.0, -tip_width),
+                QPointF(0.0, -width),
+                QPointF(-length, -width),
+                QPointF(-length, width),
+                QPointF(0.0, width),
+                QPointF(0.0, tip_width),
+            ]
         )
         # Second arrow looks left
         point_left = QTransform()

@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>753</width>
+    <height>45</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>45</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>50</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="main_frame">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" columnstretch="4,1,0,1,5,0,3,0,1,2,1,0,1,1">
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <item row="0" column="10">
+       <widget class="PyDMPushButton" name="PyDMPushButton_twkR">
+        <property name="minimumSize">
+         <size>
+          <width>35</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>&gt;&gt;</string>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.TWF</string>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>15</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>true</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.HLS</string>
+        </property>
+        <property name="onColor">
+         <color>
+          <red>255</red>
+          <green>165</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="showLabels">
+         <bool>false</bool>
+        </property>
+        <property name="bigEndian">
+         <bool>false</bool>
+        </property>
+        <property name="circles">
+         <bool>false</bool>
+        </property>
+        <property name="numBits">
+         <number>1</number>
+        </property>
+        <property name="labels">
+         <stringlist>
+          <string>Bit 0</string>
+         </stringlist>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="PyDMLabel" name="PyDMLabel_name">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>125</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>125</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.DESC</string>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::String</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel">
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="precision">
+         <number>0</number>
+        </property>
+        <property name="showUnits">
+         <bool>false</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>true</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.EGU</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="13">
+       <widget class="PyDMShellCommand" name="PyDMShellCommand">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="commands">
+         <stringlist>
+          <string>motor-expert-screen ${MOTOR}</string>
+         </stringlist>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="9">
+       <widget class="PyDMLineEdit" name="PyDMLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="precision">
+         <number>0</number>
+        </property>
+        <property name="showUnits">
+         <bool>false</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>true</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.TWV</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>15</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>true</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.LLS</string>
+        </property>
+        <property name="onColor">
+         <color>
+          <red>255</red>
+          <green>165</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="showLabels">
+         <bool>false</bool>
+        </property>
+        <property name="bigEndian">
+         <bool>false</bool>
+        </property>
+        <property name="circles">
+         <bool>false</bool>
+        </property>
+        <property name="numBits">
+         <number>1</number>
+        </property>
+        <property name="shift">
+         <number>0</number>
+        </property>
+        <property name="labels">
+         <stringlist>
+          <string>Bit 0</string>
+         </stringlist>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="PyDMLabel" name="PyDMLabel_rbv">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>125</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="precision">
+         <number>0</number>
+        </property>
+        <property name="showUnits">
+         <bool>false</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>true</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>true</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.RBV</string>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::Decimal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="PyDMByteIndicator" name="PyDMByteIndicator_mvn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>15</width>
+          <height>15</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>15</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>true</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.MOVN</string>
+        </property>
+        <property name="showLabels">
+         <bool>false</bool>
+        </property>
+        <property name="bigEndian">
+         <bool>false</bool>
+        </property>
+        <property name="circles">
+         <bool>true</bool>
+        </property>
+        <property name="numBits">
+         <number>1</number>
+        </property>
+        <property name="shift">
+         <number>0</number>
+        </property>
+        <property name="labels">
+         <stringlist>
+          <string>Bit 0</string>
+         </stringlist>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="PyDMPushButton" name="PyDMPushButton_twkL">
+        <property name="minimumSize">
+         <size>
+          <width>35</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>&lt;&lt;</string>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.TWR</string>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="12">
+       <widget class="PyDMPushButton" name="PyDMPushButton_stop">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(170, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>Stop</string>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.STOP</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="PyDMLineEdit" name="PyDMLineEdit_setpoint">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="precision">
+         <number>0</number>
+        </property>
+        <property name="showUnits">
+         <bool>false</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>true</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.VAL</string>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLineEdit::Default</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMShellCommand</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.shell_command</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
