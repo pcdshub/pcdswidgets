@@ -5,16 +5,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pcdswidgets.vacuum.valves &mdash; pcdswidgets 0.9.1.dev27+g137b3a1 documentation</title>
+  <title>pcdswidgets.vacuum.valves &mdash; pcdswidgets 0.10.1.dev106+g92caf0341 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=c90118a3"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=24228af1"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/docs-versions-menu.js?v=3d6a1aea"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -95,24 +95,25 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">Qt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGridLayout</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..icons.valves</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ApertureValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">,</span> <span class="n">ControlValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">FastShutterSymbolIcon</span><span class="p">,</span> <span class="n">NeedleValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">PneumaticValveDASymbolIcon</span><span class="p">,</span>
-                            <span class="n">PneumaticValveNOSymbolIcon</span><span class="p">,</span>
-                            <span class="n">PneumaticValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">ProportionalValveSymbolIcon</span><span class="p">,</span>
-                            <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..icons.valves</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ApertureValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">ControlValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">FastShutterSymbolIcon</span><span class="p">,</span>
+    <span class="n">NeedleValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">PneumaticValveDASymbolIcon</span><span class="p">,</span>
+    <span class="n">PneumaticValveNOSymbolIcon</span><span class="p">,</span>
+    <span class="n">PneumaticValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">ProportionalValveSymbolIcon</span><span class="p">,</span>
+    <span class="n">RightAngleManualValveSymbolIcon</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentLocation</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ButtonControl</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span>
-                     <span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="n">StateMixin</span>
 
 
 <div class="viewcode-block" id="PneumaticValve">
 <a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValve">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PneumaticValve</span><span class="p">(</span>
-    <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PneumaticValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Pneumatic Valve with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -185,7 +186,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
 
@@ -204,7 +205,8 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PneumaticValve.sizeHint">
@@ -217,9 +219,7 @@
 
 <div class="viewcode-block" id="ApertureValve">
 <a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ApertureValve">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ApertureValve</span><span class="p">(</span>
-    <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ApertureValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing an Aperture Valve with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -292,7 +292,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
@@ -310,7 +310,8 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ApertureValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ApertureValve.sizeHint">
@@ -323,9 +324,7 @@
 
 <div class="viewcode-block" id="FastShutter">
 <a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.FastShutter">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">FastShutter</span><span class="p">(</span>
-    <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FastShutter</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">MultipleButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Fast Shutter with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -392,7 +391,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
@@ -413,7 +412,8 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">commands</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_buttons</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">FastShutterSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FastShutter.sizeHint">
@@ -485,7 +485,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
@@ -501,7 +501,8 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">NeedleValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NeedleValve.sizeHint">
@@ -573,7 +574,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:ILK_OK_RBV&quot;</span>
@@ -589,7 +590,8 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ProportionalValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ProportionalValve.sizeHint">
@@ -635,7 +637,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Right Angle Manual Valve&quot;</span>
@@ -674,9 +676,7 @@
 
 <div class="viewcode-block" id="ControlValve">
 <a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.ControlValve">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ControlValve</span><span class="p">(</span>
-    <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ControlValve</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Control Valve with the proper icon and</span>
 <span class="sd">    controls.</span>
@@ -749,10 +749,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Control Valve with Readback&#39;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Control Valve with Readback&quot;</span>
     <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVC&quot;</span>
 
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
@@ -767,7 +767,8 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ControlValve.sizeHint">
@@ -850,14 +851,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Normally Closed Control Valve with No Readback&#39;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Normally Closed Control Valve with No Readback&quot;</span>
     <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVC&quot;</span>
 
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
-    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s1">&#39;:OPN_DO_RBV&#39;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_DO_RBV&quot;</span>
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_SW&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -866,7 +867,8 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ControlOnlyValveNC.sizeHint">
@@ -949,14 +951,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;Normally Open Control Valve with No Readback&#39;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;Normally Open Control Valve with No Readback&quot;</span>
     <span class="n">EXPERT_OPHYD_CLASS</span> <span class="o">=</span> <span class="s2">&quot;pcdsdevices.valve.VVCNO&quot;</span>
 
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_OK_RBV&quot;</span>
-    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s1">&#39;:CLS_DO_RBV&#39;</span>
+    <span class="n">_state_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_DO_RBV&quot;</span>
     <span class="n">_command_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_SW&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -965,16 +967,15 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">ControlOnlyValveSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="PneumaticValveNO">
 <a class="viewcode-back" href="../../../vacuum/valves.html#pcdswidgets.vacuum.valves.PneumaticValveNO">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PneumaticValveNO</span><span class="p">(</span>
-    <span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span>
-<span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PneumaticValveNO</span><span class="p">(</span><span class="n">InterlockMixin</span><span class="p">,</span> <span class="n">ErrorMixin</span><span class="p">,</span> <span class="n">StateMixin</span><span class="p">,</span> <span class="n">ButtonControl</span><span class="p">,</span> <span class="n">PCDSSymbolBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A Symbol Widget representing a Normally Open Pneumatic Valve with the</span>
 <span class="sd">    proper icon and controls.</span>
@@ -1047,7 +1048,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:CLS_OK_RBV&quot;</span>
@@ -1065,7 +1066,8 @@
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
             <span class="n">command_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_command_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveNOSymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PneumaticValveNO.sizeHint">
@@ -1158,7 +1160,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_qt_designer_</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;PCDS Valves&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;ECS Vacuum Valves&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_container&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">_interlock_suffix</span> <span class="o">=</span> <span class="s2">&quot;:OPN_OK_RBV&quot;</span>
@@ -1181,14 +1183,15 @@
             <span class="n">interlock_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_interlock_suffix</span><span class="p">,</span>
             <span class="n">error_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_error_suffix</span><span class="p">,</span>
             <span class="n">state_suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_state_suffix</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">PneumaticValveDASymbolIcon</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">open_btn</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;OPEN&#39;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OPEN&quot;</span><span class="p">,</span>
             <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cls_btn</span> <span class="o">=</span> <span class="n">PyDMPushButton</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CLOSE&#39;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;CLOSE&quot;</span><span class="p">,</span>
             <span class="n">pressValue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">open_btn</span><span class="o">.</span><span class="n">setFixedSize</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
@@ -1248,10 +1251,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cls_interlock_connected</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cls_interlock_channel</span> <span class="o">=</span> <span class="n">PyDMChannel</span><span class="p">(</span>
-            <span class="n">address</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">_cls_interlock_suffix</span><span class="p">),</span>
+            <span class="n">address</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cls_interlock_suffix</span><span class="p">),</span>
             <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_interlock_connection_changed</span><span class="p">,</span>
-            <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_interlock_value_changed</span>
+            <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_interlock_value_changed</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cls_interlock_channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
@@ -1358,7 +1360,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, SLAC National Accelerator Laboratory.</p>
+    <p>&#169; Copyright 2026, SLAC National Accelerator Laboratory.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
