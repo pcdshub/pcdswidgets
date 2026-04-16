@@ -5,9 +5,9 @@ This is a widget library that uses the `pydm` framework to add additional widget
 When `pcdswidgets` is installed in a `python` environment, it will provide:
 
 - Additional widgets in designer via `pydm`'s widget entrypoint.
-- The same additional widgets at runtime for use in `pydm` and `pyqt` displays.
+- The same additional widgets at runtime for use in `pydm` and `PyQt` displays.
 
-At `lcls`, this is currently distributed as part of the `pcds_conda` environments:
+At `LCLS`, this is currently distributed as part of the `pcds_conda` environments:
 
 ```
 source pcds_conda
@@ -19,14 +19,14 @@ Note that for the designer integration to work properly, the python designer plu
 
 ## Installation
 ### Production Environments
-`pcdswidgets` is packaged using standard tools and can be installed with standard tools. We maintain both `pypi` and `conda-forge` builds.
+`pcdswidgets` is packaged using standard tools and can be installed with standard tools. We maintain both `PyPI` and `conda-forge` builds.
 
 Pick your favorite:
 
 - `pip install pcdswidgets`
 - `conda install pcdswidgets`
 
-You can also install install `pcdswidgets` using other standard tools (such as `uv`) or directly from source in `github`.
+You can also install `pcdswidgets` using other standard tools (such as `uv`) or directly from source in `GitHub`.
 
 
 ### Development Environments
@@ -35,7 +35,7 @@ A helper script is included here: `build_local_venv.sh` (or, `make venv`) (or, j
 This will create a virtual environment under the `.venv` folder that will be ready to go
 to help you run designer and test your custom widgets.
 To work, this requires a suitable base environment to already exist on
-your system: one with pyqt and designer python plugin support,
+your system: one with PyQt and designer python plugin support,
 which is tricky to set up properly.
 
 These base environments are stored centrally at LCLS and are
@@ -61,7 +61,7 @@ or
 
 or whatever your favorite method is.
 
-Note that we can currently only run designer with custom widgets on our Rocky9 OS machines at LCLS.
+Note that we can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
 This is due to complications in the build process.
 
 
@@ -108,7 +108,7 @@ Device control widgets should fall into exactly one of three size classes.
 
 To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
 and are permissible sizes as recorded below.
-It's recommended to used fixed sizing when possible because dynamic sizing is hard to implement correctly.
+It's recommended to use fixed sizing when possible because dynamic sizing is hard to implement correctly.
 
 Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
@@ -119,7 +119,7 @@ Widgets should always be maintained to work at the original designed size, becau
 | Row | 800 px | 50 px |
 
 Note:
-- All widgets area allowed to be smaller than the mazimum of their size class by up to 20%.
+- All widgets are allowed to be smaller than the maximum of their size class by up to 20%.
 - Rows are also allowed to be double-height, e.g. 100px height.
 - Widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
 
@@ -129,7 +129,7 @@ If you've gotten this far, with a provisioned widget of a good size class, it's 
 Before we begin, please clone the source code and make sure you can establish a working `designer` build
 using the commands below.
 
-Note that at LCLS this only works on rocky9 machines!
+Note that at LCLS this only works on Rocky 9 machines!
 
 ```
 make
@@ -155,7 +155,7 @@ and `try_in_designer.sh` will open a designer window with the existing `pcdswidg
 
 
 ### Widget Naming
-Widget names and ui filenames should have one to one correspondance and contain three parts:
+Widget names and ui filenames should have one to one correspondence and contain three parts:
 
 - Type of device controlled
 - Descriptor word to differentiate this widget from other possible widgets with the same device type and size
@@ -208,7 +208,7 @@ Some notes:
 One of the built files is in `pcdswidgets/ui/${subsystem}/${type}`.
 
 Unlike the files in `generated`, this file is free to edit,
-and, among other thing, contains a `DesignerOptions` specification for the widget.
+and, among other things, contains a `DesignerOptions` specification for the widget.
 
 This looks something like:
 
@@ -295,12 +295,12 @@ class MyClassFull(MyClassFullBase):
     def set_my_value(self, value: int) -> None:
         self._my_value = value
 
-    my_value = pyqtProperty(int, get_motor, set_motor)
+    my_value = pyqtProperty(int, get_my_value, set_my_value)
 ```
 
 
 ### Composite Widget Limitations
-- Widgets that contain `PyDMEmbeddedWidget` are not supported: bootstrap these by turning the contents into widgets themselves.
+- Widgets that contain `PyDMEmbeddedDisplay` are not supported: bootstrap these by turning the contents into widgets themselves.
 - The automatic type hinting runs into issues when the qt object names are the same as the classnames. If you want to extend the composite widget class in python, giving your child widgets more unique names will result in more useful type hints, automatically.
 - Only direct `QString` and `QStringList` properties are supported. We still need to implement support for item-based `QString` widgets such as `QListWidget`.
 - The ordering of the designer widget categories is chaotic. This will require an update to `pydm` to resolve.
