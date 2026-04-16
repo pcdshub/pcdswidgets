@@ -35,7 +35,7 @@ A helper script is included here: `build_local_venv.sh` (or, `make venv`) (or, j
 This will create a virtual environment under the `.venv` folder that will be ready to go
 to help you run designer and test your custom widgets.
 To work, this requires a suitable base environment to already exist on
-your system: one with PyQt and designer python plugin support,
+your system: one with `PyQt` and designer python plugin support,
 which is tricky to set up properly.
 
 These base environments are stored centrally at LCLS and are
