@@ -12,12 +12,12 @@ from qtpy.QtWidgets import QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
-from pcdswidgets.generated.motion.smaract.smaract_open_loop_context_base import SmaractOpenLoopContextBase
+from pcdswidgets.generated.motion.smaract.smaract_open_loop_context_double_base import SmaractOpenLoopContextDoubleBase
 
 logger = logging.getLogger(__name__)
 
 
-class SmaractOpenLoopContext(SmaractOpenLoopContextBase):
+class SmaractOpenLoopContextDouble(SmaractOpenLoopContextDoubleBase):
     clear_step_count: PyDMPushButton
 
     designer_options = DesignerOptions(
@@ -27,14 +27,14 @@ class SmaractOpenLoopContext(SmaractOpenLoopContextBase):
     )
 
 
-class SmarActOpenLoopContextDisplay(SmaractOpenLoopContext, Display):
+class SmarActOpenLoopContextDoubleDisplay(SmaractOpenLoopContextDouble, Display):
     """This widget is intended to be opened with a PyDMRelatedDisplayButton"""
 
     def __init__(self, parent: QWidget | None = None, args=None, macros=None):
         # Initialize Display FIRST with macros, mro is mean
         Display.__init__(self, parent=parent, args=args, macros=macros)
         # Then initialize DesignerWidget
-        SmaractOpenLoopContext.__init__(self, parent=parent)
+        SmaractOpenLoopContextDouble.__init__(self, parent=parent)
 
         # Sync Display's macros into DesignerWidget's macro system
         # Otherwise PyDMRelatedDisplayButtons will not pass their macros

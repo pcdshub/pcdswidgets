@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/smaract/smaract_open_loop_context.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -19,6 +19,8 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(311, 246)
+        Form.setMinimumSize(QtCore.QSize(311, 246))
+        Form.setMaximumSize(QtCore.QSize(400, 250))
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.gridLayout = QtWidgets.QGridLayout()
