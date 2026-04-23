@@ -89,7 +89,7 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
 
         button = getattr(self, f"{axis}_expert_screen")
 
-        button.setFilenames([str(Path(__file__).parents[1] / "ui/motion/smaract/smaract_open_loop_context.ui")])
+        button.setFilenames([str(Path(__file__).parents[2] / "ui/motion/smaract/smaract_open_loop_context_double.ui")])
         logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
 
         button.setMacros(json.dumps({"motor": motor_pv}))
