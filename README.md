@@ -114,6 +114,7 @@ Widgets should always be maintained to work at the original designed size, becau
 
 | Size Class | Width | Height |
 | ---------- | ----- | -------|
+| Double| 400 px | 250 px |
 | Full | 400 px | 125 px |
 | Compact | 100 px | 75 px |
 | Row | 800 px | 50 px |
@@ -252,7 +253,20 @@ class MyClassFull(MyClassFullBase):
    - You can use the `Qt` APIs to create your own icon object.
    - For example: you can create an icon from a `.png`.
    - Please refer to the `Qt`/`PyQt` docs for how to do this.
-   - You can set `icon=your_qicon_object` in your `DesignerOptions` to include your custom icon.
+   - In `DesignerOptions` keep `icon=IconOptions.NONE`, then add a static method that points to new icon:
+   ```
+   class MyClassFull(MyClassFullBase):
+      designer_options = DesignerOptions(
+         group="ECS Subsystem Type",
+         is_container=False,
+         icon=IconOptions.NONE
+      )
+
+   @staticmethod
+    def get_designer_icon() -> str:
+        """Icon for usage in Qt designer."""
+        return QIcon("path/to/your/awesome/icon.png")
+   ```
 
 
 ### Optional: Add Logic to a Composite Widget
