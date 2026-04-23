@@ -43,8 +43,6 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
         # For now, we will link the expert screens for tip-tilts
         # to a limited context window
-        self.vertical_expert_screen.setFilenames([str(Path(__file__).parent / "smaract_open_loop_context.py")])
-        self.horizontal_expert_screen.setFilenames([str(Path(__file__).parent / "smaract_open_loop_context.py")])
         self._macros_timer = QTimer(parent=self)
         self._macros_timer.timeout.connect(self._setup_expert_screens)
         self._macros_timer.setInterval(100)
@@ -88,6 +86,10 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
             return
 
         button = getattr(self, f"{axis}_expert_screen")
+
+        button.setFilenames([str(Path(__file__).parents[1] / "ui/motion/smaract/smaract_open_loop_context.ui")])
+        logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
+
         button.setMacros(json.dumps({"motor": motor_pv}))
         logger.debug(f"Setting {axis} expert screen with macros {button._macros}")
 
