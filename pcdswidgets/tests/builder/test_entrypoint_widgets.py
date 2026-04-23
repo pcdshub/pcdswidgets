@@ -81,6 +81,11 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
         min_h = ratio * max_h
         # Allow double rows
         max_h = max_h * 2
+    elif widget_name.endswith("Double"):
+        max_w = 400
+        max_h = 250
+        min_w = ratio * max_w
+        min_h = ratio * max_h
     else:
         raise ValueError(
             f"Widget named {widget_name} does not follow naming convention: "
