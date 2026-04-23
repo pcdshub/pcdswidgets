@@ -1,0 +1,1235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>281</width>
+    <height>241</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>281</width>
+    <height>241</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>smaract_tip_tilt_qt_icon.png</normaloff>smaract_tip_tilt_qt_icon.png</iconset>
+  </property>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>281</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>400</width>
+     <height>250</height>
+    </size>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <widget class="QFrame" name="d_pad_frame">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>120</y>
+      <width>130</width>
+      <height>110</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>130</width>
+      <height>110</height>
+     </size>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>125</width>
+       <height>107</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="2" column="1">
+       <widget class="PyDMPushButton" name="step_down">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>31</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+    border: none;
+    outline: none;
+}
+QPushButton::hover
+{
+background-color: rgb(240, 225, 148);
+}</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>45</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="monitorDisp">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${vertical_motor}:STEP_REVERSE.PROC</string>
+        </property>
+        <property name="PyDMIcon">
+         <string>arrow-alt-circle-down</string>
+        </property>
+        <property name="PyDMIconColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="PyDMPushButton" name="step_right">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>31</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+    border: none;
+    outline: none;
+}
+QPushButton::hover
+{
+background-color: rgb(240, 225, 148);
+}</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>45</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="monitorDisp">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${horizontal_motor}:STEP_FORWARD.PROC</string>
+        </property>
+        <property name="PyDMIcon">
+         <string>arrow-alt-circle-right</string>
+        </property>
+        <property name="PyDMIconColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMPushButton" name="step_up">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>31</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+    border: none;
+    outline: none;
+}
+QPushButton::hover
+{
+background-color: rgb(240, 225, 148);
+}</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>45</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="monitorDisp">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${vertical_motor}:STEP_FORWARD.PROC</string>
+        </property>
+        <property name="PyDMIcon">
+         <string>arrow-alt-circle-up</string>
+        </property>
+        <property name="PyDMIconColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="PyDMPushButton" name="step_left">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>31</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+    border: none;
+    outline: none;
+}
+QPushButton::hover
+{
+background-color: rgb(240, 225, 148);
+}</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>45</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="monitorDisp">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${horizontal_motor}:STEP_REVERSE.PROC</string>
+        </property>
+        <property name="PyDMIcon">
+         <string>arrow-alt-circle-left</string>
+        </property>
+        <property name="PyDMIconColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="vertical_frame">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>10</y>
+      <width>129</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="vertical_header_layou">
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="PyDMLabel" name="vertical_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>95</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>false</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string/>
+         </property>
+         <property name="channel">
+          <string>ca://${vertical_motor}.DESC</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <widget class="PyDMByteIndicator" name="vertical_moving">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>${vertical_motor} is currently moving</string>
+         </property>
+         <property name="channel">
+          <string>ca://${vertical_motor}.MOVN</string>
+         </property>
+         <property name="blinkOnChange">
+          <bool>false</bool>
+         </property>
+         <property name="toggleMode">
+          <bool>false</bool>
+         </property>
+         <property name="blinkColor1">
+          <color>
+           <red>100</red>
+           <green>100</green>
+           <blue>100</blue>
+          </color>
+         </property>
+         <property name="blinkColor2">
+          <color>
+           <red>0</red>
+           <green>85</green>
+           <blue>255</blue>
+          </color>
+         </property>
+         <property name="blinkInterval">
+          <number>99</number>
+         </property>
+         <property name="onColor">
+          <color>
+           <red>0</red>
+           <green>85</green>
+           <blue>255</blue>
+          </color>
+         </property>
+         <property name="showLabels">
+          <bool>true</bool>
+         </property>
+         <property name="bigEndian">
+          <bool>false</bool>
+         </property>
+         <property name="circles">
+          <bool>true</bool>
+         </property>
+         <property name="labelPosition">
+          <enum>QTabWidget::North</enum>
+         </property>
+         <property name="numBits">
+          <number>1</number>
+         </property>
+         <property name="shift">
+          <number>0</number>
+         </property>
+         <property name="labels">
+          <stringlist>
+           <string></string>
+          </stringlist>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="PyDMLabel" name="vertical_step_total">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>126</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>ca://${vertical_motor}:TOTAL_STEP_COUNT</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string>Total steps taken by vertical axis</string>
+       </property>
+       <property name="channel">
+        <string>ca://${vertical_motor}:TOTAL_STEP_COUNT</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="PyDMLineEdit" name="vertical_step_size">
+       <property name="minimumSize">
+        <size>
+         <width>126</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>126</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string>Step size for vertical axis</string>
+       </property>
+       <property name="monitorDisp">
+        <bool>false</bool>
+       </property>
+       <property name="channel">
+        <string>ca://${vertical_motor}:STEP_COUNT</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <layout class="QHBoxLayout" name="vertical_expert_layout">
+       <item>
+        <widget class="QCheckBox" name="vertical_invert">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Invert</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PyDMRelatedDisplayButton" name="vertical_expert_screen">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Open expert screen for the vertical axis</string>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="PyDMIcon">
+          <string>cog</string>
+         </property>
+         <property name="filenames">
+          <stringlist/>
+         </property>
+         <property name="titles">
+          <stringlist/>
+         </property>
+         <property name="showIcon">
+          <bool>true</bool>
+         </property>
+         <property name="recursiveDisplaySearch">
+          <bool>false</bool>
+         </property>
+         <property name="macros">
+          <stringlist>
+           <string>motor=${vertical_motor}</string>
+          </stringlist>
+         </property>
+         <property name="openInNewWindow">
+          <bool>true</bool>
+         </property>
+         <property name="passwordProtected">
+          <bool>false</bool>
+         </property>
+         <property name="password">
+          <string/>
+         </property>
+         <property name="protectedPassword">
+          <string/>
+         </property>
+         <property name="followSymlinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="horizontal_frame">
+    <property name="geometry">
+     <rect>
+      <x>135</x>
+      <y>110</y>
+      <width>145</width>
+      <height>124</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_5">
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontal_header_layout">
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="PyDMLabel" name="horizontal_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>93</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>false</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string/>
+         </property>
+         <property name="channel">
+          <string>ca://${horizontal_motor}.DESC</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignRight|Qt::AlignVCenter">
+        <widget class="PyDMByteIndicator" name="horizontal_moving">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>${horizontal_motor} is currently moving</string>
+         </property>
+         <property name="channel">
+          <string>ca://${horizontal_motor}.MOVN</string>
+         </property>
+         <property name="blinkOnChange">
+          <bool>false</bool>
+         </property>
+         <property name="toggleMode">
+          <bool>false</bool>
+         </property>
+         <property name="blinkColor1">
+          <color>
+           <red>100</red>
+           <green>100</green>
+           <blue>100</blue>
+          </color>
+         </property>
+         <property name="blinkColor2">
+          <color>
+           <red>0</red>
+           <green>85</green>
+           <blue>255</blue>
+          </color>
+         </property>
+         <property name="blinkInterval">
+          <number>99</number>
+         </property>
+         <property name="onColor">
+          <color>
+           <red>0</red>
+           <green>85</green>
+           <blue>255</blue>
+          </color>
+         </property>
+         <property name="showLabels">
+          <bool>true</bool>
+         </property>
+         <property name="bigEndian">
+          <bool>false</bool>
+         </property>
+         <property name="circles">
+          <bool>true</bool>
+         </property>
+         <property name="labelPosition">
+          <enum>QTabWidget::North</enum>
+         </property>
+         <property name="numBits">
+          <number>1</number>
+         </property>
+         <property name="shift">
+          <number>0</number>
+         </property>
+         <property name="labels">
+          <stringlist>
+           <string></string>
+          </stringlist>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="PyDMLabel" name="horizontal_step_total">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>126</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>ca://${horizontal_motor}:TOTAL_STEP_COUNT</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string>Total steps taken by horizontal axis</string>
+       </property>
+       <property name="channel">
+        <string>ca://${horizontal_motor}:TOTAL_STEP_COUNT</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="PyDMLineEdit" name="horizontal_step_size">
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string>Step size for horizontal axis</string>
+       </property>
+       <property name="monitorDisp">
+        <bool>false</bool>
+       </property>
+       <property name="channel">
+        <string>ca://${horizontal_motor}:STEP_COUNT</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <layout class="QHBoxLayout" name="horizontal_expert_layout">
+       <item>
+        <widget class="QCheckBox" name="horizontal_invert">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Invert</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PyDMRelatedDisplayButton" name="horizontal_expert_screen">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Open expert screen for horizontal axis</string>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="PyDMIcon">
+          <string>cog</string>
+         </property>
+         <property name="filenames">
+          <stringlist/>
+         </property>
+         <property name="titles">
+          <stringlist/>
+         </property>
+         <property name="showIcon">
+          <bool>true</bool>
+         </property>
+         <property name="recursiveDisplaySearch">
+          <bool>false</bool>
+         </property>
+         <property name="macros">
+          <stringlist>
+           <string>motor=${horizontal_motor}</string>
+          </stringlist>
+         </property>
+         <property name="openInNewWindow">
+          <bool>true</bool>
+         </property>
+         <property name="passwordProtected">
+          <bool>false</bool>
+         </property>
+         <property name="password">
+          <string/>
+         </property>
+         <property name="protectedPassword">
+          <string/>
+         </property>
+         <property name="followSymlinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMRelatedDisplayButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.related_display_button</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
