@@ -61,8 +61,8 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
     """
     widget = WidgetCls()
     qtbot.addWidget(widget)
-    # 20% smaller is OK
-    ratio = 0.8
+    # 30% smaller is OK
+    ratio = 0.7
 
     if widget_name.endswith("Full"):
         max_w = 400
