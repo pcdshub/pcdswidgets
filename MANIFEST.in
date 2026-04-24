@@ -3,3 +3,4 @@ include CONTRIBUTING.rst
 include LICENSE.md
 include MANIFEST.in
 include README.md
+include icons/*

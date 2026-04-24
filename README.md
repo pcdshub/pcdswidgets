@@ -248,11 +248,14 @@ class MyClassFull(MyClassFullBase):
     )
 ```
 
-2. Create your own `QIcon`
+2. Create an image file and place it in the `icons` folder.
+   - You can set `icon="my_image.png"` and it should load appropriately in designer.
+
+3. Create your own `QIcon` however you like
    - You can use the `Qt` APIs to create your own icon object.
-   - For example: you can create an icon from a `.png`.
    - Please refer to the `Qt`/`PyQt` docs for how to do this.
-   - You can set `icon=your_qicon_object` in your `DesignerOptions` to include your custom icon.
+   - You must override the `get_designer_icon` method on your widget to return your `QIcon`.
+     This must be either a `classmethod` or a `staticmethod` (use the decorators).
 
 
 ### Optional: Add Logic to a Composite Widget
@@ -316,7 +319,7 @@ Largely: refer back to the existing widgets.
 
 The steps are:
 
-1. Create a new subclass of `BaseSymbolIcon` in the icons subfolder.
+1. Create a new subclass of `BaseSymbolIcon` in the symbols subfolder.
    - Define a path
    - Implement draw_icon
 2. Create a new subclass of `PCDSSymbolBase`.
