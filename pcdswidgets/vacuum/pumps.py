@@ -348,3 +348,94 @@ class GetterPump(PCDSSymbolBase):
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
         return super().controlsLocation
+
+
+class KashiyamaPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
+    """
+    A Symbol Widget representing a Kashiyama Dry Pump with the proper icon and
+    controls.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the symbol
+
+    Notes
+    -----
+    This widget allow for high customization through the Qt Stylesheets
+    mechanism.
+    As this widget is composed by internal widgets, their names can be used as
+    selectors when writing your stylesheet to be used with this widget.
+    Properties are also available to offer wider customization possibilities.
+
+    **Internal Components**
+
+    +-----------+--------------+---------------------------------------+
+    |Widget Name|Type          |What is it?                            |
+    +===========+==============+=======================================+
+    |interlock  |QFrame        |The QFrame wrapping this whole widget. |
+    +-----------+--------------+---------------------------------------+
+    |controls   |QFrame        |The QFrame wrapping the controls panel.|
+    +-----------+--------------+---------------------------------------+
+    |icon       |BaseSymbolIcon|The widget containing the icon drawing.|
+    +-----------+--------------+---------------------------------------+
+
+    **Additional Properties**
+
+    +-----------+-------------------------------------------------------------+
+    |Property   |Values                                                       |
+    +===========+=============================================================+
+    |interlocked|`true` or `false`                                            |
+    +-----------+-------------------------------------------------------------+
+    |error      |`true` or  `false`                                           |
+    +-----------+-------------------------------------------------------------+
+    |state      |`On`, `Accelerating` or `Off`                                |
+    +-----------+-------------------------------------------------------------+
+
+    Examples
+    --------
+
+    .. code-block:: css
+
+        KashiyamaPump[interlocked="true"] #interlock {
+            border: 5px solid red;
+        }
+        KashiyamaPump[interlocked="false"] #interlock {
+            border: 0px;
+        }
+        KashiyamaPump[error="true"] #icon {
+            qproperty-penStyle: "Qt::DotLine";
+            qproperty-penWidth: 2;
+            qproperty-brush: red;
+        }
+        KashiyamaPump[state="Accelerating"] #icon {
+            qproperty-centerBrush: red;
+        }
+
+    """
+
+    _qt_designer_ = {
+        "group": "ECS Vacuum Pumps",
+        "is_container": False,
+    }
+    _interlock_suffix = ":ILK_OK_RBV"
+    _error_suffix = ":ALARM_OK_RBV"
+    _state_suffix = ":STATE_RBV"
+    _command_suffix = ":RUN_SW"
+
+    NAME = "Scroll Pump"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.pump.Kashiyama_G"
+
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(
+            parent=parent,
+            interlock_suffix=self._interlock_suffix,
+            error_suffix=self._error_suffix,
+            state_suffix=self._state_suffix,
+            command_suffix=self._command_suffix,
+            **kwargs,
+        )
+        self.icon = ScrollPumpSymbolIcon(parent=self)
+
+    def sizeHint(self):
+        return QSize(180, 80)
