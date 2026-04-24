@@ -113,7 +113,7 @@ class SmaractTipTiltDoubleBase(DesignerWidget):
             (
                 "macros",
                 [
-                    """motor=${horizontal_motor}""",
+                    "motor=${horizontal_motor}",
                 ],
             ),
         ],
@@ -147,7 +147,7 @@ class SmaractTipTiltDoubleBase(DesignerWidget):
             (
                 "macros",
                 [
-                    """motor=${vertical_motor}""",
+                    "motor=${vertical_motor}",
                 ],
             ),
         ],

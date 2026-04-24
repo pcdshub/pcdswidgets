@@ -128,12 +128,19 @@
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
-    border: none;
+    border: 1 px solid gray;
+	border-radius: 5-px;
     outline: none;
 }
 QPushButton::hover
 {
-background-color: rgb(240, 225, 148);
+	background-color: rgb(240, 225, 148);
+}
+QPushButton::pressed
+{
+	background-color: rgba(187, 255, 172, 125);
+	border: 1px solid black;
+	border-radius: 5-px;
 }</string>
         </property>
         <property name="iconSize">
@@ -222,12 +229,19 @@ background-color: rgb(240, 225, 148);
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
-    border: none;
+    border: 1 px solid gray;
+	border-radius: 5-px;
     outline: none;
 }
 QPushButton::hover
 {
-background-color: rgb(240, 225, 148);
+	background-color: rgb(240, 225, 148);
+}
+QPushButton::pressed
+{
+	background-color: rgba(187, 255, 172, 125);
+	border: 1px solid black;
+	border-radius: 5-px;
 }</string>
         </property>
         <property name="iconSize">
@@ -316,12 +330,19 @@ background-color: rgb(240, 225, 148);
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
-    border: none;
+    border: 1 px solid gray;
+	border-radius: 5-px;
     outline: none;
 }
 QPushButton::hover
 {
-background-color: rgb(240, 225, 148);
+	background-color: rgb(240, 225, 148);
+}
+QPushButton::pressed
+{
+	background-color: rgba(187, 255, 172, 125);
+	border: 1px solid black;
+	border-radius: 5-px;
 }</string>
         </property>
         <property name="iconSize">
@@ -410,12 +431,19 @@ background-color: rgb(240, 225, 148);
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
-    border: none;
+    border: 1 px solid gray;
+	border-radius: 5-px;
     outline: none;
 }
 QPushButton::hover
 {
-background-color: rgb(240, 225, 148);
+	background-color: rgb(240, 225, 148);
+}
+QPushButton::pressed
+{
+	background-color: rgba(187, 255, 172, 125);
+	border: 1px solid black;
+	border-radius: 5-px;
 }</string>
         </property>
         <property name="iconSize">

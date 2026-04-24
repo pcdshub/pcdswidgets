@@ -31,6 +31,7 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
     chan_temp_get: "PyDMLabel"
     clear_step_count: "PyDMPushButton"
     desc_get: "PyDMLabel"
+    desc_set: "PyDMLineEdit"
     motor_load_get: "PyDMLabel"
     scan_volt_get: "PyDMLabel"
     scan_volt_set: "PyDMSlider"
@@ -58,6 +59,7 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
             "step_freq_get",
             "scan_volt_get",
             "desc_get",
+            "desc_set",
         ],
     }
     _widget_to_macro = {
@@ -68,6 +70,9 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
             "motor",
         ],
         "desc_get": [
+            "motor",
+        ],
+        "desc_set": [
             "motor",
         ],
         "motor_load_get": [
@@ -109,6 +114,9 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
             ("channel", "ca://${motor}:CLEAR_COUNT.PROC"),
         ],
         "desc_get": [
+            ("channel", "ca://${motor}.DESC"),
+        ],
+        "desc_set": [
             ("channel", "ca://${motor}.DESC"),
         ],
         "motor_load_get": [

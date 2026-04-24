@@ -784,6 +784,30 @@ color: rgb(0, 0, 0);</string>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string>Motor record description field</string>
+       </property>
+       <property name="monitorDisp">
+        <bool>false</bool>
+       </property>
+       <property name="channel">
+        <string>ca://${motor}.DESC</string>
+       </property>
       </widget>
      </item>
     </layout>

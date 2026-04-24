@@ -26,6 +26,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(400, 125))
+        Form.setMaximumSize(QtCore.QSize(400, 125))
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap("pcdswidgets/ui/motion/smaract/smaract_tip_tilt_qt_icon.png"),
@@ -64,12 +65,19 @@ class Ui_Form(object):
         self.step_down.setStyleSheet(
             "QPushButton\n"
             "{\n"
-            "    border: none;\n"
+            "    border: 1 px solid gray;\n"
+            "    border-radius: 5-px;\n"
             "    outline: none;\n"
             "}\n"
             "QPushButton::hover\n"
             "{\n"
-            "background-color: rgb(240, 225, 148);\n"
+            "    background-color: rgb(240, 225, 148);\n"
+            "}\n"
+            "QPushButton::pressed\n"
+            "{\n"
+            "    background-color: rgba(187, 255, 172, 125);\n"
+            "    border: 1px solid black;\n"
+            "    border-radius: 5-px;\n"
             "}"
         )
         self.step_down.setIconSize(QtCore.QSize(45, 45))
@@ -97,12 +105,19 @@ class Ui_Form(object):
         self.step_right.setStyleSheet(
             "QPushButton\n"
             "{\n"
-            "    border: none;\n"
+            "    border: 1 px solid gray;\n"
+            "    border-radius: 5-px;\n"
             "    outline: none;\n"
             "}\n"
             "QPushButton::hover\n"
             "{\n"
-            "background-color: rgb(240, 225, 148);\n"
+            "    background-color: rgb(240, 225, 148);\n"
+            "}\n"
+            "QPushButton::pressed\n"
+            "{\n"
+            "    background-color: rgba(187, 255, 172, 125);\n"
+            "    border: 1px solid black;\n"
+            "    border-radius: 5-px;\n"
             "}"
         )
         self.step_right.setIconSize(QtCore.QSize(45, 45))
@@ -130,12 +145,19 @@ class Ui_Form(object):
         self.step_up.setStyleSheet(
             "QPushButton\n"
             "{\n"
-            "    border: none;\n"
+            "    border: 1 px solid gray;\n"
+            "    border-radius: 5-px;\n"
             "    outline: none;\n"
             "}\n"
             "QPushButton::hover\n"
             "{\n"
-            "background-color: rgb(240, 225, 148);\n"
+            "    background-color: rgb(240, 225, 148);\n"
+            "}\n"
+            "QPushButton::pressed\n"
+            "{\n"
+            "    background-color: rgba(187, 255, 172, 125);\n"
+            "    border: 1px solid black;\n"
+            "    border-radius: 5-px;\n"
             "}"
         )
         self.step_up.setIconSize(QtCore.QSize(45, 45))
@@ -163,12 +185,19 @@ class Ui_Form(object):
         self.step_left.setStyleSheet(
             "QPushButton\n"
             "{\n"
-            "    border: none;\n"
+            "    border: 1 px solid gray;\n"
+            "    border-radius: 5-px;\n"
             "    outline: none;\n"
             "}\n"
             "QPushButton::hover\n"
             "{\n"
-            "background-color: rgb(240, 225, 148);\n"
+            "    background-color: rgb(240, 225, 148);\n"
+            "}\n"
+            "QPushButton::pressed\n"
+            "{\n"
+            "    background-color: rgba(187, 255, 172, 125);\n"
+            "    border: 1px solid black;\n"
+            "    border-radius: 5-px;\n"
             "}"
         )
         self.step_left.setIconSize(QtCore.QSize(45, 45))
