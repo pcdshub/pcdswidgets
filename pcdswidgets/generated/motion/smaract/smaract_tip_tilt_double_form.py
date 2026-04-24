@@ -26,7 +26,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(281, 241))
-        Form.setMaximumSize(QtCore.QSize(400, 250))
+        Form.setMaximumSize(QtCore.QSize(351, 250))
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap("pcdswidgets/ui/motion/smaract/smaract_tip_tilt_qt_icon.png"),
@@ -36,7 +36,7 @@ class Ui_Form(object):
         Form.setWindowIcon(icon)
         self.frame = QtWidgets.QFrame(Form)
         self.frame.setGeometry(QtCore.QRect(0, 0, 281, 241))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())

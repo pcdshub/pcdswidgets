@@ -20,7 +20,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(311, 246)
         Form.setMinimumSize(QtCore.QSize(311, 246))
-        Form.setMaximumSize(QtCore.QSize(400, 250))
+        Form.setMaximumSize(QtCore.QSize(388, 250))
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.gridLayout = QtWidgets.QGridLayout()
