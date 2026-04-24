@@ -3,8 +3,11 @@ import inspect
 import pytest
 from pydm.widgets.shell_command import PyDMShellCommand
 from pytestqt.qtbot import QtBot
+from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QLabel
 
+from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.tests.builder.widget_for_builder_test_base import WidgetForBuilderTestBase
 
 from .widget_for_builder_test import WidgetForBuilderTest
@@ -110,3 +113,29 @@ def test_macro_substitution_list_widget(test_widget: WidgetForBuilderTest):
     test_widget.setProperty("one", "ICHI")
 
     assert test_widget.one_two_shell.readCommands() == ["echo ICHI", "echo DOS", "echo ICHI:DOS"]
+
+
+def test_no_icon(qtbot: QtBot):
+    assert WidgetForBuilderTest.get_designer_icon() is None
+
+
+def test_iconfont_icon(qtbot: QtBot):
+    class TestCls(WidgetForBuilderTest):
+        designer_options = DesignerOptions(
+            group="ECS Tests Builder",
+            is_container=False,
+            icon=IconOptions.terminal,
+        )
+
+    assert isinstance(TestCls.get_designer_icon(), QIcon)
+
+
+def test_png_icon(qtbot: QtBot):
+    class TestCls(WidgetForBuilderTest):
+        designer_options = DesignerOptions(
+            group="ECS Tests Builder",
+            is_container=False,
+            icon="lcls.png",
+        )
+
+    assert isinstance(TestCls.get_designer_icon(), QIcon)

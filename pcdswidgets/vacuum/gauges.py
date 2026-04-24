@@ -1,7 +1,7 @@
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
-from ..icons.gauges import (
+from ..symbols.gauges import (
     CapManometerGaugeSymbolIcon,
     ColdCathodeComboGaugeSymbolIcon,
     ColdCathodeGaugeSymbolIcon,
