@@ -4,13 +4,13 @@ import pytest
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QBrush, QColor
 
-import pcdswidgets.icons
-from pcdswidgets.icons.base import BaseSymbolIcon
+import pcdswidgets.symbols
+from pcdswidgets.symbols.base import BaseSymbolIcon
 
-icons = [getattr(pcdswidgets.icons, icon) for icon in pcdswidgets.icons.__all__]
+icons = [getattr(pcdswidgets.symbols, icon) for icon in pcdswidgets.symbols.__all__]
 
 
-@pytest.mark.parametrize("icon_class", icons, ids=pcdswidgets.icons.__all__)
+@pytest.mark.parametrize("icon_class", icons, ids=pcdswidgets.symbols.__all__)
 def test_icon_smoke(qtbot, icon_class):
     icon = icon_class()
     qtbot.addWidget(icon)

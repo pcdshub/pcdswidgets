@@ -2,7 +2,7 @@ import os
 
 from qtpy.QtWidgets import QApplication, QWidget
 
-import pcdswidgets.icons as icons
+import pcdswidgets.symbols as symbols
 
 
 def screenshot(widget, filename):
@@ -17,8 +17,8 @@ def screenshot(widget, filename):
 
 app = QApplication([])
 
-for ic_name in icons.__all__:
-    ic = getattr(icons, ic_name)
+for ic_name in symbols.__all__:
+    ic = getattr(symbols, ic_name)
     tp = ic()
     tp.setFixedSize(64, 64)
     tp.show()
