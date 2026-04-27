@@ -3,7 +3,7 @@ from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy.QtCore import Property, QSize, Qt
 from qtpy.QtWidgets import QGridLayout
 
-from ..icons.valves import (
+from ..symbols.valves import (
     ApertureValveSymbolIcon,
     ControlOnlyValveSymbolIcon,
     ControlValveSymbolIcon,

@@ -10,11 +10,9 @@ from pathlib import Path
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
 from qtpy.QtCore import QTimer
-from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QCheckBox, QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.motion.smaract.smaract_tip_tilt_double_base import SmaractTipTiltDoubleBase
 
 logger = logging.getLogger(__name__)
@@ -34,7 +32,7 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
     designer_options = DesignerOptions(
         group="ECS Motion Smaract",
         is_container=False,
-        icon=IconOptions.NONE,
+        icon="smaract_tip_tilt_qt_icon.png",
     )
 
     def __init__(self, parent: QWidget | None = None):
@@ -48,11 +46,6 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         self._macros_timer.setInterval(100)
         self._macros_timer.setSingleShot(True)
         self._macros_timer.start()
-
-    @staticmethod
-    def get_designer_icon() -> str:
-        """Icon for usage in Qt designer."""
-        return QIcon(str(Path(__file__).parent / "smaract_tip_tilt_qt_icon.png"))
 
     def _setup_expert_screens(self):
         """Macros aren't immediately available through _get_macros, wait until they are."""
