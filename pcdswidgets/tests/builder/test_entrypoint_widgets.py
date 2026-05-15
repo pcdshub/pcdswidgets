@@ -86,16 +86,31 @@ def test_widget_sizing(widget_name: str, WidgetCls: type[QWidget], qtbot):
         max_h = 250
         min_w = ratio * max_w
         min_h = ratio * max_h
+    elif "Fixed" in widget_name and "X" in widget_name.split("Fixed")[-1]:
+        dims = widget_name.split("Fixed")[-1]
+        w_str, h_str = dims.split("X", 1)
+        max_w = int(w_str)
+        max_h = int(h_str)
+        min_w = ratio * max_w
+        min_h = ratio * max_h
+    elif "Stretch" in widget_name and "X" in widget_name.split("Stretch")[-1]:
+        dims = widget_name.split("Stretch")[-1]
+        w_str, h_str = dims.split("X", 1)
+        max_w = None
+        min_w = int(w_str)
+        min_h = int(h_str)
     else:
         raise ValueError(
             f"Widget named {widget_name} does not follow naming convention: "
-            "must end with Full, Compact, or Row to signal size class."
+            "must end with Full, Compact, Row, Double, Fixed<W>X<H>, or Stretch<W>X<H> "
+            "to signal size class."
         )
 
     assert widget.minimumWidth() >= min_w, f"{widget_name}'s minimum width is too small."
-    assert widget.maximumWidth() <= max_w, f"{widget_name}'s maximum width is too large."
     assert widget.minimumHeight() >= min_h, f"{widget_name}'s minimum height is too small."
-    assert widget.maximumHeight() <= max_h, f"{widget_name}'s maximum height is too large."
+    if max_w is not None:
+        assert widget.maximumWidth() <= max_w, f"{widget_name}'s maximum width is too large."
+        assert widget.maximumHeight() <= max_h, f"{widget_name}'s maximum height is too large."
 
 
 @pytest.mark.parametrize("widget_name,WidgetCls", [elem for elem in iter_all_widgets() if elem[0] in container_widgets])

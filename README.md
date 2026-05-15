@@ -103,8 +103,7 @@ Before getting too deep, however, please consider widget sizing:
 ### Widget Sizing
 We have some strict guidelines on widget sizing. These are established to give us some consistency in application of widgets, as well as to make it simpler to avoid resizing a widget between library releases.
 
-Device control widgets should fall into exactly one of three size classes.
-(Note: we can add more size classes if necessary).
+Device control widgets should fall into exactly one of the size classes below.
 
 To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
 and are permissible sizes as recorded below.
@@ -118,11 +117,15 @@ Widgets should always be maintained to work at the original designed size, becau
 | Full | 400 px | 125 px |
 | Compact | 100 px | 75 px |
 | Row | 800 px | 50 px |
+| Fixed | Custom | Custom |
+| Stretch | Custom | Custom |
 
 Note:
 - All widgets are allowed to be smaller than the maximum of their size class by up to 20%.
 - Rows are also allowed to be double-height, e.g. 100px height.
 - Widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
+- **Fixed**  Use this when your widget doesn't fit a standard size class but should still have a fixed size following the same min/max conventions as above.
+- **Stretch** size widgets are fully scalable with no maximum size constraint. The dimensions in the name represents the minimum size. Use this when your widget should be freely resizable.
 
 
 ### Environment Setup
@@ -162,6 +165,9 @@ Widget names and ui filenames should have one to one correspondence and contain 
 - Descriptor word to differentiate this widget from other possible widgets with the same device type and size
 - Size class signifier
 
+For the standard size classes (Double, Full, Compact, Row), the size class name is the final word in the widget name.
+For the custom size classes (Fixed, Stretch), the size class and dimensions are encoded at the end of the name using the format `fixed_WxH` or `stretch_WxH` (lowercase in filenames, CamelCase in class names).
+
 For casing:
 - `.ui` filenames should be lowercase_with_underscores for ease of working with filenames.
 - Class names should use CamelCase to match qt and python naming conventions.
@@ -176,6 +182,12 @@ Examples:
    - Controls generic EPICS motor record with a thermocouple added
    - Is inspired by the classic EDM style
    - Is sized to be the "row" size
+- `camera_feed_fixed_640x480.ui` (`CameraFeedFixed640X480`)
+   - Displays a camera feed
+   - Has a fixed size of 640x480 pixels
+- `camera_overview_stretch_800x600.ui` (`CameraOverviewStretch800X600`)
+   - Shows camera overview
+   - Designed for 800x600 but can be freely resized
 
 Other guidelines:
 
