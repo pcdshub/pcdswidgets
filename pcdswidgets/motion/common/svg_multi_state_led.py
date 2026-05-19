@@ -2,7 +2,7 @@ import json
 import logging
 
 from pydm.widgets import PyDMSymbol
-from qtpy.QtCore import QRectF, QSize, QSizeF, Qt, QTimer
+from qtpy.QtCore import QRectF, QSize, QSizeF, Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgRenderer
 from qtpy.QtWidgets import QStyle, QStyleOption
@@ -59,12 +59,6 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
         # Finally, let's assume we're disconnected. I hate that this is idx based
         # Edit this if you want a different initial state and icon.
         self._state = self._state_dict["DISCONNECTED"]
-
-        self._macros_timer = QTimer(parent=self)
-        self._macros_timer.timeout.connect(self.connect_msta)
-        self._macros_timer.setInterval(100)
-        self._macros_timer.setSingleShot(True)
-        self._macros_timer.start()
 
     def paintEvent(self, event):
         """
@@ -129,21 +123,9 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
     def set_motor(self, value: str) -> None:
         self._motor = value
+        self.set_channel(f"ca://{self._motor}.MSTA")
 
     motor = pyqtProperty(str, get_motor, set_motor)
-
-    def connect_msta(self) -> None:
-        """
-        Connect init_channel. This assumes the MSTA motor field and CA.
-        Change or overwrite this method if you want to begin with a different
-        PV.
-        """
-        if not self._motor:
-            # Haven't set the property yet
-            self._macros_timer.start()
-            return
-
-        self.set_channel(f"ca://{self._motor}.MSTA")
 
     def connection_changed(self, connected):
         """
