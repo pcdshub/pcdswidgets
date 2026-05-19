@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>500</height>
+    <width>650</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -50,7 +50,7 @@
         </font>
        </property>
        <property name="text">
-        <string>${NICKNAME}</string>
+        <string>${nickname}</string>
        </property>
       </widget>
      </item>
@@ -124,6 +124,39 @@
          <property name="toolTip">
           <string/>
          </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string/>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="autoDownsample">
+          <bool>true</bool>
+         </property>
+         <property name="imageWidth">
+          <number>0</number>
+         </property>
+         <property name="normalizeData">
+          <bool>false</bool>
+         </property>
+         <property name="imageChannel">
+          <string>ca://{self.cam_prefix}:IMAGE1:ArrayData</string>
+         </property>
+         <property name="widthChannel">
+          <string>ca://{self.cam_prefix}:IMAGE1:ArraySize0_RBV</string>
+         </property>
+         <property name="maxRedrawRate">
+          <number>30</number>
+         </property>
+         <property name="showAxes">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -153,7 +186,7 @@
          <x>0</x>
          <y>0</y>
          <width>408</width>
-         <height>437</height>
+         <height>487</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2"/>
@@ -266,7 +299,7 @@
         <string>color: gray;</string>
        </property>
        <property name="text">
-        <string>PV: ${PREFIX}</string>
+        <string>${cam_prefix}</string>
        </property>
       </widget>
      </item>
