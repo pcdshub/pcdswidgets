@@ -39,6 +39,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
     _internal_widget_names: set[str] = set()
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
+        self._initializing = True
         super().__init__(parent)
         self._frame_count = 0
         self._first_show = True
@@ -52,6 +53,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             }
 
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
+        self._initializing = False
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
@@ -61,7 +63,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
     def childEvent(self, event: QChildEvent) -> None:
         """Mark externally added widgets with '_sidebar_widget' for later adoption."""
         super().childEvent(event)
-        if not self._init_complete:
+        if self._initializing:
             return
         if event.type() == QEvent.ChildAdded:
             child = event.child()
@@ -85,6 +87,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
     def showEvent(self, event) -> None:
         """Hooks into the first show event to adopt child widgets added in designer"""
         super().showEvent(event)
+        if self._initializing:
+            return
         if self._first_show:
             self._first_show = False
             self._adopt_child_widgets()
@@ -103,11 +107,17 @@ class CameraViewerStretch(CameraViewerStretchBase):
             sidebar_layout.setContentsMargins(0, 0, 0, 0)
             sidebar_layout.setSpacing(2)
 
-        for child in self.findChildren(QtWidgets.QWidget):
-            if child.parent() is not self:
-                continue
-            if not child.property("_sidebar_widget"):
-                continue
+        # sort all widgets marked as sidebar_widgets by the current y location
+        candidates = sorted(
+            (
+                child
+                for child in self.findChildren(QtWidgets.QWidget)
+                if child.parent() is self and child.property("_sidebar_widget")
+            ),
+            key=lambda w: w.y(),
+        )
+        # add the children in collapsible sections
+        for child in candidates:
             section = CollapsibleSection(
                 child,
                 parent=self.sidebar_scroll.widget(),
