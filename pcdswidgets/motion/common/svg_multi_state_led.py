@@ -174,10 +174,6 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
         Override to force disconnected icon when not connected.
         This is called by PyDMWidget regularly.
         """
-        if not hasattr(self, "_state_dict"):
-            logger.debug("_state_dict does not exist!")
-            super().check_enable_state()
-            return
 
         # Check parent's connection state
         if hasattr(self, "_connected") and not self._connected:
