@@ -42,6 +42,7 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
         # And make a simple dict out of it
         self._icon_paths = [OK, MOVING, WARNING, ERROR, DISCONNECTED]
         self._state_dict = {"OK": 0, "MOVING": 1, "WARNING": 2, "ERROR": 3, "DISCONNECTED": 4}
+        self._connected = False
 
         super().__init__(*args, **kwargs)
 
@@ -175,7 +176,7 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
         """
 
         # Check parent's connection state
-        if hasattr(self, "_connected") and not self._connected:
+        if not self._connected:
             if self._current_key != self._state_dict["DISCONNECTED"]:
                 logger.debug("check_enable_state: Not connected, forcing disconnected icon")
                 logger.debug(f"_state_images keys: {list(self._state_images.keys())}")
@@ -191,28 +192,6 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
         # Call parent implementation for alarm handling etc.
         super().check_enable_state()
-
-    # Define methods for additional channels property
-    def setAdditionalChannels(self, channels) -> None:
-        """
-        Set additional channels to subscribe to.
-
-        Parameters
-        ----------
-        channels : list of str or str
-            List of PV addresses, or JSON string representation of list
-        """
-        # Handle both list and JSON string input
-        if isinstance(channels, str):
-            try:
-                channels = json.loads(channels)
-            except (json.JSONDecodeError, TypeError):
-                # If not valid JSON, treat as single channel
-                channels = [channels] if channels else []
-
-        if self._additional_channels != channels:
-            self._additional_channels = channels
-            self._setup_additional_channels()
 
     def channels(self) -> list[str]:
         """
