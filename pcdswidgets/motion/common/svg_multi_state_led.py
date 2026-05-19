@@ -2,7 +2,6 @@ import json
 import logging
 
 from pydm.widgets import PyDMSymbol
-from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import QRectF, QSize, QSizeF, Qt, QTimer
 from qtpy.QtGui import QPixmap
 from qtpy.QtSvg import QSvgRenderer
@@ -215,12 +214,6 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
             self._additional_channels = channels
             self._setup_additional_channels()
 
-    def getAdditionalChannels(self):
-        """Get the list of additional channel addresses."""
-        return self._additional_channels
-
-    additionalChannels = pyqtProperty("QStringList", getAdditionalChannels, setAdditionalChannels)
-
     def channels(self) -> list[str]:
         """
         Return all channels used by this widget.
@@ -281,36 +274,3 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
             self.setToolTip("Current motor Status")
 
         self.set_current_key(self._state)
-
-    def _setup_additional_channels(self) -> None:
-        """Setup additional channel subscriptions."""
-        self._additional_channel_objs: list[PyDMChannel]
-        # Disconnect all old channels
-        if self._additional_channel_objs:
-            for ch_obj in self._additional_channel_objs:
-                ch_obj.disconnect()
-            self._additional_channel_objs.clear()
-
-        # Create new channels
-        for idx, channel_addr in enumerate(self._additional_channels):
-            if channel_addr:
-                ch_obj = PyDMChannel(
-                    address=channel_addr,
-                    value_slot=lambda val, i=idx: self._additional_value_callback(i, val),
-                    severity_slot=lambda sev, i=idx: self._additional_severity_callback(i, sev),
-                    connection_slot=lambda conn, i=idx: self._additional_connection_callback(i, conn),
-                )
-                ch_obj.connect()
-                self._additional_channel_objs.append(ch_obj)
-
-    def _additional_value_callback(self, idx: int, value: any) -> None:
-        """Place holder method for custom callbacks. Overwrite this please."""
-        pass
-
-    def _additional_severity_callback(self, idx: int, severity: any) -> None:
-        """Place holder method for custom callbacks. Overwrite this please."""
-        pass
-
-    def _additional_connection_callback(self, idx: int, state: any) -> None:
-        """Place holder method for custom callbacks. Overwrite this please."""
-        pass
