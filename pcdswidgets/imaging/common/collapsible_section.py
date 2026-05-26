@@ -10,6 +10,7 @@ from qtpy.QtWidgets import (
     QFrame,
     QHBoxLayout,
     QLabel,
+    QSizePolicy,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -40,6 +41,7 @@ class CollapsibleSection(QWidget):
         self._title_text = title
         self._collapsed = collapsed
         self._build_ui(content)
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         self._apply_collapsed_state()
 
     @staticmethod
@@ -90,15 +92,8 @@ class CollapsibleSection(QWidget):
 
         outer.addWidget(self._header)
 
-        # Content area
-        self._content = QWidget(self)
-        self._content.setObjectName("collapsible_content")
-        self._content_layout = QVBoxLayout(self._content)
-        self._content_layout.setContentsMargins(0, 2, 0, 0)
-        self._content_layout.setSpacing(0)
-        outer.addWidget(self._content)
-
-        self._content_layout.addWidget(content)
+        self._content_widget = content
+        outer.addWidget(content)
         # Make header clickable (the whole bar, not just the button)
         self._header.mousePressEvent = lambda _ev: self.toggle()
 
@@ -108,10 +103,8 @@ class CollapsibleSection(QWidget):
         self._apply_collapsed_state()
 
     def _apply_collapsed_state(self) -> None:
-        self._content.setVisible(not self._collapsed)
-        self._arrow.setArrowType(
-            Qt.DownArrow if not self._collapsed else Qt.RightArrow
-        )
-        self._arrow.setChecked(not self._collapsed)
-        # Let parent layout know our size changed
+        expanded = not self._collapsed
+        self._content_widget.setVisible(expanded)
+        self._arrow.setArrowType(Qt.DownArrow if expanded else Qt.RightArrow)
+        self._arrow.setChecked(expanded)
         self.updateGeometry()
