@@ -146,10 +146,10 @@
           <bool>false</bool>
          </property>
          <property name="imageChannel">
-          <string>ca://{self.cam_prefix}:IMAGE1:ArrayData</string>
+          <string>ca://${cam_prefix}:IMAGE1:ArrayData</string>
          </property>
          <property name="widthChannel">
-          <string>ca://{self.cam_prefix}:IMAGE1:ArraySize0_RBV</string>
+          <string>ca://${cam_prefix}:IMAGE1:ArraySize0_RBV</string>
          </property>
          <property name="maxRedrawRate">
           <number>30</number>
