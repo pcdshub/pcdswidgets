@@ -7,7 +7,6 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 from collections import deque
 
-from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMImageView
 from qtpy import QtWidgets
 from qtpy.QtCore import QChildEvent, QEvent, QTimer
@@ -120,6 +119,14 @@ class CameraViewerStretch(CameraViewerStretchBase):
             return False
         return True
 
+    def _is_designer_editing(self) -> bool:
+        """Return True if widget is in Designer's edit mode (not preview)."""
+        try:
+            from qtpy.QtDesigner import QDesignerFormWindowInterface
+            return QDesignerFormWindowInterface.findFormWindow(self) is not None
+        except ImportError:
+            return False
+
     def showEvent(self, event) -> None:
         """Hooks into the first show event to adopt child widgets added in designer"""
         super().showEvent(event)
@@ -127,7 +134,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             return
         if self._first_show:
             self._first_show = False
-            if not is_qt_designer():
+            if not self._is_designer_editing():
                 self._adopt_child_widgets()
 
     def _adopt_child_widgets(self) -> None:
