@@ -30,11 +30,13 @@ except ImportError:
 class CameraViewerStretchBase(DesignerWidget):
     PyDMLabel: "PyDMLabel"
     active_pv_label: "QLabel"
+    image_view: "PyDMImageView"
     nickname_label: "QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "cam_prefix": [
+            "image_view",
             "PyDMLabel",
             "active_pv_label",
         ],
@@ -49,6 +51,9 @@ class CameraViewerStretchBase(DesignerWidget):
         "active_pv_label": [
             "cam_prefix",
         ],
+        "image_view": [
+            "cam_prefix",
+        ],
         "nickname_label": [
             "nickname",
         ],
@@ -59,6 +64,10 @@ class CameraViewerStretchBase(DesignerWidget):
         ],
         "active_pv_label": [
             ("text", "${cam_prefix}"),
+        ],
+        "image_view": [
+            ("imageChannel", "ca://${cam_prefix}:IMAGE1:ArrayData"),
+            ("widthChannel", "ca://${cam_prefix}:IMAGE1:ArraySize0_RBV"),
         ],
         "nickname_label": [
             ("text", "${nickname}"),
