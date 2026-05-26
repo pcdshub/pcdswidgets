@@ -22,7 +22,7 @@ from pcdswidgets.builder.designer_widget import DesignerWidget
 from .colormap_intesity_control_full_form import *
 
 try:
-    from qtpy.QtCore import pyqtProperty
+    from qtpy.QtCore import pyqtProperty  # noqa: F401
 except ImportError:
     pass  # type: ignore
 
