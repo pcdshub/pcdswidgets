@@ -7,6 +7,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 from collections import deque
 
+from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMImageView
 from qtpy import QtWidgets
 from qtpy.QtCore import QChildEvent, QEvent, QTimer
@@ -126,7 +127,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
             return
         if self._first_show:
             self._first_show = False
-            self._adopt_child_widgets()
+            if not is_qt_designer():
+                self._adopt_child_widgets()
 
     def _adopt_child_widgets(self) -> None:
         """
