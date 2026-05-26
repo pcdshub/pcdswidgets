@@ -32,6 +32,8 @@ class AcquisitionControlFullBase(DesignerWidget):
     acquire_combo: "PyDMEnumComboBox"
     array_counter_rbv: "PyDMLabel"
     capture_counter: "PyDMLabel"
+    capture_counter_2: "PyDMLabel"
+    capture_counter_3: "PyDMLabel"
     exposures_per_capture: "PyDMSpinbox"
     image_mode_combo: "PyDMEnumComboBox"
     multiple_count: "PyDMSpinbox"
@@ -40,14 +42,16 @@ class AcquisitionControlFullBase(DesignerWidget):
     ui_form = Ui_Form
     _macro_to_widget = {
         "cam_prefix": [
-            "exposures_per_capture",
-            "capture_counter",
-            "multiple_count",
-            "array_counter_rbv",
             "image_mode_combo",
+            "exposures_per_capture",
+            "capture_counter_3",
             "acquire_combo",
             "status_rbv",
             "acquire_byte",
+            "array_counter_rbv",
+            "multiple_count",
+            "capture_counter_2",
+            "capture_counter",
         ],
     }
     _widget_to_macro = {
@@ -61,6 +65,12 @@ class AcquisitionControlFullBase(DesignerWidget):
             "cam_prefix",
         ],
         "capture_counter": [
+            "cam_prefix",
+        ],
+        "capture_counter_2": [
+            "cam_prefix",
+        ],
+        "capture_counter_3": [
             "cam_prefix",
         ],
         "exposures_per_capture": [
@@ -88,6 +98,12 @@ class AcquisitionControlFullBase(DesignerWidget):
         ],
         "capture_counter": [
             ("channel", "ca://${cam_prefix}:NumImagesCounter_RBV"),
+        ],
+        "capture_counter_2": [
+            ("channel", "ca://${cam_prefix}:NumImages_RBV"),
+        ],
+        "capture_counter_3": [
+            ("channel", "ca://${cam_prefix}:NumExposures_RBV"),
         ],
         "exposures_per_capture": [
             ("channel", "ca://${cam_prefix}:NumExposures"),
