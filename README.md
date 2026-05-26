@@ -101,28 +101,25 @@ Before getting too deep, however, please consider widget sizing:
 
 
 ### Widget Sizing
-We have some strict guidelines on widget sizing. These are established to give us some consistency in application of widgets, as well as to make it simpler to avoid resizing a widget between library releases.
+We have some loose guidelines on widget sizing. These are established to give us some consistency in application of widgets, as well as to make it simpler to avoid resizing a widget between library releases.
 
-Device control widgets should fall into exactly one of three size classes.
+Device control widgets should fall into exactly one of the following size classes, but they do not have to if there's a good reason to diverge.
 (Note: we can add more size classes if necessary).
-
-To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
-and are permissible sizes as recorded below.
-It's recommended to use fixed sizing when possible because dynamic sizing is hard to implement correctly.
-
-Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
 | Size Class | Width | Height |
 | ---------- | ----- | -------|
-| Double| 400 px | 250 px |
+| Double | 400 px | 250 px |
 | Full | 400 px | 125 px |
 | Compact | 100 px | 75 px |
 | Row | 800 px | 50 px |
+| Stretch | Custom/Big | Custom/Big |
 
-Note:
-- All widgets are allowed to be smaller than the maximum of their size class by up to 20%.
-- Rows are also allowed to be double-height, e.g. 100px height.
-- Widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
+Note that this isn't enforced in any way.
+
+To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout your desired size range.
+It's recommended to use fixed sizing when possible because dynamic sizing is hard to implement correctly.
+
+Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
 
 ### Environment Setup
@@ -160,7 +157,7 @@ Widget names and ui filenames should have one to one correspondence and contain 
 
 - Type of device controlled
 - Descriptor word to differentiate this widget from other possible widgets with the same device type and size
-- Size class signifier
+- Size class signifier (or, if none are suitable, another descriptive suffix)
 
 For casing:
 - `.ui` filenames should be lowercase_with_underscores for ease of working with filenames.
