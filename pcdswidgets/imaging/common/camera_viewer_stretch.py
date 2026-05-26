@@ -123,6 +123,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
         """Return True if widget is in Designer's edit mode (not preview)."""
         try:
             from qtpy.QtDesigner import QDesignerFormWindowInterface
+
             return QDesignerFormWindowInterface.findFormWindow(self) is not None
         except ImportError:
             return False

@@ -18,6 +18,7 @@ from qtpy.QtWidgets import (
 
 logger = logging.getLogger(__name__)
 
+
 class CollapsibleSection(QWidget):
     """
     A collapsible panel with a clickable title bar.
@@ -65,8 +66,7 @@ class CollapsibleSection(QWidget):
         self._header = QFrame(self)
         self._header.setFrameShape(QFrame.StyledPanel)
         self._header.setStyleSheet(
-            "QFrame { background: palette(midlight); "
-            "border: 1px solid palette(mid); border-radius: 2px; }"
+            "QFrame { background: palette(midlight); border: 1px solid palette(mid); border-radius: 2px; }"
         )
         self._header.setCursor(Qt.PointingHandCursor)
         header_layout = QHBoxLayout(self._header)
@@ -74,9 +74,7 @@ class CollapsibleSection(QWidget):
         header_layout.setSpacing(4)
 
         self._arrow = QToolButton(self._header)
-        self._arrow.setStyleSheet(
-            "QToolButton { border: none; background: transparent; }"
-        )
+        self._arrow.setStyleSheet("QToolButton { border: none; background: transparent; }")
         self._arrow.setArrowType(Qt.RightArrow)
         self._arrow.setFixedSize(16, 16)
         self._arrow.setCheckable(True)
