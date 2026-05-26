@@ -42,6 +42,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         self._initializing = True
+        self._adopted_widgets: list[QtWidgets.QWidget] = []
         super().__init__(parent)
         self._frame_count = 0
         self._fps_rolling_buffer = deque(maxlen=5)
@@ -66,6 +67,17 @@ class CameraViewerStretch(CameraViewerStretchBase):
 
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
         self._initializing = False
+
+    def set_cam_prefix(self, value: str) -> None:
+        """Override to propagate cam_prefix to adopted sub-widgets."""
+        super().set_cam_prefix(value)
+        self._propagate_cam_prefix(value)
+
+    def _propagate_cam_prefix(self, value: str) -> None:
+        """Push cam_prefix to all adopted sub-widgets that accept it."""
+        for widget in self._adopted_widgets:
+            if hasattr(widget, "cam_prefix"):
+                widget.cam_prefix = value
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
@@ -140,6 +152,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             key=lambda w: w.y(),
         )
         # add the children in collapsible sections
+        cam_prefix = self._macro_values.get("cam_prefix", "")
         for child in candidates:
             section = CollapsibleSection(
                 child,
@@ -148,6 +161,10 @@ class CameraViewerStretch(CameraViewerStretchBase):
             )
             sidebar_layout.addWidget(section)
             section.show()
+            self._adopted_widgets.append(child)
+            # Propagate cam_prefix to sub-widget at adoption time
+            if cam_prefix and hasattr(child, "cam_prefix"):
+                child.cam_prefix = cam_prefix
             logger.debug(
                 "Adopted child %s as collapsible '%s'",
                 child.objectName() or type(child).__name__,
