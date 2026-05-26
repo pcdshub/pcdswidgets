@@ -18,8 +18,8 @@ from qtpy import QtCore, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(390, 115)
-        Form.setMinimumSize(QtCore.QSize(390, 50))
+        Form.resize(395, 107)
+        Form.setMinimumSize(QtCore.QSize(390, 100))
         Form.setMaximumSize(QtCore.QSize(400, 125))
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
