@@ -28,8 +28,8 @@ file = "LICENSE.md"
 write_to = "pcdswidgets/_version.py"
 
 [project.entry-points."pydm.widget"]
+AcquisitionControlFull = "pcdswidgets.imaging.common.acquisition_control_full:AcquisitionControlFull"
 ApertureValve = "pcdswidgets.vacuum.valves:ApertureValve"
-CameraViewerCompactStretch = "pcdswidgets.imaging.common.camera_viewer_compact_stretch:CameraViewerCompactStretch"
 CameraViewerStretch = "pcdswidgets.imaging.common.camera_viewer_stretch:CameraViewerStretch"
 CapacitanceManometerGauge = "pcdswidgets.vacuum.gauges:CapacitanceManometerGauge"
 ColdCathodeComboGauge = "pcdswidgets.vacuum.gauges:ColdCathodeComboGauge"
