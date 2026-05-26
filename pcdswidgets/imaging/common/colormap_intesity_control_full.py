@@ -101,7 +101,9 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     def _on_normalize_toggled(self, checked: bool) -> None:
         if self._image_view is None:
             return
-        self._image_view._normalize_data = checked
+        self._image_view.setNormalizeData(checked)
+        self._image_view.needs_redraw = True
+        self._image_view.redrawImage()
 
     def _on_levels_changed(self, hist_item) -> None:
         """Update image view min/max when the user drags histogram levels."""
