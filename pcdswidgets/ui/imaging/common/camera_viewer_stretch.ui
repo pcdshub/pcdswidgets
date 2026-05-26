@@ -33,7 +33,7 @@
     <number>4</number>
    </property>
    <property name="bottomMargin">
-    <number>4</number>
+    <number>2</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="top_bar">
@@ -186,7 +186,7 @@
          <x>0</x>
          <y>0</y>
          <width>408</width>
-         <height>487</height>
+         <height>489</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2"/>
@@ -208,6 +208,30 @@
        </property>
        <property name="text">
         <string>FPS:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="display_fps_label">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>##</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fps_label2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string> / </string>
        </property>
       </widget>
      </item>
@@ -241,37 +265,13 @@
         <string/>
        </property>
        <property name="channel">
-        <string>ca://${cam_prefix}:FRAMERATE_RBV</string>
+        <string>ca://${cam_prefix}:ArrayRate_RBV</string>
        </property>
        <property name="enableRichText">
         <bool>false</bool>
        </property>
        <property name="displayFormat">
         <enum>PyDMLabel::Decimal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="fps_label2">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string> / </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="display_fps_label">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>##</string>
        </property>
       </widget>
      </item>

@@ -5,10 +5,11 @@ This file can be safely edited to change the runtime behavior of the widget.
 """
 
 import logging
+from collections import deque
 
 from pydm.widgets import PyDMImageView
 from qtpy import QtWidgets
-from qtpy.QtCore import QChildEvent, QEvent
+from qtpy.QtCore import QChildEvent, QEvent, QTimer
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
@@ -28,6 +29,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
     image_view: PyDMImageView
+    display_fps_label: QtWidgets.QLabel
 
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
@@ -42,21 +44,42 @@ class CameraViewerStretch(CameraViewerStretchBase):
         self._initializing = True
         super().__init__(parent)
         self._frame_count = 0
+        self._fps_rolling_buffer = deque(maxlen=5)
         self._first_show = True
 
         # snapshot internal widgets to distinguish them from added widgets
         if not CameraViewerStretch._internal_widget_names:
             CameraViewerStretch._internal_widget_names = {
-                child.objectName()
-                for child in self.findChildren(QtWidgets.QWidget)
-                if child.objectName()
+                child.objectName() for child in self.findChildren(QtWidgets.QWidget) if child.objectName()
             }
+
+        # Display FPS timer
+        self._fps_timer = QTimer(self)
+        self._fps_timer.setInterval(1000)
+        self._fps_timer.timeout.connect(self._update_display_fps)
+        self._fps_timer.start()  # Connect image update signal for FPS counting
+        try:
+            self.image_view.newImageSignal.connect(self._on_new_image)
+        except AttributeError:
+            # some pydm versions may not have this signal
+            pass
 
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
         self._initializing = False
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
+
+    # -- Display FPS -------------------------------------------------------
+
+    def _on_new_image(self) -> None:
+        self._frame_count += 1
+
+    def _update_display_fps(self) -> None:
+        self._fps_rolling_buffer.append(self._frame_count)
+        avg_fps = sum(self._fps_rolling_buffer) / len(self._fps_rolling_buffer)
+        self.display_fps_label.setText(f"{avg_fps:.1f}")
+        self._frame_count = 0
 
     # -- Sub-Widget Adoption ----------------------------------
 
@@ -131,4 +154,3 @@ class CameraViewerStretch(CameraViewerStretchBase):
             )
         # add a vertical spacer to push all widgets to the top
         sidebar_layout.addStretch()
-
