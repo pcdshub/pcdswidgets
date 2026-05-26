@@ -4,8 +4,6 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
-import logging
-
 import numpy as np
 from pydm.widgets import PyDMImageView
 from pydm.widgets.colormaps import PyDMColorMap, cmap_names, cmaps
@@ -15,9 +13,7 @@ from qtpy import QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
-from pcdswidgets.generated.imaging.common.imageview_config_full_base import ImageviewConfigFullBase
-
-logger = logging.getLogger(__name__)
+from pcdswidgets.generated.imaging.common.colormap_intesity_control_full_base import ColormapIntesityControlFullBase
 
 _COLORMAP_ORDER = [
     PyDMColorMap.Inferno,
@@ -30,10 +26,9 @@ _COLORMAP_ORDER = [
 ]
 
 
-class ImageviewConfigFull(ImageviewConfigFullBase):
+class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     colormap_combo: QtWidgets.QComboBox
-    normalize_radio: QtWidgets.QRadioButton
-    auto_downsample_radio: QtWidgets.QRadioButton
+    normalize_check: QtWidgets.QCheckBox
     histogram_container: QtWidgets.QWidget
 
     designer_options = DesignerOptions(
@@ -60,8 +55,7 @@ class ImageviewConfigFull(ImageviewConfigFullBase):
 
         # link callbacks for ui
         self.colormap_combo.currentIndexChanged.connect(self._on_colormap_changed)
-        self.normalize_radio.toggled.connect(self._on_normalize_toggled)
-        self.auto_downsample_radio.toggled.connect(self._on_auto_downsample_toggled)
+        self.normalize_check.toggled.connect(self._on_normalize_toggled)
 
     def link_image_view(self, image_view: PyDMImageView) -> None:
         """
@@ -83,13 +77,10 @@ class ImageviewConfigFull(ImageviewConfigFullBase):
 
         self._sync_histogram_gradient(current_cmap)
 
-        self.normalize_radio.setChecked(image_view._normalize_data)
-        self.auto_downsample_radio.setChecked(image_view._auto_downsample)
+        self.normalize_check.setChecked(image_view._normalize_data)
 
         # When histogram levels change, update the image view's colormap limits
         self._histogram.sigLevelChangeFinished.connect(self._on_levels_changed)
-
-        logger.debug("ImageviewConfigFull linked to %s", image_view)
 
     def _sync_histogram_gradient(self, cmap_enum) -> None:
         """Set the histogram gradient to match the given colormap."""
@@ -111,11 +102,6 @@ class ImageviewConfigFull(ImageviewConfigFullBase):
         if self._image_view is None:
             return
         self._image_view._normalize_data = checked
-
-    def _on_auto_downsample_toggled(self, checked: bool) -> None:
-        if self._image_view is None:
-            return
-        self._image_view._auto_downsample = checked
 
     def _on_levels_changed(self, hist_item) -> None:
         """Update image view min/max when the user drags histogram levels."""

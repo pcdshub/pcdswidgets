@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/imaging/common/imageview_config_full.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/imaging/common/colormap_intesity_control_full.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -19,18 +19,15 @@ class Ui_Form(object):
         Form.setMaximumSize(QtCore.QSize(400, 250))
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
-        self.normalize_radio = QtWidgets.QRadioButton(Form)
-        self.normalize_radio.setObjectName("normalize_radio")
-        self.gridLayout.addWidget(self.normalize_radio, 0, 2, 1, 1)
         self.colormap_label = QtWidgets.QLabel(Form)
         self.colormap_label.setObjectName("colormap_label")
         self.gridLayout.addWidget(self.colormap_label, 0, 0, 1, 1)
         self.colormap_combo = QtWidgets.QComboBox(Form)
         self.colormap_combo.setObjectName("colormap_combo")
         self.gridLayout.addWidget(self.colormap_combo, 0, 1, 1, 1)
-        self.auto_downsample_radio = QtWidgets.QRadioButton(Form)
-        self.auto_downsample_radio.setObjectName("auto_downsample_radio")
-        self.gridLayout.addWidget(self.auto_downsample_radio, 0, 3, 1, 1)
+        self.normalize_check = QtWidgets.QCheckBox(Form)
+        self.normalize_check.setObjectName("normalize_check")
+        self.gridLayout.addWidget(self.normalize_check, 0, 2, 1, 1)
         self.histogram_container = QtWidgets.QWidget(Form)
         self.histogram_container.setObjectName("histogram_container")
         self.gridLayout.addWidget(self.histogram_container, 2, 0, 1, 4)
@@ -40,7 +37,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "View Config"))
-        self.normalize_radio.setText(_translate("Form", "Normalize"))
+        Form.setWindowTitle(_translate("Form", "Colormap & Intensity"))
         self.colormap_label.setText(_translate("Form", "Color Map"))
-        self.auto_downsample_radio.setText(_translate("Form", "Auto DownSample"))
+        self.normalize_check.setText(_translate("Form", "Auto Normalize"))
