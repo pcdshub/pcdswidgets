@@ -28,6 +28,7 @@ except ImportError:
 
 
 class AcquisitionControlFullBase(DesignerWidget):
+    PyDMPushButton: "PyDMPushButton"
     acquire_byte: "PyDMByteIndicator"
     acquire_combo: "PyDMEnumComboBox"
     array_counter_rbv: "PyDMLabel"
@@ -42,19 +43,23 @@ class AcquisitionControlFullBase(DesignerWidget):
     ui_form = Ui_Form
     _macro_to_widget = {
         "cam_prefix": [
-            "image_mode_combo",
             "exposures_per_capture",
             "capture_counter_3",
             "acquire_combo",
+            "image_mode_combo",
+            "array_counter_rbv",
+            "PyDMPushButton",
             "status_rbv",
             "acquire_byte",
-            "array_counter_rbv",
             "multiple_count",
             "capture_counter_2",
             "capture_counter",
         ],
     }
     _widget_to_macro = {
+        "PyDMPushButton": [
+            "cam_prefix",
+        ],
         "acquire_byte": [
             "cam_prefix",
         ],
@@ -87,6 +92,9 @@ class AcquisitionControlFullBase(DesignerWidget):
         ],
     }
     _widget_to_pre_template = {
+        "PyDMPushButton": [
+            ("channel", "ca://${cam_prefix}:ArrayCounter"),
+        ],
         "acquire_byte": [
             ("channel", "ca://${cam_prefix}:Acquire_RBV"),
         ],
