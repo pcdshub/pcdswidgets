@@ -9,7 +9,7 @@ from pydm.widgets import PyDMImageView
 from pydm.widgets.colormaps import PyDMColorMap, cmap_names, cmaps
 from pyqtgraph import ColorMap
 from pyqtgraph.widgets.HistogramLUTWidget import HistogramLUTWidget
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
@@ -40,6 +40,8 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
         self._image_view: PyDMImageView | None = None
+        self._image_stream_paused = False
+        self._graph_press_active = False
 
         for cmap_enum in _COLORMAP_ORDER:
             self.colormap_combo.addItem(cmap_names[cmap_enum], cmap_enum)
@@ -69,18 +71,47 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         # Link histogram to the image's ImageItem for live level control
         self._histogram.setImageItem(image_view.getImageItem())
 
-        # Sync UI to current image view state
-        current_cmap = image_view.readColorMap()
-        idx = self.colormap_combo.findData(current_cmap)
-        if idx >= 0:
-            self.colormap_combo.setCurrentIndex(idx)
+        #update colormap on image to default
+        idx = self.colormap_combo.currentIndex()
+        self._on_colormap_changed(idx)
 
-        self._sync_histogram_gradient(current_cmap)
-
-        self.normalize_check.setChecked(image_view._normalize_data)
+        # Pause incoming frames while left mouse is held in histogram graph area.
+        self._histogram.viewport().installEventFilter(self)
 
         # When histogram levels change, update the image view's colormap limits
         self._histogram.sigLevelChangeFinished.connect(self._on_levels_changed)
+
+    def _pause_image_stream(self) -> None:
+        if self._image_view is None or self._image_stream_paused:
+            return
+
+        image_channel = getattr(self._image_view, "_imagechannel", None)
+        if image_channel is None:
+            return
+
+        image_channel.disconnect()
+        self._image_stream_paused = True
+
+    def _resume_image_stream(self) -> None:
+        if self._image_view is None or not self._image_stream_paused:
+            return
+
+        image_channel = getattr(self._image_view, "_imagechannel", None)
+        if image_channel is not None:
+            image_channel.connect()
+        self._image_stream_paused = False
+
+    def eventFilter(self, obj, event) -> bool:
+        if obj is self._histogram.viewport():
+            if event.type() == QtCore.QEvent.MouseButtonPress:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._graph_press_active = True
+                    self._pause_image_stream()
+            elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                if event.button() == QtCore.Qt.LeftButton and self._graph_press_active:
+                    self._graph_press_active = False
+                    self._resume_image_stream()
+        return super().eventFilter(obj, event)
 
     def _sync_histogram_gradient(self, cmap_enum) -> None:
         """Set the histogram gradient to match the given colormap."""
