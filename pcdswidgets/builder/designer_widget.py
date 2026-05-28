@@ -2,6 +2,7 @@
 Helper for using designer to layout widgets.
 """
 
+from pathlib import Path
 from string import Template
 from typing import Any, ClassVar, Protocol
 
@@ -9,10 +10,15 @@ from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
 from pydm.widgets.qtplugin_extensions import RulesExtension
+from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
+
+import pcdswidgets
 
 from .designer_options import DesignerOptions
 from .icon_options import IconOptions
+
+ICON_AREA = Path(pcdswidgets.__file__).parent / "icons"
 
 ifont = IconFont()
 
@@ -32,6 +38,8 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     designer_options: ClassVar[DesignerOptions]
     # Tells PyDM to include in designer
     _qt_designer_: ClassVar[dict[str, Any]]
+    # Special handling for icon variants
+    _icon_option: ClassVar[QIcon | IconOptions | str | None]
     # Macro name to widget names that include that macro
     _macro_to_widget: ClassVar[dict[str, list[str]]]
     # Widget name to required macros: all must be non-empty before updating
@@ -49,19 +57,8 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 "group": cls.designer_options.group,
                 "is_container": cls.designer_options.is_container,
             }
-            icon_obj = cls.designer_options.icon
-            if icon_obj is not None:
-                cls._qt_designer_["icon"] = icon_obj
-        # Interpret enum as icons for ease of selection
-        try:
-            icon = cls._qt_designer_["icon"]
-            if isinstance(icon, IconOptions):
-                if str(icon):
-                    cls._qt_designer_["icon"] = ifont.icon(str(icon))
-                else:
-                    del cls._qt_designer_["icon"]
-        except (AttributeError, KeyError):
-            ...
+            cls._icon_option = cls.designer_options.icon
+
         # Include a quick editor for macro vals
         new_ext = [MacroEditExtension, RulesExtension]
         try:
@@ -79,6 +76,29 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     def retranslateUi(self, *args, **kwargs):
         """Required function for setupUi to work in __init__"""
         self.ui_form.retranslateUi(self, *args, **kwargs)  # type: ignore
+
+    @classmethod
+    def get_designer_icon(cls) -> QIcon | None:  # type: ignore
+        """
+        Return the correct QIcon for PyDM's designer hooks.
+
+        If we return None, PyDM will use the default icon.
+        """
+        try:
+            icon = cls._icon_option
+        except AttributeError:
+            return None
+        match icon:
+            case QIcon():
+                return icon
+            case IconOptions.NONE:
+                return None
+            case IconOptions():
+                return ifont.icon(str(icon))
+            case str():
+                return QIcon(get_icon_path(icon))
+            case _:
+                return None
 
     def _get_macro(self, macro_name: str) -> str:
         return self._macro_values[macro_name]
@@ -183,3 +203,7 @@ class MacroValueEditor(QDialog):
 
     def cancel_changes(self):
         self.close()
+
+
+def get_icon_path(icon_file: str) -> str:
+    return str(ICON_AREA / icon_file)
