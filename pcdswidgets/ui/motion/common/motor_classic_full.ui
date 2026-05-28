@@ -593,7 +593,7 @@ background-color: rgb(250, 250, 250);</string>
       <item row="6" column="2">
        <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="PyDMPushButton" name="PyDMPushButton_stop_3">
+         <widget class="PyDMPushButton" name="PyDMPushButton_clear_error">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
