@@ -251,10 +251,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
         return False
 
     def get_roi_color(self) -> QColor:
-        return self.color_selection_button.color
+        return self.color_selection_button.get_color()
 
     def set_roi_color(self, color: QColor) -> None:
-        self.color_selection_button.color = color
+        self.color_selection_button.set_color(color)
 
     roi_color = pyqtProperty(QColor, get_roi_color, set_roi_color)
 

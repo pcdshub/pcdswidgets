@@ -17,6 +17,7 @@ class ColorButton(QPushButton):
         super().__init__(parent)
 
         self._color = QColor("red")
+        self._update_button_style()
         self.setMinimumWidth(40)
         self.clicked.connect(self.on_click)
 
