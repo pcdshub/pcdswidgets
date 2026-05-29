@@ -28,72 +28,72 @@ except ImportError:
 
 
 class EpicsRoiFullBase(DesignerWidget):
-    PyDMSpinbox_11: "PyDMSpinbox"
-    PyDMSpinbox_12: "PyDMSpinbox"
-    PyDMSpinbox_13: "PyDMSpinbox"
-    PyDMSpinbox_14: "PyDMSpinbox"
+    height_spinbox: "PyDMSpinbox"
+    width_spinbox: "PyDMSpinbox"
+    x_spinbox: "PyDMSpinbox"
+    y_spinbox: "PyDMSpinbox"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "cam_prefix": [
-            "PyDMSpinbox_12",
-            "PyDMSpinbox_11",
-            "PyDMSpinbox_13",
-            "PyDMSpinbox_14",
+            "y_spinbox",
+            "width_spinbox",
+            "x_spinbox",
+            "height_spinbox",
         ],
         "roi_plugin": [
-            "PyDMSpinbox_12",
-            "PyDMSpinbox_11",
-            "PyDMSpinbox_13",
-            "PyDMSpinbox_14",
+            "y_spinbox",
+            "width_spinbox",
+            "x_spinbox",
+            "height_spinbox",
         ],
         "suffix_WidthX": [
-            "PyDMSpinbox_11",
+            "width_spinbox",
         ],
         "suffix_WidthY": [
-            "PyDMSpinbox_14",
+            "height_spinbox",
         ],
         "suffix_X": [
-            "PyDMSpinbox_13",
+            "x_spinbox",
         ],
         "suffix_Y": [
-            "PyDMSpinbox_12",
+            "y_spinbox",
         ],
     }
     _widget_to_macro = {
-        "PyDMSpinbox_11": [
-            "cam_prefix",
-            "roi_plugin",
-            "suffix_WidthX",
-        ],
-        "PyDMSpinbox_12": [
-            "cam_prefix",
-            "roi_plugin",
-            "suffix_Y",
-        ],
-        "PyDMSpinbox_13": [
-            "cam_prefix",
-            "roi_plugin",
-            "suffix_X",
-        ],
-        "PyDMSpinbox_14": [
+        "height_spinbox": [
             "cam_prefix",
             "roi_plugin",
             "suffix_WidthY",
         ],
+        "width_spinbox": [
+            "cam_prefix",
+            "roi_plugin",
+            "suffix_WidthX",
+        ],
+        "x_spinbox": [
+            "cam_prefix",
+            "roi_plugin",
+            "suffix_X",
+        ],
+        "y_spinbox": [
+            "cam_prefix",
+            "roi_plugin",
+            "suffix_Y",
+        ],
     }
     _widget_to_pre_template = {
-        "PyDMSpinbox_11": [
+        "height_spinbox": [
+            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_WidthY}"),
+        ],
+        "width_spinbox": [
             ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_WidthX}"),
         ],
-        "PyDMSpinbox_12": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_Y}"),
-        ],
-        "PyDMSpinbox_13": [
+        "x_spinbox": [
             ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_X}"),
         ],
-        "PyDMSpinbox_14": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_WidthY}"),
+        "y_spinbox": [
+            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_Y}"),
         ],
     }
 

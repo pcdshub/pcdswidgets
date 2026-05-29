@@ -1,7 +1,6 @@
-from qtpy.QtWidgets import QPushButton, QColorDialog
-from qtpy.QtGui import QColor, QPalette
-from qtpy.QtCore import Signal
-from qtpy.QtCore import Property
+from qtpy.QtCore import Property, Signal
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QColorDialog, QPushButton
 
 
 class ColorButton(QPushButton):
@@ -17,11 +16,9 @@ class ColorButton(QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self._color = None
+        self._color = QColor("red")
         self.setMinimumWidth(40)
         self.clicked.connect(self.on_click)
-
-        self.set_color(QColor("red"))
 
     def get_color(self):
         return self._color

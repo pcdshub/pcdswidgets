@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import pyqtgraph as pg
-from qtpy.QtCore import QPointF, QRectF, Qt
+from qtpy.QtCore import QPointF, QRectF, Qt, Slot
 from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QSpinBox, QVBoxLayout
 
 
 class CamROI(pg.ROI):
@@ -20,13 +21,13 @@ class CamROI(pg.ROI):
       typical EPICS area-detector ROI plugin PVs).
     """
 
-    def __init__(self, color, pen_width, **kwargs):
+    def __init__(self, ini_color, init_width, **kwargs):
         super().__init__(pos=(0, 0), size=(1, 1), **kwargs)
-        self.update_pen( color, pen_width)
         self.setVisible(False)
         self.setAcceptedMouseButtons(Qt.NoButton)
         self.translatable = False
         self.resizable = False
+        self.change_pen(ini_color, init_width)
 
     # ── Qt geometry overrides ────────────────────────────────────────────
 
@@ -79,18 +80,66 @@ class CamROI(pg.ROI):
 
     # ── Pen management ───────────────────────────────────────────────────
 
-    def update_pen(self, color: QColor, width: int) -> None:
-        """Apply a new color and width to the normal and hover pens."""
-        pen = pg.mkPen(color, width=width)
-        hover_pen = pg.mkPen(self._inverted_color(color), width=width)
-        self.setPen(pen)
-        self.hoverPen = hover_pen
+    @Slot(bool)
+    def visible(self, state: bool):
+        self.setVisible(state)
+
+    @Slot(QColor)
+    def update_color(self, color: QColor):
+        """a slot for setting the color"""
+        self.change_pen(color=color)
+
+    def change_pen(self, color=None, width=None):
+        """
+        Similar to setPen but with key differences
+
+        - defaults to previous width or color if ommited
+        - adds updates hoverpen too with inverted color
+        - calls prepare Geometry to avoid ghosting due to size changes
+        """
+        if color is None:
+            color = self.pen.color()
+        if width is None:
+            width = self.pen.width()
+
+        self.pen = pg.mkPen(color=color, width=width)
+        # self.hover_pen = pg.mkPen(self._inverted_color(color), width)
+
         if self.mouseHovering:
-            self.currentPen = hover_pen
+            self.currentPen = self.hover_pen
         else:
-            self.currentPen = pen
+            self.currentPen = self.pen
+
         self.prepareGeometryChange()
         self.update()
+
+    def thickness_dialog(self):
+        """Open a dialog to for user to select ROI pen thickness."""
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Line Thickness")
+        layout = QVBoxLayout(dlg)
+
+        row = QHBoxLayout()
+        row.addWidget(QLabel("Thickness (px):"))
+        spin = QSpinBox()
+        spin.setRange(1, 20)
+        spin.setValue(self._pen_width)
+        row.addWidget(spin)
+        layout.addLayout(row)
+
+        btn_row = QHBoxLayout()
+        ok_btn = QPushButton("OK")
+        cancel_btn = QPushButton("Cancel")
+        btn_row.addWidget(ok_btn)
+        btn_row.addWidget(cancel_btn)
+        layout.addLayout(btn_row)
+
+        ok_btn.clicked.connect(dlg.accept)
+        cancel_btn.clicked.connect(dlg.reject)
+
+        if dlg.exec_() == QDialog.Accepted:
+            pen_width = spin.value()
+            self.change_pen(width=pen_width)
 
     @staticmethod
     def _inverted_color(color: QColor) -> QColor:

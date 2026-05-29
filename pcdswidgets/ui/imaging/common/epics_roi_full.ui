@@ -36,7 +36,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="PyDMSpinbox" name="PyDMSpinbox_12">
+      <widget class="PyDMSpinbox" name="y_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -85,7 +85,7 @@
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PyDMSpinbox" name="PyDMSpinbox_11">
+      <widget class="PyDMSpinbox" name="width_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -134,7 +134,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PyDMSpinbox" name="PyDMSpinbox_13">
+      <widget class="PyDMSpinbox" name="x_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -190,7 +190,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="PyDMSpinbox" name="PyDMSpinbox_14">
+      <widget class="PyDMSpinbox" name="height_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
