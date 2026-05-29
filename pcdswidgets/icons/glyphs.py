@@ -14,7 +14,7 @@ ERROR = str(BASE_PATH / "error.svg")
 
 DISCONNECTED = str(BASE_PATH / "disconnected.svg")
 
-EYE  = str(BASE_PATH / "eye.svg")
+EYE = str(BASE_PATH / "eye.svg")
 
 EYE_OFF = str(BASE_PATH / "eye-off.svg")
 
@@ -31,5 +31,3 @@ TRASH = str(BASE_PATH / "trash.svg")
 MOVE = str(BASE_PATH / "move.svg")
 
 THICKNESS = str(BASE_PATH / "thickness.svg")
-
-

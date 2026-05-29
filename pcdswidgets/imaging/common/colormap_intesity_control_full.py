@@ -74,7 +74,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         # Link histogram to the image's ImageItem for live level control
         self._histogram.setImageItem(self._image_view.getImageItem())
 
-        #update colormap on image to default
+        # update colormap on image to default
         idx = self.colormap_combo.currentIndex()
         self._on_colormap_changed(idx)
 

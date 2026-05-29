@@ -3,6 +3,7 @@ Originally generated from jinja template ui_main_widget.j2
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
+
 import logging
 
 from pydm.widgets import PyDMImageView
@@ -28,8 +29,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
     """Interactive ROI overlay widget for EPICS area-detector cameras.
 
     Provides draw, center-select, move/resize, and color/thickness controls
-    for a rectangular ROI overlaid on a PyDMImageView.  ROI geometry is
-    synchronised bidirectionally with EPICS PVs via PyDMSpinbox channels.
+    for a rectangular ROI overlaid on a PyDMImageView.
+
+    ROI geometry is synchronised with EPICS PVs via PyDMSpinbox
+    channels.
     """
 
     draw_roi_button: QPushButton
@@ -45,10 +48,11 @@ class EpicsRoiFull(EpicsRoiFullBase):
         icon=IconOptions.NONE,
     )
 
-    # Interaction modes
+    # Interaction modes — mutually exclusive
     MODE_NONE = 0
     MODE_DRAW = 1
     MODE_CENTER = 2
+    MODE_MOVE = 3
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -76,15 +80,15 @@ class EpicsRoiFull(EpicsRoiFullBase):
     def _set_macro_defaults(self):
         """Populate unset macros with sensible defaults for ROI1."""
         default_map = {
-            "nickname" : "ROI 1",
-            "roi_plugin" : ":ROI1:",
-            "suffix_X" : "MinX",
-            "suffix_Y" : "MinY",
-            "suffix_WidthX" : "SizeX",
-            "suffix_WidthY" : "SizeY",
+            "nickname": "ROI 1",
+            "roi_plugin": ":ROI1:",
+            "suffix_X": "MinX",
+            "suffix_Y": "MinY",
+            "suffix_WidthX": "SizeX",
+            "suffix_WidthY": "SizeY",
         }
         for name, value in default_map.items():
-            if (name not in self._macro_values)  or (self._macro_values[name] == ""):
+            if (name not in self._macro_values) or (self._macro_values[name] == ""):
                 self._macro_values[name] = value
 
     # The nickname macro is not auto-generated because no child widgets
@@ -105,7 +109,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             CROSSHAIR: self.select_center_button,
             EYE: self.visibility_button,
             MOVE: self.move_enabled_button,
-            THICKNESS: self.line_thickness_button
+            THICKNESS: self.line_thickness_button,
         }
         for path, button in icon_map.items():
             icon = QIcon()
@@ -125,8 +129,8 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
         self.draw_roi_button.toggled.connect(self._on_draw_toggled)
         self.select_center_button.toggled.connect(self._on_center_toggled)
+        self.move_enabled_button.toggled.connect(self._on_move_toggled)
         self.visibility_button.toggled.connect(self._on_visibility_toggled)
-        self.move_enabled_button.clicked.connect(self._on_move_enabled_clicked)
         self.color_selection_button.colorChanged.connect(self._on_color_changed)
         self.line_thickness_button.clicked.connect(self._on_thickness_clicked)
 
@@ -157,7 +161,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self.roi_rect.resizable = False
         self._view_box.addItem(self.roi_rect)
 
-        # Sync ROI overlay when user drags it (re-enable mouse later in draw mode)
+        # Sync ROI → spinboxes when user finishes dragging in move mode
         self.roi_rect.sigRegionChangeFinished.connect(self._on_roi_moved)
 
         # Listen for mouse clicks on the view for draw/center modes
@@ -165,34 +169,62 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._view_box.scene().sigMouseMoved.connect(self._on_scene_moved)
 
         # Sync ROI from EPICS channel updates (camonitor / initial read)
-        for spinbox in (self.PyDMSpinbox_13, self.PyDMSpinbox_12,
-                        self.PyDMSpinbox_11, self.PyDMSpinbox_14):
+        for spinbox in (self.PyDMSpinbox_13, self.PyDMSpinbox_12, self.PyDMSpinbox_11, self.PyDMSpinbox_14):
             spinbox.valueChanged.connect(self._sync_roi_from_spinboxes)
 
-    # ── Button handlers ──────────────────────────────────────────────────
+    # ── Mode management ────────────────────────────────────────────────────
+    #
+    # Draw, center, and move are mutually exclusive interaction modes.
+    # While any mode is active, inbound EPICS spinbox updates are suppressed
+    # so they don't fight the user.  When an action completes (second draw
+    # click, center click, or drag-finish) we push ROI → spinboxes.
 
     def _on_draw_toggled(self, checked: bool):
         """Enter/exit draw-ROI mode."""
         if checked:
-            # Entering draw mode – deactivate center mode if active
-            self.select_center_button.setChecked(False)
-            self._mode = self.MODE_DRAW
-            self._set_roi_interactive(False)
+            self._enter_mode(self.MODE_DRAW)
         else:
-            self._mode = self.MODE_NONE
+            self._exit_mode()
             self._draw_origin = None
-            self._set_roi_interactive(True)
 
     def _on_center_toggled(self, checked: bool):
         """Enter/exit select-center mode."""
         if checked:
-            # Entering center mode – deactivate draw mode if active
-            self.draw_roi_button.setChecked(False)
-            self._mode = self.MODE_CENTER
-            self._set_roi_interactive(False)
+            self._enter_mode(self.MODE_CENTER)
         else:
-            self._mode = self.MODE_NONE
-            self._set_roi_interactive(True)
+            self._exit_mode()
+
+    def _on_move_toggled(self, checked: bool):
+        """Enter/exit move/resize mode."""
+        if checked:
+            self._enter_mode(self.MODE_MOVE)
+            if self.roi_rect:
+                self.roi_rect.set_movable(True)
+        else:
+            if self.roi_rect:
+                self.roi_rect.set_movable(False)
+            self._exit_mode()
+
+    def _enter_mode(self, mode: int) -> None:
+        """Activate a mode, deactivating any other."""
+        # Uncheck other mode buttons first — their toggled(False) handlers
+        # will call _exit_mode() which resets _mode to NONE harmlessly.
+        mode_buttons = {
+            self.MODE_DRAW: self.draw_roi_button,
+            self.MODE_CENTER: self.select_center_button,
+            self.MODE_MOVE: self.move_enabled_button,
+        }
+        for m, btn in mode_buttons.items():
+            if m != mode:
+                btn.setChecked(False)
+        # Set mode last so the unchecking cascade doesn't clobber it.
+        self._mode = mode
+
+    def _exit_mode(self) -> None:
+        """Return to idle (MODE_NONE) if not already re-entering another mode."""
+        if self._mode == self.MODE_NONE:
+            return
+        self._mode = self.MODE_NONE
 
     def _on_visibility_toggled(self, checked: bool):
         """Toggle ROI overlay visibility."""
@@ -200,12 +232,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
             return
         self._is_visible = checked
         self.roi_rect.setVisible(checked)
-
-    def _on_move_enabled_clicked(self):
-        """Toggle ability to move/resize ROI via mouse interaction."""
-        if self.roi_rect is None:
-            return
-        self.roi_rect.set_movable(self.move_enabled_button.isChecked())
 
     def _on_thickness_clicked(self):
         """Open a dialog to set the ROI pen thickness."""
@@ -309,8 +335,8 @@ class EpicsRoiFull(EpicsRoiFullBase):
     # ── ROI ↔ Spinbox synchronisation ────────────────────────────────────
 
     def _on_roi_moved(self):
-        """Called when user finishes dragging the ROI interactively."""
-        if self._syncing or self._mode != self.MODE_NONE:
+        """Called when user finishes dragging the ROI in move mode."""
+        if self._syncing or self._mode != self.MODE_MOVE:
             return
         self._sync_spinboxes_from_roi()
 
@@ -336,8 +362,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
             self._syncing = False
 
     def _sync_roi_from_spinboxes(self, _value=None):
-        """Debounce EPICS channel updates — restart timer on each call."""
+        """Debounce EPICS → ROI updates; suppressed while user is interacting."""
         if self._syncing or self.roi_rect is None:
+            return
+        if self._mode != self.MODE_NONE:
             return
         self._spinbox_debounce.start()
 
@@ -366,17 +394,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._is_visible = visible
         self.roi_rect.setVisible(visible)
         self.visibility_button.setChecked(visible)
-
-    def _set_roi_interactive(self, interactive: bool):
-        """Enable/disable direct mouse interaction with the ROI handles.
-
-        Always defers to the move_enabled_button state — if move is not
-        enabled, interaction stays off regardless of the request.
-        """
-        if self.roi_rect is None:
-            return
-        allowed = interactive and self.move_enabled_button.isChecked()
-        self.roi_rect.set_interactive(allowed)
 
     def _apply_pen(self):
         """Apply current color and thickness to the ROI pen."""

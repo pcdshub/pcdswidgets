@@ -28,9 +28,7 @@ class CamROI(pg.ROI):
     def boundingRect(self) -> QRectF:
         pw = self.currentPen.width() if self.currentPen else 1
         margin = pw / 2.0 + 1
-        return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(
-            -margin, -margin, margin, margin
-        )
+        return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(-margin, -margin, margin, margin)
 
     def stateChanged(self, finish=True):
         # Invalidate old padded rect before the parent repaints.

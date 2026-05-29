@@ -3,6 +3,7 @@ from qtpy.QtGui import QColor, QPalette
 from qtpy.QtCore import Signal
 from qtpy.QtCore import Property
 
+
 class ColorButton(QPushButton):
     """
     A button that displays a color swatch. When clicked, it opens
