@@ -337,7 +337,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.GapLabel1.sizePolicy().hasHeightForWidth())
         self.GapLabel1.setSizePolicy(sizePolicy)
         self.GapLabel1.setMinimumSize(QtCore.QSize(120, 0))
-        self.GapLabel1.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.GapLabel1.setMaximumSize(QtCore.QSize(120, 16777215))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.GapLabel1.setFont(font)

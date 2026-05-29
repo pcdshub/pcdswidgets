@@ -36,8 +36,8 @@ class MotorClassicFullBase(DesignerWidget):
     PyDMLabel_rbv: "PyDMLabel"
     PyDMLineEdit_setpoint: "PyDMLineEdit"
     PyDMLineEdit_twVal: "PyDMLineEdit"
+    PyDMPushButton_clear_error: "PyDMPushButton"
     PyDMPushButton_stop: "PyDMPushButton"
-    PyDMPushButton_stop_3: "PyDMPushButton"
     PyDMPushButton_twkL: "PyDMPushButton"
     PyDMPushButton_twkR: "PyDMPushButton"
     PyDMShellCommand_expert: "PyDMShellCommand"
@@ -53,7 +53,7 @@ class MotorClassicFullBase(DesignerWidget):
             "PyDMLabel_egu",
             "PyDMByteIndicator_hls",
             "PyDMLabel_name",
-            "PyDMPushButton_stop_3",
+            "PyDMPushButton_clear_error",
             "PyDMLineEdit_setpoint",
             "PyDMByteIndicator_mvn",
             "PyDMPushButton_stop",
@@ -85,10 +85,10 @@ class MotorClassicFullBase(DesignerWidget):
         "PyDMLineEdit_twVal": [
             "MOTOR",
         ],
-        "PyDMPushButton_stop": [
+        "PyDMPushButton_clear_error": [
             "MOTOR",
         ],
-        "PyDMPushButton_stop_3": [
+        "PyDMPushButton_stop": [
             "MOTOR",
         ],
         "PyDMPushButton_twkL": [
@@ -126,11 +126,11 @@ class MotorClassicFullBase(DesignerWidget):
         "PyDMLineEdit_twVal": [
             ("channel", "ca://${MOTOR}.TWV"),
         ],
+        "PyDMPushButton_clear_error": [
+            ("channel", "ca://${MOTOR}:SEQ_SELN"),
+        ],
         "PyDMPushButton_stop": [
             ("channel", "ca://${MOTOR}.STOP"),
-        ],
-        "PyDMPushButton_stop_3": [
-            ("channel", "ca://${MOTOR}:SEQ_SELN"),
         ],
         "PyDMPushButton_twkL": [
             ("channel", "ca://${MOTOR}.TWR"),
