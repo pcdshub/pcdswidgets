@@ -1,0 +1,459 @@
+"""
+Originally generated from jinja template ui_main_widget.j2
+
+This file can be safely edited to change the runtime behavior of the widget.
+"""
+import logging
+
+import pyqtgraph as pg
+from qtpy.QtCore import QPointF, QRectF, QTimer, Qt
+from qtpy.QtGui import QColor, QIcon, QPixmap
+from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QSpinBox, QVBoxLayout
+
+try:
+    from qtpy.QtCore import pyqtProperty
+except ImportError:
+    from qtpy.QtCore import Property as pyqtProperty  # type: ignore
+
+from pydm.widgets import PyDMImageView
+
+from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.builder.icon_options import IconOptions
+from pcdswidgets.generated.imaging.common.epics_roi_full_base import EpicsRoiFullBase
+from pcdswidgets.icons.glyphs import PEN_TOOL, CROSSHAIR, EYE, MOVE, THICKNESS
+
+logger = logging.getLogger(__name__)
+
+
+class _PaddedRectROI(pg.ROI):
+    """ROI that draws a rectangle with pen-width-aware boundingRect.
+
+    Unlike pg.RectROI, this does not add any handles by default,
+    avoiding stale handle artifacts.
+    """
+
+    def __init__(self, pos, size, **kwargs):
+        super().__init__(pos, size, **kwargs)
+
+    def boundingRect(self) -> QRectF:
+        pw = self.currentPen.width() if self.currentPen else 1
+        margin = pw / 2.0 + 1
+        return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(
+            -margin, -margin, margin, margin
+        )
+
+    def stateChanged(self, finish=True):
+        # Tell Qt our geometry changed *before* the parent repaints,
+        # so it invalidates the old (padded) rect as well as the new one.
+        self.prepareGeometryChange()
+        super().stateChanged(finish)
+
+
+class EpicsRoiFull(EpicsRoiFullBase):
+
+    draw_roi_button: QPushButton
+    select_center_button: QPushButton
+    visibility_button: QPushButton
+    color_selection_button: QPushButton
+    move_enabled_button: QPushButton
+    line_thickness_button: QPushButton
+
+    designer_options = DesignerOptions(
+        group="ECS Imaging Common",
+        is_container=False,
+        icon=IconOptions.NONE,
+    )
+
+    # Interaction modes
+    MODE_NONE = 0
+    MODE_DRAW = 1
+    MODE_CENTER = 2
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._set_macro_defaults()
+
+        self.roi_rect: pg.RectROI = None
+        self._image_view: PyDMImageView = None
+        self._view_box = None
+        self._mode = self.MODE_NONE
+        self._draw_origin: QPointF = None
+        self._is_visible = False
+        self._pen_width = 3
+        self._syncing = False
+
+        # Debounce timer for EPICS channel updates arriving sequentially
+        self._spinbox_debounce = QTimer(self)
+        self._spinbox_debounce.setSingleShot(True)
+        self._spinbox_debounce.setInterval(50)  # ms
+        self._spinbox_debounce.timeout.connect(self._apply_spinbox_to_roi)
+
+        self._init_button_icons()
+        self._connect_buttons()
+
+    def _set_macro_defaults(self):
+        default_map = {
+            "nickname" : "ROI 1",
+            "roi_plugin" : ":ROI1:",
+            "suffix_X" : "MinX",
+            "suffix_Y" : "MinY",
+            "suffix_WidthX" : "SizeX",
+            "suffix_WidthY" : "SizeY",
+        }
+        for name, value in default_map.items():
+            if (name not in self._macro_values)  or (self._macro_values[name] == ""):
+                self._macro_values[name] = value
+
+    def _init_button_icons(self):
+        """init buttons"""
+
+        # link icons svgs here to avoid path issues
+        icon_map = {
+            PEN_TOOL: self.draw_roi_button,
+            CROSSHAIR: self.select_center_button,
+            EYE: self.visibility_button,
+            MOVE: self.move_enabled_button,
+            THICKNESS: self.line_thickness_button
+        }
+        for path, button in icon_map.items():
+            icon = QIcon()
+            icon.addPixmap(
+                QPixmap(path),
+                QIcon.Normal,
+                QIcon.Off,
+            )
+            button.setIcon(icon)
+
+    def _connect_buttons(self):
+        """Wire up button click signals."""
+        self.draw_roi_button.setCheckable(True)
+        self.select_center_button.setCheckable(True)
+        self.move_enabled_button.setCheckable(True)
+        self.visibility_button.setCheckable(True)
+
+        self.draw_roi_button.toggled.connect(self._on_draw_toggled)
+        self.select_center_button.toggled.connect(self._on_center_toggled)
+        self.visibility_button.toggled.connect(self._on_visibility_toggled)
+        self.move_enabled_button.clicked.connect(self._on_move_enabled_clicked)
+        self.color_selection_button.colorChanged.connect(self._on_color_changed)
+        self.line_thickness_button.clicked.connect(self._on_thickness_clicked)
+
+    def link_parent_widgets(self, parent) -> None:
+        """
+        Connect this config widget to a PyDMImageView.
+
+        Called by the parent widget at adoption time. Links the histogram
+        to the image item and syncs the UI state to current image settings.
+        """
+        if hasattr(parent, "image_view"):
+            self._image_view = parent.image_view
+        else:
+            return
+        try:
+            plot_item = self._image_view.getView()
+            self._view_box = plot_item.getViewBox()
+        except Exception:
+            logger.debug("Could not get ViewBox for overlays", exc_info=True)
+            return
+
+        color = self.get_roi_color()
+        self.roi_rect = _PaddedRectROI(
+            [0, 0], [1, 1],
+            pen=pg.mkPen(color, width=self._pen_width),
+            hoverPen=pg.mkPen(self._inverted_color(color), width=self._pen_width),
+        )
+        self.roi_rect.setVisible(False)
+        self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
+        self.roi_rect.translatable = False
+        self.roi_rect.resizable = False
+        self._view_box.addItem(self.roi_rect)
+
+        # Sync ROI overlay when user drags it (re-enable mouse later in draw mode)
+        self.roi_rect.sigRegionChangeFinished.connect(self._on_roi_moved)
+
+        # Listen for mouse clicks on the view for draw/center modes
+        self._view_box.scene().sigMouseClicked.connect(self._on_scene_clicked)
+        self._view_box.scene().sigMouseMoved.connect(self._on_scene_moved)
+
+        # Sync ROI from EPICS channel updates (camonitor / initial read)
+        for spinbox in (self.PyDMSpinbox_13, self.PyDMSpinbox_12,
+                        self.PyDMSpinbox_11, self.PyDMSpinbox_14):
+            spinbox.valueChanged.connect(self._sync_roi_from_spinboxes)
+
+    # ── Button handlers ──────────────────────────────────────────────────
+
+    def _on_draw_toggled(self, checked: bool):
+        """Enter/exit draw-ROI mode."""
+        if checked:
+            # Entering draw mode – deactivate center mode if active
+            self.select_center_button.setChecked(False)
+            self._mode = self.MODE_DRAW
+            self._set_roi_interactive(False)
+        else:
+            self._mode = self.MODE_NONE
+            self._draw_origin = None
+            self._set_roi_interactive(True)
+
+    def _on_center_toggled(self, checked: bool):
+        """Enter/exit select-center mode."""
+        if checked:
+            # Entering center mode – deactivate draw mode if active
+            self.draw_roi_button.setChecked(False)
+            self._mode = self.MODE_CENTER
+            self._set_roi_interactive(False)
+        else:
+            self._mode = self.MODE_NONE
+            self._set_roi_interactive(True)
+
+    def _on_visibility_toggled(self, checked: bool):
+        """Toggle ROI overlay visibility."""
+        if self.roi_rect is None:
+            return
+        self._is_visible = checked
+        self.roi_rect.setVisible(checked)
+
+    def _on_move_enabled_clicked(self):
+        """Toggle ability to move/resize ROI via mouse interaction."""
+        if self.roi_rect is None:
+            return
+        movable = self.move_enabled_button.isChecked()
+        self.roi_rect.translatable = movable
+        self.roi_rect.resizable = movable
+        if movable:
+            self.roi_rect.setAcceptedMouseButtons(Qt.LeftButton)
+            # Add scale handle if none exist
+            if not self.roi_rect.handles:
+                self.roi_rect.addScaleHandle([1, 1], [0, 0])
+        else:
+            self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
+            # Remove all handles so they can't reappear on redraw
+            while self.roi_rect.handles:
+                self.roi_rect.removeHandle(0)
+
+    def _on_thickness_clicked(self):
+        """Open a dialog to set the ROI pen thickness."""
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Line Thickness")
+        layout = QVBoxLayout(dlg)
+
+        row = QHBoxLayout()
+        row.addWidget(QLabel("Thickness (px):"))
+        spin = QSpinBox()
+        spin.setRange(1, 20)
+        spin.setValue(self._pen_width)
+        row.addWidget(spin)
+        layout.addLayout(row)
+
+        btn_row = QHBoxLayout()
+        ok_btn = QPushButton("OK")
+        cancel_btn = QPushButton("Cancel")
+        btn_row.addWidget(ok_btn)
+        btn_row.addWidget(cancel_btn)
+        layout.addLayout(btn_row)
+
+        ok_btn.clicked.connect(dlg.accept)
+        cancel_btn.clicked.connect(dlg.reject)
+
+        if dlg.exec_() == QDialog.Accepted:
+            self._pen_width = spin.value()
+            self._apply_pen()
+
+    def _on_color_changed(self, color: QColor):
+        """Update ROI pen color when user picks a new color."""
+        if self.roi_rect is None:
+            return
+        self._apply_pen()
+
+    # ── Scene mouse event handlers ───────────────────────────────────────
+
+    def _on_scene_clicked(self, event):
+        """Handle mouse clicks on the ViewBox scene for draw/center modes."""
+        if self._mode == self.MODE_NONE or self._view_box is None:
+            return
+
+        # Only respond to left-click
+        if event.button() != Qt.LeftButton:
+            return
+
+        scene_pos = event.scenePos()
+        data_pos = self._view_box.mapSceneToView(scene_pos)
+
+        if self._mode == self.MODE_DRAW:
+            self._handle_draw_click(data_pos)
+            event.accept()
+        elif self._mode == self.MODE_CENTER:
+            self._handle_centering_click(data_pos)
+            event.accept()
+
+    def _on_scene_moved(self, scene_pos):
+        """Live-update ROI size while dragging during draw mode."""
+        if self._mode != self.MODE_DRAW or self._draw_origin is None:
+            return
+        if self._view_box is None or self.roi_rect is None:
+            return
+
+        data_pos = self._view_box.mapSceneToView(scene_pos)
+        self._update_roi_from_corners(self._draw_origin, data_pos)
+
+    # ── Draw mode logic ──────────────────────────────────────────────────
+
+    def _handle_draw_click(self, data_pos: QPointF):
+        """First click sets origin, second click finalises the ROI."""
+        if self._draw_origin is None:
+            # First click – start drawing
+            self._draw_origin = data_pos
+            self._set_visible(True)
+            self.roi_rect.setPos(data_pos.x(), data_pos.y())
+            self.roi_rect.setSize([1, 1])
+        else:
+            # Second click – finalise
+            self._update_roi_from_corners(self._draw_origin, data_pos)
+            self._sync_spinboxes_from_roi()
+            self._draw_origin = None
+            # Exit draw mode
+            self.draw_roi_button.setChecked(False)
+
+    def _update_roi_from_corners(self, p1: QPointF, p2: QPointF):
+        """Set ROI position/size from two corner points."""
+        x = min(p1.x(), p2.x())
+        y = min(p1.y(), p2.y())
+        w = abs(p2.x() - p1.x())
+        h = abs(p2.y() - p1.y())
+        # Enforce minimum size of 1 pixel
+        w = max(w, 1)
+        h = max(h, 1)
+        self.roi_rect.setPos(x, y)
+        self.roi_rect.setSize([w, h])
+
+    # ── Center mode logic ────────────────────────────────────────────────
+
+    def _handle_centering_click(self, data_pos: QPointF):
+        """Move ROI center to the clicked position, keep size."""
+        if self.roi_rect is None:
+            return
+        size = self.roi_rect.size()
+        w, h = size.x(), size.y()
+        new_x = data_pos.x() - w / 2.0
+        new_y = data_pos.y() - h / 2.0
+        self.roi_rect.setPos(new_x, new_y)
+        self._set_visible(True)
+        self._sync_spinboxes_from_roi()
+        # Exit center mode
+        self.select_center_button.setChecked(False)
+
+    # ── ROI ↔ Spinbox synchronisation ────────────────────────────────────
+
+    def _on_roi_moved(self):
+        """Called when user finishes dragging the ROI interactively."""
+        if self._syncing or self._mode != self.MODE_NONE:
+            return
+        self._sync_spinboxes_from_roi()
+
+    def _sync_spinboxes_from_roi(self):
+        """Push ROI geometry into the PyDMSpinbox widgets (EPICS channels)."""
+        if self.roi_rect is None or self._syncing:
+            return
+        self._syncing = True
+        try:
+            pos = self.roi_rect.pos()
+            size = self.roi_rect.size()
+            cx = pos.x() + size.x() / 2.0
+            cy = pos.y() + size.y() / 2.0
+            wx = size.x()
+            wy = size.y()
+
+            # PyDMSpinbox_13 = CenterX, PyDMSpinbox_12 = CenterY
+            # PyDMSpinbox_11 = WidthX,  PyDMSpinbox_14 = WidthY
+            for spinbox, value in (
+                (self.PyDMSpinbox_13, cx),
+                (self.PyDMSpinbox_12, cy),
+                (self.PyDMSpinbox_11, wx),
+                (self.PyDMSpinbox_14, wy),
+            ):
+                spinbox.setValue(value)
+                spinbox.send_value_signal[float].emit(value)
+        finally:
+            self._syncing = False
+
+    def _sync_roi_from_spinboxes(self, _value=None):
+        """Debounce EPICS channel updates — restart timer on each call."""
+        if self._syncing or self.roi_rect is None:
+            return
+        self._spinbox_debounce.start()
+
+    def _apply_spinbox_to_roi(self):
+        """Actually update ROI geometry after debounce settles."""
+        if self._syncing or self.roi_rect is None:
+            return
+        self._syncing = True
+        try:
+            cx = self.PyDMSpinbox_13.value
+            cy = self.PyDMSpinbox_12.value
+            wx = self.PyDMSpinbox_11.value
+            wy = self.PyDMSpinbox_14.value
+            if None in (cx, cy, wx, wy) or wx <= 0 or wy <= 0:
+                return
+            x = cx - wx / 2.0
+            y = cy - wy / 2.0
+            self.roi_rect.setPos(x, y)
+            self.roi_rect.setSize([wx, wy])
+        finally:
+            self._syncing = False
+
+    # ── Helpers ──────────────────────────────────────────────────────────
+
+    def _set_visible(self, visible: bool):
+        """Single source of truth for ROI visibility state."""
+        if self.roi_rect is None:
+            return
+        self._is_visible = visible
+        self.roi_rect.setVisible(visible)
+        self.visibility_button.setChecked(visible)
+
+    def _set_roi_interactive(self, interactive: bool):
+        """Enable/disable direct mouse interaction with the ROI handles.
+        
+        Always defers to the move_enabled_button state — if move is not
+        enabled, interaction stays off regardless of the request.
+        """
+        if self.roi_rect is None:
+            return
+        allowed = interactive and self.move_enabled_button.isChecked()
+        if allowed:
+            self.roi_rect.setAcceptedMouseButtons(Qt.LeftButton)
+        else:
+            self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
+
+    def _apply_pen(self):
+        """Apply current color and thickness to the ROI pen."""
+        if self.roi_rect is None:
+            return
+        color = self.get_roi_color()
+        pen = pg.mkPen(color, width=self._pen_width)
+        hover_pen = pg.mkPen(
+            self._inverted_color(color), width=self._pen_width
+        )
+        self.roi_rect.setPen(pen)
+        self.roi_rect.hoverPen = hover_pen
+        # Force the cached currentPen to match the current state
+        if self.roi_rect.mouseHovering:
+            self.roi_rect.currentPen = hover_pen
+        else:
+            self.roi_rect.currentPen = pen
+        # Ensure bounding rect accounts for the full pen width
+        self.roi_rect.prepareGeometryChange()
+        self.roi_rect.update()
+
+    @staticmethod
+    def _inverted_color(color: QColor) -> QColor:
+        """Return the RGB-inverted version of a color."""
+        return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue())
+
+    def get_roi_color(self) -> QColor:
+        return self.color_selection_button.color
+
+    def set_roi_color(self, color: QColor) -> None:
+        self.color_selection_button.color = color
+
+    roi_color = pyqtProperty(QColor, get_roi_color, set_roi_color)

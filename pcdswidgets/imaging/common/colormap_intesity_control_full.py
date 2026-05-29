@@ -59,17 +59,20 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         self.colormap_combo.currentIndexChanged.connect(self._on_colormap_changed)
         self.normalize_check.toggled.connect(self._on_normalize_toggled)
 
-    def link_image_view(self, image_view: PyDMImageView) -> None:
+    def link_parent_widgets(self, parent: any) -> None:
         """
         Connect this config widget to a PyDMImageView.
 
         Called by the parent widget at adoption time. Links the histogram
         to the image item and syncs the UI state to current image settings.
         """
-        self._image_view = image_view
+        if hasattr(parent, "image_view"):
+            self._image_view = parent.image_view
+        else:
+            return
 
         # Link histogram to the image's ImageItem for live level control
-        self._histogram.setImageItem(image_view.getImageItem())
+        self._histogram.setImageItem(self._image_view.getImageItem())
 
         #update colormap on image to default
         idx = self.colormap_combo.currentIndex()
