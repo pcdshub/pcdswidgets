@@ -127,10 +127,13 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self.move_enabled_button.setCheckable(True)
         self.visibility_button.setCheckable(True)
 
-        self.draw_roi_button.toggled.connect(self._on_draw_toggled)
-        self.select_center_button.toggled.connect(self._on_center_toggled)
-        self.move_enabled_button.toggled.connect(self._on_move_toggled)
+        #mode select toggles
+        self.draw_roi_button.toggled.connect(lambda new_state: self._on_mode_toggled(self.MODE_DRAW, new_state))
+        self.select_center_button.toggled.connect(lambda new_state: self._on_mode_toggled(self.MODE_CENTER, new_state))
+        self.move_enabled_button.toggled.connect(lambda new_state: self._on_mode_toggled(self.MODE_MOVE, new_state))
+        # visibility toggle
         self.visibility_button.toggled.connect(self._on_visibility_toggled)
+        # open pen edit settings
         self.color_selection_button.colorChanged.connect(self._on_color_changed)
         self.line_thickness_button.clicked.connect(self._on_thickness_clicked)
 
@@ -150,15 +153,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
             plot_item = self._image_view.getView()
             self._view_box = plot_item.getViewBox()
         except Exception:
-            logger.debug("Could not get ViewBox for overlays", exc_info=True)
+            logger.error("Could not get ViewBox for overlays")
             return
 
-        self.roi_rect = CamROI()
-        self.roi_rect.update_pen(self.get_roi_color(), self._pen_width)
-        self.roi_rect.setVisible(False)
-        self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
-        self.roi_rect.translatable = False
-        self.roi_rect.resizable = False
+        self.roi_rect = CamROI(self.get_roi_color(), self._pen_width)
         self._view_box.addItem(self.roi_rect)
 
         # Sync ROI → spinboxes when user finishes dragging in move mode
@@ -179,52 +177,43 @@ class EpicsRoiFull(EpicsRoiFullBase):
     # so they don't fight the user.  When an action completes (second draw
     # click, center click, or drag-finish) we push ROI → spinboxes.
 
-    def _on_draw_toggled(self, checked: bool):
-        """Enter/exit draw-ROI mode."""
+    def _on_mode_toggled(self, mode: int, checked: bool) -> None:
+        """Unified handler for mutually exclusive mode buttons."""
         if checked:
-            self._enter_mode(self.MODE_DRAW)
+            self._enter_mode(mode)
         else:
-            self._exit_mode()
-            self._draw_origin = None
-
-    def _on_center_toggled(self, checked: bool):
-        """Enter/exit select-center mode."""
-        if checked:
-            self._enter_mode(self.MODE_CENTER)
-        else:
-            self._exit_mode()
-
-    def _on_move_toggled(self, checked: bool):
-        """Enter/exit move/resize mode."""
-        if checked:
-            self._enter_mode(self.MODE_MOVE)
-            if self.roi_rect:
-                self.roi_rect.set_movable(True)
-        else:
-            if self.roi_rect:
-                self.roi_rect.set_movable(False)
-            self._exit_mode()
+            self._exit_mode(mode)
 
     def _enter_mode(self, mode: int) -> None:
         """Activate a mode, deactivating any other."""
         # Uncheck other mode buttons first — their toggled(False) handlers
-        # will call _exit_mode() which resets _mode to NONE harmlessly.
-        mode_buttons = {
+        # see _mode == NONE and exit harmlessly.
+        for m, btn in self._mode_buttons().items():
+            if m != mode:
+                btn.setChecked(False)
+        self._mode = mode
+        # Mode-specific setup
+        if mode == self.MODE_MOVE and self.roi_rect:
+            self.roi_rect.set_movable(True)
+
+    def _exit_mode(self, mode: int) -> None:
+        """Leave *mode* and return to idle. No-op if already in a different mode."""
+        if self._mode != mode:
+            return
+        # Mode-specific teardown
+        if mode == self.MODE_DRAW:
+            self._draw_origin = None
+        elif mode == self.MODE_MOVE and self.roi_rect:
+            self.roi_rect.set_movable(False)
+        self._mode = self.MODE_NONE
+
+    def _mode_buttons(self) -> dict:
+        """Map mode constants to their toggle buttons."""
+        return {
             self.MODE_DRAW: self.draw_roi_button,
             self.MODE_CENTER: self.select_center_button,
             self.MODE_MOVE: self.move_enabled_button,
         }
-        for m, btn in mode_buttons.items():
-            if m != mode:
-                btn.setChecked(False)
-        # Set mode last so the unchecking cascade doesn't clobber it.
-        self._mode = mode
-
-    def _exit_mode(self) -> None:
-        """Return to idle (MODE_NONE) if not already re-entering another mode."""
-        if self._mode == self.MODE_NONE:
-            return
-        self._mode = self.MODE_NONE
 
     def _on_visibility_toggled(self, checked: bool):
         """Toggle ROI overlay visibility."""

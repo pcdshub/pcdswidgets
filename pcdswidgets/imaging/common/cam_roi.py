@@ -20,8 +20,13 @@ class CamROI(pg.ROI):
       typical EPICS area-detector ROI plugin PVs).
     """
 
-    def __init__(self, pos=(0, 0), size=(1, 1), **kwargs):
-        super().__init__(pos, size, **kwargs)
+    def __init__(self, color, pen_width, **kwargs):
+        super().__init__(pos=(0, 0), size=(1, 1), **kwargs)
+        self.update_pen( color, pen_width)
+        self.setVisible(False)
+        self.setAcceptedMouseButtons(Qt.NoButton)
+        self.translatable = False
+        self.resizable = False
 
     # ── Qt geometry overrides ────────────────────────────────────────────
 
