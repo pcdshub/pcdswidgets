@@ -105,6 +105,17 @@ class EpicsRoiFull(EpicsRoiFullBase):
             if (name not in self._macro_values)  or (self._macro_values[name] == ""):
                 self._macro_values[name] = value
 
+    # The nickname macro is not auto-generated because no child widgets
+    # reference it in their channel templates. We define it manually here
+    # so the parent adoption code can identify this ROI by name.
+    def get_nickname(self) -> str:
+        return self._get_macro("nickname")
+
+    def set_nickname(self, value: str) -> None:
+        self._set_macro("nickname", value)
+
+    nickname = pyqtProperty(str, get_nickname, set_nickname)
+
     def _init_button_icons(self):
         """init buttons"""
 
