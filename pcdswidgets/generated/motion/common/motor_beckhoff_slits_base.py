@@ -44,18 +44,18 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     ui_form = Ui_Form
     _macro_to_widget = {
         "prefix": [
+            "CenterRBV2",
+            "CenterRBV1",
+            "ByteIndicatorGap1Move",
+            "ByteIndicatorCenter1Move",
+            "CenterSet1",
+            "ByteIndicatorCenter2Move",
+            "GapSet2",
+            "GapRBV2",
             "GapRBV1",
             "GapSet1",
-            "ByteIndicatorGap2Move",
-            "CenterRBV1",
-            "ByteIndicatorCenter1Move",
-            "ByteIndicatorCenter2Move",
-            "GapRBV2",
-            "CenterRBV2",
-            "ByteIndicatorGap1Move",
             "CenterSet2",
-            "CenterSet1",
-            "GapSet2",
+            "ByteIndicatorGap2Move",
         ],
     }
     _widget_to_macro = {
