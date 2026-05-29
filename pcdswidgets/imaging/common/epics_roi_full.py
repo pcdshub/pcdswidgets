@@ -5,8 +5,8 @@ This file can be safely edited to change the runtime behavior of the widget.
 """
 import logging
 
-import pyqtgraph as pg
-from qtpy.QtCore import QPointF, QRectF, QTimer, Qt
+from pydm.widgets import PyDMImageView
+from qtpy.QtCore import QPointF, Qt, QTimer
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QSpinBox, QVBoxLayout
 
@@ -15,41 +15,22 @@ try:
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
-from pydm.widgets import PyDMImageView
-
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.epics_roi_full_base import EpicsRoiFullBase
-from pcdswidgets.icons.glyphs import PEN_TOOL, CROSSHAIR, EYE, MOVE, THICKNESS
+from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS
+from pcdswidgets.imaging.common.cam_roi import CamROI
 
 logger = logging.getLogger(__name__)
 
 
-class _PaddedRectROI(pg.ROI):
-    """ROI that draws a rectangle with pen-width-aware boundingRect.
-
-    Unlike pg.RectROI, this does not add any handles by default,
-    avoiding stale handle artifacts.
-    """
-
-    def __init__(self, pos, size, **kwargs):
-        super().__init__(pos, size, **kwargs)
-
-    def boundingRect(self) -> QRectF:
-        pw = self.currentPen.width() if self.currentPen else 1
-        margin = pw / 2.0 + 1
-        return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(
-            -margin, -margin, margin, margin
-        )
-
-    def stateChanged(self, finish=True):
-        # Tell Qt our geometry changed *before* the parent repaints,
-        # so it invalidates the old (padded) rect as well as the new one.
-        self.prepareGeometryChange()
-        super().stateChanged(finish)
-
-
 class EpicsRoiFull(EpicsRoiFullBase):
+    """Interactive ROI overlay widget for EPICS area-detector cameras.
+
+    Provides draw, center-select, move/resize, and color/thickness controls
+    for a rectangular ROI overlaid on a PyDMImageView.  ROI geometry is
+    synchronised bidirectionally with EPICS PVs via PyDMSpinbox channels.
+    """
 
     draw_roi_button: QPushButton
     select_center_button: QPushButton
@@ -74,7 +55,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
         self._set_macro_defaults()
 
-        self.roi_rect: pg.RectROI = None
+        self.roi_rect: CamROI | None = None
         self._image_view: PyDMImageView = None
         self._view_box = None
         self._mode = self.MODE_NONE
@@ -93,6 +74,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._connect_buttons()
 
     def _set_macro_defaults(self):
+        """Populate unset macros with sensible defaults for ROI1."""
         default_map = {
             "nickname" : "ROI 1",
             "roi_plugin" : ":ROI1:",
@@ -117,9 +99,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
     nickname = pyqtProperty(str, get_nickname, set_nickname)
 
     def _init_button_icons(self):
-        """init buttons"""
-
-        # link icons svgs here to avoid path issues
+        """Assign SVG icons to the toolbar buttons."""
         icon_map = {
             PEN_TOOL: self.draw_roi_button,
             CROSSHAIR: self.select_center_button,
@@ -152,10 +132,11 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     def link_parent_widgets(self, parent) -> None:
         """
-        Connect this config widget to a PyDMImageView.
+        Connect this ROI widget to a parent's PyDMImageView.
 
-        Called by the parent widget at adoption time. Links the histogram
-        to the image item and syncs the UI state to current image settings.
+        Called by the parent widget at adoption time.  Creates the ROI
+        overlay item, attaches it to the ViewBox, and wires up mouse and
+        spinbox signals for bidirectional synchronisation.
         """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
@@ -168,12 +149,8 @@ class EpicsRoiFull(EpicsRoiFullBase):
             logger.debug("Could not get ViewBox for overlays", exc_info=True)
             return
 
-        color = self.get_roi_color()
-        self.roi_rect = _PaddedRectROI(
-            [0, 0], [1, 1],
-            pen=pg.mkPen(color, width=self._pen_width),
-            hoverPen=pg.mkPen(self._inverted_color(color), width=self._pen_width),
-        )
+        self.roi_rect = CamROI()
+        self.roi_rect.update_pen(self.get_roi_color(), self._pen_width)
         self.roi_rect.setVisible(False)
         self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
         self.roi_rect.translatable = False
@@ -228,19 +205,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         """Toggle ability to move/resize ROI via mouse interaction."""
         if self.roi_rect is None:
             return
-        movable = self.move_enabled_button.isChecked()
-        self.roi_rect.translatable = movable
-        self.roi_rect.resizable = movable
-        if movable:
-            self.roi_rect.setAcceptedMouseButtons(Qt.LeftButton)
-            # Add scale handle if none exist
-            if not self.roi_rect.handles:
-                self.roi_rect.addScaleHandle([1, 1], [0, 0])
-        else:
-            self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
-            # Remove all handles so they can't reappear on redraw
-            while self.roi_rect.handles:
-                self.roi_rect.removeHandle(0)
+        self.roi_rect.set_movable(self.move_enabled_button.isChecked())
 
     def _on_thickness_clicked(self):
         """Open a dialog to set the ROI pen thickness."""
@@ -319,7 +284,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             self.roi_rect.setSize([1, 1])
         else:
             # Second click – finalise
-            self._update_roi_from_corners(self._draw_origin, data_pos)
+            self.roi_rect.set_from_corners(self._draw_origin, data_pos)
             self._sync_spinboxes_from_roi()
             self._draw_origin = None
             # Exit draw mode
@@ -327,15 +292,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     def _update_roi_from_corners(self, p1: QPointF, p2: QPointF):
         """Set ROI position/size from two corner points."""
-        x = min(p1.x(), p2.x())
-        y = min(p1.y(), p2.y())
-        w = abs(p2.x() - p1.x())
-        h = abs(p2.y() - p1.y())
-        # Enforce minimum size of 1 pixel
-        w = max(w, 1)
-        h = max(h, 1)
-        self.roi_rect.setPos(x, y)
-        self.roi_rect.setSize([w, h])
+        self.roi_rect.set_from_corners(p1, p2)
 
     # ── Center mode logic ────────────────────────────────────────────────
 
@@ -343,11 +300,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         """Move ROI center to the clicked position, keep size."""
         if self.roi_rect is None:
             return
-        size = self.roi_rect.size()
-        w, h = size.x(), size.y()
-        new_x = data_pos.x() - w / 2.0
-        new_y = data_pos.y() - h / 2.0
-        self.roi_rect.setPos(new_x, new_y)
+        self.roi_rect.move_center_to(data_pos)
         self._set_visible(True)
         self._sync_spinboxes_from_roi()
         # Exit center mode
@@ -367,12 +320,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             return
         self._syncing = True
         try:
-            pos = self.roi_rect.pos()
-            size = self.roi_rect.size()
-            cx = pos.x() + size.x() / 2.0
-            cy = pos.y() + size.y() / 2.0
-            wx = size.x()
-            wy = size.y()
+            cx, cy, wx, wy = self.roi_rect.get_geometry()
 
             # PyDMSpinbox_13 = CenterX, PyDMSpinbox_12 = CenterY
             # PyDMSpinbox_11 = WidthX,  PyDMSpinbox_14 = WidthY
@@ -403,12 +351,9 @@ class EpicsRoiFull(EpicsRoiFullBase):
             cy = self.PyDMSpinbox_12.value
             wx = self.PyDMSpinbox_11.value
             wy = self.PyDMSpinbox_14.value
-            if None in (cx, cy, wx, wy) or wx <= 0 or wy <= 0:
+            if None in (cx, cy, wx, wy):
                 return
-            x = cx - wx / 2.0
-            y = cy - wy / 2.0
-            self.roi_rect.setPos(x, y)
-            self.roi_rect.setSize([wx, wy])
+            self.roi_rect.set_geometry(cx, cy, wx, wy)
         finally:
             self._syncing = False
 
@@ -424,42 +369,20 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     def _set_roi_interactive(self, interactive: bool):
         """Enable/disable direct mouse interaction with the ROI handles.
-        
+
         Always defers to the move_enabled_button state — if move is not
         enabled, interaction stays off regardless of the request.
         """
         if self.roi_rect is None:
             return
         allowed = interactive and self.move_enabled_button.isChecked()
-        if allowed:
-            self.roi_rect.setAcceptedMouseButtons(Qt.LeftButton)
-        else:
-            self.roi_rect.setAcceptedMouseButtons(Qt.NoButton)
+        self.roi_rect.set_interactive(allowed)
 
     def _apply_pen(self):
         """Apply current color and thickness to the ROI pen."""
         if self.roi_rect is None:
             return
-        color = self.get_roi_color()
-        pen = pg.mkPen(color, width=self._pen_width)
-        hover_pen = pg.mkPen(
-            self._inverted_color(color), width=self._pen_width
-        )
-        self.roi_rect.setPen(pen)
-        self.roi_rect.hoverPen = hover_pen
-        # Force the cached currentPen to match the current state
-        if self.roi_rect.mouseHovering:
-            self.roi_rect.currentPen = hover_pen
-        else:
-            self.roi_rect.currentPen = pen
-        # Ensure bounding rect accounts for the full pen width
-        self.roi_rect.prepareGeometryChange()
-        self.roi_rect.update()
-
-    @staticmethod
-    def _inverted_color(color: QColor) -> QColor:
-        """Return the RGB-inverted version of a color."""
-        return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue())
+        self.roi_rect.update_pen(self.get_roi_color(), self._pen_width)
 
     def get_roi_color(self) -> QColor:
         return self.color_selection_button.color
