@@ -151,7 +151,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
             # always disable other modes
             self.move_enabled_button.setChecked(False)
             self.select_center_button.setChecked(False)
-        print("draw")
 
     def _on_move_toggle(self, is_enabled: bool):
         self.roi_rect.set_movable(is_enabled)
@@ -165,18 +164,14 @@ class EpicsRoiFull(EpicsRoiFullBase):
         else:
             self.roi_rect.sigRegionChangeFinished.disconnect(self._push_roi_to_spinbox)
 
-        print("move")
-
     def _on_centering_toggle(self, is_enabled: bool):
         if is_enabled:
             # always disable other modes
             self.move_enabled_button.setChecked(False)
             self.draw_roi_button.setChecked(False)
-        print("center")
 
     def _on_scene_clicked(self, event):
         """Handle mouse clicks on the ViewBox scene for draw/center modes."""
-        print("scene_clicked")
         # Only respond to left-click
         if event.button() != Qt.LeftButton:
             return
@@ -210,7 +205,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     def _push_roi_to_spinbox(self):
         """Push current ROI geometry to the EPICS spinbox channels."""
-        print("roi_to_spin")
         if self._is_xy_center:
             geometry = self.roi_rect.get_geometry_wrt_center()
         else:
@@ -222,7 +216,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
     def _on_scene_moved(self, scene_pos):
         """Live-update ROI shape while dragging during draw mode."""
         if self._draw_origin is not None:
-            print("scene moved")
             data_pos = self._view_box.mapSceneToView(scene_pos)
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
 
@@ -230,7 +223,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
         """update the ROI if spinbox values change not due to user input"""
         # only update ROI if the move controls are not active
         if not self.user_moving_roi:
-            print("spinbox_changed")
             values = [sb.value for sb in self.roi_spinboxes]
             if None in values:
                 return
