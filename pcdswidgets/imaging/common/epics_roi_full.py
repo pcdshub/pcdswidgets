@@ -19,7 +19,7 @@ except ImportError:
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.epics_roi_full_base import EpicsRoiFullBase
-from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS
+from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS, CAM_COG
 from pcdswidgets.imaging.common.cam_roi import CamROI
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.camera,
+        icon=CAM_COG,
     )
 
     def __init__(self, *args, **kwargs):
