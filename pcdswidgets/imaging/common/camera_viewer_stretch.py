@@ -79,17 +79,6 @@ class CameraViewerStretch(CameraViewerStretchBase):
             if (name not in self._macro_values) or (self._macro_values[name] == ""):
                 self._macro_values[name] = value
 
-    def set_cam_prefix(self, value: str) -> None:
-        """Override to propagate cam_prefix to adopted sub-widgets."""
-        super().set_cam_prefix(value)
-        self._propagate_cam_prefix(value)
-
-    def _propagate_cam_prefix(self, value: str) -> None:
-        """Push cam_prefix to all adopted sub-widgets that accept it."""
-        for widget in self._adopted_widgets:
-            if hasattr(widget, "cam_prefix"):
-                widget.cam_prefix = value
-
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
 
