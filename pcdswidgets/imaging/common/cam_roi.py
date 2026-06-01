@@ -104,10 +104,10 @@ class CamROI(pg.ROI):
             width = self.pen.width()
 
         self.pen = pg.mkPen(color=color, width=width)
-        # self.hover_pen = pg.mkPen(self._inverted_color(color), width)
+        self.hoverPen = pg.mkPen(color=self._inverted_color(color), width=width)
 
         if self.mouseHovering:
-            self.currentPen = self.hover_pen
+            self.currentPen = self.hoverPen
         else:
             self.currentPen = self.pen
 
