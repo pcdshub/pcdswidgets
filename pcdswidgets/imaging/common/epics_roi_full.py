@@ -52,15 +52,16 @@ class EpicsRoiFull(EpicsRoiFullBase):
         super().__init__(*args, **kwargs)
 
         self._set_macro_defaults()
-
-        # if the X,Y points define center of box or starting edge
-        self.startpoint_iscenter = True
+        self._nickname = "ROI SELECT"
 
         self._image_view: PyDMImageView = None
         self._view_box = None
         self._draw_origin: QPointF = None
 
         self.roi_rect = CamROI(self.get_roi_color(), 3, self)
+
+        # if the X,Y epics PVs define center of box or starting edge
+        self._is_xy_center = False
 
         self._init_button_icons()
         self._connect_buttons()
@@ -210,7 +211,11 @@ class EpicsRoiFull(EpicsRoiFullBase):
     def _push_roi_to_spinbox(self):
         """Push current ROI geometry to the EPICS spinbox channels."""
         print("roi_to_spin")
-        for spinbox, value in zip(self.roi_spinboxes, self.roi_rect.get_geometry()):
+        if self._is_xy_center:
+            geometry = self.roi_rect.get_geometry_wrt_center()
+        else:
+            geometry = self.roi_rect.get_geometry_wrt_corner()
+        for spinbox, value in zip(self.roi_spinboxes, geometry):
             spinbox.setValue(value)
             spinbox.send_value()
 
@@ -229,13 +234,16 @@ class EpicsRoiFull(EpicsRoiFullBase):
             values = [sb.value for sb in self.roi_spinboxes]
             if None in values:
                 return
-            self.roi_rect.set_geometry(*values)
+            if self.is_xy_center:
+                self.roi_rect.set_geometry_from_center(*values)
+            else:
+                self.roi_rect.set_geometry_from_corner(*values)
 
     # ── Properties ───────────────────────────────────────
 
     @property
     def roi_spinboxes(self):
-        """Coordinate control spinboxes in geometry order: (center_x, center_y, width_x, width_y)."""
+        """Coordinate control spinboxes in geometry order: (x, y, width_x, width_y)."""
         return (self.x_spinbox, self.y_spinbox, self.height_spinbox, self.width_spinbox)
 
     @property
@@ -265,3 +273,11 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
+
+    def get_is_xy_center(self) -> str:
+        return self._is_xy_center
+
+    def set_is_xy_center(self, value: str) -> None:
+        self._is_xy_center = value
+
+    is_xy_center = pyqtProperty(str, get_is_xy_center, set_is_xy_center)

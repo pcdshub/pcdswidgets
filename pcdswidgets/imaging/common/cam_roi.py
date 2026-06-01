@@ -23,6 +23,7 @@ class CamROI(pg.ROI):
 
     def __init__(self, ini_color, init_width, parent_window, **kwargs):
         super().__init__(pos=(0, 0), size=(1, 1), **kwargs)
+
         self.setVisible(False)
         self.setAcceptedMouseButtons(Qt.NoButton)
         self.translatable = False
@@ -44,7 +45,7 @@ class CamROI(pg.ROI):
 
     # ── Geometry (center + size) ─────────────────────────────────────────
 
-    def get_geometry(self) -> tuple[float, float, float, float]:
+    def get_geometry_wrt_center(self) -> tuple[float, float, float, float]:
         """Return current ROI as (center_x, center_y, width, height)."""
         pos = self.pos()
         size = self.size()
@@ -52,7 +53,13 @@ class CamROI(pg.ROI):
         cy = pos.y() + size.y() / 2.0
         return cx, cy, size.x(), size.y()
 
-    def set_geometry(self, cx: float, cy: float, wx: float, wy: float) -> None:
+    def get_geometry_wrt_corner(self) -> tuple[float, float, float, float]:
+        """Return current ROI as (start_z, start_y, width, height)."""
+        pos = self.pos()
+        size = self.size()
+        return pos.x(), pos.y(), size.x(), size.y()
+
+    def set_geometry_from_center(self, cx: float, cy: float, wx: float, wy: float) -> None:
         """Set ROI position/size from center coordinates and dimensions.
 
         Does nothing if width or height are non-positive.
@@ -60,6 +67,16 @@ class CamROI(pg.ROI):
         if wx <= 0 or wy <= 0:
             return
         self.setPos(cx - wx / 2.0, cy - wy / 2.0)
+        self.setSize([wx, wy])
+
+    def set_geometry_from_corner(self, x_start: float, y_start: float, wx: float, wy: float) -> None:
+        """Set ROI position/size from starting coordinates and dimensions.
+
+        Does nothing if width or height are non-positive.
+        """
+        if wx <= 0 or wy <= 0:
+            return
+        self.setPos(x_start, y_start)
         self.setSize([wx, wy])
 
     def set_from_corners(self, p1: QPointF, p2: QPointF) -> None:
