@@ -21,13 +21,14 @@ class CamROI(pg.ROI):
       typical EPICS area-detector ROI plugin PVs).
     """
 
-    def __init__(self, ini_color, init_width, **kwargs):
+    def __init__(self, ini_color, init_width, parent_window, **kwargs):
         super().__init__(pos=(0, 0), size=(1, 1), **kwargs)
         self.setVisible(False)
         self.setAcceptedMouseButtons(Qt.NoButton)
         self.translatable = False
         self.resizable = False
         self.change_pen(ini_color, init_width)
+        self.parent_window = parent_window
 
     # ── Qt geometry overrides ────────────────────────────────────────────
 
@@ -115,7 +116,7 @@ class CamROI(pg.ROI):
 
     def thickness_dialog(self):
         """Open a dialog to for user to select ROI pen thickness."""
-        dlg = QDialog(self)
+        dlg = QDialog(self.parent_window)
         dlg.setWindowTitle("Line Thickness")
         layout = QVBoxLayout(dlg)
 
@@ -123,7 +124,7 @@ class CamROI(pg.ROI):
         row.addWidget(QLabel("Thickness (px):"))
         spin = QSpinBox()
         spin.setRange(1, 20)
-        spin.setValue(self._pen_width)
+        spin.setValue(self.pen.width())
         row.addWidget(spin)
         layout.addLayout(row)
 

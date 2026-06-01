@@ -60,7 +60,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._view_box = None
         self._draw_origin: QPointF = None
 
-        self.roi_rect = CamROI(self.get_roi_color(), 3)
+        self.roi_rect = CamROI(self.get_roi_color(), 3, self)
 
         self._init_button_icons()
         self._connect_buttons()
