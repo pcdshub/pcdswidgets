@@ -163,6 +163,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
         )
         # add the children in collapsible sections
         cam_prefix = self._macro_values.get("cam_prefix", "")
+        cam_stream_plugin = self._macro_values.get("stream_plugin", "IMAGE1")
+
         for child in candidates:
             section = CollapsibleSection(
                 child,
@@ -172,9 +174,11 @@ class CameraViewerStretch(CameraViewerStretchBase):
             sidebar_layout.addWidget(section)
             section.show()
             self._adopted_widgets.append(child)
-            # Propagate cam_prefix to sub-widget at adoption time
+            # Propagate macros to sub-widget at adoption time
             if cam_prefix and hasattr(child, "cam_prefix"):
                 child.cam_prefix = cam_prefix
+            if cam_stream_plugin and hasattr(child, "stream_plugin"):
+                child.stream_plugin = cam_stream_plugin
             # Link sub-widget to our image_view if it supports it
             if hasattr(child, "link_parent_widgets"):
                 child.link_parent_widgets(self)
