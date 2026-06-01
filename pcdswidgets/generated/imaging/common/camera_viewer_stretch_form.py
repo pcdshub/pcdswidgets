@@ -138,8 +138,12 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.nickname_label.setText(_translate("Form", "${nickname}"))
         self.sidebar_toggle.setText(_translate("Form", "☰"))
-        self.image_view.setImageChannel(_translate("Form", "ca://${cam_prefix}:IMAGE1:ArrayData"))
-        self.image_view.setWidthChannel(_translate("Form", "ca://${cam_prefix}:IMAGE1:ArraySize0_RBV"))
+        self.image_view.setImageChannel(
+            _translate("Form", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_waveform_channel}")
+        )
+        self.image_view.setWidthChannel(
+            _translate("Form", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_width_channel}")
+        )
         self.fps_label.setText(_translate("Form", "FPS:"))
         self.display_fps_label.setText(_translate("Form", "##"))
         self.fps_label2.setText(_translate("Form", " / "))

@@ -21,10 +21,6 @@ from .collapsible_section import CollapsibleSection
 
 logger = logging.getLogger(__name__)
 
-CA_SUFFIX = ":ArrayData"
-PVA_SUFFIX = "_PVA:Image1"
-
-
 class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
@@ -44,6 +40,9 @@ class CameraViewerStretch(CameraViewerStretchBase):
         self._initializing = True
         self._adopted_widgets: list[QtWidgets.QWidget] = []
         super().__init__(parent)
+
+        self._set_macro_defaults()
+
         self._frame_count = 0
         self._fps_rolling_buffer = deque(maxlen=5)
         self._first_show = True
@@ -67,6 +66,18 @@ class CameraViewerStretch(CameraViewerStretchBase):
 
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
         self._initializing = False
+
+    def _set_macro_defaults(self):
+        """Populate unset macros with sensible defaults for ROI1."""
+        default_map = {
+            "stream_plugin": ":IMAGE1:",
+            "img_protocol": "ca://",
+            "suffix_waveform_channel": "ArrayData",
+            "suffix_width_channel": "ArraySize0_RBV",
+        }
+        for name, value in default_map.items():
+            if (name not in self._macro_values) or (self._macro_values[name] == ""):
+                self._macro_values[name] = value
 
     def set_cam_prefix(self, value: str) -> None:
         """Override to propagate cam_prefix to adopted sub-widgets."""
