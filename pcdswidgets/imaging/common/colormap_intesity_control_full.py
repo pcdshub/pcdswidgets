@@ -34,7 +34,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.NONE,
+        icon=IconOptions.camera,
     )
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):

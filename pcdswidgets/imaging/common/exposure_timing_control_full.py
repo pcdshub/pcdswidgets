@@ -13,5 +13,5 @@ class ExposureTimingControlFull(ExposureTimingControlFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.NONE,
+        icon=IconOptions.camera,
     )
