@@ -209,7 +209,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             geometry = self.roi_rect.get_geometry_wrt_center()
         else:
             geometry = self.roi_rect.get_geometry_wrt_corner()
-        for spinbox, value in zip(self.roi_spinboxes, geometry):
+        for spinbox, value in zip(self.roi_spinboxes, geometry, strict=True):
             spinbox.setValue(value)
             spinbox.send_value()
 
