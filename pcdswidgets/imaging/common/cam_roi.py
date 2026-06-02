@@ -1,6 +1,5 @@
 """Managed rectangular ROI for camera image overlays."""
 
-
 import pyqtgraph as pg
 from qtpy.QtCore import QPointF, QRectF, Qt, Slot
 from qtpy.QtGui import QColor
