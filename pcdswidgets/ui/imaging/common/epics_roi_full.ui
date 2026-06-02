@@ -283,6 +283,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Change ROI color</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -301,6 +304,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Adjust ROI outline thickness</string>
        </property>
        <property name="text">
         <string/>
@@ -321,6 +327,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Toggle drag-to-move/resize ROI controls</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -340,6 +349,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Draw ROI: click top left corner then click bottom right to draw.</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -358,6 +370,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Click new on image to re-center ROI</string>
        </property>
        <property name="text">
         <string/>
@@ -380,6 +395,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Show/hide ROI overlay</string>
        </property>
        <property name="text">
         <string/>

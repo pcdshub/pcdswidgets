@@ -164,3 +164,11 @@ class Ui_Form(object):
         self.height_spinbox.setChannel(_translate("Form", "ca://${cam_prefix}${roi_plugin}${suffix_WidthY}"))
         self.label_18.setText(_translate("Form", "Y:"))
         self.label_22.setText(_translate("Form", "Width:"))
+        self.color_selection_button.setToolTip(_translate("Form", "Change ROI color"))
+        self.line_thickness_button.setToolTip(_translate("Form", "Adjust ROI outline thickness"))
+        self.move_enabled_button.setToolTip(_translate("Form", "Toggle drag-to-move/resize ROI controls"))
+        self.draw_roi_button.setToolTip(
+            _translate("Form", "Draw ROI: click top left corner then click bottom right to draw.")
+        )
+        self.select_center_button.setToolTip(_translate("Form", "Click new on image to re-center ROI"))
+        self.visibility_button.setToolTip(_translate("Form", "Show/hide ROI overlay"))
