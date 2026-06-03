@@ -2,6 +2,7 @@
 Helper for using designer to layout widgets.
 """
 
+import os
 from pathlib import Path
 from string import Template
 from typing import Any, ClassVar, Protocol
@@ -9,7 +10,9 @@ from typing import Any, ClassVar, Protocol
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
+from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from pydm.widgets.qtplugin_extensions import RulesExtension
+from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
@@ -18,7 +21,8 @@ import pcdswidgets
 from .designer_options import DesignerOptions
 from .icon_options import IconOptions
 
-ICON_AREA = Path(pcdswidgets.__file__).parent / "icons"
+MODULE_ROOT = Path(pcdswidgets.__file__).parent.resolve() # type: ignore
+ICON_AREA = MODULE_ROOT / "icons"
 
 ifont = IconFont()
 
@@ -72,6 +76,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ui_form.setupUi(self, self)  # type: ignore
+        self.update_relative_paths()
 
     def retranslateUi(self, *args, **kwargs):
         """Required function for setupUi to work in __init__"""
@@ -99,6 +104,43 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 return QIcon(get_icon_path(icon))
             case _:
                 return None
+
+    def update_relative_paths(self):
+        """
+        Special handling for PyDMRelatedDisplay and PyDMEmbeddedDisplay.
+
+        Relative filepaths are fully non-functional when used in pcdswidgets,
+        because they are relative to the filepath of the ui file (Display)
+        they are placed in, not relative to the package data here.
+
+        When we have relative filepaths in either of these widgets, swap them
+        to absolute filepaths at runtime, relative to the pcdswidgets module
+        directory.
+
+        For example, if pcdswidgets is installed at
+        /some/path/python/lib/site-packages/pcdswidgets
+        and we pick a relative path motion/smaract/test.ui
+        then we will replace it with the absolute path
+        /some/path/python/lib/site-packages/pcdswidgets/motion/smaract/test.ui
+        """
+        # ui-file loaded objects are attributes of the class
+        for obj in self.__dict__.values():
+            if isinstance(obj, PyDMEmbeddedDisplay):
+                filename = obj.readFilename()
+                if os.path.isabs(filename):
+                    continue
+                obj.setFilename(str(MODULE_ROOT / filename))
+            elif isinstance(obj, PyDMRelatedDisplayButton):
+                filenames = obj.readFilenames()
+                updated_one = False
+                for idx, fname in enumerate(filenames):
+                    if os.path.isabs(fname):
+                        continue
+                    filenames[idx] = str(MODULE_ROOT / fname)
+                    updated_one = True
+                if updated_one:
+                    obj.setFilenames(filenames)
+
 
     def _get_macro(self, macro_name: str) -> str:
         return self._macro_values[macro_name]
