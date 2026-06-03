@@ -176,8 +176,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
             if cam_prefix and hasattr(child, "cam_prefix"):
                 child.cam_prefix = cam_prefix
             # Link sub-widget to our image_view if it supports it
-            if hasattr(child, "link_image_view"):
-                child.link_image_view(self.image_view)
+            if hasattr(child, "link_parent_widgets"):
+                child.link_parent_widgets(self)
             logger.debug(
                 "Adopted child %s as collapsible '%s'",
                 child.objectName() or type(child).__name__,
