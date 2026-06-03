@@ -21,7 +21,7 @@ import pcdswidgets
 from .designer_options import DesignerOptions
 from .icon_options import IconOptions
 
-MODULE_ROOT = Path(pcdswidgets.__file__).parent.resolve() # type: ignore
+MODULE_ROOT = Path(pcdswidgets.__file__).parent.resolve()  # type: ignore
 ICON_AREA = MODULE_ROOT / "icons"
 
 ifont = IconFont()
@@ -140,7 +140,6 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                     updated_one = True
                 if updated_one:
                     obj.setFilenames(filenames)
-
 
     def _get_macro(self, macro_name: str) -> str:
         return self._macro_values[macro_name]
