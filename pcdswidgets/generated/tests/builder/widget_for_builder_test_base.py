@@ -99,33 +99,33 @@ class WidgetForBuilderTestBase(DesignerWidget):
         }
 
     def get_name(self) -> str:
-        return self._get_macro("NAME")
+        return self.get_macro("NAME")
 
     def set_name(self, value: str) -> None:
-        self._set_macro("NAME", value)
+        self.set_macro("NAME", value)
 
     name = pyqtProperty(str, get_name, set_name)
 
     def get_num(self) -> str:
-        return self._get_macro("NUM")
+        return self.get_macro("NUM")
 
     def set_num(self, value: str) -> None:
-        self._set_macro("NUM", value)
+        self.set_macro("NUM", value)
 
     num = pyqtProperty(str, get_num, set_num)
 
     def get_one(self) -> str:
-        return self._get_macro("ONE")
+        return self.get_macro("ONE")
 
     def set_one(self, value: str) -> None:
-        self._set_macro("ONE", value)
+        self.set_macro("ONE", value)
 
     one = pyqtProperty(str, get_one, set_one)
 
     def get_two(self) -> str:
-        return self._get_macro("TWO")
+        return self.get_macro("TWO")
 
     def set_two(self, value: str) -> None:
-        self._set_macro("TWO", value)
+        self.set_macro("TWO", value)
 
     two = pyqtProperty(str, get_two, set_two)

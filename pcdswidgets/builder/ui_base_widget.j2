@@ -81,10 +81,10 @@ class {{ base_cls }}(DesignerWidget):
 {% for macro in macro_names %}
 
     def get_{{ macro.lower() }}(self) -> str:
-        return self._get_macro("{{ macro }}")
+        return self.get_macro("{{ macro }}")
 
     def set_{{ macro.lower() }}(self, value: str) -> None:
-        self._set_macro("{{ macro }}", value)
+        self.set_macro("{{ macro }}", value)
 
     {{ macro.lower() }} = pyqtProperty(str, get_{{ macro.lower() }}, set_{{ macro.lower() }})
 {% endfor %}

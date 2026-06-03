@@ -50,8 +50,8 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
         self._macros_timer.start()
 
     def _setup_expert_screens(self):
-        """Macros aren't immediately available through _get_macros, wait until they are."""
-        if not self._get_macro("vertical_motor") or not self._get_macro("horizontal_motor"):
+        """Macros aren't immediately available through get_macro, wait until they are."""
+        if not self.get_macro("vertical_motor") or not self.get_macro("horizontal_motor"):
             self._macros_timer.start()
             return
 
@@ -74,7 +74,7 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
             # Don't be silly, silly
             return
 
-        motor_pv = self._get_macro(f"{axis}_motor")
+        motor_pv = self.get_macro(f"{axis}_motor")
 
         if not motor_pv:
             logger.debug(f"Macro for {axis}_motor does not yet exist")
@@ -105,7 +105,7 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
             # Don't be silly please
             return
 
-        motor_pv = self._get_macro(f"{axis}_motor")
+        motor_pv = self.get_macro(f"{axis}_motor")
 
         if not motor_pv:
             logger.debug(f"Macro for {axis}_motor does not yet exist")
