@@ -841,7 +841,9 @@ color: rgb(0, 0, 0);</string>
           <string>cog</string>
          </property>
          <property name="filenames">
-          <stringlist/>
+          <stringlist>
+           <string>ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
          </property>
          <property name="titles">
           <stringlist/>
@@ -1198,7 +1200,9 @@ color: rgb(0, 0, 0);</string>
           <string>cog</string>
          </property>
          <property name="filenames">
-          <stringlist/>
+          <stringlist>
+           <string>ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
          </property>
          <property name="titles">
           <stringlist/>

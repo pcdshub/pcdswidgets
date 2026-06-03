@@ -6,7 +6,6 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import json
 import logging
-from pathlib import Path
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
 from qtpy.QtCore import QTimer
@@ -80,8 +79,7 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
 
         button = getattr(self, f"{axis}_expert_screen")
 
-        button.setFilenames([str(Path(__file__).parents[2] / "ui/motion/smaract/smaract_open_loop_context_double.ui")])
-        logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
+        logger.debug(f"{axis} expert screen filename was {button.readFilenames()[0]}")
 
         button.setMacros(json.dumps({"motor": motor_pv}))
         logger.debug(f"Setting {axis} expert screen with macros {button._macros}")
