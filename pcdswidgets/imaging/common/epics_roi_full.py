@@ -236,7 +236,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
     @property
     def roi_spinboxes(self):
         """Coordinate control spinboxes in geometry order: (x, y, width_x, width_y)."""
-        return (self.x_spinbox, self.y_spinbox, self.height_spinbox, self.width_spinbox)
+        return (self.x_spinbox, self.y_spinbox, self.width_spinbox, self.height_spinbox)
 
     @property
     def interactive_buttons(self):

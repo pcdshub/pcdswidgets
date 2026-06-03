@@ -53,6 +53,9 @@ class CameraViewerStretch(CameraViewerStretchBase):
                 child.objectName() for child in self.findChildren(QtWidgets.QWidget) if child.objectName()
             }
 
+        # Fix axis orientation: Area Detector uses C-order (row-major) data
+        self.image_view.readingOrder = 1  # Clike
+
         # Display FPS timer
         self._fps_timer = QTimer(self)
         self._fps_timer.setInterval(1000)
