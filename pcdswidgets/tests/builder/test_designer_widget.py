@@ -1,6 +1,9 @@
 import inspect
+from pathlib import Path
 
 import pytest
+from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
+from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from pydm.widgets.shell_command import PyDMShellCommand
 from pytestqt.qtbot import QtBot
 from qtpy.QtGui import QIcon
@@ -26,6 +29,8 @@ def test_has_expected_hints():
     for label_name in ("name_label", "num_label", "name_num_label"):
         assert hints[label_name] == "QLabel"
     assert hints["one_two_shell"] == "PyDMShellCommand"
+    assert hints["emb_disp"] == "PyDMEmbeddedDisplay"
+    assert hints["rel_disp"] == "PyDMRelatedDisplayButton"
 
 
 def test_has_expected_widgets(test_widget: WidgetForBuilderTest):
@@ -33,22 +38,35 @@ def test_has_expected_widgets(test_widget: WidgetForBuilderTest):
     assert isinstance(test_widget.num_label, QLabel)
     assert isinstance(test_widget.name_num_label, QLabel)
     assert isinstance(test_widget.one_two_shell, PyDMShellCommand)
+    assert isinstance(test_widget.emb_disp, PyDMEmbeddedDisplay)
+    assert isinstance(test_widget.rel_disp, PyDMRelatedDisplayButton)
 
 
 def test_has_expected_macro_to_widget(test_widget: WidgetForBuilderTest):
-    assert set(test_widget._macro_to_widget.keys()) == {"NAME", "NUM", "ONE", "TWO"}
+    assert set(test_widget._macro_to_widget.keys()) == {"NAME", "NUM", "ONE", "TWO", "EMB_TITLE", "REL_TITLE"}
     assert set(test_widget._macro_to_widget["NAME"]) == {"name_label", "name_num_label"}
     assert set(test_widget._macro_to_widget["NUM"]) == {"num_label", "name_num_label"}
     assert test_widget._macro_to_widget["ONE"] == ["one_two_shell"]
     assert test_widget._macro_to_widget["TWO"] == ["one_two_shell"]
+    assert test_widget._macro_to_widget["EMB_TITLE"] == ["emb_disp"]
+    assert test_widget._macro_to_widget["REL_TITLE"] == ["rel_disp"]
 
 
 def test_has_expected_widget_to_macro(test_widget: WidgetForBuilderTest):
-    assert set(test_widget._widget_to_macro.keys()) == {"name_label", "num_label", "name_num_label", "one_two_shell"}
+    assert set(test_widget._widget_to_macro.keys()) == {
+        "name_label",
+        "num_label",
+        "name_num_label",
+        "one_two_shell",
+        "emb_disp",
+        "rel_disp",
+    }
     assert test_widget._widget_to_macro["name_label"] == ["NAME"]
     assert test_widget._widget_to_macro["num_label"] == ["NUM"]
     assert set(test_widget._widget_to_macro["name_num_label"]) == {"NAME", "NUM"}
     assert set(test_widget._widget_to_macro["one_two_shell"]) == {"ONE", "TWO"}
+    assert test_widget._widget_to_macro["emb_disp"] == ["EMB_TITLE"]
+    assert test_widget._widget_to_macro["rel_disp"] == ["REL_TITLE"]
 
 
 def test_has_expected_widget_to_pre_template(test_widget: WidgetForBuilderTest):
@@ -57,6 +75,8 @@ def test_has_expected_widget_to_pre_template(test_widget: WidgetForBuilderTest):
         "num_label",
         "name_num_label",
         "one_two_shell",
+        "emb_disp",
+        "rel_disp",
     }
     assert set(test_widget._widget_to_pre_template["name_label"]) == {("text", "Name: ${NAME}"), ("toolTip", "${NAME}")}
     assert test_widget._widget_to_pre_template["num_label"] == [("text", "Num: ${NUM}")]
@@ -64,6 +84,8 @@ def test_has_expected_widget_to_pre_template(test_widget: WidgetForBuilderTest):
     assert test_widget._widget_to_pre_template["one_two_shell"] == [
         ("commands", ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"])
     ]
+    assert test_widget._widget_to_pre_template["emb_disp"] == [("macros", """{"TITLE": "${EMB_TITLE}"}""")]
+    assert test_widget._widget_to_pre_template["rel_disp"] == [("macros", """{"TITLE": "${REL_TITLE}"}""")]
 
 
 def test_has_expected_macro_values(test_widget: WidgetForBuilderTest):
@@ -72,6 +94,8 @@ def test_has_expected_macro_values(test_widget: WidgetForBuilderTest):
         "NUM": "",
         "ONE": "",
         "TWO": "",
+        "EMB_TITLE": "",
+        "REL_TITLE": "",
     }
 
 
@@ -113,6 +137,25 @@ def test_macro_substitution_list_widget(test_widget: WidgetForBuilderTest):
     test_widget.setProperty("one", "ICHI")
 
     assert test_widget.one_two_shell.readCommands() == ["echo ICHI", "echo DOS", "echo ICHI:DOS"]
+
+
+def test_macro_substitution_subdisplays(test_widget: WidgetForBuilderTest):
+    assert test_widget.emb_disp.readMacros() == ["""{"TITLE": "${EMB_TITLE}"}"""]
+
+    test_widget.setProperty("emb_title", "Embedded")
+
+    assert test_widget.emb_disp.readMacros() == ["""{"TITLE": "Embedded"}"""]
+
+    assert test_widget.rel_disp.readMacros() == ["""{"TITLE": "${REL_TITLE}"}"""]
+
+    test_widget.setProperty("rel_title", "Related")
+
+    assert test_widget.rel_disp.readMacros() == ["""{"TITLE": "Related"}"""]
+
+
+def test_filepath_subdisplays(test_widget: WidgetForBuilderTest):
+    assert test_widget.emb_disp.readFilename() == str(Path(__file__).parent.resolve() / "subdisplay.ui")
+    assert test_widget.rel_disp.readFilenames() == [str(Path(__file__).parent.resolve() / "subdisplay.ui")]
 
 
 def test_no_icon(qtbot: QtBot):
