@@ -1104,7 +1104,9 @@ color: rgb(0, 0, 0);</string>
           <bool>false</bool>
          </property>
          <property name="macros">
-          <stringlist/>
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${vertical_motor}&quot;}</string>
+          </stringlist>
          </property>
          <property name="openInNewWindow">
           <bool>true</bool>
@@ -1179,7 +1181,9 @@ color: rgb(0, 0, 0);</string>
           <bool>false</bool>
          </property>
          <property name="macros">
-          <stringlist/>
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${horizontal_motor}&quot;}</string>
+          </stringlist>
          </property>
          <property name="openInNewWindow">
           <bool>true</bool>
