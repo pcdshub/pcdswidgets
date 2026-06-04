@@ -7,7 +7,6 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
-from qtpy.QtCore import QTimer
 from qtpy.QtWidgets import QCheckBox, QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -37,48 +36,6 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         super().__init__(parent)
         self.vertical_invert.stateChanged.connect(self._invert_vertical)
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
-        # For now, we will link the expert screens for tip-tilts
-        # to a limited context window
-        self._macros_timer = QTimer(parent=self)
-        self._macros_timer.timeout.connect(self._setup_expert_screens)
-        self._macros_timer.setInterval(100)
-        self._macros_timer.setSingleShot(True)
-        self._macros_timer.start()
-
-    def _setup_expert_screens(self):
-        """Macros aren't immediately available through _get_macros, wait until they are."""
-        if not self._get_macro("vertical_motor") or not self._get_macro("horizontal_motor"):
-            self._macros_timer.start()
-            return
-
-        self._set_expert_screen_macro("vertical")
-        self._set_expert_screen_macro("horizontal")
-
-    def _set_expert_screen_macro(self, axis: str) -> None:
-        """
-        Explicitly set the macros for the PyDMRelatedDisplay as a JSON digestible str
-
-        Parameters
-        ----------
-        axis : str
-            One of ['vertical', 'horizontal']
-        """
-        motor_pv: str
-        button: PyDMRelatedDisplayButton
-
-        if axis not in ["vertical", "horizontal"]:
-            # Don't be silly, silly
-            return
-
-        motor_pv = self._get_macro(f"{axis}_motor")
-
-        if not motor_pv:
-            logger.debug(f"Macro for {axis}_motor does not yet exist")
-            return
-
-        button = getattr(self, f"{axis}_expert_screen")
-
-        logger.debug(f"{axis} expert screen filename was {button.readFilenames()[0]}")
 
     def _invert_axis_channel(self, axis: str) -> None:
         """
