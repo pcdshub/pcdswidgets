@@ -59,7 +59,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.emb_disp)
         self.rel_disp = PyDMRelatedDisplayButton(Form)
         self.rel_disp.setToolTip("")
-        self.rel_disp.setFilenames(["pcdswidgets/tests/builder/subdisplay.ui"])
+        self.rel_disp.setFilenames(["tests/builder/subdisplay.ui"])
         self.rel_disp.setMacros(['{"TITLE": "${REL_TITLE}"}'])
         self.rel_disp.setObjectName("rel_disp")
         self.verticalLayout.addWidget(self.rel_disp)

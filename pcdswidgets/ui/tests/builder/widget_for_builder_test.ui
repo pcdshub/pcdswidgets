@@ -132,7 +132,7 @@
      </property>
      <property name="filenames">
       <stringlist>
-       <string>pcdswidgets/tests/builder/subdisplay.ui</string>
+       <string>tests/builder/subdisplay.ui</string>
       </stringlist>
      </property>
      <property name="macros">

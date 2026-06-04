@@ -126,17 +126,17 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
         # ui-file loaded objects are attributes of the class
         for obj in self.__dict__.values():
             if isinstance(obj, PyDMEmbeddedDisplay):
-                filename = obj.readFilename()
-                if os.path.isabs(filename):
+                fname = obj.readFilename()
+                if os.path.isabs(fname):
                     continue
-                obj.setFilename(str(MODULE_ROOT / filename))
+                obj.setFilename(make_filepath_relative(fname))
             elif isinstance(obj, PyDMRelatedDisplayButton):
                 filenames = obj.readFilenames()
                 updated_one = False
                 for idx, fname in enumerate(filenames):
                     if os.path.isabs(fname):
                         continue
-                    filenames[idx] = str(MODULE_ROOT / fname)
+                    filenames[idx] = make_filepath_relative(fname)
                     updated_one = True
                 if updated_one:
                     obj.setFilenames(filenames)
@@ -168,6 +168,19 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
             else:
                 raise TypeError(f"Unexpected template type, should be str or stringlist: {templ}")
             widget.setProperty(prop, value)
+
+
+def make_filepath_relative(filename: str) -> str:
+    """
+    Make a relative filepath absolute, attaching it to the pcdswidgets install root.
+
+    Two forms are accepted:
+    - pcdswidgets/some/path
+    - some/path
+    """
+    if filename.startswith("pcdswidgets"):
+        filename = filename.replace("pcdswidgets" + os.sep, "")
+    return str(MODULE_ROOT / filename)
 
 
 class MacroEditExtension:

@@ -84,8 +84,8 @@ def test_has_expected_widget_to_pre_template(test_widget: WidgetForBuilderTest):
     assert test_widget._widget_to_pre_template["one_two_shell"] == [
         ("commands", ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"])
     ]
-    assert test_widget._widget_to_pre_template["emb_disp"] == [("macros", """{"TITLE": "${EMB_TITLE}"}""")]
-    assert test_widget._widget_to_pre_template["rel_disp"] == [("macros", """{"TITLE": "${REL_TITLE}"}""")]
+    assert test_widget._widget_to_pre_template["emb_disp"] == [("macros", '{"TITLE": "${EMB_TITLE}"}')]
+    assert test_widget._widget_to_pre_template["rel_disp"] == [("macros", ['{"TITLE": "${REL_TITLE}"}'])]
 
 
 def test_has_expected_macro_values(test_widget: WidgetForBuilderTest):
@@ -140,22 +140,24 @@ def test_macro_substitution_list_widget(test_widget: WidgetForBuilderTest):
 
 
 def test_macro_substitution_subdisplays(test_widget: WidgetForBuilderTest):
-    assert test_widget.emb_disp.readMacros() == ["""{"TITLE": "${EMB_TITLE}"}"""]
+    assert test_widget.emb_disp.readMacros() == '{"TITLE": "${EMB_TITLE}"}'
 
     test_widget.setProperty("emb_title", "Embedded")
 
-    assert test_widget.emb_disp.readMacros() == ["""{"TITLE": "Embedded"}"""]
+    assert test_widget.emb_disp.readMacros() == '{"TITLE": "Embedded"}'
 
-    assert test_widget.rel_disp.readMacros() == ["""{"TITLE": "${REL_TITLE}"}"""]
+    assert test_widget.rel_disp.readMacros() == ['{"TITLE": "${REL_TITLE}"}']
 
     test_widget.setProperty("rel_title", "Related")
 
-    assert test_widget.rel_disp.readMacros() == ["""{"TITLE": "Related"}"""]
+    assert test_widget.rel_disp.readMacros() == ['{"TITLE": "Related"}']
 
 
 def test_filepath_subdisplays(test_widget: WidgetForBuilderTest):
-    assert test_widget.emb_disp.readFilename() == str(Path(__file__).parent.resolve() / "subdisplay.ui")
-    assert test_widget.rel_disp.readFilenames() == [str(Path(__file__).parent.resolve() / "subdisplay.ui")]
+    canonical_path = Path(__file__).parent.resolve() / "subdisplay.ui"
+    assert canonical_path.exists()
+    assert test_widget.emb_disp.readFilename() == str(canonical_path)
+    assert test_widget.rel_disp.readFilenames() == [str(canonical_path)]
 
 
 def test_no_icon(qtbot: QtBot):
