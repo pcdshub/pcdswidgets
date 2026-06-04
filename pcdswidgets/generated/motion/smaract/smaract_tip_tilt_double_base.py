@@ -113,57 +113,57 @@ class SmaractTipTiltDoubleBase(DesignerWidget):
             (
                 "macros",
                 [
-                    "motor=${horizontal_motor}",
+                    """{"motor": "${horizontal_motor}"}""",
                 ],
             ),
         ],
         "horizontal_label": [
-            ("channel", "ca://${horizontal_motor}.DESC"),
+            ("channel", """ca://${horizontal_motor}.DESC"""),
         ],
         "horizontal_moving": [
-            ("PyDMToolTip", "${horizontal_motor} is currently moving"),
-            ("channel", "ca://${horizontal_motor}.MOVN"),
+            ("PyDMToolTip", """${horizontal_motor} is currently moving"""),
+            ("channel", """ca://${horizontal_motor}.MOVN"""),
         ],
         "horizontal_step_size": [
-            ("channel", "ca://${horizontal_motor}:STEP_COUNT"),
+            ("channel", """ca://${horizontal_motor}:STEP_COUNT"""),
         ],
         "horizontal_step_total": [
-            ("text", "ca://${horizontal_motor}:TOTAL_STEP_COUNT"),
-            ("channel", "ca://${horizontal_motor}:TOTAL_STEP_COUNT"),
+            ("text", """ca://${horizontal_motor}:TOTAL_STEP_COUNT"""),
+            ("channel", """ca://${horizontal_motor}:TOTAL_STEP_COUNT"""),
         ],
         "step_down": [
-            ("channel", "ca://${vertical_motor}:STEP_REVERSE.PROC"),
+            ("channel", """ca://${vertical_motor}:STEP_REVERSE.PROC"""),
         ],
         "step_left": [
-            ("channel", "ca://${horizontal_motor}:STEP_REVERSE.PROC"),
+            ("channel", """ca://${horizontal_motor}:STEP_REVERSE.PROC"""),
         ],
         "step_right": [
-            ("channel", "ca://${horizontal_motor}:STEP_FORWARD.PROC"),
+            ("channel", """ca://${horizontal_motor}:STEP_FORWARD.PROC"""),
         ],
         "step_up": [
-            ("channel", "ca://${vertical_motor}:STEP_FORWARD.PROC"),
+            ("channel", """ca://${vertical_motor}:STEP_FORWARD.PROC"""),
         ],
         "vertical_expert_screen": [
             (
                 "macros",
                 [
-                    "motor=${vertical_motor}",
+                    """{"motor": "${vertical_motor}"}""",
                 ],
             ),
         ],
         "vertical_label": [
-            ("channel", "ca://${vertical_motor}.DESC"),
+            ("channel", """ca://${vertical_motor}.DESC"""),
         ],
         "vertical_moving": [
-            ("PyDMToolTip", "${vertical_motor} is currently moving"),
-            ("channel", "ca://${vertical_motor}.MOVN"),
+            ("PyDMToolTip", """${vertical_motor} is currently moving"""),
+            ("channel", """ca://${vertical_motor}.MOVN"""),
         ],
         "vertical_step_size": [
-            ("channel", "ca://${vertical_motor}:STEP_COUNT"),
+            ("channel", """ca://${vertical_motor}:STEP_COUNT"""),
         ],
         "vertical_step_total": [
-            ("text", "ca://${vertical_motor}:TOTAL_STEP_COUNT"),
-            ("channel", "ca://${vertical_motor}:TOTAL_STEP_COUNT"),
+            ("text", """ca://${vertical_motor}:TOTAL_STEP_COUNT"""),
+            ("channel", """ca://${vertical_motor}:TOTAL_STEP_COUNT"""),
         ],
     }
 

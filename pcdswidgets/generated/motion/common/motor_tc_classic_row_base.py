@@ -53,13 +53,13 @@ class MotorTcClassicRowBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "MotorClassicRow": [
-            ("motor", "${MOTOR}"),
+            ("motor", """${MOTOR}"""),
         ],
         "interlock_indicator": [
-            ("channel", "ca://${MOTOR}:ILOCK:ACTIVE_RBV"),
+            ("channel", """ca://${MOTOR}:ILOCK:ACTIVE_RBV"""),
         ],
         "temperature_label": [
-            ("channel", "ca://${MOTOR}:ILOCK:TC_TEMP_RBV"),
+            ("channel", """ca://${MOTOR}:ILOCK:TC_TEMP_RBV"""),
         ],
     }
 

@@ -4,7 +4,6 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
-import json
 import logging
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
@@ -80,9 +79,6 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         button = getattr(self, f"{axis}_expert_screen")
 
         logger.debug(f"{axis} expert screen filename was {button.readFilenames()[0]}")
-
-        button.setMacros(json.dumps({"motor": motor_pv}))
-        logger.debug(f"Setting {axis} expert screen with macros {button._macros}")
 
     def _invert_axis_channel(self, axis: str) -> None:
         """

@@ -84,16 +84,16 @@ class EpicsRoiFullBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "height_spinbox": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_WidthY}"),
+            ("channel", """ca://${cam_prefix}${roi_plugin}${suffix_WidthY}"""),
         ],
         "width_spinbox": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_WidthX}"),
+            ("channel", """ca://${cam_prefix}${roi_plugin}${suffix_WidthX}"""),
         ],
         "x_spinbox": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_X}"),
+            ("channel", """ca://${cam_prefix}${roi_plugin}${suffix_X}"""),
         ],
         "y_spinbox": [
-            ("channel", "ca://${cam_prefix}${roi_plugin}${suffix_Y}"),
+            ("channel", """ca://${cam_prefix}${roi_plugin}${suffix_Y}"""),
         ],
     }
 

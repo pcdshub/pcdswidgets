@@ -55,14 +55,14 @@ class {{ base_cls }}(DesignerWidget):
 {% for widget in widget_names %}
         "{{ widget }}": [
 {% for prop, value in widget_to_pre_templ_strs[widget] %}
-            ("{{ prop }}", "{{ value }}"),
+            ("{{ prop }}", """{{ value }}"""),
 {% endfor %}
 {% for prop, value_list in widget_to_pre_templ_lists[widget] %}
             (
                 "{{ prop }}",
                 [
 {% for value in value_list %}
-                "{{ value }}",
+                """{{ value }}""",
 {% endfor %}
                 ]
             ),

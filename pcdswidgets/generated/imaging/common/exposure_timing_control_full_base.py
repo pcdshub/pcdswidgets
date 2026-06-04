@@ -78,28 +78,28 @@ class ExposureTimingControlFullBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "acquire_period_edit": [
-            ("channel", "ca://${cam_prefix}:AcquirePeriod"),
+            ("channel", """ca://${cam_prefix}:AcquirePeriod"""),
         ],
         "acquire_period_rbv": [
-            ("channel", "ca://${cam_prefix}:AcquirePeriod_RBV"),
+            ("channel", """ca://${cam_prefix}:AcquirePeriod_RBV"""),
         ],
         "acquire_time_edit": [
-            ("channel", "ca://${cam_prefix}:AcquireTime"),
+            ("channel", """ca://${cam_prefix}:AcquireTime"""),
         ],
         "acquire_time_rbv": [
-            ("channel", "ca://${cam_prefix}:AcquireTime_RBV"),
+            ("channel", """ca://${cam_prefix}:AcquireTime_RBV"""),
         ],
         "frame_rate_rbv": [
-            ("channel", "ca://${cam_prefix}:GainAuto_RBV"),
+            ("channel", """ca://${cam_prefix}:GainAuto_RBV"""),
         ],
         "gain_auto_combo": [
-            ("channel", "ca://${cam_prefix}:GainAuto"),
+            ("channel", """ca://${cam_prefix}:GainAuto"""),
         ],
         "gain_edit": [
-            ("channel", "ca://${cam_prefix}:Gain"),
+            ("channel", """ca://${cam_prefix}:Gain"""),
         ],
         "gain_rbv": [
-            ("channel", "ca://${cam_prefix}:Gain_RBV"),
+            ("channel", """ca://${cam_prefix}:Gain_RBV"""),
         ],
     }
 

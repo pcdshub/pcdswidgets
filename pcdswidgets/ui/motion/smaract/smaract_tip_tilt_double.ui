@@ -856,7 +856,7 @@ color: rgb(0, 0, 0);</string>
          </property>
          <property name="macros">
           <stringlist>
-           <string>motor=${vertical_motor}</string>
+           <string>{&quot;motor&quot;: &quot;${vertical_motor}&quot;}</string>
           </stringlist>
          </property>
          <property name="openInNewWindow">
@@ -1215,7 +1215,7 @@ color: rgb(0, 0, 0);</string>
          </property>
          <property name="macros">
           <stringlist>
-           <string>motor=${horizontal_motor}</string>
+           <string>{&quot;motor&quot;: &quot;${horizontal_motor}&quot;}</string>
           </stringlist>
          </property>
          <property name="openInNewWindow">
