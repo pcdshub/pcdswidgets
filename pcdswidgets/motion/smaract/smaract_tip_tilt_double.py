@@ -9,7 +9,6 @@ import logging
 from pathlib import Path
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
-from qtpy.QtCore import QTimer
 from qtpy.QtWidgets import QCheckBox, QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -39,43 +38,19 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         super().__init__(parent)
         self.vertical_invert.stateChanged.connect(self._invert_vertical)
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
-        # For now, we will link the expert screens for tip-tilts
-        # to a limited context window
-        self._macros_timer = QTimer(parent=self)
-        self._macros_timer.timeout.connect(self._setup_expert_screens)
-        self._macros_timer.setInterval(100)
-        self._macros_timer.setSingleShot(True)
-        self._macros_timer.start()
 
-    def _setup_expert_screens(self):
-        """Macros aren't immediately available through get_macro, wait until they are."""
-        if not self.get_macro("vertical_motor") or not self.get_macro("horizontal_motor"):
-            self._macros_timer.start()
-            return
-
-        self._set_expert_screen_macro("vertical")
-        self._set_expert_screen_macro("horizontal")
-
-    def _set_expert_screen_macro(self, axis: str) -> None:
+    def after_set_macro(self, macro_name: str, value: str):
         """
-        Explicitly set the macros for the PyDMRelatedDisplay as a JSON digestible str
-
-        Parameters
-        ----------
-        axis : str
-            One of ['vertical', 'horizontal']
+        Once ready, set the macros for the PyDMRelatedDisplay as a JSON digestible str
         """
-        motor_pv: str
         button: PyDMRelatedDisplayButton
 
-        if axis not in ["vertical", "horizontal"]:
-            # Don't be silly, silly
-            return
-
-        motor_pv = self.get_macro(f"{axis}_motor")
-
-        if not motor_pv:
-            logger.debug(f"Macro for {axis}_motor does not yet exist")
+        if macro_name == "vertical_motor":
+            axis = "vertical"
+        elif macro_name == "horizontal_motor":
+            axis = "horizontal"
+        else:
+            # Nothing to do for other macros
             return
 
         button = getattr(self, f"{axis}_expert_screen")
@@ -83,7 +58,7 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
         button.setFilenames([str(Path(__file__).parents[2] / "ui/motion/smaract/smaract_open_loop_context_double.ui")])
         logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
 
-        button.setMacros(json.dumps({"motor": motor_pv}))
+        button.setMacros([json.dumps({"motor": value})])
         logger.debug(f"Setting {axis} expert screen with macros {button._macros}")
 
     def _invert_axis_channel(self, axis: str) -> None:
