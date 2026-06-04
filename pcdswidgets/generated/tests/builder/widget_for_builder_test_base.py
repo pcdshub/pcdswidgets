@@ -68,22 +68,22 @@ class WidgetForBuilderTestBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "name_label": [
-            ("toolTip", "${NAME}"),
-            ("text", "Name: ${NAME}"),
+            ("toolTip", """${NAME}"""),
+            ("text", """Name: ${NAME}"""),
         ],
         "name_num_label": [
-            ("text", "${NAME}:${NUM}"),
+            ("text", """${NAME}:${NUM}"""),
         ],
         "num_label": [
-            ("text", "Num: ${NUM}"),
+            ("text", """Num: ${NUM}"""),
         ],
         "one_two_shell": [
             (
                 "commands",
                 [
-                    "echo ${ONE}",
-                    "echo ${TWO}",
-                    "echo ${ONE}:${TWO}",
+                    """echo ${ONE}""",
+                    """echo ${TWO}""",
+                    """echo ${ONE}:${TWO}""",
                 ],
             ),
         ],

@@ -93,37 +93,37 @@ class AcquisitionControlFullBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "PyDMPushButton": [
-            ("channel", "ca://${cam_prefix}:ArrayCounter"),
+            ("channel", """ca://${cam_prefix}:ArrayCounter"""),
         ],
         "acquire_byte": [
-            ("channel", "ca://${cam_prefix}:Acquire_RBV"),
+            ("channel", """ca://${cam_prefix}:Acquire_RBV"""),
         ],
         "acquire_combo": [
-            ("channel", "ca://${cam_prefix}:Acquire"),
+            ("channel", """ca://${cam_prefix}:Acquire"""),
         ],
         "array_counter_rbv": [
-            ("channel", "ca://${cam_prefix}:ArrayCounter_RBV"),
+            ("channel", """ca://${cam_prefix}:ArrayCounter_RBV"""),
         ],
         "capture_counter": [
-            ("channel", "ca://${cam_prefix}:NumImagesCounter_RBV"),
+            ("channel", """ca://${cam_prefix}:NumImagesCounter_RBV"""),
         ],
         "capture_counter_2": [
-            ("channel", "ca://${cam_prefix}:NumImages_RBV"),
+            ("channel", """ca://${cam_prefix}:NumImages_RBV"""),
         ],
         "capture_counter_3": [
-            ("channel", "ca://${cam_prefix}:NumExposures_RBV"),
+            ("channel", """ca://${cam_prefix}:NumExposures_RBV"""),
         ],
         "exposures_per_capture": [
-            ("channel", "ca://${cam_prefix}:NumExposures"),
+            ("channel", """ca://${cam_prefix}:NumExposures"""),
         ],
         "image_mode_combo": [
-            ("channel", "ca://${cam_prefix}:ImageMode"),
+            ("channel", """ca://${cam_prefix}:ImageMode"""),
         ],
         "multiple_count": [
-            ("channel", "ca://${cam_prefix}:NumImages"),
+            ("channel", """ca://${cam_prefix}:NumImages"""),
         ],
         "status_rbv": [
-            ("channel", "ca://${cam_prefix}:DetectorState_RBV"),
+            ("channel", """ca://${cam_prefix}:DetectorState_RBV"""),
         ],
     }
 
