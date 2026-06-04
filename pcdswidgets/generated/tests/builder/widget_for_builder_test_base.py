@@ -28,17 +28,17 @@ except ImportError:
 
 
 class WidgetForBuilderTestBase(DesignerWidget):
-    PyDMEmbeddedDisplay: "PyDMEmbeddedDisplay"
-    PyDMRelatedDisplayButton: "PyDMRelatedDisplayButton"
+    emb_disp: "PyDMEmbeddedDisplay"
     name_label: "QLabel"
     name_num_label: "QLabel"
     num_label: "QLabel"
     one_two_shell: "PyDMShellCommand"
+    rel_disp: "PyDMRelatedDisplayButton"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "EMB_TITLE": [
-            "PyDMEmbeddedDisplay",
+            "emb_disp",
         ],
         "NAME": [
             "name_label",
@@ -52,18 +52,15 @@ class WidgetForBuilderTestBase(DesignerWidget):
             "one_two_shell",
         ],
         "REL_TITLE": [
-            "PyDMRelatedDisplayButton",
+            "rel_disp",
         ],
         "TWO": [
             "one_two_shell",
         ],
     }
     _widget_to_macro = {
-        "PyDMEmbeddedDisplay": [
+        "emb_disp": [
             "EMB_TITLE",
-        ],
-        "PyDMRelatedDisplayButton": [
-            "REL_TITLE",
         ],
         "name_label": [
             "NAME",
@@ -79,18 +76,13 @@ class WidgetForBuilderTestBase(DesignerWidget):
             "ONE",
             "TWO",
         ],
+        "rel_disp": [
+            "REL_TITLE",
+        ],
     }
     _widget_to_pre_template = {
-        "PyDMEmbeddedDisplay": [
+        "emb_disp": [
             ("macros", """{"TITLE": "${EMB_TITLE}"}"""),
-        ],
-        "PyDMRelatedDisplayButton": [
-            (
-                "macros",
-                [
-                    """{"TITLE": "${REL_TITLE}"}""",
-                ],
-            ),
         ],
         "name_label": [
             ("toolTip", """${NAME}"""),
@@ -109,6 +101,14 @@ class WidgetForBuilderTestBase(DesignerWidget):
                     """echo ${ONE}""",
                     """echo ${TWO}""",
                     """echo ${ONE}:${TWO}""",
+                ],
+            ),
+        ],
+        "rel_disp": [
+            (
+                "macros",
+                [
+                    """{"TITLE": "${REL_TITLE}"}""",
                 ],
             ),
         ],
