@@ -18,7 +18,7 @@ class AcquisitionControlFull(AcquisitionControlFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.NONE,
+        icon=IconOptions.camera,
     )
 
     def __init__(self, *args, **kwargs):
