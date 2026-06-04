@@ -129,14 +129,14 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 fname = obj.readFilename()
                 if os.path.isabs(fname):
                     continue
-                obj.setFilename(make_filepath_relative(fname))
+                obj.setFilename(make_filename_absolute(fname))
             elif isinstance(obj, PyDMRelatedDisplayButton):
                 filenames = obj.readFilenames()
                 updated_one = False
                 for idx, fname in enumerate(filenames):
                     if os.path.isabs(fname):
                         continue
-                    filenames[idx] = make_filepath_relative(fname)
+                    filenames[idx] = make_filename_absolute(fname)
                     updated_one = True
                 if updated_one:
                     obj.setFilenames(filenames)
@@ -170,7 +170,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
             widget.setProperty(prop, value)
 
 
-def make_filepath_relative(filename: str) -> str:
+def make_filename_absolute(filename: str) -> str:
     """
     Make a relative filepath absolute, attaching it to the pcdswidgets install root.
 
