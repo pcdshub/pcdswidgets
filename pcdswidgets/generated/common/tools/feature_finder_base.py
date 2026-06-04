@@ -28,9 +28,7 @@ except ImportError:
 
 
 class FeatureFinderBase(DesignerWidget):
-    detector_egu_get: "PyDMLabel"
     detector_get: "PyDMLabel"
-    motor_egu_get: "PyDMLabel"
     motor_hlm_get: "PyDMLabel"
     motor_llm_get: "PyDMLabel"
     motor_status_led: "SvgMultiStateLED"
@@ -44,7 +42,6 @@ class FeatureFinderBase(DesignerWidget):
     _macro_to_widget = {
         "detector": [
             "detector_get",
-            "detector_egu_get",
         ],
         "motor": [
             "stop",
@@ -55,18 +52,11 @@ class FeatureFinderBase(DesignerWidget):
             "velocity_set",
             "position_set",
             "motor_status_led",
-            "motor_egu_get",
         ],
     }
     _widget_to_macro = {
-        "detector_egu_get": [
-            "detector",
-        ],
         "detector_get": [
             "detector",
-        ],
-        "motor_egu_get": [
-            "motor",
         ],
         "motor_hlm_get": [
             "motor",
@@ -94,15 +84,8 @@ class FeatureFinderBase(DesignerWidget):
         ],
     }
     _widget_to_pre_template = {
-        "detector_egu_get": [
-            ("channel", "ca://${detector}.EGU"),
-        ],
         "detector_get": [
             ("channel", "ca://${detector}"),
-        ],
-        "motor_egu_get": [
-            ("text", "ca://${motor}.EGU"),
-            ("channel", "ca://${motor}.EGU"),
         ],
         "motor_hlm_get": [
             ("text", "ca://${motor}.HLM"),

@@ -13,6 +13,7 @@ import os
 from datetime import datetime
 from math import inf
 from pathlib import Path
+from string import Template
 from sys import float_info
 
 import numpy as np
@@ -51,7 +52,6 @@ class FeatureFinder(FeatureFinderBase):
     motor_status_led: SvgMultiStateLED
     motor_hlm_get: PyDMLabel
     motor_llm_get: PyDMLabel
-    motor_egu_get: PyDMLabel
     lower_limit_set: QDoubleSpinBox
     lower_limit_get: QLabel
     upper_limit_set: QDoubleSpinBox
@@ -82,6 +82,10 @@ class FeatureFinder(FeatureFinderBase):
         self._motor_egu = ""
         self._lower_limit = 0
         self._upper_limit = 0
+        self._dmov = None
+        self._motor_buttons_connected = False
+        self._limits_connected = False
+        self._motor_egu_ch = None
 
         # Data arrays for plotting
         self._motor_positions = []
@@ -89,6 +93,7 @@ class FeatureFinder(FeatureFinderBase):
         # detector
         self._detector_pv = ""
         self._detector_egu = ""
+        self._detector_egu_ch = None
 
         # Config file for caching
         self._config_file = Path.home() / ".config" / "feature_finder_settings.json"
@@ -130,6 +135,45 @@ class FeatureFinder(FeatureFinderBase):
         self._macros_timer.timeout.connect(self.post_init_setup)
         self._macros_timer.setInterval(100)
         self._macros_timer.setSingleShot(True)
+
+    def _set_macro(self, macro_name: str, value: str) -> None:
+        """
+        Overriding the parent method for this to handle PyDMWidget channel swapping
+
+        Parameters
+        ----------
+        macro_name : str
+            key name of the macro. In this widget, one of: ['motor', 'detector']
+        value : str
+            The value of the macro. In this widget, this is a PV.
+        """
+        widget: PyDMLabel | PyDMLineEdit | PyDMPushButton | SvgMultiStateLED
+        super()._set_macro(macro_name, value)
+
+        for widget_name in self._macro_to_widget[macro_name]:
+            widget = getattr(self, widget_name)
+            if hasattr(widget, "set_channel"):
+                # We're going to be cautiously explicit about set_channel
+                for prop, templ in self._widget_to_pre_template[widget_name]:
+                    if prop == "channel":
+                        chan = Template(templ).substitute(self._macro_values)
+                        widget.set_channel(chan)
+
+        if macro_name == "motor":
+            self._motor_pv = value
+            # Extra work to do for motor
+            if self._dmov:
+                self._dmov.disconnect(destroying=True)
+            # Then add the new connection
+            self._dmov = PyDMChannel(address=f"ca://{self._motor_pv}.DMOV", value_slot=self.on_motor_done_moving)
+            self._dmov.connect()
+
+            self.connect_motor()
+
+        if macro_name == "detector":
+            self.connect_detector()
+
+        # Start the post-init timer
         self._macros_timer.start()
 
     def post_init_setup(self) -> None:
@@ -140,14 +184,11 @@ class FeatureFinder(FeatureFinderBase):
             self._macros_timer.start()
             return
 
-        # Connect widgets and pvs after an initial wait
-        # To let values actually acquirez
-        self.connect_motor()
-        self.connect_detector()
-        # Set-up the graph
-        self.setup_plot()
         # Load settings, if possible
         self.load_settings()
+
+        # Set-up the graph
+        self.setup_plot()
 
     def _get_config_key(self) -> str:
         """
@@ -201,6 +242,8 @@ class FeatureFinder(FeatureFinderBase):
         """
         Load saved settings from the config file for this motor/detector pair.
         """
+        setter: QDoubleSpinBox
+
         # Wait for the macros to actually finish connecting
         if not self._motor_pv or not self._detector_pv:
             QTimer.singleShot(100, self.load_settings)
@@ -240,29 +283,50 @@ class FeatureFinder(FeatureFinderBase):
         """
         Once the motor macro is available, connect all relevant attr, widgets, etc.
         """
-        self._motor_pv = self._get_macro("motor")
         # Get the EGU as a channel
-        self.motor_egu_get.hide()
+        if self._motor_egu_ch:
+            self._motor_egu_ch.disconnect(destroying=True)
 
-        self._motor_egu = self.motor_egu_get.value
-
-        self.step_size_set.setSuffix(f" {self._motor_egu}")
-
-        # Monitor motor DMOV (Done Moving) to detect when move completes
-        self._dmov = PyDMChannel(address=f"ca://{self._motor_pv}.DMOV", value_slot=self.on_motor_done_moving)
-        self._dmov.connect()
+        self._motor_egu_ch = PyDMChannel(f"ca://{self._motor_pv}.EGU", value_slot=self.update_motor_egu)
+        self._motor_egu_ch.connect()
 
         # Connect the step/run buttons
-        self.connect_motor_widgets()
+        self.connect_motor_buttons()
         # Connect the limits
         self.connect_limits()
 
-    def connect_motor_widgets(self) -> None:
+    def update_motor_egu(self, value) -> None:
+        """
+        Call back to update the motor EGU units when they change.
+        """
+        setter: QDoubleSpinBox
+        getter: QLabel
+
+        self._motor_egu = value
+
+        # Update our QLabel widgets
+        for prop in ["step_size", "lower_limit", "upper_limit"]:
+            setter = getattr(self, f"{prop}_set")
+            getter = getattr(self, f"{prop}_get")
+            prop_val = getattr(self, f"_{prop}")
+
+            setter.setSuffix(f" {self._motor_egu}")
+            getter.setText(f" {prop_val:.6e} {self._motor_egu}")
+
+        self.plot.setLabel("bottom", f"{self._motor_pv}", units=self._motor_egu)
+
+    def connect_motor_buttons(self) -> None:
         """
         Connect the motor widgets to their appropriate slots,
         presumptively after pydm already expanded macros.
         """
-        logger.info(f"Connecting motor: {self._motor_pv}")
+        widget: PyDMPushButton
+
+        if self._motor_buttons_connected:
+            logger.debug("Motor buttons already connected. No callbacks to update.")
+            return
+
+        logger.debug(f"Connecting motor buttons to: {self._motor_pv}")
         # Attach the step and run buttons to their slots
         for dir in ["fwd", "bwd"]:
             for act in ["step", "run"]:
@@ -272,35 +336,50 @@ class FeatureFinder(FeatureFinderBase):
 
         # And make sure the .STOP field also aborts continuous runs
         self.stop.clicked.connect(self._stop_run)
+        self._motor_buttons_connected = True
 
     def connect_limits(self) -> None:
         """
         Connect the scan limit functions to their widgets, then format them.
+        If they're already connected, update them.
         """
         widget: QDoubleSpinBox
+
         for lim in ["lower", "upper"]:
             # Find the setter widget
             widget = getattr(self, f"{lim}_limit_set")
             # Get the update function
             update = getattr(self, f"update_{lim}_limit")
-            # Connect the signal to the updater
-            widget.editingFinished.connect(update)
-            widget.editingFinished.connect(self.save_settings)
-            # Set the suffix
+            if not self._limits_connected:
+                # Connect the signal to the updater
+                widget.editingFinished.connect(update)
+                widget.editingFinished.connect(self.save_settings)
+                # Set the range for steps to big, big number
+                widget.setRange(-float_info.max, float_info.max)
             widget.setSuffix(f" {self._motor_egu}")
-            # Set the range for the steps to big, big number
-            # which will be throttled by the LLM and HLM of the motor
-            widget.setRange(-float_info.max, float_info.max)
             widget.setValue(getattr(self, f"_{lim}_limit"))
             # Then update the widget
             update()
 
+        if not self._limits_connected:
+            self._limits_connected = True
+
     def connect_detector(self) -> None:
         """
-        Once the meter macro is available, connect all relevant widgets and update attr
+        Once the meter macro is available, connect all relevant widgets and update attr.
         """
         self._detector_pv = self._get_macro("detector")
-        self._detector_egu = self.detector_egu_get.value
+        if self._detector_egu_ch:
+            self._detector_egu_ch.disconnect(destroying=True)
+        self._detector_egu_ch = PyDMChannel(f"ca://{self._detector_pv}.EGU", value_slot=self.update_detector_egu)
+        self._detector_egu_ch.connect()
+
+    def update_detector_egu(self, value: str) -> None:
+        """
+        Call back to update the detector EGU units when they change.
+        """
+        self._detector_egu = value
+        self.plot.setLabel("left", f"{self._detector_pv}", units=self._detector_egu)
 
     @Slot()
     def show_change_pvs_dialog(self):
@@ -376,7 +455,10 @@ class FeatureFinder(FeatureFinderBase):
         if confirm == QMessageBox.Yes:
             # User confirmed, apply changes
             try:
-                self.update_pvs(new_motor_pv, new_detector_pv)
+                self.save_settings()
+                self._reset_graph()
+                self._set_macro("motor", new_motor_pv)
+                self._set_macro("detector", new_detector_pv)
                 dialog.accept()
             except Exception as e:
                 logger.error(f"Failed to apply PV changes: {e}")
@@ -384,103 +466,6 @@ class FeatureFinder(FeatureFinderBase):
         else:
             # User cancelled - don't close the dialog, let them edit or cancel
             logger.debug("PV change cancelled by user.")
-
-    def update_pvs(self, new_motor_pv: str, new_detector_pv: str) -> None:
-        """
-        Update all relevant signals and widgets with the newly christened
-        PVs requested by the user. Will save the settings before proceeding
-        with any replacements.
-        Always resets the plot upon successful substitution.
-
-        Parameters
-        ----------
-        new_motor_pv : str
-            The new PV for the motor, if any.
-        new_detector_pv : str
-            The new PV for the detector, if any.
-        """
-        widget: PyDMLabel | PyDMLineEdit
-        if new_motor_pv == self._motor_pv and new_detector_pv == self._detector_pv:
-            # Nothing new, nothing to do
-            return
-
-        # New PVs requested, save this config
-        self.save_settings()
-
-        if new_motor_pv != self._motor_pv:
-            #  motor getter widgets
-            motor_sigs = [f"{sig}_get" for sig in ["position", "velocity", "motor_egu", "motor_hlm", "motor_llm"]]
-            # append the setters
-            motor_sigs.extend([f"{sig}_set" for sig in ["position", "velocity"]])
-
-            # Destroy all the connections to the plugin
-            # And please prevent bad things from happening
-            for sig in motor_sigs:
-                widget = getattr(self, sig)
-                old_chan = widget.channel
-                new_chan = old_chan.replace(self._motor_pv, new_motor_pv)
-                widget.set_channel(new_chan)
-
-            # Properly disconnect this PV
-            self._dmov.disconnect(destroying=True)
-            # Then add the new connection
-            self._dmov = PyDMChannel(address=f"ca://{self._motor_pv}.DMOV", value_slot=self.on_motor_done_moving)
-            self._dmov.connect()
-            # Update the macros and some private vars
-            self._set_macro("motor", new_motor_pv)
-            logger.info(f"Updating 'motor' macro to: {new_motor_pv}")
-            self._motor_pv = new_motor_pv
-            self._motor_egu = ""
-
-        if new_detector_pv != self._detector_pv:
-            # Get detector widgers
-            detector_sigs = ["detector_get", "detector_egu_get"]
-
-            for sig in detector_sigs:
-                widget = getattr(self, sig)
-                old_chan = widget.channel
-                new_chan = old_chan.replace(self._detector_pv, new_detector_pv)
-                widget.set_channel(new_chan)
-
-            # Update more macros and private vars
-            self._set_macro("detector", new_detector_pv)
-            logger.info(f"Updating 'detector' macro to: {new_detector_pv}")
-            self._detector_pv = new_detector_pv
-            self._detector_egu = ""
-
-        # Clear data and update the plot
-        self._reset_graph()
-
-        # PVs need to reconnect and update, let them breathe then continue
-        QTimer.singleShot(200, self.finish_update_pvs)
-
-    def finish_update_pvs(self, retry: int = 0):
-        """
-        Wait for widgets to actually connect and get new data, then refresh.
-        """
-        widget: QDoubleSpinBox
-
-        # We'll use the EGU widgets as our litmus
-        if (not self._motor_egu or not self._detector_egu) and retry < 20:
-            # Give up after 2 seconds
-            QTimer.singleShot(100, lambda: self.finish_update_pvs(retry + 1))
-            return
-
-        self.load_settings()
-
-        self._motor_egu = self.motor_egu_get.value
-        self._detector_egu = self.detector_egu_get.value
-
-        logger.debug(f"Motor egu is now: {self._motor_egu}")
-        logger.debug(f"Detector egu is now: {self._detector_egu}")
-
-        # Propogate the suffixes
-        motor_sigs = [f"{sig}_set" for sig in ["step_size", "upper_limit", "lower_limit"]]
-        for sig in motor_sigs:
-            widget = getattr(self, sig)
-            widget.setSuffix(f" {self._motor_egu}")
-
-        self.setup_plot()
 
     @Slot(int)
     def on_motor_done_moving(self, val: int) -> None:
