@@ -57,6 +57,8 @@ class BuilderFilepathTestWidgetBase(DesignerWidget):
                 "macros",
                 [
                     """{"TITLE": "${REL_TITLE}"}""",
+                    """""",
+                    """""",
                 ],
             ),
         ],
