@@ -73,28 +73,28 @@ class SmaractOpenLoopClassicRowBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "PyDMLabel_name": [
-            ("channel", "ca://${MOTOR}.DESC"),
+            ("channel", """ca://${MOTOR}.DESC"""),
         ],
         "PyDMLineEdit": [
-            ("channel", "ca://${MOTOR}:STEP_COUNT"),
+            ("channel", """ca://${MOTOR}:STEP_COUNT"""),
         ],
         "PyDMLineEdit_setpoint": [
-            ("channel", "ca://${MOTOR}:TOTAL_STEP_COUNT"),
+            ("channel", """ca://${MOTOR}:TOTAL_STEP_COUNT"""),
         ],
         "PyDMPushButton_stop": [
-            ("channel", "ca://${MOTOR}.STOP"),
+            ("channel", """ca://${MOTOR}.STOP"""),
         ],
         "PyDMPushButton_twkL": [
-            ("channel", "ca://${MOTOR}:STEP_REVERSE.PROC"),
+            ("channel", """ca://${MOTOR}:STEP_REVERSE.PROC"""),
         ],
         "PyDMPushButton_twkR": [
-            ("channel", "ca://${MOTOR}:STEP_FORWARD.PROC"),
+            ("channel", """ca://${MOTOR}:STEP_FORWARD.PROC"""),
         ],
         "PyDMShellCommand": [
             (
                 "commands",
                 [
-                    "edm -eolc -x -m MOTOR=${MOTOR} /reg/g/pcds/epics/ioc/common/smaract/R1.0.8/motorScreens/mcs2_openloop.edl",
+                    """edm -eolc -x -m MOTOR=${MOTOR} /reg/g/pcds/epics/ioc/common/smaract/R1.0.8/motorScreens/mcs2_openloop.edl""",
                 ],
             ),
         ],

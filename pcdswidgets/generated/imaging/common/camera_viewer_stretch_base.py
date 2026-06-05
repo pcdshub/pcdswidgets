@@ -60,17 +60,17 @@ class CameraViewerStretchBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "PyDMLabel": [
-            ("channel", "ca://${cam_prefix}:ArrayRate_RBV"),
+            ("channel", """ca://${cam_prefix}:ArrayRate_RBV"""),
         ],
         "active_pv_label": [
-            ("text", "${cam_prefix}"),
+            ("text", """${cam_prefix}"""),
         ],
         "image_view": [
-            ("imageChannel", "ca://${cam_prefix}:IMAGE1:ArrayData"),
-            ("widthChannel", "ca://${cam_prefix}:IMAGE1:ArraySize0_RBV"),
+            ("imageChannel", """ca://${cam_prefix}:IMAGE1:ArrayData"""),
+            ("widthChannel", """ca://${cam_prefix}:IMAGE1:ArraySize0_RBV"""),
         ],
         "nickname_label": [
-            ("text", "${nickname}"),
+            ("text", """${nickname}"""),
         ],
     }
 

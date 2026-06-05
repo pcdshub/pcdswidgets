@@ -98,43 +98,43 @@ class MotorClassicRowBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "PyDMByteIndicator": [
-            ("channel", "ca://${MOTOR}.LLS"),
+            ("channel", """ca://${MOTOR}.LLS"""),
         ],
         "PyDMByteIndicator_2": [
-            ("channel", "ca://${MOTOR}.HLS"),
+            ("channel", """ca://${MOTOR}.HLS"""),
         ],
         "PyDMByteIndicator_mvn": [
-            ("channel", "ca://${MOTOR}.MOVN"),
+            ("channel", """ca://${MOTOR}.MOVN"""),
         ],
         "PyDMLabel": [
-            ("channel", "ca://${MOTOR}.EGU"),
+            ("channel", """ca://${MOTOR}.EGU"""),
         ],
         "PyDMLabel_name": [
-            ("channel", "ca://${MOTOR}.DESC"),
+            ("channel", """ca://${MOTOR}.DESC"""),
         ],
         "PyDMLabel_rbv": [
-            ("channel", "ca://${MOTOR}.RBV"),
+            ("channel", """ca://${MOTOR}.RBV"""),
         ],
         "PyDMLineEdit": [
-            ("channel", "ca://${MOTOR}.TWV"),
+            ("channel", """ca://${MOTOR}.TWV"""),
         ],
         "PyDMLineEdit_setpoint": [
-            ("channel", "ca://${MOTOR}.VAL"),
+            ("channel", """ca://${MOTOR}.VAL"""),
         ],
         "PyDMPushButton_stop": [
-            ("channel", "ca://${MOTOR}.STOP"),
+            ("channel", """ca://${MOTOR}.STOP"""),
         ],
         "PyDMPushButton_twkL": [
-            ("channel", "ca://${MOTOR}.TWR"),
+            ("channel", """ca://${MOTOR}.TWR"""),
         ],
         "PyDMPushButton_twkR": [
-            ("channel", "ca://${MOTOR}.TWF"),
+            ("channel", """ca://${MOTOR}.TWF"""),
         ],
         "PyDMShellCommand": [
             (
                 "commands",
                 [
-                    "motor-expert-screen ${MOTOR}",
+                    """motor-expert-screen ${MOTOR}""",
                 ],
             ),
         ],

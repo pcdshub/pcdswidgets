@@ -108,47 +108,47 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "chan_temp_get": [
-            ("channel", "ca://${motor}:CHANTEMP"),
+            ("channel", """ca://${motor}:CHANTEMP"""),
         ],
         "clear_step_count": [
-            ("channel", "ca://${motor}:CLEAR_COUNT.PROC"),
+            ("channel", """ca://${motor}:CLEAR_COUNT.PROC"""),
         ],
         "desc_get": [
-            ("channel", "ca://${motor}.DESC"),
+            ("channel", """ca://${motor}.DESC"""),
         ],
         "desc_set": [
-            ("channel", "ca://${motor}.DESC"),
+            ("channel", """ca://${motor}.DESC"""),
         ],
         "motor_load_get": [
-            ("channel", "ca://${motor}:MOTOR_LOAD"),
+            ("channel", """ca://${motor}:MOTOR_LOAD"""),
         ],
         "scan_volt_get": [
-            ("channel", "ca://${motor}:SCAN_POS"),
+            ("channel", """ca://${motor}:SCAN_POS"""),
         ],
         "scan_volt_set": [
-            ("channel", "ca://${motor}:SCAN_MOVE"),
+            ("channel", """ca://${motor}:SCAN_MOVE"""),
         ],
         "step_freq_get": [
-            ("channel", "ca://${motor}:STEP_FREQ"),
+            ("channel", """ca://${motor}:STEP_FREQ"""),
         ],
         "step_freq_set": [
-            ("channel", "ca://${motor}:STEP_FREQ"),
+            ("channel", """ca://${motor}:STEP_FREQ"""),
         ],
         "step_size_get": [
-            ("PyDMToolTip", "The open-loop step size for ${motor}"),
-            ("channel", "ca://${motor}:STEP_COUNT"),
+            ("PyDMToolTip", """The open-loop step size for ${motor}"""),
+            ("channel", """ca://${motor}:STEP_COUNT"""),
         ],
         "step_size_set": [
-            ("channel", "ca://${motor}:STEP_COUNT"),
+            ("channel", """ca://${motor}:STEP_COUNT"""),
         ],
         "step_volt_get": [
-            ("channel", "ca://${motor}:STEP_VOLTAGE"),
+            ("channel", """ca://${motor}:STEP_VOLTAGE"""),
         ],
         "step_volt_set": [
-            ("channel", "ca://${motor}:STEP_VOLTAGE"),
+            ("channel", """ca://${motor}:STEP_VOLTAGE"""),
         ],
         "total_step_count_get": [
-            ("channel", "ca://${motor}:TOTAL_STEP_COUNT"),
+            ("channel", """ca://${motor}:TOTAL_STEP_COUNT"""),
         ],
     }
 

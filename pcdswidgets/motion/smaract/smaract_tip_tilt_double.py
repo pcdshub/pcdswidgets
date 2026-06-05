@@ -4,7 +4,6 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
-import json
 import logging
 from pathlib import Path
 
@@ -57,9 +56,6 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
 
         button.setFilenames([str(Path(__file__).parents[2] / "ui/motion/smaract/smaract_open_loop_context_double.ui")])
         logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
-
-        button.setMacros([json.dumps({"motor": value})])
-        logger.debug(f"Setting {axis} expert screen with macros {button._macros}")
 
     def _invert_axis_channel(self, axis: str) -> None:
         """
