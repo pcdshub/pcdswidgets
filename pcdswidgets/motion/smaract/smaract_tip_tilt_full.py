@@ -5,7 +5,6 @@ This file can be safely edited to change the runtime behavior of the widget.
 """
 
 import logging
-from pathlib import Path
 
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton
 from qtpy.QtWidgets import QCheckBox, QWidget
@@ -37,29 +36,6 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
         super().__init__(parent)
         self.vertical_invert.stateChanged.connect(self._invert_vertical)
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
-        # For now, we will link the expert screens for tip-tilts
-        # to a limited context window
-        self.vertical_expert_screen.setFilenames([str(Path(__file__).parent / "smaract_open_loop_context.py")])
-        self.horizontal_expert_screen.setFilenames([str(Path(__file__).parent / "smaract_open_loop_context.py")])
-
-    def after_set_macro(self, macro_name: str, value: str):
-        """
-        Once ready, set the macros for the PyDMRelatedDisplay as a JSON digestible str
-        """
-        button: PyDMRelatedDisplayButton
-
-        if macro_name == "vertical_motor":
-            axis = "vertical"
-        elif macro_name == "horizontal_motor":
-            axis = "horizontal"
-        else:
-            # Nothing to do for other macros
-            return
-
-        button = getattr(self, f"{axis}_expert_screen")
-
-        button.setFilenames([str(Path(__file__).parents[2] / "ui/motion/smaract/smaract_open_loop_context_double.ui")])
-        logger.debug(f"Setting {axis} expert screen filename to {button.filenames}()")
 
     def _invert_axis_channel(self, axis: str) -> None:
         """

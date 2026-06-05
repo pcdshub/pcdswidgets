@@ -6,7 +6,8 @@ base_cls = ExposureTimingControlFullBase
 macro_names = ['cam_prefix']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class ExposureTimingControlFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     acquire_period_edit: "PyDMLineEdit"
     acquire_period_rbv: "PyDMLabel"
     acquire_time_edit: "PyDMLineEdit"
@@ -36,6 +38,10 @@ class ExposureTimingControlFullBase(DesignerWidget):
     gain_auto_combo: "PyDMEnumComboBox"
     gain_edit: "PyDMLineEdit"
     gain_rbv: "PyDMLabel"
+    label_exposure: "QtWidgets.QLabel"
+    label_gain: "QtWidgets.QLabel"
+    label_gain_auto: "QtWidgets.QLabel"
+    label_period: "QtWidgets.QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {

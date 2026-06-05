@@ -6,7 +6,8 @@ base_cls = EpicsRoiFullBase
 macro_names = ['cam_prefix', 'roi_plugin', 'suffix_WidthX', 'suffix_WidthY', 'suffix_X', 'suffix_Y']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,7 +29,18 @@ except ImportError:
 
 
 class EpicsRoiFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    color_selection_button: "ColorButton"
+    draw_roi_button: "QtWidgets.QPushButton"
     height_spinbox: "PyDMSpinbox"
+    label_18: "QtWidgets.QLabel"
+    label_19: "QtWidgets.QLabel"
+    label_20: "QtWidgets.QLabel"
+    label_22: "QtWidgets.QLabel"
+    line_thickness_button: "QtWidgets.QPushButton"
+    move_enabled_button: "QtWidgets.QPushButton"
+    select_center_button: "QtWidgets.QPushButton"
+    visibility_button: "QtWidgets.QPushButton"
     width_spinbox: "PyDMSpinbox"
     x_spinbox: "PyDMSpinbox"
     y_spinbox: "PyDMSpinbox"

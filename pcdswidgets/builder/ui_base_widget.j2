@@ -6,7 +6,8 @@ base_cls = {{ base_cls }}
 macro_names = {{ macro_names }}
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,7 +29,7 @@ except ImportError:
 {% endif %}
 
 class {{ base_cls }}(DesignerWidget):
-{% for widget in widget_names %}
+{% for widget in all_widget_names %}
     {{ widget }}: "{{ widget_name_to_class[widget] }}"
 {% endfor %}
 
@@ -43,7 +44,7 @@ class {{ base_cls }}(DesignerWidget):
 {% endfor %}
     }
     _widget_to_macro = {
-{% for widget in widget_names %}
+{% for widget in macro_widget_names %}
         "{{ widget }}": [
 {% for macro in widget_to_macro[widget] %}
             "{{ macro }}",
@@ -52,7 +53,7 @@ class {{ base_cls }}(DesignerWidget):
 {% endfor %}
     }
     _widget_to_pre_template = {
-{% for widget in widget_names %}
+{% for widget in macro_widget_names %}
         "{{ widget }}": [
 {% for prop, value in widget_to_pre_templ_strs[widget] %}
             ("{{ prop }}", """{{ value }}"""),

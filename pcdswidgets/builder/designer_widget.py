@@ -2,6 +2,7 @@
 Helper for using designer to layout widgets.
 """
 
+import os
 import warnings
 from pathlib import Path
 from string import Template
@@ -10,7 +11,9 @@ from typing import Any, ClassVar, Protocol
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
+from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from pydm.widgets.qtplugin_extensions import RulesExtension
+from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
@@ -19,7 +22,8 @@ import pcdswidgets
 from .designer_options import DesignerOptions
 from .icon_options import IconOptions
 
-ICON_AREA = Path(pcdswidgets.__file__).parent / "icons"  # type: ignore
+MODULE_ROOT = Path(pcdswidgets.__file__).parent.resolve()  # type: ignore
+ICON_AREA = MODULE_ROOT / "icons"
 
 ifont = IconFont()
 
@@ -73,6 +77,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ui_form.setupUi(self, self)  # type: ignore
+        self.update_relative_paths()
 
     def retranslateUi(self, *args, **kwargs):
         """Required function for setupUi to work in __init__"""
@@ -100,6 +105,48 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 return QIcon(get_icon_path(icon))
             case _:
                 return None
+
+    def update_relative_paths(self):
+        """
+        Special handling for PyDMRelatedDisplay and PyDMEmbeddedDisplay.
+
+        Relative filepaths are nearly non-functional when used in pcdswidgets,
+        because they are relative to the filepath of the ui file (Display)
+        they are placed in, not relative to the package data here.
+
+        To opt in to a path relative to the package data here, the user
+        should express it in the following form:
+
+        pcdswidgets/tests/builder/test.ui
+
+        When we see a relative filepath that starts with "pcdswidgets",
+        we will update it to be the absolute path to that resource to avoid
+        these sorts of issues. This allows us to make widgets that refer to each other
+        or to ui file resources shipped with the module.
+
+        For example, if pcdswidgets is installed at
+        /some/path/python/lib/site-packages/pcdswidgets
+        and we pick a relative path pcdswidgets/tests/builder/test.ui
+        then we will replace it with the absolute path
+        /some/path/python/lib/site-packages/pcdswidgets/tests/builder/test.ui
+        """
+        # ui-file loaded objects are attributes of the class
+        for obj in self.__dict__.values():
+            if isinstance(obj, PyDMEmbeddedDisplay):
+                fname = obj.readFilename()
+                new_filename = fix_pcdswidgets_filename(fname)
+                if fname != new_filename:
+                    obj.setFilename(new_filename)
+            elif isinstance(obj, PyDMRelatedDisplayButton):
+                filenames = obj.readFilenames()
+                updated_one = False
+                for idx, fname in enumerate(filenames):
+                    new_filename = fix_pcdswidgets_filename(fname)
+                    if fname != new_filename:
+                        filenames[idx] = new_filename
+                        updated_one = True
+                if updated_one:
+                    obj.setFilenames(filenames)
 
     def get_macro(self, macro_name: str) -> str:
         """Returns the current value of a macro that is applied to our subwidgets."""
@@ -155,6 +202,18 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
             else:
                 raise TypeError(f"Unexpected template type, should be str or stringlist: {templ}")
             widget.setProperty(prop, value)
+
+
+def fix_pcdswidgets_filename(filename: str) -> str:
+    """
+    If a relative filename starts with "pcdswidgets", make it absolute, attaching it to the pcdswidgets install root.
+
+    Otherwise, return the original filename.
+    """
+    prefix_indicator = "pcdswidgets" + os.sep
+    if filename.startswith(prefix_indicator):
+        return str(MODULE_ROOT / filename.removeprefix(prefix_indicator))
+    return filename
 
 
 class MacroEditExtension:

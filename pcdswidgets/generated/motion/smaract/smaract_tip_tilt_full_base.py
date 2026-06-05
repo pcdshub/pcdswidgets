@@ -6,7 +6,8 @@ base_cls = SmaractTipTiltFullBase
 macro_names = ['horizontal_motor', 'vertical_motor']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,7 +29,12 @@ except ImportError:
 
 
 class SmaractTipTiltFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    frame: "QtWidgets.QFrame"
+    gridLayoutWidget: "QtWidgets.QWidget"
+    gridLayoutWidget_2: "QtWidgets.QWidget"
     horizontal_expert_screen: "PyDMRelatedDisplayButton"
+    horizontal_invert: "QtWidgets.QCheckBox"
     horizontal_label: "PyDMLabel"
     horizontal_moving: "PyDMByteIndicator"
     horizontal_step_size: "PyDMLineEdit"
@@ -38,6 +44,7 @@ class SmaractTipTiltFullBase(DesignerWidget):
     step_right: "PyDMPushButton"
     step_up: "PyDMPushButton"
     vertical_expert_screen: "PyDMRelatedDisplayButton"
+    vertical_invert: "QtWidgets.QCheckBox"
     vertical_label: "PyDMLabel"
     vertical_moving: "PyDMByteIndicator"
     vertical_step_size: "PyDMLineEdit"
