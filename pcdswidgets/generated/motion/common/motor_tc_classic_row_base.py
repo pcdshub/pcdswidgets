@@ -6,7 +6,8 @@ base_cls = MotorTcClassicRowBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,8 +29,12 @@ except ImportError:
 
 
 class MotorTcClassicRowBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     MotorClassicRow: "MotorClassicRow"
+    frame: "QtWidgets.QFrame"
     interlock_indicator: "PyDMByteIndicator"
+    label: "QtWidgets.QLabel"
+    label_2: "QtWidgets.QLabel"
     temperature_label: "PyDMLabel"
 
     ui_form = Ui_Form

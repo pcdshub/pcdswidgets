@@ -6,7 +6,8 @@ base_cls = ColormapIntesityControlFullBase
 macro_names = []
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -23,6 +24,12 @@ from .colormap_intesity_control_full_form import *
 
 
 class ColormapIntesityControlFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    colormap_combo: "QtWidgets.QComboBox"
+    colormap_label: "QtWidgets.QLabel"
+    histogram_container: "QtWidgets.QWidget"
+    normalize_check: "QtWidgets.QCheckBox"
+
     ui_form = Ui_Form
     _macro_to_widget = {}
     _widget_to_macro = {}

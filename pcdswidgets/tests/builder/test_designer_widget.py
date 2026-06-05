@@ -24,7 +24,7 @@ def test_has_expected_hints():
     hints = inspect.get_annotations(WidgetForBuilderTestBase)
 
     for label_name in ("name_label", "num_label", "name_num_label"):
-        assert hints[label_name] == "QLabel"
+        assert hints[label_name] == "QtWidgets.QLabel"
     assert hints["one_two_shell"] == "PyDMShellCommand"
 
 
