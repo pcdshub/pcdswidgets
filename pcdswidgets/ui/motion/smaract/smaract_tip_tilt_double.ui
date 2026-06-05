@@ -842,7 +842,7 @@ color: rgb(0, 0, 0);</string>
          </property>
          <property name="filenames">
           <stringlist>
-           <string>ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
           </stringlist>
          </property>
          <property name="titles">
@@ -1201,7 +1201,7 @@ color: rgb(0, 0, 0);</string>
          </property>
          <property name="filenames">
           <stringlist>
-           <string>ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
           </stringlist>
          </property>
          <property name="titles">

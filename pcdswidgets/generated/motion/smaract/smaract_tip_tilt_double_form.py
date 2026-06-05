@@ -332,7 +332,7 @@ class Ui_Form(object):
         self.vertical_expert_screen.setAlarmSensitiveContent(False)
         self.vertical_expert_screen.setAlarmSensitiveBorder(True)
         self.vertical_expert_screen.setChannel("")
-        self.vertical_expert_screen.setFilenames(["ui/motion/smaract/smaract_open_loop_context_double.ui"])
+        self.vertical_expert_screen.setFilenames(["pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui"])
         self.vertical_expert_screen.setTitles([])
         self.vertical_expert_screen.setShowIcon(True)
         self.vertical_expert_screen.setRecursiveDisplaySearch(False)
@@ -455,7 +455,9 @@ class Ui_Form(object):
         self.horizontal_expert_screen.setAlarmSensitiveContent(False)
         self.horizontal_expert_screen.setAlarmSensitiveBorder(True)
         self.horizontal_expert_screen.setChannel("")
-        self.horizontal_expert_screen.setFilenames(["ui/motion/smaract/smaract_open_loop_context_double.ui"])
+        self.horizontal_expert_screen.setFilenames(
+            ["pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui"]
+        )
         self.horizontal_expert_screen.setTitles([])
         self.horizontal_expert_screen.setShowIcon(True)
         self.horizontal_expert_screen.setRecursiveDisplaySearch(False)
