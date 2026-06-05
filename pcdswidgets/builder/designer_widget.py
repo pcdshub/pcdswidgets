@@ -2,6 +2,7 @@
 Helper for using designer to layout widgets.
 """
 
+import warnings
 from pathlib import Path
 from string import Template
 from typing import Any, ClassVar, Protocol
@@ -104,11 +105,19 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
         """Returns the current value of a macro that is applied to our subwidgets."""
         return self._macro_values[macro_name]
 
+    def _get_macro(self, macro_name: str) -> str:
+        warnings.warn("_get_macro is deprecated, use get_macro instead.", category=DeprecationWarning, stacklevel=2)
+        return self.get_macro(macro_name)
+
     def set_macro(self, macro_name: str, value: str):
         """Updates a macro to a new value and propagates to all subwidget properties appropriately."""
         self._macro_values[macro_name] = value
         self._updates_for_macro(macro_name)
         self.after_set_macro(macro_name=macro_name, value=value)
+
+    def _set_macro(self, macro_name: str, value: str):
+        warnings.warn("_set_macro is deprecated, use set_macro instead.", category=DeprecationWarning, stacklevel=2)
+        return self.set_macro(macro_name, value)
 
     def after_set_macro(self, macro_name: str, value: str):
         """
