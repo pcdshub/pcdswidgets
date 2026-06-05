@@ -219,7 +219,12 @@ def add_prop_to_widget_macros(widget_macros: defaultdict[str, dict[str, str | li
     if strlist_node is not None:
         # We have a list of strings! Some may have macros.
         all_str_nodes = strlist_node.findall("string")
-        all_str_literals = [node.text for node in all_str_nodes if node.text is not None]
+        all_str_literals = []
+        for node in all_str_nodes:
+            if node.text is None:
+                all_str_literals.append("")
+            else:
+                all_str_literals.append(node.text)
         for text in all_str_literals:
             if "${" in text:
                 widget_macros[name][prop.attrib["name"]] = all_str_literals
