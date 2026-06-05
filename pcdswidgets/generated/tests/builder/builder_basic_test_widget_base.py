@@ -6,7 +6,8 @@ base_cls = BuilderBasicTestWidgetBase
 macro_names = ['NAME', 'NUM', 'ONE', 'TWO']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,9 +29,10 @@ except ImportError:
 
 
 class BuilderBasicTestWidgetBase(DesignerWidget):
-    name_label: "QLabel"
-    name_num_label: "QLabel"
-    num_label: "QLabel"
+    Form: "QtWidgets.QWidget"
+    name_label: "QtWidgets.QLabel"
+    name_num_label: "QtWidgets.QLabel"
+    num_label: "QtWidgets.QLabel"
     one_two_shell: "PyDMShellCommand"
 
     ui_form = Ui_Form

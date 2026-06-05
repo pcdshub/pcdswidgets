@@ -32,8 +32,9 @@ def filepath_test_widget(qtbot: QtBot) -> BuilderFilepathTestWidget:
 def test_has_expected_hints():
     hints = inspect.get_annotations(BuilderBasicTestWidgetBase)
 
+    assert hints["Form"] == "QtWidgets.QWidget"
     for label_name in ("name_label", "num_label", "name_num_label"):
-        assert hints[label_name] == "QLabel"
+        assert hints[label_name] == "QtWidgets.QLabel"
     assert hints["one_two_shell"] == "PyDMShellCommand"
 
 

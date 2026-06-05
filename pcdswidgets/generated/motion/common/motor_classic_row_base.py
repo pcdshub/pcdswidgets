@@ -6,7 +6,8 @@ base_cls = MotorClassicRowBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class MotorClassicRowBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     PyDMByteIndicator: "PyDMByteIndicator"
     PyDMByteIndicator_2: "PyDMByteIndicator"
     PyDMByteIndicator_mvn: "PyDMByteIndicator"
@@ -40,6 +42,7 @@ class MotorClassicRowBase(DesignerWidget):
     PyDMPushButton_twkL: "PyDMPushButton"
     PyDMPushButton_twkR: "PyDMPushButton"
     PyDMShellCommand: "PyDMShellCommand"
+    main_frame: "QtWidgets.QFrame"
 
     ui_form = Ui_Form
     _macro_to_widget = {

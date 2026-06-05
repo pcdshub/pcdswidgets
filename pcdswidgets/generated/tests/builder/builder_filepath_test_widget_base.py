@@ -6,7 +6,8 @@ base_cls = BuilderFilepathTestWidgetBase
 macro_names = ['EMB_TITLE', 'REL_TITLE']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class BuilderFilepathTestWidgetBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     emb_disp: "PyDMEmbeddedDisplay"
     rel_disp: "PyDMRelatedDisplayButton"
 
