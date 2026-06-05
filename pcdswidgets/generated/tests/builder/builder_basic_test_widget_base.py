@@ -28,7 +28,7 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 
-class WidgetForBuilderTestBase(DesignerWidget):
+class BuilderBasicTestWidgetBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
     name_label: "QtWidgets.QLabel"
     name_num_label: "QtWidgets.QLabel"
