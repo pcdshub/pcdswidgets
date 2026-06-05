@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/tests/builder/widget_for_builder_test.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/tests/builder/builder_basic_test_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -8,8 +8,6 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
-from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
-from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from pydm.widgets.shell_command import PyDMShellCommand
 from qtpy import QtCore, QtWidgets
 
@@ -17,7 +15,7 @@ from qtpy import QtCore, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 237)
+        Form.resize(400, 103)
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.name_label = QtWidgets.QLabel(Form)
@@ -49,20 +47,6 @@ class Ui_Form(object):
         self.one_two_shell.setShowCurrentlyRunningIndication(False)
         self.one_two_shell.setObjectName("one_two_shell")
         self.verticalLayout.addWidget(self.one_two_shell)
-        self.emb_disp = PyDMEmbeddedDisplay(Form)
-        self.emb_disp.setToolTip("")
-        self.emb_disp.setRecursiveDisplaySearch(False)
-        self.emb_disp.setLoadWhenShown(True)
-        self.emb_disp.setDisconnectWhenHidden(True)
-        self.emb_disp.setFollowSymlinks(False)
-        self.emb_disp.setObjectName("emb_disp")
-        self.verticalLayout.addWidget(self.emb_disp)
-        self.rel_disp = PyDMRelatedDisplayButton(Form)
-        self.rel_disp.setToolTip("")
-        self.rel_disp.setFilenames(["tests/builder/subdisplay.ui"])
-        self.rel_disp.setMacros(['{"TITLE": "${REL_TITLE}"}'])
-        self.rel_disp.setObjectName("rel_disp")
-        self.verticalLayout.addWidget(self.rel_disp)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -75,5 +59,3 @@ class Ui_Form(object):
         self.num_label.setText(_translate("Form", "Num: ${NUM}"))
         self.name_num_label.setText(_translate("Form", "${NAME}:${NUM}"))
         self.one_two_shell.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
-        self.emb_disp.setMacros(_translate("Form", '{"TITLE": "${EMB_TITLE}"}'))
-        self.emb_disp.setFilename(_translate("Form", "pcdswidgets/tests/builder/subdisplay.ui"))

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>237</height>
+    <height>103</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,61 +100,9 @@
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="PyDMEmbeddedDisplay" name="emb_disp">
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="macros">
-      <string>{&quot;TITLE&quot;: &quot;${EMB_TITLE}&quot;}</string>
-     </property>
-     <property name="filename">
-      <string>pcdswidgets/tests/builder/subdisplay.ui</string>
-     </property>
-     <property name="recursiveDisplaySearch">
-      <bool>false</bool>
-     </property>
-     <property name="loadWhenShown">
-      <bool>true</bool>
-     </property>
-     <property name="disconnectWhenHidden">
-      <bool>true</bool>
-     </property>
-     <property name="followSymlinks">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="PyDMRelatedDisplayButton" name="rel_disp">
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="filenames">
-      <stringlist>
-       <string>tests/builder/subdisplay.ui</string>
-      </stringlist>
-     </property>
-     <property name="macros">
-      <stringlist>
-       <string>{&quot;TITLE&quot;: &quot;${REL_TITLE}&quot;}</string>
-      </stringlist>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>PyDMEmbeddedDisplay</class>
-   <extends>QFrame</extends>
-   <header>pydm.widgets.embedded_display</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMRelatedDisplayButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.related_display_button</header>
-  </customwidget>
   <customwidget>
    <class>PyDMShellCommand</class>
    <extends>QPushButton</extends>
