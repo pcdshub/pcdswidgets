@@ -109,35 +109,41 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
         """
         Special handling for PyDMRelatedDisplay and PyDMEmbeddedDisplay.
 
-        Relative filepaths are fully non-functional when used in pcdswidgets,
+        Relative filepaths are nearly non-functional when used in pcdswidgets,
         because they are relative to the filepath of the ui file (Display)
         they are placed in, not relative to the package data here.
 
-        When we have relative filepaths in either of these widgets, swap them
-        to absolute filepaths at runtime, relative to the pcdswidgets module
-        directory.
+        To opt in to a path relative to the package data here, the user
+        should express it in the following form:
+
+        pcdswidgets/tests/builder/test.ui
+
+        When we see a relative filepath that starts with "pcdswidgets",
+        we will update it to be the absolute path to that resource to avoid
+        these sorts of issues. This allows us to make widgets that refer to each other
+        or to ui file resources shipped with the module.
 
         For example, if pcdswidgets is installed at
         /some/path/python/lib/site-packages/pcdswidgets
-        and we pick a relative path motion/smaract/test.ui
+        and we pick a relative path pcdswidgets/tests/builder/test.ui
         then we will replace it with the absolute path
-        /some/path/python/lib/site-packages/pcdswidgets/motion/smaract/test.ui
+        /some/path/python/lib/site-packages/pcdswidgets/tests/builder/test.ui
         """
         # ui-file loaded objects are attributes of the class
         for obj in self.__dict__.values():
             if isinstance(obj, PyDMEmbeddedDisplay):
                 fname = obj.readFilename()
-                if os.path.isabs(fname):
-                    continue
-                obj.setFilename(make_filename_absolute(fname))
+                new_filename = fix_pcdswidgets_filename(fname)
+                if fname != new_filename:
+                    obj.setFilename(new_filename)
             elif isinstance(obj, PyDMRelatedDisplayButton):
                 filenames = obj.readFilenames()
                 updated_one = False
                 for idx, fname in enumerate(filenames):
-                    if os.path.isabs(fname):
-                        continue
-                    filenames[idx] = make_filename_absolute(fname)
-                    updated_one = True
+                    new_filename = fix_pcdswidgets_filename(fname)
+                    if fname != new_filename:
+                        filenames[idx] = new_filename
+                        updated_one = True
                 if updated_one:
                     obj.setFilenames(filenames)
 
@@ -170,17 +176,16 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
             widget.setProperty(prop, value)
 
 
-def make_filename_absolute(filename: str) -> str:
+def fix_pcdswidgets_filename(filename: str) -> str:
     """
-    Make a relative filepath absolute, attaching it to the pcdswidgets install root.
+    If a relative filename starts with "pcdswidgets", make it aboslute, attaching it to the pcdswidgets install root.
 
-    Two forms are accepted:
-    - pcdswidgets/some/path
-    - some/path
+    Otherwise, return the original filename.
     """
-    if filename.startswith("pcdswidgets"):
-        filename = filename.replace("pcdswidgets" + os.sep, "")
-    return str(MODULE_ROOT / filename)
+    prefix_indicator = "pcdswidgets" + os.sep
+    if filename.startswith(prefix_indicator):
+        return str(MODULE_ROOT / filename.removeprefix(prefix_indicator))
+    return filename
 
 
 class MacroEditExtension:
