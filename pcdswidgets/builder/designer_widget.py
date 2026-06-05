@@ -178,7 +178,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
 
 def fix_pcdswidgets_filename(filename: str) -> str:
     """
-    If a relative filename starts with "pcdswidgets", make it aboslute, attaching it to the pcdswidgets install root.
+    If a relative filename starts with "pcdswidgets", make it absolute, attaching it to the pcdswidgets install root.
 
     Otherwise, return the original filename.
     """
