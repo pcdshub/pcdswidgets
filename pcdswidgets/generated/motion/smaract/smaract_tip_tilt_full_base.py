@@ -182,17 +182,17 @@ class SmaractTipTiltFullBase(DesignerWidget):
         }
 
     def get_horizontal_motor(self) -> str:
-        return self._get_macro("horizontal_motor")
+        return self.get_macro("horizontal_motor")
 
     def set_horizontal_motor(self, value: str) -> None:
-        self._set_macro("horizontal_motor", value)
+        self.set_macro("horizontal_motor", value)
 
     horizontal_motor = pyqtProperty(str, get_horizontal_motor, set_horizontal_motor)
 
     def get_vertical_motor(self) -> str:
-        return self._get_macro("vertical_motor")
+        return self.get_macro("vertical_motor")
 
     def set_vertical_motor(self, value: str) -> None:
-        self._set_macro("vertical_motor", value)
+        self.set_macro("vertical_motor", value)
 
     vertical_motor = pyqtProperty(str, get_vertical_motor, set_vertical_motor)

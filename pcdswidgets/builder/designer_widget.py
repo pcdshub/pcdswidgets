@@ -3,6 +3,7 @@ Helper for using designer to layout widgets.
 """
 
 import os
+import warnings
 from pathlib import Path
 from string import Template
 from typing import Any, ClassVar, Protocol
@@ -147,18 +148,45 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                 if updated_one:
                     obj.setFilenames(filenames)
 
-    def _get_macro(self, macro_name: str) -> str:
+    def get_macro(self, macro_name: str) -> str:
+        """Returns the current value of a macro that is applied to our subwidgets."""
         return self._macro_values[macro_name]
 
-    def _set_macro(self, macro_name: str, value: str):
+    def _get_macro(self, macro_name: str) -> str:
+        warnings.warn("_get_macro is deprecated, use get_macro instead.", category=DeprecationWarning, stacklevel=2)
+        return self.get_macro(macro_name)
+
+    def set_macro(self, macro_name: str, value: str):
+        """Updates a macro to a new value and propagates to all subwidget properties appropriately."""
         self._macro_values[macro_name] = value
         self._updates_for_macro(macro_name)
+        self.after_set_macro(macro_name=macro_name, value=value)
+
+    def _set_macro(self, macro_name: str, value: str):
+        warnings.warn("_set_macro is deprecated, use set_macro instead.", category=DeprecationWarning, stacklevel=2)
+        return self.set_macro(macro_name, value)
+
+    def after_set_macro(self, macro_name: str, value: str):
+        """
+        Hook for additional actions to take when a macro is set.
+
+        This exists so you can extend this behavior without overriding set_macro,
+        which could otherwise make it easy to break the widget.
+
+        So, you override after_set_macro instead and define what you'd like to change
+        after specific values are updated.
+
+        Note that this runs after all built-in effects of set_macro.
+        """
+        ...
 
     def _updates_for_macro(self, macro_name: str):
+        """Propagate updates to each widget that uses this macro."""
         for widget_name in self._macro_to_widget[macro_name]:
             self._update_widget_for_macros(widget_name)
 
     def _update_widget_for_macros(self, widget_name: str):
+        """Update the widget if all needed macros are defined."""
         needed_macros = self._widget_to_macro[widget_name]
         if not all(self._macro_values[macro_name] for macro_name in needed_macros):
             # Skip! Not ready!

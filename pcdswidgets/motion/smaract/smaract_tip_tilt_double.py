@@ -54,7 +54,7 @@ class SmaractTipTiltDouble(SmaractTipTiltDoubleBase):
             # Don't be silly please
             return
 
-        motor_pv = self._get_macro(f"{axis}_motor")
+        motor_pv = self.get_macro(f"{axis}_motor")
 
         if not motor_pv:
             logger.debug(f"Macro for {axis}_motor does not yet exist")

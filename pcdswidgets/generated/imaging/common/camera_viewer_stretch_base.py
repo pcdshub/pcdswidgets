@@ -92,17 +92,17 @@ class CameraViewerStretchBase(DesignerWidget):
         }
 
     def get_cam_prefix(self) -> str:
-        return self._get_macro("cam_prefix")
+        return self.get_macro("cam_prefix")
 
     def set_cam_prefix(self, value: str) -> None:
-        self._set_macro("cam_prefix", value)
+        self.set_macro("cam_prefix", value)
 
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)
 
     def get_nickname(self) -> str:
-        return self._get_macro("nickname")
+        return self.get_macro("nickname")
 
     def set_nickname(self, value: str) -> None:
-        self._set_macro("nickname", value)
+        self.set_macro("nickname", value)
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)

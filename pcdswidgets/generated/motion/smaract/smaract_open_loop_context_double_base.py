@@ -169,9 +169,9 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("motor")
+        return self.get_macro("motor")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("motor", value)
+        self.set_macro("motor", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)

@@ -121,49 +121,49 @@ class EpicsRoiFullBase(DesignerWidget):
         }
 
     def get_cam_prefix(self) -> str:
-        return self._get_macro("cam_prefix")
+        return self.get_macro("cam_prefix")
 
     def set_cam_prefix(self, value: str) -> None:
-        self._set_macro("cam_prefix", value)
+        self.set_macro("cam_prefix", value)
 
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)
 
     def get_roi_plugin(self) -> str:
-        return self._get_macro("roi_plugin")
+        return self.get_macro("roi_plugin")
 
     def set_roi_plugin(self, value: str) -> None:
-        self._set_macro("roi_plugin", value)
+        self.set_macro("roi_plugin", value)
 
     roi_plugin = pyqtProperty(str, get_roi_plugin, set_roi_plugin)
 
     def get_suffix_widthx(self) -> str:
-        return self._get_macro("suffix_WidthX")
+        return self.get_macro("suffix_WidthX")
 
     def set_suffix_widthx(self, value: str) -> None:
-        self._set_macro("suffix_WidthX", value)
+        self.set_macro("suffix_WidthX", value)
 
     suffix_widthx = pyqtProperty(str, get_suffix_widthx, set_suffix_widthx)
 
     def get_suffix_widthy(self) -> str:
-        return self._get_macro("suffix_WidthY")
+        return self.get_macro("suffix_WidthY")
 
     def set_suffix_widthy(self, value: str) -> None:
-        self._set_macro("suffix_WidthY", value)
+        self.set_macro("suffix_WidthY", value)
 
     suffix_widthy = pyqtProperty(str, get_suffix_widthy, set_suffix_widthy)
 
     def get_suffix_x(self) -> str:
-        return self._get_macro("suffix_X")
+        return self.get_macro("suffix_X")
 
     def set_suffix_x(self, value: str) -> None:
-        self._set_macro("suffix_X", value)
+        self.set_macro("suffix_X", value)
 
     suffix_x = pyqtProperty(str, get_suffix_x, set_suffix_x)
 
     def get_suffix_y(self) -> str:
-        return self._get_macro("suffix_Y")
+        return self.get_macro("suffix_Y")
 
     def set_suffix_y(self, value: str) -> None:
-        self._set_macro("suffix_Y", value)
+        self.set_macro("suffix_Y", value)
 
     suffix_y = pyqtProperty(str, get_suffix_y, set_suffix_y)

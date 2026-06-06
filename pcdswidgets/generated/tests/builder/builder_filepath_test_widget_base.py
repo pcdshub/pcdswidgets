@@ -74,17 +74,17 @@ class BuilderFilepathTestWidgetBase(DesignerWidget):
         }
 
     def get_emb_title(self) -> str:
-        return self._get_macro("EMB_TITLE")
+        return self.get_macro("EMB_TITLE")
 
     def set_emb_title(self, value: str) -> None:
-        self._set_macro("EMB_TITLE", value)
+        self.set_macro("EMB_TITLE", value)
 
     emb_title = pyqtProperty(str, get_emb_title, set_emb_title)
 
     def get_rel_title(self) -> str:
-        return self._get_macro("REL_TITLE")
+        return self.get_macro("REL_TITLE")
 
     def set_rel_title(self, value: str) -> None:
-        self._set_macro("REL_TITLE", value)
+        self.set_macro("REL_TITLE", value)
 
     rel_title = pyqtProperty(str, get_rel_title, set_rel_title)
