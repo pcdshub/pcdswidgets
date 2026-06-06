@@ -6,7 +6,8 @@ base_cls = AcquisitionControlFullBase
 macro_names = ['cam_prefix']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class AcquisitionControlFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     PyDMPushButton: "PyDMPushButton"
     acquire_byte: "PyDMByteIndicator"
     acquire_combo: "PyDMEnumComboBox"
@@ -37,7 +39,12 @@ class AcquisitionControlFullBase(DesignerWidget):
     capture_counter_3: "PyDMLabel"
     exposures_per_capture: "PyDMSpinbox"
     image_mode_combo: "PyDMEnumComboBox"
+    label_acquire: "QtWidgets.QLabel"
+    label_capture_mode: "QtWidgets.QLabel"
+    label_capture_mode_2: "QtWidgets.QLabel"
+    label_counter: "QtWidgets.QLabel"
     multiple_count: "PyDMSpinbox"
+    multiple_count_group: "QtWidgets.QWidget"
     status_rbv: "PyDMLabel"
 
     ui_form = Ui_Form
@@ -134,9 +141,9 @@ class AcquisitionControlFullBase(DesignerWidget):
         }
 
     def get_cam_prefix(self) -> str:
-        return self._get_macro("cam_prefix")
+        return self.get_macro("cam_prefix")
 
     def set_cam_prefix(self, value: str) -> None:
-        self._set_macro("cam_prefix", value)
+        self.set_macro("cam_prefix", value)
 
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)

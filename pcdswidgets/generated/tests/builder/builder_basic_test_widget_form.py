@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Form implementation generated from reading ui file 'pcdswidgets/ui/tests/builder/widget_for_builder_test.ui'
+# Form implementation generated from reading ui file 'pcdswidgets/ui/tests/builder/builder_basic_test_widget.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -15,7 +15,7 @@ from qtpy import QtCore, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 191)
+        Form.resize(400, 103)
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.name_label = QtWidgets.QLabel(Form)

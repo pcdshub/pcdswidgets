@@ -6,7 +6,8 @@ base_cls = SmaractOpenLoopClassicRowBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class SmaractOpenLoopClassicRowBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     PyDMLabel_name: "PyDMLabel"
     PyDMLineEdit: "PyDMLineEdit"
     PyDMLineEdit_setpoint: "PyDMLineEdit"
@@ -35,6 +37,7 @@ class SmaractOpenLoopClassicRowBase(DesignerWidget):
     PyDMPushButton_twkL: "PyDMPushButton"
     PyDMPushButton_twkR: "PyDMPushButton"
     PyDMShellCommand: "PyDMShellCommand"
+    label: "QtWidgets.QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -107,9 +110,9 @@ class SmaractOpenLoopClassicRowBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("MOTOR")
+        return self.get_macro("MOTOR")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("MOTOR", value)
+        self.set_macro("MOTOR", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)

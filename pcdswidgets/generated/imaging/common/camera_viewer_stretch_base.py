@@ -6,7 +6,8 @@ base_cls = CameraViewerStretchBase
 macro_names = ['cam_prefix', 'nickname']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,10 +29,19 @@ except ImportError:
 
 
 class CameraViewerStretchBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     PyDMLabel: "PyDMLabel"
-    active_pv_label: "QLabel"
+    active_pv_label: "QtWidgets.QLabel"
+    display_fps_label: "QtWidgets.QLabel"
+    fps_label: "QtWidgets.QLabel"
+    fps_label2: "QtWidgets.QLabel"
+    image_container: "QtWidgets.QWidget"
     image_view: "PyDMImageView"
-    nickname_label: "QLabel"
+    main_splitter: "QtWidgets.QSplitter"
+    nickname_label: "QtWidgets.QLabel"
+    sidebar_content: "QtWidgets.QWidget"
+    sidebar_scroll: "QtWidgets.QScrollArea"
+    sidebar_toggle: "QtWidgets.QPushButton"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -82,17 +92,17 @@ class CameraViewerStretchBase(DesignerWidget):
         }
 
     def get_cam_prefix(self) -> str:
-        return self._get_macro("cam_prefix")
+        return self.get_macro("cam_prefix")
 
     def set_cam_prefix(self, value: str) -> None:
-        self._set_macro("cam_prefix", value)
+        self.set_macro("cam_prefix", value)
 
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)
 
     def get_nickname(self) -> str:
-        return self._get_macro("nickname")
+        return self.get_macro("nickname")
 
     def set_nickname(self, value: str) -> None:
-        self._set_macro("nickname", value)
+        self.set_macro("nickname", value)
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)

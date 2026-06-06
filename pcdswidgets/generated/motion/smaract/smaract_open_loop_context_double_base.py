@@ -6,7 +6,8 @@ base_cls = SmaractOpenLoopContextDoubleBase
 macro_names = ['motor']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,20 +29,29 @@ except ImportError:
 
 
 class SmaractOpenLoopContextDoubleBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     chan_temp_get: "PyDMLabel"
+    channel_temp_label: "QtWidgets.QLabel"
     clear_step_count: "PyDMPushButton"
     desc_get: "PyDMLabel"
+    desc_label: "QtWidgets.QLabel"
     desc_set: "PyDMLineEdit"
     motor_load_get: "PyDMLabel"
+    motor_load_label: "QtWidgets.QLabel"
     scan_volt_get: "PyDMLabel"
+    scan_volt_label: "QtWidgets.QLabel"
     scan_volt_set: "PyDMSlider"
     step_freq_get: "PyDMLabel"
+    step_freq_label: "QtWidgets.QLabel"
     step_freq_set: "PyDMLineEdit"
     step_size_get: "PyDMLabel"
+    step_size_label: "QtWidgets.QLabel"
     step_size_set: "PyDMLineEdit"
     step_volt_get: "PyDMLabel"
     step_volt_set: "PyDMLineEdit"
+    step_voltage_label: "QtWidgets.QLabel"
     total_step_count_get: "PyDMLabel"
+    total_step_count_label: "QtWidgets.QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -159,9 +169,9 @@ class SmaractOpenLoopContextDoubleBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("motor")
+        return self.get_macro("motor")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("motor", value)
+        self.set_macro("motor", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)
