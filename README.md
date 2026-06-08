@@ -33,9 +33,9 @@ You can also build and install `pcdswidgets` directly from source using `GitHub`
 
 
 ### Development Environments
-A `pixi` environment is included here. This is the shared context in which we build and test `pcdswidgets`.
+A `pixi` environment is included here. This is the shared context in which we build, develop, and test `pcdswidgets`.
 
-Note that you _must_ have `pixi` on your path for this to work.
+Note that you _must_ have `pixi` on your path for this to work. That means that `pixi` is a developer requirement.
 
 At lcls you can get this via ctrlenv-pathmunge:
 
@@ -46,6 +46,8 @@ pixi --version
 ```
 
 You can create the environment with `pixi run install`.
+If this is the first `pixi` command you've run with this repo, it will build the environment for you,
+and then run the post-env install script to set up the designer plugin, which is the `install` task in this repo.
 
 You can also just `make`, which will run all the important build steps, or `make pixi` for just the `pixi` step.
 
@@ -61,11 +63,13 @@ or you'll need to actually figure out why all the conda-forge pyqt builds stoppe
 You can run `pixi install` (or, `make pixi`)
 to update the environment with any new widgets you've added since the last run.
 
-Once this environment is created, you can use `pixi run designer` or `try_in_designer.sh` to
+When you are ready to test, you can use `pixi run designer` to
 make sure your widgets are exporting cleanly in an editable way in designer.
 
-You can also use `pixi run pydm` or `try_in_pydm.sh` to launch a version of `pydm` that includes
+You can also use `pixi run pydm` to launch a version of `pydm` that includes
 your new widgets.
+
+Each of these `pixi` commands will build or update the environment as needed.
 
 You can alternatively build your own environment:
 
@@ -78,7 +82,8 @@ or
 or whatever your favorite method is.
 
 Note that we can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
-This is due to complications in the build process.
+This is due to complications in the build process where our existing compiled binary for the plugin
+is not cross-compiled, and therefore needs exact versions of Python and PyQt on the specific architecture.
 
 
 ## Adding Widgets Tutorial
@@ -147,11 +152,11 @@ Note that at LCLS this only works on Rocky 9 machines!
 
 ```
 make
-./try_in_designer.sh
+pixi run designer
 ```
 
 If the `make` completes successfully, you will have a working `python` environment
-and `try_in_designer.sh` will open a designer window with the existing `pcdswidgets` widgets in the sidebar.
+and `pixi run designer` will open a designer window with the existing `pcdswidgets` widgets in the sidebar.
 
 
 ### Adding Your Composite Widget: Part 1
@@ -204,8 +209,8 @@ Other guidelines:
    - This will generate at least three `.py` files and add a row to `pyproject.toml`.
    - Do not edit the files in `generated`.
 5. Try it out!
-   - Run `./try_in_designer.sh` and make a test screen. (Which, reminder: only works on rocky9 at LCLS).
-   - After you've made a test screen, then do `./try_in_pydm.sh my_screen.ui` for further testing.
+   - Run `pixi run designer` and make a test screen. (Which, reminder: only works on rocky9 at LCLS).
+   - After you've made a test screen, then do `pixi run pydm my_screen.ui` for further testing.
    - Make sure to take screenshots to include in your pull request.
 
 At this point, if you like what you see, you're actually done.
