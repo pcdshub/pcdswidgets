@@ -23,6 +23,10 @@ all:
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
 
+# Special target for forcing rebuild of generated dir
+# make rebuild --always-make
+rebuild: $(PY_FORM) $(PY_BASE)
+
 # Need to re-run form and base if the ui file is updated
 $(PY_FORM): pcdswidgets/generated/%_form.py: pcdswidgets/ui/%.ui
 	$(BUILD_CMD) uic $^

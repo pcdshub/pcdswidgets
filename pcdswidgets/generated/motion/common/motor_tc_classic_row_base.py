@@ -6,7 +6,8 @@ base_cls = MotorTcClassicRowBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,8 +29,12 @@ except ImportError:
 
 
 class MotorTcClassicRowBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     MotorClassicRow: "MotorClassicRow"
+    frame: "QtWidgets.QFrame"
     interlock_indicator: "PyDMByteIndicator"
+    label: "QtWidgets.QLabel"
+    label_2: "QtWidgets.QLabel"
     temperature_label: "PyDMLabel"
 
     ui_form = Ui_Form
@@ -53,13 +58,13 @@ class MotorTcClassicRowBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "MotorClassicRow": [
-            ("motor", "${MOTOR}"),
+            ("motor", """${MOTOR}"""),
         ],
         "interlock_indicator": [
-            ("channel", "ca://${MOTOR}:ILOCK:ACTIVE_RBV"),
+            ("channel", """ca://${MOTOR}:ILOCK:ACTIVE_RBV"""),
         ],
         "temperature_label": [
-            ("channel", "ca://${MOTOR}:ILOCK:TC_TEMP_RBV"),
+            ("channel", """ca://${MOTOR}:ILOCK:TC_TEMP_RBV"""),
         ],
     }
 
@@ -70,9 +75,9 @@ class MotorTcClassicRowBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("MOTOR")
+        return self.get_macro("MOTOR")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("MOTOR", value)
+        self.set_macro("MOTOR", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)
