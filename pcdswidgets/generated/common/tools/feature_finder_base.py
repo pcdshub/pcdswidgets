@@ -6,7 +6,8 @@ base_cls = FeatureFinderBase
 macro_names = ['detector', 'motor']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,14 +29,38 @@ except ImportError:
 
 
 class FeatureFinderBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    bwd_run: "PyDMPushButton"
+    bwd_step: "PyDMPushButton"
+    change_pvs_button: "PyDMPushButton"
     detector_get: "PyDMLabel"
+    detector_label: "QtWidgets.QLabel"
+    fwd_run: "PyDMPushButton"
+    fwd_step: "PyDMPushButton"
+    invert_x_checkbox: "QtWidgets.QCheckBox"
+    invert_x_label: "QtWidgets.QLabel"
+    label: "QtWidgets.QLabel"
+    lower_limit_get: "QtWidgets.QLabel"
+    lower_limit_label: "QtWidgets.QLabel"
+    lower_limit_set: "QtWidgets.QDoubleSpinBox"
     motor_hlm_get: "PyDMLabel"
     motor_llm_get: "PyDMLabel"
     motor_status_led: "SvgMultiStateLED"
+    plot: "PyDMScatterPlot"
     position_get: "PyDMLabel"
+    position_label: "QtWidgets.QLabel"
     position_set: "PyDMLineEdit"
+    reset_graph: "PyDMPushButton"
+    soft_limits_label: "QtWidgets.QLabel"
+    step_size_get: "QtWidgets.QLabel"
+    step_size_label: "QtWidgets.QLabel"
+    step_size_set: "QtWidgets.QDoubleSpinBox"
     stop: "PyDMPushButton"
+    upper_limit_get: "QtWidgets.QLabel"
+    upper_limit_label: "QtWidgets.QLabel"
+    upper_limit_set: "QtWidgets.QDoubleSpinBox"
     velocity_get: "PyDMLabel"
+    velocity_label: "QtWidgets.QLabel"
     velocity_set: "PyDMLineEdit"
 
     ui_form = Ui_Form
@@ -85,33 +110,33 @@ class FeatureFinderBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "detector_get": [
-            ("channel", "ca://${detector}"),
+            ("channel", """ca://${detector}"""),
         ],
         "motor_hlm_get": [
-            ("text", "ca://${motor}.HLM"),
-            ("channel", "ca://${motor}.HLM"),
+            ("text", """ca://${motor}.HLM"""),
+            ("channel", """ca://${motor}.HLM"""),
         ],
         "motor_llm_get": [
-            ("text", "ca://${motor}.LLM"),
-            ("channel", "ca://${motor}.LLM"),
+            ("text", """ca://${motor}.LLM"""),
+            ("channel", """ca://${motor}.LLM"""),
         ],
         "motor_status_led": [
-            ("motor", "${motor}"),
+            ("motor", """${motor}"""),
         ],
         "position_get": [
-            ("channel", "ca://${motor}.RBV"),
+            ("channel", """ca://${motor}.RBV"""),
         ],
         "position_set": [
-            ("channel", "ca://${motor}.VAL"),
+            ("channel", """ca://${motor}.VAL"""),
         ],
         "stop": [
-            ("channel", "ca://${motor}.STOP"),
+            ("channel", """ca://${motor}.STOP"""),
         ],
         "velocity_get": [
-            ("channel", "ca://${motor}.VELO"),
+            ("channel", """ca://${motor}.VELO"""),
         ],
         "velocity_set": [
-            ("channel", "ca://${motor}.VELO"),
+            ("channel", """ca://${motor}.VELO"""),
         ],
     }
 
@@ -123,17 +148,17 @@ class FeatureFinderBase(DesignerWidget):
         }
 
     def get_detector(self) -> str:
-        return self._get_macro("detector")
+        return self.get_macro("detector")
 
     def set_detector(self, value: str) -> None:
-        self._set_macro("detector", value)
+        self.set_macro("detector", value)
 
     detector = pyqtProperty(str, get_detector, set_detector)
 
     def get_motor(self) -> str:
-        return self._get_macro("motor")
+        return self.get_macro("motor")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("motor", value)
+        self.set_macro("motor", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)
