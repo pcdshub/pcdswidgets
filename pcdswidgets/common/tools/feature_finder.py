@@ -136,7 +136,7 @@ class FeatureFinder(FeatureFinderBase):
         self._macros_timer.setInterval(100)
         self._macros_timer.setSingleShot(True)
 
-    def _set_macro(self, macro_name: str, value: str) -> None:
+    def after_set_macro(self, macro_name: str, value: str) -> None:
         """
         Overriding the parent method for this to handle PyDMWidget channel swapping
 
@@ -148,8 +148,6 @@ class FeatureFinder(FeatureFinderBase):
             The value of the macro. In this widget, this is a PV.
         """
         widget: PyDMLabel | PyDMLineEdit | PyDMPushButton | SvgMultiStateLED
-        super()._set_macro(macro_name, value)
-
         for widget_name in self._macro_to_widget[macro_name]:
             widget = getattr(self, widget_name)
             if hasattr(widget, "set_channel"):
@@ -180,7 +178,7 @@ class FeatureFinder(FeatureFinderBase):
         """
         Need to wait for the object to exist for its macros to be available
         """
-        if not self._get_macro("motor") or not self._get_macro("detector"):
+        if not self.get_macro("motor") or not self.get_macro("detector"):
             self._macros_timer.start()
             return
 
@@ -368,7 +366,7 @@ class FeatureFinder(FeatureFinderBase):
         """
         Once the meter macro is available, connect all relevant widgets and update attr.
         """
-        self._detector_pv = self._get_macro("detector")
+        self._detector_pv = self.get_macro("detector")
         if self._detector_egu_ch:
             self._detector_egu_ch.disconnect(destroying=True)
         self._detector_egu_ch = PyDMChannel(f"ca://{self._detector_pv}.EGU", value_slot=self.update_detector_egu)
@@ -457,8 +455,8 @@ class FeatureFinder(FeatureFinderBase):
             try:
                 self.save_settings()
                 self._reset_graph()
-                self._set_macro("motor", new_motor_pv)
-                self._set_macro("detector", new_detector_pv)
+                self.set_macro("motor", new_motor_pv)
+                self.set_macro("detector", new_detector_pv)
                 dialog.accept()
             except Exception as e:
                 logger.error(f"Failed to apply PV changes: {e}")
