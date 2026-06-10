@@ -19,11 +19,10 @@ from sys import float_info
 import numpy as np
 from epics import caput
 from pydm import PyDMChannel
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton, PyDMScatterPlot
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import QTimer, Slot
 from qtpy.QtWidgets import (
-    QCheckBox,
     QDialog,
     QDialogButtonBox,
     QDoubleSpinBox,
@@ -41,31 +40,6 @@ logger = logging.getLogger(__name__)
 
 
 class FeatureFinder(FeatureFinderBase):
-    # Type hinting
-    position_set: PyDMLineEdit
-    position_get: PyDMLabel
-    detector_get: PyDMLabel
-    step_size_set: QDoubleSpinBox
-    step_size_get: QLabel
-    velocity_set: PyDMLineEdit
-    velocity_get: PyDMLabel
-    motor_status_led: SvgMultiStateLED
-    motor_hlm_get: PyDMLabel
-    motor_llm_get: PyDMLabel
-    lower_limit_set: QDoubleSpinBox
-    lower_limit_get: QLabel
-    upper_limit_set: QDoubleSpinBox
-    upper_limit_get: QLabel
-    bwd_run: PyDMPushButton
-    bwd_step: PyDMPushButton
-    stop: PyDMPushButton
-    fwd_run: PyDMPushButton
-    fwd_step: PyDMPushButton
-    reset_graph: PyDMPushButton
-    invert_x_checkbox: QCheckBox
-    plot: PyDMScatterPlot
-    change_pvs_button: PyDMPushButton
-
     designer_options = DesignerOptions(
         group="ECS Common Tools",
         is_container=False,
