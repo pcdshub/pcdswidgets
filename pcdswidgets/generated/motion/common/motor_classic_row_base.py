@@ -47,18 +47,18 @@ class MotorClassicRowBase(DesignerWidget):
     ui_form = Ui_Form
     _macro_to_widget = {
         "MOTOR": [
-            "PyDMPushButton_twkR",
-            "PyDMByteIndicator_2",
-            "PyDMLabel_name",
-            "PyDMLabel",
+            "PyDMLineEdit_setpoint",
             "PyDMShellCommand",
-            "PyDMLineEdit",
             "PyDMByteIndicator",
+            "PyDMLabel_name",
+            "PyDMPushButton_twkR",
+            "PyDMLabel",
+            "PyDMPushButton_stop",
             "PyDMLabel_rbv",
             "PyDMByteIndicator_mvn",
+            "PyDMByteIndicator_2",
+            "PyDMLineEdit",
             "PyDMPushButton_twkL",
-            "PyDMPushButton_stop",
-            "PyDMLineEdit_setpoint",
         ],
     }
     _widget_to_macro = {
