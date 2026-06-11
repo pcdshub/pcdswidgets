@@ -1,0 +1,1222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>621</width>
+    <height>471</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>621</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">color: rgb(35, 35, 35);</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="button_layout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <layout class="QGridLayout" name="motor_button_grid">
+         <item row="1" column="2">
+          <widget class="PyDMPushButton" name="stop">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(170, 0, 0);</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string>Stop the motor</string>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string>ca://${motor}.STOP</string>
+           </property>
+           <property name="PyDMIcon">
+            <string>stop</string>
+           </property>
+           <property name="PyDMIconColor">
+            <color alpha="0">
+             <red>255</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string/>
+           </property>
+           <property name="pressValue">
+            <string>1</string>
+           </property>
+           <property name="releaseValue">
+            <string/>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="PyDMPushButton" name="fwd_run">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string>Run continously fwd</string>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string/>
+           </property>
+           <property name="PyDMIcon">
+            <string>angle-double-right</string>
+           </property>
+           <property name="PyDMIconColor">
+            <color>
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string>Are you sure you want to proceed?</string>
+           </property>
+           <property name="pressValue">
+            <string>None</string>
+           </property>
+           <property name="releaseValue">
+            <string>None</string>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="PyDMPushButton" name="bwd_step">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string>Step bwd</string>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string/>
+           </property>
+           <property name="PyDMIcon">
+            <string>angle-left</string>
+           </property>
+           <property name="PyDMIconColor">
+            <color>
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string>Are you sure you want to proceed?</string>
+           </property>
+           <property name="pressValue">
+            <string>None</string>
+           </property>
+           <property name="releaseValue">
+            <string>None</string>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="PyDMPushButton" name="bwd_run">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string>Run continously bwd</string>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string/>
+           </property>
+           <property name="PyDMIcon">
+            <string>angle-double-left</string>
+           </property>
+           <property name="PyDMIconColor">
+            <color>
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string>Are you sure you want to proceed?</string>
+           </property>
+           <property name="pressValue">
+            <string>None</string>
+           </property>
+           <property name="releaseValue">
+            <string>None</string>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="PyDMPushButton" name="fwd_step">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string>Step fwd</string>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string/>
+           </property>
+           <property name="PyDMIcon">
+            <string>angle-right</string>
+           </property>
+           <property name="PyDMIconColor">
+            <color>
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string>Are you sure you want to proceed?</string>
+           </property>
+           <property name="pressValue">
+            <string>None</string>
+           </property>
+           <property name="releaseValue">
+            <string>None</string>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="PyDMPushButton" name="change_pvs_button">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);
+font: 9pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Change PVs</string>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>false</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Update the PVs used in this widget</string>
+         </property>
+         <property name="monitorDisp">
+          <bool>false</bool>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="PyDMIcon">
+          <string>edit</string>
+         </property>
+         <property name="passwordProtected">
+          <bool>false</bool>
+         </property>
+         <property name="password">
+          <string/>
+         </property>
+         <property name="protectedPassword">
+          <string/>
+         </property>
+         <property name="showConfirmDialog">
+          <bool>false</bool>
+         </property>
+         <property name="confirmMessage">
+          <string>Are you sure you want to proceed?</string>
+         </property>
+         <property name="pressValue">
+          <string>None</string>
+         </property>
+         <property name="releaseValue">
+          <string>None</string>
+         </property>
+         <property name="relativeChange">
+          <bool>false</bool>
+         </property>
+         <property name="writeWhenRelease">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="1">
+          <widget class="PyDMPushButton" name="reset_graph">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(35, 35, 35);
+background-color: rgb(238, 238, 238);</string>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>false</bool>
+           </property>
+           <property name="alarmSensitiveBorder">
+            <bool>false</bool>
+           </property>
+           <property name="PyDMToolTip">
+            <string/>
+           </property>
+           <property name="monitorDisp">
+            <bool>false</bool>
+           </property>
+           <property name="channel">
+            <string/>
+           </property>
+           <property name="PyDMIcon">
+            <string>recycle</string>
+           </property>
+           <property name="passwordProtected">
+            <bool>false</bool>
+           </property>
+           <property name="password">
+            <string/>
+           </property>
+           <property name="protectedPassword">
+            <string/>
+           </property>
+           <property name="showConfirmDialog">
+            <bool>false</bool>
+           </property>
+           <property name="confirmMessage">
+            <string>Are you sure you want to proceed?</string>
+           </property>
+           <property name="pressValue">
+            <string>None</string>
+           </property>
+           <property name="releaseValue">
+            <string>None</string>
+           </property>
+           <property name="relativeChange">
+            <bool>false</bool>
+           </property>
+           <property name="writeWhenRelease">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Reset Plot</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="invert_x_label">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Invert X-axis</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" alignment="Qt::AlignHCenter">
+          <widget class="QCheckBox" name="invert_x_checkbox">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout_5"/>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="motor_grid">
+       <item row="9" column="7">
+        <widget class="PyDMLabel" name="motor_llm_get">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>ca://${motor}.LLM</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Motor's lower soft limit</string>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.LLM</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="7">
+        <widget class="PyDMLabel" name="motor_hlm_get">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;color: rgb(35, 35, 35);</string>
+         </property>
+         <property name="text">
+          <string>ca://${motor}.HLM</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Motor's upper soft limit</string>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.HLM</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="6">
+        <widget class="QLabel" name="step_size_get">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Step Size RBV</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="6">
+        <widget class="PyDMLabel" name="velocity_get">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Velocity in $(pv_value.EGU)</string>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.VELO</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="PyDMLabel" name="detector_get">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Detection signal</string>
+         </property>
+         <property name="channel">
+          <string>ca://${detector}</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+         <property name="displayFormat">
+          <enum>PyDMLabel::Exponential</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QLabel" name="step_size_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step Size</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QLabel" name="upper_limit_label">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Upper limit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="6">
+        <widget class="PyDMLabel" name="position_get">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Motor's current position</string>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.RBV</string>
+         </property>
+         <property name="enableRichText">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="5">
+        <widget class="QDoubleSpinBox" name="upper_limit_set">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(238, 238, 238);
+color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="5">
+        <widget class="PyDMLineEdit" name="velocity_set">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(238, 238, 238);
+color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Set the velocity</string>
+         </property>
+         <property name="monitorDisp">
+          <bool>false</bool>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.VELO</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QLabel" name="lower_limit_label">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Lower limit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QLabel" name="velocity_label">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Velocity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="5">
+        <widget class="QDoubleSpinBox" name="lower_limit_set">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(238, 238, 238);
+color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="stepType">
+          <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QLabel" name="position_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Position</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLabel" name="detector_label">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Detector</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="5">
+        <widget class="QDoubleSpinBox" name="step_size_set">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(238, 238, 238);
+color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>6</number>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
+         </property>
+         <property name="stepType">
+          <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="6">
+        <widget class="QLabel" name="lower_limit_get">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Lower Limit RBV</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="6">
+        <widget class="QLabel" name="upper_limit_get">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Upper Limit RBV</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="PyDMLineEdit" name="position_set">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(238, 238, 238);
+color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="precision">
+          <number>0</number>
+         </property>
+         <property name="showUnits">
+          <bool>true</bool>
+         </property>
+         <property name="precisionFromPV">
+          <bool>true</bool>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Go to position</string>
+         </property>
+         <property name="monitorDisp">
+          <bool>false</bool>
+         </property>
+         <property name="channel">
+          <string>ca://${motor}.VAL</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="7" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="SvgMultiStateLED" name="motor_status_led">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="motor" stdset="0">
+          <string>${motor}</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="7" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLabel" name="soft_limits_label">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(35, 35, 35);
+font: 11pt &quot;Sans Serif&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Soft limits</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="PyDMScatterPlot" name="plot">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>550</width>
+       <height>267</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="backgroundBrush">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </property>
+     <property name="sceneRect">
+      <rectf>
+       <x>0.000000000000000</x>
+       <y>0.000000000000000</y>
+       <width>603.000000000000000</width>
+       <height>267.000000000000000</height>
+      </rectf>
+     </property>
+     <property name="axisColor">
+      <color>
+       <red>0</red>
+       <green>0</green>
+       <blue>0</blue>
+      </color>
+     </property>
+     <property name="yAxes">
+      <stringlist>
+       <string>{&quot;name&quot;: &quot;left&quot;, &quot;orientation&quot;: &quot;left&quot;, &quot;label&quot;: null, &quot;minRange&quot;: -2.025816515378531, &quot;maxRange&quot;: 2.025816515378531, &quot;autoRange&quot;: true, &quot;logMode&quot;: false}</string>
+      </stringlist>
+     </property>
+     <property name="curves">
+      <stringlist/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMScatterPlot</class>
+   <extends>QGraphicsView</extends>
+   <header>pydm.widgets.scatterplot</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMSymbol</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.symbol</header>
+  </customwidget>
+  <customwidget>
+   <class>SvgMultiStateLED</class>
+   <extends>PyDMSymbol</extends>
+   <header>pcdswidgets.motion.common.svg_multi_state_led</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
