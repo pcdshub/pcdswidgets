@@ -1,9 +1,14 @@
+import logging
+import os
+
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Property, QSize
 
 from ..icons.pumps import GetterPumpSymbolIcon, IonPumpSymbolIcon, ScrollPumpSymbolIcon, TurboPumpSymbolIcon
 from .base import ContentLocation, PCDSSymbolBase
 from .mixins import ButtonControl, ButtonLabelControl, ErrorMixin, InterlockMixin, StateMixin
+
+logger = logging.getLogger(__name__)
 
 
 class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
@@ -85,6 +90,21 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
     NAME = "Ion Pump"
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
+    # Per-ophyd-class suffix overrides. Any suffix not listed for a given
+    # ophyd class falls back to the class-level default above. These are
+    # applied whenever the expertOphydClass property changes (including when
+    # the Designer applies the saved property after construction), and the
+    # channels are rebuilt so the new suffixes take effect.
+    SUFFIX_MAP = {
+        "pcdsdevices.pump.PIPCombined": {
+            "interlock_suffix": False,
+            "error_suffix": ":ERROR",
+            "state_suffix": ":STATUS",
+            "command_suffix": ":STATEDES",
+            "readback_suffix": ":PRESS_RBV",
+        },
+    }
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -99,8 +119,98 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
         self.icon = IonPumpSymbolIcon(parent=self)
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
+    @PCDSSymbolBase.expertOphydClass.setter
+    def expertOphydClass(self, klass):
+        """
+        Set the expert ophyd class and apply any suffix overrides mapped to it.
+
+        When the ophyd class changes, the per-class suffixes (if any) are
+        applied and the channels are rebuilt so they point at the correct PVs.
+        """
+        if self.expertOphydClass == klass:
+            return
+        self._expert_ophyd_class = klass
+
+        overrides = self.SUFFIX_MAP.get(klass, {})
+        self._interlock_suffix = overrides.get("interlock_suffix", type(self)._interlock_suffix)
+        self._error_suffix = overrides.get("error_suffix", type(self)._error_suffix)
+        self._state_suffix = overrides.get("state_suffix", type(self)._state_suffix)
+        self._command_suffix = overrides.get("command_suffix", type(self)._command_suffix)
+        self._readback_suffix = overrides.get("readback_suffix", type(self)._readback_suffix)
+
+        # Rebuild channels so the new suffixes take effect (only meaningful
+        # once a channel prefix has been provided).
+        if self._channels_prefix:
+            self.destroy_channels()
+            self.create_channels()
+
     def sizeHint(self):
         return QSize(180, 80)
+
+    def get_expert_ui_paths(self, expert_key):
+        """
+        Provide paths to expert UIs for IonPump.
+
+        Parameters
+        ----------
+        expert_key : str
+            The expertOphydClass value.
+
+        Returns
+        -------
+        list[str]
+            Paths to matching .ui files, or an empty list.
+        """
+        if not expert_key:
+            return []
+        folder = expert_key.rsplit(".", 1)[-1]
+
+        ui_dir = os.path.join(os.path.dirname(__file__), "..", "ui", "vacuum", "pump_screens", folder)
+        if not os.path.isdir(ui_dir):
+            return []
+
+        # Define preferred tab order
+        preferred_order = ["detailed.ui", "expert.ui", "controller.ui"]
+        all_files = [f for f in os.listdir(ui_dir) if f.endswith(".ui")]
+
+        # Sort by preferred_order, then append any extras not in the list
+        ordered_files = [f for f in preferred_order if f in all_files] + [f for f in all_files if f not in preferred_order]
+
+        ui_paths = [os.path.join(ui_dir, filename) for filename in ordered_files]
+        return ui_paths
+
+    def get_expert_macros(self, expert_key: str, prefix: str) -> dict[str, str]:
+        """
+        Provide expert-screen macros for IonPump.
+
+        Subclasses can tailor this further for IOC naming differences.
+        """
+        macros = super().get_expert_macros(expert_key, prefix)
+
+        controller_base = ""
+        controller_pv = f"{prefix}:VPCNAME"
+
+        try:
+            from epics import caget
+        except ImportError:
+            logger.debug("pyepics is unavailable; leaving controller_base empty for %s", controller_pv)
+        else:
+            try:
+                controller_value = caget(controller_pv, timeout=1.0)
+            except Exception:
+                logger.warning("Unable to resolve %s for IonPump expert macros", controller_pv, exc_info=True)
+            else:
+                if controller_value is None:
+                    logger.debug("No controller base returned from %s", controller_pv)
+                else:
+                    controller_base = str(controller_value).strip()
+                    logger.debug("Resolved controller_base '%s' from %s for IonPump expert macros", controller_base, controller_pv)
+
+        # Leave the macro empty if no controller can be resolved so the
+        # expert screen still opens, but its controller PVs will not connect.
+        macros["controller"] = controller_base
+        return macros
+
 
 
 class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):

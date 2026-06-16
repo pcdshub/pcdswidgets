@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>366</width>
+    <height>373</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Digitel QPC Controller</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PyDMLabel" name="PyDMLabel_13">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>${controller}</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="general_box">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>General</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Firmware Version</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>ca://${controller}:FWVERSION</string>
+        </property>
+        <property name="precision">
+         <number>2</number>
+        </property>
+        <property name="precisionFromPV">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${controller}:FWVERSION</string>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::Decimal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>System Restart</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="PyDMPushButton" name="PyDMPushButton">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">PyDMPushButton { background-color: red }</string>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="monitorDisp">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${controller}:MASTERRESET</string>
+        </property>
+        <property name="PyDMIcon">
+         <string/>
+        </property>
+        <property name="passwordProtected">
+         <bool>false</bool>
+        </property>
+        <property name="password">
+         <string/>
+        </property>
+        <property name="protectedPassword">
+         <string/>
+        </property>
+        <property name="showConfirmDialog">
+         <bool>false</bool>
+        </property>
+        <property name="confirmMessage">
+         <string>Are you sure you want to proceed?</string>
+        </property>
+        <property name="pressValue">
+         <string>1</string>
+        </property>
+        <property name="releaseValue">
+         <string>None</string>
+        </property>
+        <property name="relativeChange">
+         <bool>false</bool>
+        </property>
+        <property name="writeWhenRelease">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="hv_box">
+     <property name="title">
+      <string>HV</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>HV Auto Start</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel_11">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>ca://${controller}:ASPOWER</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="precision">
+         <number>0</number>
+        </property>
+        <property name="showUnits">
+         <bool>true</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>true</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${controller}:ASPOWER</string>
+        </property>
+        <property name="enableRichText">
+         <bool>false</bool>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::String</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_2">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${controller}:ASPOWERDES</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="debug_box">
+     <property name="title">
+      <string>Debug</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Command</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="PyDMLineEdit" name="PyDMLineEdit">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>${controller}:COMMAND</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Response</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="PyDMLabel" name="PyDMLabel_2">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>ca://${controller}:RESPONSE.VAL</string>
+        </property>
+        <property name="precision">
+         <number>2</number>
+        </property>
+        <property name="showUnits">
+         <bool>false</bool>
+        </property>
+        <property name="precisionFromPV">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveContent">
+         <bool>false</bool>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>true</bool>
+        </property>
+        <property name="PyDMToolTip">
+         <string/>
+        </property>
+        <property name="channel">
+         <string>ca://${controller}:RESPONSE.VAL</string>
+        </property>
+        <property name="enableRichText">
+         <bool>false</bool>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::String</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Example&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CMD 08&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

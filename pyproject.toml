@@ -46,6 +46,7 @@ MotorClassicFull = "pcdswidgets.motion.common.motor_classic_full:MotorClassicFul
 MotorClassicRow = "pcdswidgets.motion.common.motor_classic_row:MotorClassicRow"
 MotorTcClassicRow = "pcdswidgets.motion.common.motor_tc_classic_row:MotorTcClassicRow"
 NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
+Pipcombined = "pcdswidgets.vacuum.pump_screens.PIPCombined:Pipcombined"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
 PneumaticValveDA = "pcdswidgets.vacuum.valves:PneumaticValveDA"
 PneumaticValveNO = "pcdswidgets.vacuum.valves:PneumaticValveNO"

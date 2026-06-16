@@ -588,6 +588,81 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
 
+    def get_expert_ui_paths(self, expert_key) -> list[str]:
+        """
+        Optional hook to provide local UI file paths for the expert class.
+
+        This allows widgets to define local UI files (stored in ui/vacuum) that
+        correspond to their expertOphydClass, enabling a gradual migration away
+        from Typhos while maintaining backward compatibility.
+
+        Subclasses can override this method to map expertOphydClass values to
+        local UI file paths. Any returned paths are shown as the first tabs in
+        the expert screen.
+
+        Parameters
+        ----------
+        expert_key : str
+            The expertOphydClass value.
+
+        Returns
+        -------
+        list[str]
+            Absolute paths to local UI files. Return an empty list when no
+            local UI files are defined for this expert class.
+        """
+        return []
+
+    @staticmethod
+    def _format_macros(macros: dict[str, str]) -> str:
+        """Serialize a macro mapping into a PyDM-compatible macro string."""
+        return ",".join(f"{key}={value}" for key, value in macros.items())
+
+    def get_expert_macros(self, expert_key, prefix) -> dict[str, str]:
+        """
+        Hook for widgets to provide dynamic macros for expert screens.
+
+        Parameters
+        ----------
+        expert_key : str
+            The expertOphydClass value.
+        prefix : str
+            The resolved device prefix without protocol.
+
+        Returns
+        -------
+        dict[str, str]
+            Macro mapping for expert screens. The base enforces a ``prefix``
+            macro and subclasses can add extra entries.
+        """
+        return {"prefix": prefix}
+
+    def get_expert_tab_specs(self, expert_key, prefix) -> list[dict[str, str]]:
+        """
+        Return expert tab definitions for the expert screen click strategy.
+
+        Parameters
+        ----------
+        expert_key : str
+            The expertOphydClass value.
+        prefix : str
+            The resolved device prefix without protocol.
+
+        Returns
+        -------
+        list[dict[str, str]]
+            Tab definitions with ``path``, ``title``, and ``macros`` fields.
+        """
+        macro_str = self._format_macros(self.get_expert_macros(expert_key, prefix))
+        return [
+            {
+                "path": ui_path,
+                "title": os.path.splitext(os.path.basename(ui_path))[0],
+                "macros": macro_str,
+            }
+            for ui_path in self.get_expert_ui_paths(expert_key)
+        ]
+
     def setup_icon(self):
         if not self.icon:
             return
@@ -626,35 +701,46 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             return
         name = prefix.replace(":", "_")
 
+        # Collect the tabs to show in order:
+        # 1. The local .ui file mapped to the expertOphydClass - first tab(s).
+        # 2. Any designer-provided ui_* files - following tab(s).
+        # 3. Typhos, if it is installed - last tab.
+        self.tab_widget = QTabWidget()
+        self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
+
+        for spec in self.get_expert_tab_specs(klass, prefix):
+            embedded = PyDMEmbeddedDisplay()
+            embedded.set_macros_and_filename(spec["path"], spec["macros"])
+            self.tab_widget.addTab(embedded, spec["title"])
+            self.embedded_displays.append(embedded)
+
+        for file_path, title, macros in zip_longest(self.ui_file_paths, self.ui_file_titles, self.ui_file_macros):
+            embedded = PyDMEmbeddedDisplay()
+            title = title or file_path
+            macros = macros or ""
+
+            embedded.set_macros_and_filename(file_path, macros)
+            self.tab_widget.addTab(embedded, title)
+            self.embedded_displays.append(embedded)
+
         try:
             import typhos
+
+            kwargs = {"name": name, "prefix": prefix}
+            display = typhos.TyphosDeviceDisplay.from_class(klass, **kwargs)
+            self._expert_display = display
+            display.destroyed.connect(self._cleanup_expert_display)
+            self.tab_widget.addTab(display, "Typhos")
         except ImportError:
-            logger.error("Typhos not installed. Cannot create display.")
+            logger.warning("Typhos not installed. Skipping Typhos display.")
+
+        if self.tab_widget.count() == 0:
+            logger.error("No expert screens available for pcdswidgets %s", self.__class__.__name__)
+            self.tab_widget = None
             return
 
-        kwargs = {"name": name, "prefix": prefix}
-        display = typhos.TyphosDeviceDisplay.from_class(klass, **kwargs)
-        self._expert_display = display
-        display.destroyed.connect(self._cleanup_expert_display)
-
-        if len(self.ui_file_paths) > 0:
-            self.tab_widget = QTabWidget()
-            self.tab_widget.setTabPosition(QTabWidget.TabPosition.West)
-            self.tab_widget.addTab(display, "Typhos")
-
-            for file_path, title, macros in zip_longest(self.ui_file_paths, self.ui_file_titles, self.ui_file_macros):
-                embedded = PyDMEmbeddedDisplay()
-                title = title or file_path
-                macros = macros or ""
-
-                embedded.set_macros_and_filename(file_path, macros)
-                self.tab_widget.addTab(embedded, title)
-                self.embedded_displays.append(embedded)
-
-            self.tab_widget.show()
-
-        elif display:
-            display.show()
+        self.tab_widget.resize(500, 600)  # Width, height in pixels
+        self.tab_widget.show()
 
     @Property("QStringList")
     def ui_paths(self):
