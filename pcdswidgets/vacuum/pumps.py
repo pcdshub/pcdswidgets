@@ -4,7 +4,7 @@ import os
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Property, QSize
 
-from ..icons.pumps import GetterPumpSymbolIcon, IonPumpSymbolIcon, ScrollPumpSymbolIcon, TurboPumpSymbolIcon
+from ..symbols.pumps import GetterPumpSymbolIcon, IonPumpSymbolIcon, ScrollPumpSymbolIcon, TurboPumpSymbolIcon
 from .base import ContentLocation, PCDSSymbolBase
 from .mixins import ButtonControl, ButtonLabelControl, ErrorMixin, InterlockMixin, StateMixin
 

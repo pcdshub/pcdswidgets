@@ -7,10 +7,11 @@ When `pcdswidgets` is installed in a `python` environment, it will provide:
 - Additional widgets in designer via `pydm`'s widget entrypoint.
 - The same additional widgets at runtime for use in `pydm` and `PyQt` displays.
 
-At `LCLS`, this is currently distributed as part of the `pcds_conda` environments:
+At `LCLS`, this is currently distributed as part of the `ctrlenv` environments:
 
 ```
-source pcds_conda
+source ctrlenv_setup.sh
+ctrlenv-pathmunge
 designer
 ```
 
@@ -25,31 +26,50 @@ Pick your favorite:
 
 - `pip install pcdswidgets`
 - `conda install pcdswidgets`
+- `uv add pcdswidgets`
+- `pixi add pcdswidgets`
 
-You can also install `pcdswidgets` using other standard tools (such as `uv`) or directly from source in `GitHub`.
+You can also build and install `pcdswidgets` directly from source using `GitHub`.
 
 
 ### Development Environments
-A helper script is included here: `build_local_venv.sh` (or, `make venv`) (or, just `make`).
+A `pixi` environment is included here. This is the shared context in which we build, develop, and test `pcdswidgets`.
 
-This will create a virtual environment under the `.venv` folder that will be ready to go
+Note that you _must_ have `pixi` on your path for this to work. That means that `pixi` is a developer requirement.
+
+At lcls you can get this via ctrlenv-pathmunge:
+
+```
+source ctrlenv_setup.sh
+ctrlenv-pathmunge
+pixi --version
+```
+
+You can create the environment with `pixi run install`.
+If this is the first `pixi` command you've run with this repo, it will build the environment for you,
+and then run the post-env install script to set up the designer plugin, which is the `install` task in this repo.
+
+You can also just `make`, which will run all the important build steps, or `make pixi` for just the `pixi` step.
+
+This will create a pixi environment under the `.pixi` folder that will be ready to go
 to help you run designer and test your custom widgets.
-To work, this requires a suitable base environment to already exist on
-your system: one with `PyQt` and designer python plugin support,
+To work, this requires a pre-compiled designer python plugin,
 which is tricky to set up properly.
 
-These base environments are stored centrally at LCLS and are
-specified in `base_env_vars.sh`.
-If you are not at LCLS, you will need to edit this file to use these scripts.
+If you are not at LCLS, you will need to edit the `pixi_scripts/install.sh` script to point to your plugin source,
+or you'll need to copy it into your environment manually,
+or you'll need to actually figure out why all the conda-forge pyqt builds stopped including this automatically.
 
-You can run the `build_local_venv.sh` again (or, `make venv`)
+You can run `pixi install` (or, `make pixi`)
 to update the environment with any new widgets you've added since the last run.
 
-Once this environment is created, you can use `try_in_designer.sh` to
+When you are ready to test, you can use `pixi run designer` to
 make sure your widgets are exporting cleanly in an editable way in designer.
 
-You can also use `try_in_pydm.sh` to launch a version of `pydm` that includes
+You can also use `pixi run pydm` to launch a version of `pydm` that includes
 your new widgets.
+
+Each of these `pixi` commands will build or update the environment as needed.
 
 You can alternatively build your own environment:
 
@@ -62,7 +82,8 @@ or
 or whatever your favorite method is.
 
 Note that we can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
-This is due to complications in the build process.
+This is due to complications in the build process where our existing compiled binary for the plugin
+is not cross-compiled, and therefore needs exact versions of Python and PyQt on the specific architecture.
 
 
 ## Adding Widgets Tutorial
@@ -101,28 +122,25 @@ Before getting too deep, however, please consider widget sizing:
 
 
 ### Widget Sizing
-We have some strict guidelines on widget sizing. These are established to give us some consistency in application of widgets, as well as to make it simpler to avoid resizing a widget between library releases.
+We have some loose guidelines on widget sizing. These are established to give us some consistency in application of widgets, as well as to make it simpler to avoid resizing a widget between library releases.
 
-Device control widgets should fall into exactly one of three size classes.
+Device control widgets should fall into exactly one of the following size classes, but they do not have to if there's a good reason to diverge.
 (Note: we can add more size classes if necessary).
-
-To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout the range
-and are permissible sizes as recorded below.
-It's recommended to use fixed sizing when possible because dynamic sizing is hard to implement correctly.
-
-Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
 | Size Class | Width | Height |
 | ---------- | ----- | -------|
-| Double| 400 px | 250 px |
+| Double | 400 px | 250 px |
 | Full | 400 px | 125 px |
 | Compact | 100 px | 75 px |
 | Row | 800 px | 50 px |
+| Stretch | Custom/Big | Custom/Big |
 
-Note:
-- All widgets are allowed to be smaller than the maximum of their size class by up to 20%.
-- Rows are also allowed to be double-height, e.g. 100px height.
-- Widgets that aren't control widgets (containers, etc.) should not have a maximum or a minimum size. These widgets should instead be usable at any size. There is a list in the test suite to add test exceptions for these.
+Note that this isn't enforced in any way.
+
+To ensure sizing consistency, set the minimum and maximum sizes to values that look good throughout your desired size range.
+It's recommended to use fixed sizing when possible because dynamic sizing is hard to implement correctly.
+
+Widgets should always be maintained to work at the original designed size, because changing this can break existing screens.
 
 
 ### Environment Setup
@@ -134,11 +152,11 @@ Note that at LCLS this only works on Rocky 9 machines!
 
 ```
 make
-./try_in_designer.sh
+pixi run designer
 ```
 
 If the `make` completes successfully, you will have a working `python` environment
-and `try_in_designer.sh` will open a designer window with the existing `pcdswidgets` widgets in the sidebar.
+and `pixi run designer` will open a designer window with the existing `pcdswidgets` widgets in the sidebar.
 
 
 ### Adding Your Composite Widget: Part 1
@@ -160,7 +178,7 @@ Widget names and ui filenames should have one to one correspondence and contain 
 
 - Type of device controlled
 - Descriptor word to differentiate this widget from other possible widgets with the same device type and size
-- Size class signifier
+- Size class signifier (or, if none are suitable, another descriptive suffix)
 
 For casing:
 - `.ui` filenames should be lowercase_with_underscores for ease of working with filenames.
@@ -191,8 +209,8 @@ Other guidelines:
    - This will generate at least three `.py` files and add a row to `pyproject.toml`.
    - Do not edit the files in `generated`.
 5. Try it out!
-   - Run `./try_in_designer.sh` and make a test screen. (Which, reminder: only works on rocky9 at LCLS).
-   - After you've made a test screen, then do `./try_in_pydm.sh my_screen.ui` for further testing.
+   - Run `pixi run designer` and make a test screen. (Which, reminder: only works on rocky9 at LCLS).
+   - After you've made a test screen, then do `pixi run pydm my_screen.ui` for further testing.
    - Make sure to take screenshots to include in your pull request.
 
 At this point, if you like what you see, you're actually done.
@@ -249,23 +267,27 @@ class MyClassFull(MyClassFullBase):
     )
 ```
 
-2. Create your own `QIcon`
+2. Create an image file and place it in the `icons` folder.
+   - You can set `icon="my_image.png"` and it should load appropriately in designer.
+
+3. Create your own `QIcon` however you like
    - You can use the `Qt` APIs to create your own icon object.
-   - For example: you can create an icon from a `.png`.
    - Please refer to the `Qt`/`PyQt` docs for how to do this.
-   - In `DesignerOptions` keep `icon=IconOptions.NONE`, then add a static method that points to new icon:
+   - Keep `icon=IconOptions.NONE`, or remove the line entirely.
+   - Override the `get_designer_icon` method on your widget to return your `QIcon`.
+     This must be either a `classmethod` or a `staticmethod` (use the decorators):
    ```
    class MyClassFull(MyClassFullBase):
-      designer_options = DesignerOptions(
-         group="ECS Subsystem Type",
-         is_container=False,
-         icon=IconOptions.NONE
-      )
+       designer_options = DesignerOptions(
+           group="ECS Subsystem Type",
+           is_container=False,
+           icon=IconOptions.NONE
+       )
 
-   @staticmethod
-    def get_designer_icon() -> str:
-        """Icon for usage in Qt designer."""
-        return QIcon("path/to/your/awesome/icon.png")
+       @staticmethod
+       def get_designer_icon() -> str:
+           """Icon for usage in Qt designer."""
+           return QIcon("path/to/your/awesome/icon.png")
    ```
 
 
@@ -330,7 +352,7 @@ Largely: refer back to the existing widgets.
 
 The steps are:
 
-1. Create a new subclass of `BaseSymbolIcon` in the icons subfolder.
+1. Create a new subclass of `BaseSymbolIcon` in the symbols subfolder.
    - Define a path
    - Implement draw_icon
 2. Create a new subclass of `PCDSSymbolBase`.

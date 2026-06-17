@@ -7,7 +7,7 @@ import pytest
 import pcdswidgets
 from pcdswidgets.builder.designer_widget import DesignerWidget
 
-MODULE_ROOT = Path(pcdswidgets.__file__).parent
+MODULE_ROOT = Path(pcdswidgets.__file__).parent  # type: ignore
 UI_SOURCES = sorted((MODULE_ROOT / "ui").rglob("*.ui"))
 
 TEST_UI = str(Path(__file__).parent / "pytest.ui")
@@ -90,7 +90,8 @@ def test_built_is_importable(ui_source: Path):
     assert issubclass(base_classes[0], DesignerWidget)
     assert base_classes[0].ui_form is form_classes[0]
 
-    assert len(main_classes) == 1
+    # User can add additional classes
+    assert len(main_classes) >= 1
     assert hasattr(main_classes[0], "designer_options")
     assert hasattr(main_classes[0], "_qt_designer_")
     assert issubclass(main_classes[0], base_classes[0])

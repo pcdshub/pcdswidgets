@@ -64,118 +64,230 @@
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2" rowstretch="3,2,2" columnstretch="4,6,1">
+     <layout class="QGridLayout" name="gridLayout_2" rowstretch="3,0,0,0,0,0,0" columnstretch="4,0,0">
       <property name="leftMargin">
        <number>1</number>
       </property>
       <property name="spacing">
        <number>1</number>
       </property>
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item row="6" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
         <property name="spacing">
-         <number>0</number>
+         <number>3</number>
         </property>
         <property name="leftMargin">
-         <number>0</number>
+         <number>5</number>
         </property>
-        <property name="topMargin">
-         <number>0</number>
+        <property name="rightMargin">
+         <number>5</number>
         </property>
         <item>
-         <widget class="PyDMLabel" name="PyDMLabel_name">
+         <widget class="PyDMPushButton" name="PyDMPushButton_twkL">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>75</width>
+            <width>35</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
+            <width>35</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+          </property>
+          <property name="text">
+           <string>&lt;&lt;</string>
+          </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>false</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="monitorDisp">
+           <bool>false</bool>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}.TWR</string>
+          </property>
+          <property name="PyDMIcon">
+           <string/>
+          </property>
+          <property name="passwordProtected">
+           <bool>false</bool>
+          </property>
+          <property name="password">
+           <string/>
+          </property>
+          <property name="protectedPassword">
+           <string/>
+          </property>
+          <property name="showConfirmDialog">
+           <bool>false</bool>
+          </property>
+          <property name="confirmMessage">
+           <string>Are you sure you want to proceed?</string>
+          </property>
+          <property name="pressValue">
+           <string>1</string>
+          </property>
+          <property name="releaseValue">
+           <string>None</string>
+          </property>
+          <property name="relativeChange">
+           <bool>false</bool>
+          </property>
+          <property name="writeWhenRelease">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLineEdit" name="PyDMLineEdit_twVal">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <pointsize>11</pointsize>
            </font>
           </property>
           <property name="toolTip">
            <string/>
           </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="precision">
+           <number>0</number>
+          </property>
+          <property name="precisionFromPV">
+           <bool>true</bool>
+          </property>
           <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}.DESC</string>
-          </property>
-          <property name="displayFormat">
-           <enum>PyDMLabel::String</enum>
+           <string>ca://${MOTOR}.TWV</string>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item row="0" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
         <item>
-         <widget class="PyDMByteIndicator" name="PyDMByteIndicator_mvn">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="PyDMPushButton" name="PyDMPushButton_twkR">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>25</width>
+            <width>35</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>25</width>
+            <width>35</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="toolTip">
            <string/>
           </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+          </property>
+          <property name="text">
+           <string>&gt;&gt;</string>
+          </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
           <property name="alarmSensitiveBorder">
            <bool>false</bool>
           </property>
-          <property name="channel">
-           <string>ca://${MOTOR}.MOVN</string>
+          <property name="PyDMToolTip">
+           <string/>
           </property>
-          <property name="showLabels">
+          <property name="monitorDisp">
            <bool>false</bool>
           </property>
-          <property name="circles">
-           <bool>true</bool>
+          <property name="channel">
+           <string>ca://${MOTOR}.TWF</string>
+          </property>
+          <property name="PyDMIcon">
+           <string/>
+          </property>
+          <property name="passwordProtected">
+           <bool>false</bool>
+          </property>
+          <property name="password">
+           <string/>
+          </property>
+          <property name="protectedPassword">
+           <string/>
+          </property>
+          <property name="showConfirmDialog">
+           <bool>false</bool>
+          </property>
+          <property name="confirmMessage">
+           <string>Are you sure you want to proceed?</string>
+          </property>
+          <property name="pressValue">
+           <string>1</string>
+          </property>
+          <property name="releaseValue">
+           <string>None</string>
+          </property>
+          <property name="relativeChange">
+           <bool>false</bool>
+          </property>
+          <property name="writeWhenRelease">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="spacing">
          <number>7</number>
@@ -189,6 +301,22 @@
         <property name="rightMargin">
          <number>7</number>
         </property>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>15</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item>
          <widget class="PyDMByteIndicator" name="PyDMByteIndicator_lls">
           <property name="maximumSize">
@@ -259,19 +387,23 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
+            <width>150</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>11</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>
           </property>
           <property name="toolTip">
            <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -281,6 +413,64 @@
           </property>
           <property name="displayFormat">
            <enum>PyDMLabel::Decimal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLabel" name="PyDMLabel_egu">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <property name="precision">
+           <number>0</number>
+          </property>
+          <property name="showUnits">
+           <bool>false</bool>
+          </property>
+          <property name="precisionFromPV">
+           <bool>true</bool>
+          </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>false</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}.EGU</string>
           </property>
          </widget>
         </item>
@@ -340,10 +530,70 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item row="0" column="0" colspan="3">
+       <widget class="PyDMLabel" name="PyDMLabel_name">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>350</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(35, 35, 35);</string>
+        </property>
+        <property name="alarmSensitiveBorder">
+         <bool>false</bool>
+        </property>
+        <property name="channel">
+         <string>ca://${MOTOR}.DESC</string>
+        </property>
+        <property name="displayFormat">
+         <enum>PyDMLabel::String</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>3</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="6" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="PyDMPushButton" name="PyDMPushButton_stop">
+         <widget class="PyDMPushButton" name="PyDMPushButton_clear_error">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -358,7 +608,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>60</width>
+            <width>150</width>
             <height>16777215</height>
            </size>
           </property>
@@ -366,22 +616,53 @@
            <string/>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(170, 0, 0);</string>
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
           </property>
           <property name="text">
-           <string>Stop</string>
+           <string>Clear Error</string>
           </property>
-          <property name="channel">
-           <string>ca://${MOTOR}.STOP</string>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
           </property>
-          <property name="pressValue">
-           <string>1</string>
+          <property name="alarmSensitiveBorder">
+           <bool>false</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="monitorDisp">
+           <bool>false</bool>
+          </property>
+          <property name="PyDMIcon">
+           <string/>
+          </property>
+          <property name="passwordProtected">
+           <bool>false</bool>
+          </property>
+          <property name="password">
+           <string/>
+          </property>
+          <property name="protectedPassword">
+           <string/>
+          </property>
+          <property name="showConfirmDialog">
+           <bool>false</bool>
+          </property>
+          <property name="confirmMessage">
+           <string>Are you sure you want to proceed?</string>
+          </property>
+          <property name="relativeChange">
+           <bool>false</bool>
+          </property>
+          <property name="writeWhenRelease">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="1" column="1">
+      <item row="4" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <property name="leftMargin">
          <number>30</number>
@@ -408,20 +689,27 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
+            <width>150</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>11</pointsize>
            </font>
           </property>
           <property name="toolTip">
            <string/>
           </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+          </property>
           <property name="maxLength">
            <number>12</number>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -445,19 +733,60 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item row="2" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <property name="spacing">
-         <number>7</number>
+         <number>0</number>
         </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
         <item>
-         <widget class="PyDMLabel" name="PyDMLabel_egu">
+         <widget class="PyDMByteIndicator" name="PyDMByteIndicator_mvn">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>false</bool>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}.MOVN</string>
+          </property>
+          <property name="showLabels">
+           <bool>false</bool>
+          </property>
+          <property name="circles">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="PyDMPushButton" name="PyDMPushButton_stop">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -465,187 +794,35 @@
            </sizepolicy>
           </property>
           <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
            <size>
             <width>60</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="precision">
-           <number>0</number>
-          </property>
-          <property name="showUnits">
-           <bool>false</bool>
-          </property>
-          <property name="precisionFromPV">
-           <bool>true</bool>
-          </property>
-          <property name="alarmSensitiveContent">
-           <bool>false</bool>
-          </property>
-          <property name="alarmSensitiveBorder">
-           <bool>false</bool>
-          </property>
-          <property name="PyDMToolTip">
-           <string/>
-          </property>
-          <property name="channel">
-           <string>ca://${MOTOR}.EGU</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_8"/>
-      </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <property name="spacing">
-         <number>3</number>
-        </property>
-        <property name="leftMargin">
-         <number>5</number>
-        </property>
-        <property name="rightMargin">
-         <number>5</number>
-        </property>
-        <item>
-         <widget class="PyDMPushButton" name="PyDMPushButton_twkL">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>35</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>35</width>
             <height>16777215</height>
            </size>
           </property>
           <property name="toolTip">
            <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(170, 0, 0);
+color: rgb(255, 255, 255);</string>
           </property>
           <property name="text">
-           <string>&lt;&lt;</string>
+           <string>Stop</string>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}.TWR</string>
+           <string>ca://${MOTOR}.STOP</string>
           </property>
           <property name="pressValue">
            <string>1</string>
           </property>
-          <property name="relativeChange">
-           <bool>true</bool>
-          </property>
          </widget>
         </item>
-        <item>
-         <widget class="PyDMLineEdit" name="PyDMLineEdit_twVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="precision">
-           <number>0</number>
-          </property>
-          <property name="precisionFromPV">
-           <bool>true</bool>
-          </property>
-          <property name="alarmSensitiveBorder">
-           <bool>false</bool>
-          </property>
-          <property name="channel">
-           <string>ca://${MOTOR}.TWV</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="PyDMPushButton" name="PyDMPushButton_twkR">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>35</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>35</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="text">
-           <string>&gt;&gt;</string>
-          </property>
-          <property name="channel">
-           <string>ca://${MOTOR}.TWF</string>
-          </property>
-          <property name="pressValue">
-           <string>1</string>
-          </property>
-          <property name="relativeChange">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
          <widget class="PyDMShellCommand" name="PyDMShellCommand_expert">
           <property name="sizePolicy">
@@ -669,6 +846,10 @@
           <property name="toolTip">
            <string/>
           </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+          </property>
           <property name="commands">
            <stringlist>
             <string>motor-expert-screen ${MOTOR}</string>
@@ -677,6 +858,22 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="3" column="1">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>3</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
