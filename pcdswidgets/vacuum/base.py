@@ -739,7 +739,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             self.tab_widget = None
             return
 
-        self.tab_widget.resize(500, 600)  # Width, height in pixels
+        self.tab_widget.resize(700, 1000)  # Width, height in pixels
         self.tab_widget.show()
 
     @Property("QStringList")
