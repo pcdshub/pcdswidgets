@@ -173,7 +173,9 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
         all_files = [f for f in os.listdir(ui_dir) if f.endswith(".ui")]
 
         # Sort by preferred_order, then append any extras not in the list
-        ordered_files = [f for f in preferred_order if f in all_files] + [f for f in all_files if f not in preferred_order]
+        ordered_files = [f for f in preferred_order if f in all_files] + [
+            f for f in all_files if f not in preferred_order
+        ]
 
         ui_paths = [os.path.join(ui_dir, filename) for filename in ordered_files]
         return ui_paths
