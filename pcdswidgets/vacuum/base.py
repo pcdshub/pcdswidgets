@@ -655,7 +655,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         """
         expert_prefix = ""
         if expert_key:
-            expert_prefix = expert_key.rsplit('.', 1)[-1] + "_"
+            expert_prefix = expert_key.rsplit(".", 1)[-1] + "_"
 
         macro_str = self._format_macros(self.get_expert_macros(expert_key, prefix))
 
