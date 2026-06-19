@@ -657,7 +657,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         return [
             {
                 "path": ui_path,
-                "title": os.path.splitext(os.path.basename(ui_path))[0],
+                "title": os.path.basename(ui_path).split(".")[0],
                 "macros": macro_str,
             }
             for ui_path in self.get_expert_ui_paths(expert_key)

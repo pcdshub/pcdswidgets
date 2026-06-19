@@ -91,10 +91,7 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPPLC"
 
     # Per-ophyd-class suffix overrides. Any suffix not listed for a given
-    # ophyd class falls back to the class-level default above. These are
-    # applied whenever the expertOphydClass property changes (including when
-    # the Designer applies the saved property after construction), and the
-    # channels are rebuilt so the new suffixes take effect.
+    # ophyd class falls back to the class-level default above.
     SUFFIX_MAP = {
         "pcdsdevices.pump.PIPCombined": {
             "interlock_suffix": False,
@@ -165,8 +162,10 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
             return []
         folder = expert_key.rsplit(".", 1)[-1]
 
+        # Hardcoded path for the IonPump expert UIs
         ui_dir = os.path.join(os.path.dirname(__file__), "..", "ui", "vacuum", "pump_screens", folder)
         if not os.path.isdir(ui_dir):
+            logger.warning(f"No expert UI directory found for {expert_key} at {ui_dir}")
             return []
 
         # Define preferred tab order
@@ -193,24 +192,22 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
         try:
             from epics import caget
         except ImportError:
-            logger.debug("pyepics is unavailable; leaving controller_base empty for %s", controller_pv)
+            logger.warning(f"pyepics is unavailable; leaving controller_base empty for {controller_pv}")
         else:
             try:
                 controller_value = caget(controller_pv, timeout=1.0)
             except Exception:
-                logger.warning("Unable to resolve %s for IonPump expert macros", controller_pv, exc_info=True)
+                logger.warning(f"Unable to resolve {controller_pv} for IonPump expert macros", exc_info=True)
             else:
                 if controller_value is None:
-                    logger.debug("No controller base returned from %s", controller_pv)
+                    logger.warning(f"No controller base returned from {controller_pv}")
                 else:
                     controller_base = str(controller_value).strip()
-                    logger.debug("Resolved controller_base '%s' from %s for IonPump expert macros", controller_base, controller_pv)
 
         # Leave the macro empty if no controller can be resolved so the
         # expert screen still opens, but its controller PVs will not connect.
         macros["controller"] = controller_base
         return macros
-
 
 
 class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
