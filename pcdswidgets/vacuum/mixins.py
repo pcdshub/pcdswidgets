@@ -59,6 +59,15 @@ class InterlockMixin:
         """
         super().create_channels()
         if not self._interlock_suffix:
+            if self.interlock_channel is not None:
+                self.interlock_channel.disconnect()
+                self.interlock_channel = None
+            self._interlocked = False
+            self._interlock_connected = False
+            if hasattr(self, "controls_frame"):
+                self.controls_frame.setEnabled(True)
+            if hasattr(self, "update_stylesheet"):
+                self.update_stylesheet()
             return
 
         self._interlocked = True

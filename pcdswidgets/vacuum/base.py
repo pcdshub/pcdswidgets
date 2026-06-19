@@ -653,11 +653,16 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         list[dict[str, str]]
             Tab definitions with ``path``, ``title``, and ``macros`` fields.
         """
+        expert_prefix = ""
+        if expert_key:
+            expert_prefix = expert_key.rsplit('.', 1)[-1] + "_"
+
         macro_str = self._format_macros(self.get_expert_macros(expert_key, prefix))
+
         return [
             {
                 "path": ui_path,
-                "title": os.path.basename(ui_path).split(".")[0],
+                "title": os.path.basename(ui_path).split(".")[0].removeprefix(expert_prefix),
                 "macros": macro_str,
             }
             for ui_path in self.get_expert_ui_paths(expert_key)
