@@ -162,15 +162,21 @@ class IonPump(InterlockMixin, ErrorMixin, StateMixin, ButtonLabelControl, PCDSSy
             return []
         folder = expert_key.rsplit(".", 1)[-1]
 
-        # Hardcoded path for the IonPump expert UIs
-        ui_dir = os.path.join(os.path.dirname(__file__), "..", "ui", "vacuum", "pump_screens", folder)
+        # Expert UIs are stored directly in pump_screens using the pattern: <OphydClass>_<title>.ui (e.g. PIPCombined_detailed.ui).
+        ui_dir = os.path.join(os.path.dirname(__file__), "..", "ui", "vacuum", "pump_screens")
         if not os.path.isdir(ui_dir):
             logger.warning(f"No expert UI directory found for {expert_key} at {ui_dir}")
             return []
 
-        # Define preferred tab order
-        preferred_order = ["detailed.ui", "expert.ui", "controller.ui"]
-        all_files = [f for f in os.listdir(ui_dir) if f.endswith(".ui")]
+        prefix = folder + "_"
+        all_files = [f for f in os.listdir(ui_dir) if f.startswith(prefix) and f.endswith(".ui")]
+        if not all_files:
+            logger.warning(f"No expert UI files found for {expert_key} with prefix {prefix} in {ui_dir}")
+            return []
+
+        preferred_order = [f"{folder}_detailed.ui",
+                           f"{folder}_expert.ui",
+                           f"{folder}_controller.ui"]
 
         # Sort by preferred_order, then append any extras not in the list
         ordered_files = [f for f in preferred_order if f in all_files] + [
