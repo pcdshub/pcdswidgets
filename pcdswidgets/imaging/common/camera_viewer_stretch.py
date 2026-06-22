@@ -80,8 +80,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             "suffix_width_channel": "ArraySize0_RBV",
         }
         for name, value in default_map.items():
-            if (name not in self._macro_values) or (self._macro_values[name] == ""):
-                self._macro_values[name] = value
+            self._macro_values[name] = value
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
