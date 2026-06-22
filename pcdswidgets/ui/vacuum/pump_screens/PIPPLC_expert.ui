@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>538</width>
+    <height>693</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_17">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="PyDMLabel" name="PyDMLabel_11">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>${name}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+       <property name="toolTip">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_4">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Readback</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_14">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="pressure_label">
+            <property name="text">
+             <string>&lt;b&gt;Pressure&lt;b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="high_voltage_do_label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage DO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="high_voltage_in_label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage IN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label">
+            <property name="text">
+             <string>&lt;b&gt;interlock_ok&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="PyDMLabel" name="pressure_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:PRESS_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="high_voltage_do_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_DO_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="high_voltage_in_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_DI_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="interlock_ok_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:ILK_OK_RBV</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Control</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_15">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="pressure_label_3">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Protection Setpoint&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="high_voltage_do_label_3">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Setpoint Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="high_voltage_in_label_3">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage Switch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_3">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Auto On&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="PyDMLabel" name="protection_setpoint_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="setpoint_hysteresis_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="high_voltage_switch_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_SW_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="auto_on_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:Auto_On_RBV</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="PyDMLineEdit" name="protection_setpoint_setpoint">
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_SP</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="setpoint_hysteresis_setpoint">
+            <property name="channel">
+             <string>ca://${prefix}:SP_HYS</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="high_voltage_switch_setpoint">
+            <property name="channel">
+             <string>ca://${prefix}:HV_SW</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="auto_on_setpoint">
+            <property name="channel">
+             <string>ca://${prefix}:Auto_On</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Config</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_16">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QLabel" name="pump_on_status_label">
+            <property name="text">
+             <string>&lt;b&gt;Pump On Status&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="plc_ai_offset_label">
+            <property name="text">
+             <string>&lt;b&gt;PLC AI Offset&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="pump_state_label">
+            <property name="text">
+             <string>&lt;b&gt;Pump State&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="qpc_name_label">
+            <property name="text">
+             <string>&lt;b&gt;QPC Name&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="qpc_pumpsize_label">
+            <property name="text">
+             <string>&lt;b&gt;QPC Pump Size&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_device_label">
+            <property name="text">
+             <string>&lt;b&gt;Interlock Device&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="autoOn_countdown_label">
+            <property name="text">
+             <string>&lt;b&gt;Auto On Timer&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <widget class="PyDMLabel" name="pump_on_status_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_DI_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="plc_ai_offset_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AI_Offset_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="pump_state_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:STATE_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="qpc_name_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:VPCNAME</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="qpc_pumpsize_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:PUMPSIZE</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="interlock_device_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:ILK_DEVICE_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="autoOn_countdown_readback">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 85, 255);
+color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AutoOn_timer_RBV</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>89</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
