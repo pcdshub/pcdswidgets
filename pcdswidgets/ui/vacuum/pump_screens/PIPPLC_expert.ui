@@ -92,7 +92,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>180</height>
+       <height>190</height>
       </size>
      </property>
      <property name="title">
@@ -100,7 +100,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_14">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -148,8 +148,17 @@
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="text">
+             <string>ca://${prefix}:PRESS_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:PRESS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -158,6 +167,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ILK_OK_RBV</string>
@@ -170,6 +182,9 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:STATE_RBV</string>
             </property>
@@ -181,6 +196,9 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:HV_DO_RBV</string>
             </property>
@@ -191,6 +209,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:HV_DI_RBV</string>
@@ -248,7 +269,7 @@ color: rgb(255, 255, 255);</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_15">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
@@ -292,8 +313,14 @@ color: rgb(255, 255, 255);</string>
             <property name="text">
              <string>ca://${prefix}:AT_VAC_SP_RBV</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -303,8 +330,17 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="text">
+             <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -313,6 +349,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:HV_SW_RBV</string>
@@ -324,6 +363,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:Auto_On_RBV</string>
@@ -349,14 +391,26 @@ color: rgb(255, 255, 255);</string>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLineEdit" name="high_voltage_switch_setpoint">
+           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:HV_SW</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLineEdit" name="auto_on_setpoint">
+           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_2">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:Auto_On</string>
             </property>
@@ -388,7 +442,7 @@ color: rgb(255, 255, 255);</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_16">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
@@ -436,6 +490,9 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:AI_Offset_RBV</string>
             </property>
@@ -446,6 +503,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:VPCNAME</string>
@@ -458,6 +518,9 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:PUMPSIZE</string>
             </property>
@@ -469,8 +532,20 @@ color: rgb(255, 255, 255);</string>
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
             </property>
+            <property name="text">
+             <string>ca://${prefix}:ILK_DEVICE_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:ILK_DEVICE_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
             </property>
            </widget>
           </item>
@@ -479,6 +554,9 @@ color: rgb(255, 255, 255);</string>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:AutoOn_timer_RBV</string>
@@ -558,6 +636,11 @@ color: rgb(255, 255, 255);</string>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
   </customwidget>
   <customwidget>
    <class>PyDMLineEdit</class>
