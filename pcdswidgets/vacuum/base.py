@@ -632,10 +632,13 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         Returns
         -------
         dict[str, str]
-            Macro mapping for expert screens. The base enforces a ``prefix``
-            macro and subclasses can add extra entries.
+            Macro mapping for expert screens. The base enforces ``prefix`` and
+            ``name`` macros and subclasses can add extra entries.
         """
-        return {"prefix": prefix}
+        return {
+            "prefix": prefix,
+            "name": prefix.replace(":", "_"),
+        }
 
     def get_expert_tab_specs(self, expert_key, prefix) -> list[dict[str, str]]:
         """
