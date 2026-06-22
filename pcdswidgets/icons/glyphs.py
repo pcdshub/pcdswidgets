@@ -32,4 +32,4 @@ MOVE = str(BASE_PATH / "move.svg")
 
 THICKNESS = str(BASE_PATH / "thickness.svg")
 
-CAM_COG = str(BASE_PATH/ "camera-cog.svg")
+CAM_COG = str(BASE_PATH / "camera-cog.svg")

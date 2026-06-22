@@ -17,9 +17,8 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.marker_selection_full_base import MarkerSelectionFullBase
-from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, THICKNESS, CAM_COG
+from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
 from pcdswidgets.imaging.common.marker_style_dialog import MarkerStyleDialog
 
@@ -59,7 +58,6 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         is_container=False,
         icon=CAM_COG,
     )
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

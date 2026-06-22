@@ -12,7 +12,6 @@ from pyqtgraph.widgets.HistogramLUTWidget import HistogramLUTWidget
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.colormap_intesity_control_full_base import ColormapIntesityControlFullBase
 from pcdswidgets.icons.glyphs import CAM_COG
 

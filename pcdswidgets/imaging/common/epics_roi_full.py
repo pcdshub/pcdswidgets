@@ -17,9 +17,8 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.epics_roi_full_base import EpicsRoiFullBase
-from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS, CAM_COG
+from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS
 from pcdswidgets.imaging.common.cam_roi import CamROI
 
 logger = logging.getLogger(__name__)

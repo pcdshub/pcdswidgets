@@ -21,6 +21,7 @@ from .collapsible_section import CollapsibleSection
 
 logger = logging.getLogger(__name__)
 
+
 class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
