@@ -6,7 +6,8 @@ base_cls = MarkerSelectionFullBase
 macro_names = ['cam_prefix']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,35 @@ except ImportError:
 
 
 class MarkerSelectionFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    color_1_button: "ColorButton"
+    color_2_button: "ColorButton"
+    color_3_button: "ColorButton"
+    color_4_button: "ColorButton"
+    label_10: "QtWidgets.QLabel"
+    label_11: "QtWidgets.QLabel"
+    label_12: "QtWidgets.QLabel"
+    label_13: "QtWidgets.QLabel"
+    label_14: "QtWidgets.QLabel"
+    label_15: "QtWidgets.QLabel"
+    label_16: "QtWidgets.QLabel"
+    label_5: "QtWidgets.QLabel"
+    label_6: "QtWidgets.QLabel"
+    label_7: "QtWidgets.QLabel"
+    label_8: "QtWidgets.QLabel"
+    label_9: "QtWidgets.QLabel"
+    point_1_select: "QtWidgets.QPushButton"
+    point_2_select: "QtWidgets.QPushButton"
+    point_3_select: "QtWidgets.QPushButton"
+    point_4_select: "QtWidgets.QPushButton"
+    style_select: "QtWidgets.QPushButton"
+    style_select_2: "QtWidgets.QPushButton"
+    style_select_3: "QtWidgets.QPushButton"
+    style_select_4: "QtWidgets.QPushButton"
+    visibility_1: "QtWidgets.QPushButton"
+    visibility_2: "QtWidgets.QPushButton"
+    visibility_3: "QtWidgets.QPushButton"
+    visibility_4: "QtWidgets.QPushButton"
     x_spinbox_1: "PyDMSpinbox"
     x_spinbox_2: "PyDMSpinbox"
     x_spinbox_3: "PyDMSpinbox"
@@ -78,28 +108,28 @@ class MarkerSelectionFullBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "x_spinbox_1": [
-            ("channel", "${cam_prefix}:Cross1:MinX"),
+            ("channel", """${cam_prefix}:Cross1:MinX"""),
         ],
         "x_spinbox_2": [
-            ("channel", "${cam_prefix}:Cross2:MinX"),
+            ("channel", """${cam_prefix}:Cross2:MinX"""),
         ],
         "x_spinbox_3": [
-            ("channel", "${cam_prefix}:Cross3:MinX"),
+            ("channel", """${cam_prefix}:Cross3:MinX"""),
         ],
         "x_spinbox_4": [
-            ("channel", "${cam_prefix}:Cross4:MinX"),
+            ("channel", """${cam_prefix}:Cross4:MinX"""),
         ],
         "y_spinbox_1": [
-            ("channel", "${cam_prefix}:Cross1:MinY"),
+            ("channel", """${cam_prefix}:Cross1:MinY"""),
         ],
         "y_spinbox_2": [
-            ("channel", "${cam_prefix}:Cross2:MinY"),
+            ("channel", """${cam_prefix}:Cross2:MinY"""),
         ],
         "y_spinbox_3": [
-            ("channel", "${cam_prefix}:Cross3:MinY"),
+            ("channel", """${cam_prefix}:Cross3:MinY"""),
         ],
         "y_spinbox_4": [
-            ("channel", "${cam_prefix}:Cross4:MinY"),
+            ("channel", """${cam_prefix}:Cross4:MinY"""),
         ],
     }
 
@@ -110,9 +140,9 @@ class MarkerSelectionFullBase(DesignerWidget):
         }
 
     def get_cam_prefix(self) -> str:
-        return self._get_macro("cam_prefix")
+        return self.get_macro("cam_prefix")
 
     def set_cam_prefix(self, value: str) -> None:
-        self._set_macro("cam_prefix", value)
+        self.set_macro("cam_prefix", value)
 
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)
