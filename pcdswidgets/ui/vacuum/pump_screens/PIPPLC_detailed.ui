@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>693</height>
+    <width>522</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -84,7 +84,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -92,7 +92,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>180</height>
+       <height>140</height>
       </size>
      </property>
      <property name="title">
@@ -124,20 +124,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="high_voltage_do_label">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage DO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="high_voltage_in_label">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage IN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -154,13 +140,18 @@ color: rgb(255, 255, 255);</string>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="interlock_ok_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+           <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
+            <property name="toolTip">
+             <string/>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ILK_OK_RBV</string>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -175,41 +166,12 @@ color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="PyDMLabel" name="high_voltage_do_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:HV_DO_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="high_voltage_in_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:HV_DI_RBV</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="label">
             <property name="text">
              <string/>
             </property>
@@ -217,6 +179,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
             <property name="text">
              <string/>
             </property>
@@ -240,7 +209,7 @@ color: rgb(255, 255, 255);</string>
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>170</height>
+       <height>160</height>
       </size>
      </property>
      <property name="title">
@@ -269,13 +238,6 @@ color: rgb(255, 255, 255);</string>
            <widget class="QLabel" name="high_voltage_in_label_3">
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage Switch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="interlock_ok_label_3">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Auto On&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -319,17 +281,6 @@ color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="PyDMLabel" name="auto_on_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:Auto_On_RBV</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -349,16 +300,12 @@ color: rgb(255, 255, 255);</string>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLineEdit" name="high_voltage_switch_setpoint">
+           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:HV_SW</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLineEdit" name="auto_on_setpoint">
-            <property name="channel">
-             <string>ca://${prefix}:Auto_On</string>
             </property>
            </widget>
           </item>
@@ -372,7 +319,7 @@ color: rgb(255, 255, 255);</string>
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -380,7 +327,7 @@ color: rgb(255, 255, 255);</string>
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>180</height>
+       <height>140</height>
       </size>
      </property>
      <property name="title">
@@ -391,13 +338,6 @@ color: rgb(255, 255, 255);</string>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_11">
-          <item>
-           <widget class="QLabel" name="plc_ai_offset_label">
-            <property name="text">
-             <string>&lt;b&gt;PLC AI Offset&lt;/b&gt;</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QLabel" name="qpc_name_label">
             <property name="text">
@@ -419,28 +359,10 @@ color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="autoOn_countdown_label">
-            <property name="text">
-             <string>&lt;b&gt;Auto On Timer&lt;/b&gt;</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_12">
-          <item>
-           <widget class="PyDMLabel" name="plc_ai_offset_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:AI_Offset_RBV</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="PyDMLabel" name="qpc_name_readback">
             <property name="styleSheet">
@@ -474,35 +396,10 @@ color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="PyDMLabel" name="autoOn_countdown_readback">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:AutoOn_timer_RBV</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_13">
-          <item>
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QLabel" name="label_14">
             <property name="text">
@@ -519,13 +416,6 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_8">
             <property name="text">
              <string/>
             </property>
@@ -558,6 +448,16 @@ color: rgb(255, 255, 255);</string>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
   </customwidget>
   <customwidget>
    <class>PyDMLineEdit</class>
