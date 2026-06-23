@@ -50,6 +50,14 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     EXPERT_OPHYD_CLASS = ""
 
+    # Directory that is scanned for expert UI files named <OphydClass>_<title>.ui.
+    # Subclasses set this to enable dynamic discovery of their expert screens.
+    EXPERT_UI_DIR = ""
+
+    # Filenames whose <title> appears here are shown in this order first and any
+    # remaining matches follow in alphabetical order.
+    EXPERT_UI_ORDER = ()
+
     Q_ENUMS(ContentLocation)
     ContentLocation = ContentLocation
 
@@ -588,17 +596,15 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             box_layout.addWidget(widget)
             layout.addLayout(box_layout)
 
-    def get_expert_ui_paths(self, expert_key) -> list[str]:
+    def get_expert_ui_paths(self, expert_key):
         """
-        Optional hook to provide local UI file paths for the expert class.
+        Discover local expert UI files for the given expert class.
 
-        This allows widgets to define local UI files (stored in ui/vacuum) that
-        correspond to their expertOphydClass, enabling a gradual migration away
-        from Typhos while maintaining backward compatibility.
-
-        Subclasses can override this method to map expertOphydClass values to
-        local UI file paths. Any returned paths are shown as the first tabs in
-        the expert screen.
+        The directory named by EXPERT_UI_DIR is scanned for files named
+        <OphydClass>_<title>.ui (where <OphydClass> is the last component
+        of expert_key). Matches are ordered by EXPERT_UI_ORDER first,
+        then alphabetically, and returned as absolute paths. Subclasses need
+        to set EXPERT_UI_DIR.
 
         Parameters
         ----------
@@ -608,17 +614,38 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         Returns
         -------
         list[str]
-            Absolute paths to local UI files. Return an empty list when no
-            local UI files are defined for this expert class.
+            Absolute paths to the discovered UI files.
         """
-        return []
+        if not self.EXPERT_UI_DIR or not expert_key:
+            return []
+
+        from ..builder.designer_widget import fix_pcdswidgets_filename
+
+        ui_dir = fix_pcdswidgets_filename(self.EXPERT_UI_DIR)
+        if not os.path.isdir(ui_dir):
+            logger.warning(f"No expert UI directory found for {expert_key} at {ui_dir}")
+            return []
+
+        class_name = expert_key.rsplit(".", 1)[-1]
+        prefix = class_name + "_"
+        matches = sorted(f for f in os.listdir(ui_dir) if f.startswith(prefix) and f.endswith(".ui"))
+        if not matches:
+            logger.warning(f"No expert UI files found for {expert_key} with prefix {prefix} in {ui_dir}")
+            return []
+
+        # Show preferred files first, then everything else
+        preferred = [f"{prefix}{title}.ui" for title in self.EXPERT_UI_ORDER]
+        ordered = [name for name in preferred if name in matches]
+        ordered += [name for name in matches if name not in preferred]
+
+        return [os.path.join(ui_dir, filename) for filename in ordered]
 
     @staticmethod
     def _format_macros(macros: dict[str, str]) -> str:
         """Serialize a macro mapping into a PyDM-compatible macro string."""
         return ",".join(f"{key}={value}" for key, value in macros.items())
 
-    def get_expert_macros(self, expert_key, prefix) -> dict[str, str]:
+    def get_expert_macros(self, prefix):
         """
         Hook for widgets to provide dynamic macros for expert screens.
 
@@ -640,7 +667,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             "name": prefix.replace(":", "_"),
         }
 
-    def get_expert_tab_specs(self, expert_key, prefix) -> list[dict[str, str]]:
+    def get_expert_tab_specs(self, expert_key, prefix):
         """
         Return expert tab definitions for the expert screen click strategy.
 
@@ -660,7 +687,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if expert_key:
             expert_prefix = expert_key.rsplit(".", 1)[-1] + "_"
 
-        macro_str = self._format_macros(self.get_expert_macros(expert_key, prefix))
+        macro_str = self._format_macros(self.get_expert_macros(prefix))
 
         return [
             {
@@ -740,7 +767,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
             display.destroyed.connect(self._cleanup_expert_display)
             self.tab_widget.addTab(display, "Typhos")
         except ImportError:
-            logger.warning("Typhos not installed. Skipping Typhos display.")
+            logger.debug("Typhos not installed. Skipping Typhos display.")
 
         if self.tab_widget.count() == 0:
             logger.error("No expert screens available for pcdswidgets %s", self.__class__.__name__)
