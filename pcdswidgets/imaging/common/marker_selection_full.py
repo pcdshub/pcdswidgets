@@ -71,9 +71,9 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _set_macro_defaults(self):
         """Populate unset macros with sensible defaults."""
         default_map = {}
-        for i in range(1,NUM_MARKERS):
-            default_map[f"suffix_{i}x"] = f"Over1:{i+4}:PositionX"
-            default_map[f"suffix_{i}y"] = f"Over1:{i+4}:PositionY"
+        for i in range(NUM_MARKERS):
+            default_map[f"suffix_{i+1}x"] = f":Over1:{i+5}:PositionX"
+            default_map[f"suffix_{i+1}y"] = f":Over1:{i+5}:PositionY"
 
         for name, value in default_map.items():
             self._macro_values[name] = value
