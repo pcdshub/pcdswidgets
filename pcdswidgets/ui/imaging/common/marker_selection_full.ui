@@ -103,7 +103,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross1:MinX</string>
+        <string>${cam_prefix}${suffix_1x}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -165,7 +165,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross1:MinY</string>
+        <string>${cam_prefix}${suffix_1y}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -333,7 +333,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross2:MinX</string>
+        <string>${cam_prefix}${suffix_2x}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -395,7 +395,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross2:MinY</string>
+        <string>${cam_prefix}${suffix_2y}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -563,7 +563,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross3:MinX</string>
+        <string>${cam_prefix}${suffix_3x}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -625,7 +625,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross3:MinY</string>
+        <string>${cam_prefix}${suffix_3y}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -793,7 +793,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross4:MinX</string>
+        <string>${cam_prefix}${suffix_4x}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>
@@ -855,7 +855,7 @@
         <bool>true</bool>
        </property>
        <property name="channel">
-        <string>${cam_prefix}:Cross4:MinY</string>
+        <string>${cam_prefix}${suffix_4y}</string>
        </property>
        <property name="userDefinedLimits">
         <bool>true</bool>

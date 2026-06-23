@@ -24,7 +24,7 @@ from pcdswidgets.imaging.common.marker_style_dialog import MarkerStyleDialog
 
 logger = logging.getLogger(__name__)
 
-# Default colors per marker index
+# Default colors per marker index (these can be overwritten in designer)
 _DEFAULT_COLORS = [
     QColor("red"),
     QColor("green"),
@@ -33,25 +33,14 @@ _DEFAULT_COLORS = [
 ]
 NUM_MARKERS = 4
 
-
 class MarkerSelectionFull(MarkerSelectionFullBase):
     """Interactive marker overlay widget for EPICS area-detector cameras.
 
     Provides click-to-place, visibility toggle, and style/thickness controls
     for up to 4 point-of-interest markers overlaid on a PyDMImageView.
 
-    Marker positions are synchronised with EPICS PVs via PyDMSpinbox channels.
+    Positions are synced to EPICS via PyDMSpinboxs.
     """
-
-    # Buttons from the UI form
-    point_1_select: QPushButton
-    point_2_select: QPushButton
-    point_3_select: QPushButton
-    point_4_select: QPushButton
-    visibility_1: QPushButton
-    visibility_2: QPushButton
-    visibility_3: QPushButton
-    visibility_4: QPushButton
 
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
@@ -61,6 +50,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._set_macro_defaults()
 
         self._image_view: PyDMImageView = None
         self._view_box = None
@@ -78,25 +68,32 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._connect_buttons()
         self._connect_spinboxes()
 
-    # ── Setup ────────────────────────────────────────────────────────────
+    def _set_macro_defaults(self):
+        """Populate unset macros with sensible defaults."""
+        default_map = {}
+        for i in range(1,NUM_MARKERS):
+            default_map[f"suffix_{i}x"] = f"Over1:{i+4}:PositionX"
+            default_map[f"suffix_{i}y"] = f"Over1:{i+4}:PositionY"
+
+        for name, value in default_map.items():
+            self._macro_values[name] = value
 
     def _init_button_icons(self):
         """Assign SVG icons to the select, visibility, and style buttons."""
         for i in range(NUM_MARKERS):
-            select_btn = self._select_button(i)
-            icon = QIcon()
-            icon.addPixmap(QPixmap(CROSSHAIR), QIcon.Normal, QIcon.Off)
-            select_btn.setIcon(icon)
-
-            vis_btn = self._visibility_button(i)
-            icon = QIcon()
-            icon.addPixmap(QPixmap(EYE), QIcon.Normal, QIcon.Off)
-            vis_btn.setIcon(icon)
-
-            style_btn = self._style_button(i)
-            icon = QIcon()
-            icon.addPixmap(QPixmap(THICKNESS), QIcon.Normal, QIcon.Off)
-            style_btn.setIcon(icon)
+            icon_map = {
+                CROSSHAIR: self._select_button(i),
+                EYE: self._visibility_button(i),
+                THICKNESS: self._style_button(i),
+            }
+            for path, button in icon_map.items():
+                icon = QIcon()
+                icon.addPixmap(
+                    QPixmap(path),
+                    QIcon.Normal,
+                    QIcon.Off,
+                )
+                button.setIcon(icon)
 
     def _apply_default_colors(self):
         """Sync color buttons with the marker default colors."""
@@ -106,21 +103,17 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _connect_buttons(self):
         """Wire up all button signals."""
         for i in range(NUM_MARKERS):
-            # Select buttons are checkable (click-to-place mode)
             select_btn = self._select_button(i)
             select_btn.setCheckable(True)
             select_btn.toggled.connect(lambda checked, idx=i: self._on_select_toggled(idx, checked))
 
-            # Visibility toggles
             vis_btn = self._visibility_button(i)
             vis_btn.setCheckable(True)
             vis_btn.toggled.connect(lambda checked, idx=i: self._on_visibility_toggled(idx, checked))
 
-            # Color buttons → update marker color
             color_btn = self._color_button(i)
             color_btn.colorChanged.connect(lambda color, idx=i: self._markers[idx].set_color(color))
 
-            # Style button opens style/thickness dialog
             style_btn = self._style_button(i)
             style_btn.clicked.connect(lambda _checked, idx=i: self._open_style_dialog(idx))
 
@@ -132,8 +125,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             x_sb.valueChanged.connect(lambda _v, idx=i: self._on_spinbox_changed(idx))
             y_sb.valueChanged.connect(lambda _v, idx=i: self._on_spinbox_changed(idx))
 
-    # ── Widget accessors (index → widget) ────────────────────────────────
-
+    ## helper functions to get control widget by marker index
     def _select_button(self, idx: int) -> QPushButton:
         return getattr(self, f"point_{idx + 1}_select")
 
@@ -144,7 +136,6 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         return getattr(self, f"color_{idx + 1}_button")
 
     def _style_button(self, idx: int) -> QPushButton:
-        # UI names: style_select, style_select_2, style_select_3, style_select_4
         suffix = "" if idx == 0 else f"_{idx + 1}"
         return getattr(self, f"style_select{suffix}")
 
@@ -154,7 +145,6 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _y_spinbox(self, idx: int):
         return getattr(self, f"y_spinbox_{idx + 1}")
 
-    # ── Parent linking (called by container widget) ──────────────────────
 
     def link_parent_widgets(self, parent) -> None:
         """Connect this marker widget to a parent's PyDMImageView.
@@ -177,10 +167,9 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         for marker in self._markers:
             marker.attach(self._view_box)
 
-        # Listen for mouse clicks on the view for point-select mode
+        # Listen for mouse clicks
         self._view_box.scene().sigMouseClicked.connect(self._on_scene_clicked)
 
-    # ── Event handlers ───────────────────────────────────────────────────
 
     def _on_select_toggled(self, idx: int, checked: bool):
         """Enter or exit point-select mode for marker *idx*."""
@@ -209,23 +198,22 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         scene_pos = event.scenePos()
         data_pos = self._view_box.mapSceneToView(scene_pos)
 
-        # Update marker position
         self._markers[idx].set_position(data_pos.x(), data_pos.y())
 
-        # Push to spinboxes → EPICS
+        # point to spinboxes
         self._x_spinbox(idx).setValue(data_pos.x())
-        self._x_spinbox(idx).send_value()
         self._y_spinbox(idx).setValue(data_pos.y())
+        # spinboxes to EPICS
+        self._x_spinbox(idx).send_value()
         self._y_spinbox(idx).send_value()
 
-        # Make visible and exit select mode
         self._visibility_button(idx).setChecked(True)
         self._select_button(idx).setChecked(False)
         event.accept()
 
     def _on_spinbox_changed(self, idx: int):
         """Update marker overlay when spinbox values change externally."""
-        # Don't update if user is actively selecting a new point
+        # don't update when user selection is active (endless loop)
         if self._active_select_idx == idx:
             return
         x_val = self._x_spinbox(idx).value
@@ -246,14 +234,14 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             marker.set_style(dlg.selected_style)
             marker.set_width(dlg.selected_width)
 
-    # ── Properties ────────────────────────────────────────
-
     def _get_marker_color(self, idx: int) -> QColor:
         return self._markers[idx].color
 
     def _set_marker_color(self, idx: int, color: QColor) -> None:
         self._markers[idx].set_color(color)
         self._color_button(idx).set_color(color)
+
+    ## Explicit properties for each marker that can be overwritten in designer.
 
     def get_color_1(self) -> QColor:
         return self._get_marker_color(0)

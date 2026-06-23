@@ -79,8 +79,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             "suffix_WidthY": "SizeY",
         }
         for name, value in default_map.items():
-            if (name not in self._macro_values) or (self._macro_values[name] == ""):
-                self._macro_values[name] = value
+            self._macro_values[name] = value
 
     def _init_button_icons(self):
         """Assign SVG icons to the toolbar buttons."""
