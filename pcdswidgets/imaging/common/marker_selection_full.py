@@ -60,7 +60,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._markers: list[CamMarker] = []
         for i in range(NUM_MARKERS):
             color = _DEFAULT_COLORS[i]
-            marker = CamMarker(color, width=2, style=MarkerStyle.CROSSHAIR)
+            marker = CamMarker(color, width=2, style=MarkerStyle.CROSSHAIR_LENGTH)
             self._markers.append(marker)
 
         self._init_button_icons()
@@ -228,11 +228,17 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         dlg = MarkerStyleDialog(
             current_style=marker.style,
             current_width=marker.width,
+            current_arm_length=marker.arm_length,
+            current_hatch_pattern=marker.hatch_pattern,
             parent=self,
         )
         if dlg.exec_() == MarkerStyleDialog.Accepted:
-            marker.set_style(dlg.selected_style)
-            marker.set_width(dlg.selected_width)
+            targets = self._markers if dlg.apply_to_all else [marker]
+            for m in targets:
+                m.set_style(dlg.selected_style)
+                m.set_width(dlg.selected_width)
+                m.set_arm_length(dlg.selected_arm_length)
+                m.set_hatch_pattern(dlg.selected_hatch_pattern)
 
     def _get_marker_color(self, idx: int) -> QColor:
         return self._markers[idx].color
