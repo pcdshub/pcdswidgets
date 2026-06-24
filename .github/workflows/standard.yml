@@ -9,7 +9,7 @@ on:
 
 jobs:
   standard:
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-standard.yml@master
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-standard.yml@daab22df5db812fade2f720068a8e49ae0df1a69
     secrets: inherit
     with:
       # The workflow needs to know the package name.  This can be determined
