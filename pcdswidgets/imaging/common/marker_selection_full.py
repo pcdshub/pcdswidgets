@@ -6,7 +6,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import logging
 
-from pydm.widgets import PyDMImageView
+from pydm.widgets import PyDMImageView, PyDMSpinbox
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
@@ -118,14 +118,16 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             style_btn.clicked.connect(lambda _checked, idx=i: self._open_style_dialog(idx))
 
     def _connect_spinboxes(self):
-        """Monitor spinboxes for external (camonitor) changes."""
-        for i in range(NUM_MARKERS):
-            x_sb = self._x_spinbox(i)
-            y_sb = self._y_spinbox(i)
-            x_sb.valueChanged.connect(lambda _v, idx=i: self._on_spinbox_changed(idx))
-            y_sb.valueChanged.connect(lambda _v, idx=i: self._on_spinbox_changed(idx))
+        """connect on-screen overlayed markers to the spinbox values."""
+        for idx in range(NUM_MARKERS):
+            for axis in ["x","y"]:
+                sb = self._spinbox(axis, idx)
+                sb.valueChanged.connect(lambda value, axis=axis, index=idx: self._on_spinbox_changed(value, axis, index))
 
     ## helper functions to get control widget by marker index
+    def _spinbox(self, axis:str, idx: int) -> PyDMSpinbox:
+        return getattr(self, f"{axis}_spinbox_{idx + 1}")
+
     def _select_button(self, idx: int) -> QPushButton:
         return getattr(self, f"point_{idx + 1}_select")
 
@@ -138,13 +140,6 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _style_button(self, idx: int) -> QPushButton:
         suffix = "" if idx == 0 else f"_{idx + 1}"
         return getattr(self, f"style_select{suffix}")
-
-    def _x_spinbox(self, idx: int):
-        return getattr(self, f"x_spinbox_{idx + 1}")
-
-    def _y_spinbox(self, idx: int):
-        return getattr(self, f"y_spinbox_{idx + 1}")
-
 
     def link_parent_widgets(self, parent) -> None:
         """Connect this marker widget to a parent's PyDMImageView.
@@ -198,29 +193,28 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         scene_pos = event.scenePos()
         data_pos = self._view_box.mapSceneToView(scene_pos)
 
-        self._markers[idx].set_position(data_pos.x(), data_pos.y())
-
-        # point to spinboxes
-        self._x_spinbox(idx).setValue(data_pos.x())
-        self._y_spinbox(idx).setValue(data_pos.y())
+        x_sb = self._spinbox("x",idx)
+        y_sb = self._spinbox("y",idx)
+        # point to spinboxes (note this triggers set_position)
+        x_sb.setValue(data_pos.x())
+        y_sb.setValue(data_pos.y())
         # spinboxes to EPICS
-        self._x_spinbox(idx).send_value()
-        self._y_spinbox(idx).send_value()
+        x_sb.send_value()
+        y_sb.send_value()
 
+        #force marker to be visible
         self._visibility_button(idx).setChecked(True)
+
+        # finish selection
         self._select_button(idx).setChecked(False)
         event.accept()
 
-    def _on_spinbox_changed(self, idx: int):
+    def _on_spinbox_changed(self, value: float, axis: str, index: int ):
         """Update marker overlay when spinbox values change externally."""
-        # don't update when user selection is active (endless loop)
-        if self._active_select_idx == idx:
-            return
-        x_val = self._x_spinbox(idx).value
-        y_val = self._y_spinbox(idx).value
-        if x_val is None or y_val is None:
-            return
-        self._markers[idx].set_position(x_val, y_val)
+        if axis == "x":
+            self._markers[index].x = value
+        else:
+            self._markers[index].y = value
 
     def _open_style_dialog(self, idx: int):
         """Open the style/thickness dialog for marker *idx*."""

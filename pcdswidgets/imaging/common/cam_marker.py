@@ -46,14 +46,12 @@ class CamMarker:
         self._style = style
         self._arm_length = arm_length
         self._hatch_pattern = hatch_pattern
-        self._pos = QPointF(0, 0)
+        self._x, self._y = 0.0, 0.0
         self._visible = False
         self._view_box = None
 
         # Graphic items managed by this marker
         self._items: list[pg.GraphicsObject] = []
-
-    # ── API ───────────────────────────────────────────────────────
 
     def attach(self, view_box) -> None:
         """Attach this marker to a pyqtgraph ViewBox."""
@@ -64,14 +62,6 @@ class CamMarker:
         """Remove all graphic items from the ViewBox."""
         self._remove_items()
         self._view_box = None
-
-    def set_position(self, x: float, y: float) -> None:
-        """Move marker center to (x, y) in data coordinates."""
-        self._pos = QPointF(x, y)
-        self._update_positions()
-
-    def position(self) -> QPointF:
-        return QPointF(self._pos)
 
     def set_visible(self, visible: bool) -> None:
         self._visible = visible
@@ -102,6 +92,24 @@ class CamMarker:
         self._update_pens()
 
     @property
+    def x(self) -> float:
+        return self._x
+
+    @x.setter
+    def x(self, value:float):
+        self._x = value
+        self._update_positions()
+
+    @property
+    def y(self) -> float:
+        return self._y
+
+    @y.setter
+    def y(self, value:float):
+        self._y = value
+        self._update_positions()
+
+    @property
     def style(self) -> MarkerStyle:
         return self._style
 
@@ -120,8 +128,6 @@ class CamMarker:
     @property
     def hatch_pattern(self) -> Qt.PenStyle:
         return self._hatch_pattern
-
-    # ── Internal ─────────────────────────────────────────────────────────
 
     def _rebuild(self) -> None:
         """Recreate graphic items for the current style."""
@@ -159,21 +165,19 @@ class CamMarker:
 
     def _update_positions(self) -> None:
         """Reposition items to the current center point."""
-        x, y = self._pos.x(), self._pos.y()
-
         if not self._items:
             return
 
         if self._style == MarkerStyle.INFINITE_LINES:
-            self._items[0].setValue(y)  # horizontal
-            self._items[1].setValue(x)  # vertical
+            self._items[0].setValue(self.y)  # horizontal
+            self._items[1].setValue(self.x)  # vertical
         else:
             arm = float(self._arm_length)
             # 4 arm starting from center
-            self._items[0].setData([x, x - arm], [y, y])
-            self._items[1].setData([x, x + arm], [y, y])
-            self._items[2].setData([x, x], [y, y + arm])
-            self._items[3].setData([x, x], [y, y - arm])
+            self._items[0].setData([self.x, self.x - arm], [self.y, self.y])
+            self._items[1].setData([self.x, self.x + arm], [self.y, self.y])
+            self._items[2].setData([self.x, self.x], [self.y, self.y + arm])
+            self._items[3].setData([self.x, self.x], [self.y, self.y - arm])
 
     def _update_pens(self) -> None:
         """Apply current pen settings to all graphic items."""
