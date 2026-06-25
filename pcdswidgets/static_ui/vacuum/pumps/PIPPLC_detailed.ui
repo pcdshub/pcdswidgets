@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>567</height>
+    <width>540</width>
+    <height>647</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,47 +21,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_17">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="PyDMLabel" name="PyDMLabel_11">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>${name}</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
-       <property name="toolTip">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="Line" name="line_4">
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+    <widget class="PyDMLabel" name="PyDMLabel_11">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
      </property>
-     <property name="lineWidth">
-      <number>1</number>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">    background-color: #e8f4f8;
+
+    border: 1px solid #90c8e0;
+
+    padding: 5px;
+
+    color: rgb(43, 43, 43);</string>
+     </property>
+     <property name="text">
+      <string>${name}</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -95,6 +83,11 @@
        <height>140</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Readback</string>
      </property>
@@ -105,6 +98,14 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="pressure_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;b&gt;Pressure&lt;b&gt;</string>
             </property>
@@ -112,6 +113,14 @@
           </item>
           <item>
            <widget class="QLabel" name="interlock_ok_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Interlock OK&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -119,6 +128,14 @@
           </item>
           <item>
            <widget class="QLabel" name="pump_state_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;b&gt;Pump State&lt;/b&gt;</string>
             </property>
@@ -130,9 +147,13 @@
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="PyDMLabel" name="pressure_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:PRESS_RBV</string>
@@ -166,9 +187,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="pump_state_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -224,6 +249,11 @@ color: rgb(255, 255, 255);</string>
        <height>160</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Control</string>
      </property>
@@ -234,22 +264,46 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
            <widget class="QLabel" name="pressure_label_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Protection Setpoint&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Protection SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="high_voltage_do_label_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Setpoint Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SP Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="high_voltage_in_label_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;High Voltage Switch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;HV Switch&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -259,9 +313,13 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
            <widget class="PyDMLabel" name="protection_setpoint_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:AT_VAC_SP_RBV</string>
@@ -282,9 +340,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="setpoint_hysteresis_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:SP_HYS_RBV</string>
@@ -302,9 +364,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="high_voltage_switch_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -320,6 +386,9 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
            <widget class="PyDMLineEdit" name="protection_setpoint_setpoint">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_SP</string>
             </property>
@@ -327,6 +396,9 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLineEdit" name="setpoint_hysteresis_setpoint">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:SP_HYS</string>
             </property>
@@ -336,6 +408,9 @@ color: rgb(255, 255, 255);</string>
            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
             <property name="toolTip">
              <string/>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
             </property>
             <property name="channel">
              <string>ca://${prefix}:HV_SW</string>
@@ -363,6 +438,11 @@ color: rgb(255, 255, 255);</string>
        <height>140</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Config</string>
      </property>
@@ -373,6 +453,14 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
            <widget class="QLabel" name="qpc_name_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;b&gt;QPC Name&lt;/b&gt;</string>
             </property>
@@ -380,6 +468,14 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QLabel" name="qpc_pumpsize_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;b&gt;QPC Pump Size&lt;/b&gt;</string>
             </property>
@@ -387,6 +483,14 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QLabel" name="interlock_device_label">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
             <property name="text">
              <string>&lt;b&gt;Interlock Device&lt;/b&gt;</string>
             </property>
@@ -398,9 +502,13 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
            <widget class="PyDMLabel" name="qpc_name_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -412,9 +520,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="qpc_pumpsize_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -426,9 +538,13 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="interlock_device_readback">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:ILK_DEVICE_RBV</string>

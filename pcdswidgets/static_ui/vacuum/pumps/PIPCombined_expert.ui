@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>572</width>
-    <height>781</height>
+    <width>585</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,47 +21,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="PyDMLabel" name="PyDMLabel_10">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>${name}</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
-       <property name="toolTip">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="Line" name="line_4">
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+    <widget class="PyDMLabel" name="PyDMLabel_10">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
      </property>
-     <property name="lineWidth">
-      <number>1</number>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">   background-color: #e8f4f8;
+
+    border: 1px solid #90c8e0;
+
+    padding: 5px;
+
+    color: rgb(43, 43, 43);</string>
+     </property>
+     <property name="text">
+      <string>${name}</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -82,40 +70,6 @@
     </spacer>
    </item>
    <item>
-    <widget class="PyDMLabel" name="PyDMLabel">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>40</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>PLC Interface</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="line_3">
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>3</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="minimumSize">
       <size>
@@ -123,8 +77,13 @@
        <height>140</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="title">
-      <string>Readback</string>
+      <string>PLC Interface Readback</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -133,6 +92,11 @@
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_6">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -146,6 +110,11 @@
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_7">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -159,6 +128,11 @@
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_8">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -176,12 +150,16 @@
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
            <widget class="PyDMLabel" name="PLC_Pressure_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:PRESS_RBV</string>
@@ -202,12 +180,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PLC_State_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:STATE_RBV</string>
@@ -222,12 +204,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PLC_HV_DI_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:HV_DI_RBV</string>
@@ -291,40 +277,6 @@ color: rgb(255, 255, 255);</string>
     </widget>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="lineWidth">
-      <number>3</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="PyDMLabel" name="PyDMLabel_2">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>40</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>IOC Interface</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="minimumSize">
       <size>
@@ -332,8 +284,13 @@ color: rgb(255, 255, 255);</string>
        <height>350</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="title">
-      <string>Readback</string>
+      <string>IOC Interface Readback</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -345,6 +302,11 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_12">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -358,6 +320,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_33">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -371,6 +338,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_34">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -384,6 +356,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_13">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -397,6 +374,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_15">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -410,6 +392,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_47">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -423,6 +410,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_48">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -436,6 +428,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_49">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -449,6 +446,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_50">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -462,6 +464,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_35">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -479,12 +486,16 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_15">
           <item>
            <widget class="PyDMLabel" name="IOC_Pressure_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -514,12 +525,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_Current_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -549,12 +564,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_Pressure_4">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -584,12 +603,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_Status_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:STATUS</string>
@@ -603,22 +626,23 @@ color: rgb(255, 255, 255);</string>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="IOC_Error_2">
+           <widget class="PyDMLabel" name="IOC_Status_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:ERROR</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>true</bool>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ERROR</string>
@@ -627,12 +651,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_HV_Status_4">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:TTL_FUNCTION_RB</string>
@@ -647,12 +675,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_HV_Enabled_4">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:TTL_STATUS</string>
@@ -673,12 +705,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_DI_4">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string>Note: Digital In set to 'Off' means the interlock is driven by the controller acoording to the HV Enable Mode</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:DIMODE</string>
@@ -699,12 +735,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_AO_Mode_5">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:AOMODEDES</string>
@@ -722,12 +762,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_AO_Mode_6">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:LOGOFFSET_RB</string>
@@ -988,8 +1032,13 @@ color: rgb(255, 255, 255);</string>
        <height>100</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="title">
-      <string>Config</string>
+      <string>IOC Interface Config</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -1001,6 +1050,11 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_25">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -1014,6 +1068,11 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_26">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -1031,12 +1090,16 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
            <widget class="PyDMLabel" name="IOC_Enable_RB_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:ISENABLED</string>
@@ -1051,12 +1114,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLabel" name="IOC_Protection_RB_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 85, 255);
-color: rgb(255, 255, 255);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>ca://${prefix}:TTL_OFF_RB</string>
@@ -1099,11 +1166,19 @@ color: rgb(255, 255, 255);</string>
               <height>100</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
             </property>
             <property name="editable">
              <bool>true</bool>
@@ -1118,8 +1193,16 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="PyDMLineEdit" name="IOC_Protection_SP_3">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
             </property>
             <property name="channel">
              <string>ca://${prefix}:TTL_OFF_SP</string>

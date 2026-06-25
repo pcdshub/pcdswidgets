@@ -21,6 +21,7 @@ from qtpy.QtWidgets import (
 )
 
 from ..utils import refresh_style
+from ..builder.designer_widget import fix_pcdswidgets_filename
 
 logger = logging.getLogger(__name__)
 
@@ -619,8 +620,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         if not self.EXPERT_UI_DIR or not expert_key:
             return []
 
-        from ..builder.designer_widget import fix_pcdswidgets_filename
-
         ui_dir = fix_pcdswidgets_filename(self.EXPERT_UI_DIR)
         if not os.path.isdir(ui_dir):
             logger.warning(f"No expert UI directory found for {expert_key} at {ui_dir}")
@@ -641,7 +640,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         return [os.path.join(ui_dir, filename) for filename in ordered]
 
     @staticmethod
-    def _format_macros(macros: dict[str, str]) -> str:
+    def _format_macros(macros):
         """Serialize a macro mapping into a PyDM-compatible macro string."""
         return ",".join(f"{key}={value}" for key, value in macros.items())
 
