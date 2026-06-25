@@ -186,7 +186,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             if hasattr(child, "link_parent_widgets"):
                 child.link_parent_widgets(self)
             logger.debug(
-                "Adopted child %s as collapsible '%s'",
+                "Adopted child %s'",
                 child.objectName() or type(child).__name__,
             )
         # add a vertical spacer to push all widgets to the top
