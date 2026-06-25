@@ -1,14 +1,14 @@
-""" override default signal/slot behavior of the spinbox """
+"""override default signal/slot behavior of the spinbox"""
 
 from pydm.widgets import PyDMSpinbox
 from qtpy.QtCore import Qt
 
 
 class PyDMSpinboxEnter(PyDMSpinbox):
-    """ Overrides for PyDMSpinbox for handling editing events"""
+    """Overrides for PyDMSpinbox for handling editing events"""
+
     def __init__(self, parent=None, init_channel=None):
         super().__init__(parent, init_channel)
-
 
     def keyPressEvent(self, ev):
         """

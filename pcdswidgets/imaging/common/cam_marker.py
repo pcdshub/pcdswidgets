@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import IntEnum
 
 import pyqtgraph as pg
-from qtpy.QtCore import QPointF, Qt
+from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 
 
@@ -96,7 +96,7 @@ class CamMarker:
         return self._x
 
     @x.setter
-    def x(self, value:float):
+    def x(self, value: float):
         self._x = value
         self._update_positions()
 
@@ -105,7 +105,7 @@ class CamMarker:
         return self._y
 
     @y.setter
-    def y(self, value:float):
+    def y(self, value: float):
         self._y = value
         self._update_positions()
 

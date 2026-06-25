@@ -33,6 +33,7 @@ _DEFAULT_COLORS = [
 ]
 NUM_MARKERS = 4
 
+
 class MarkerSelectionFull(MarkerSelectionFullBase):
     """Interactive marker overlay widget for EPICS area-detector cameras.
 
@@ -72,8 +73,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         """Populate unset macros with sensible defaults."""
         default_map = {}
         for i in range(NUM_MARKERS):
-            default_map[f"suffix_{i+1}x"] = f":Over1:{i+5}:PositionX"
-            default_map[f"suffix_{i+1}y"] = f":Over1:{i+5}:PositionY"
+            default_map[f"suffix_{i + 1}x"] = f":Over1:{i + 5}:PositionX"
+            default_map[f"suffix_{i + 1}y"] = f":Over1:{i + 5}:PositionY"
 
         for name, value in default_map.items():
             self._macro_values[name] = value
@@ -120,12 +121,14 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _connect_spinboxes(self):
         """connect on-screen overlayed markers to the spinbox values."""
         for idx in range(NUM_MARKERS):
-            for axis in ["x","y"]:
+            for axis in ["x", "y"]:
                 sb = self._spinbox(axis, idx)
-                sb.valueChanged.connect(lambda value, axis=axis, index=idx: self._on_spinbox_changed(value, axis, index))
+                sb.valueChanged.connect(
+                    lambda value, axis=axis, index=idx: self._on_spinbox_changed(value, axis, index)
+                )
 
     ## helper functions to get control widget by marker index
-    def _spinbox(self, axis:str, idx: int) -> PyDMSpinbox:
+    def _spinbox(self, axis: str, idx: int) -> PyDMSpinbox:
         return getattr(self, f"{axis}_spinbox_{idx + 1}")
 
     def _select_button(self, idx: int) -> QPushButton:
@@ -165,7 +168,6 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         # Listen for mouse clicks
         self._view_box.scene().sigMouseClicked.connect(self._on_scene_clicked)
 
-
     def _on_select_toggled(self, idx: int, checked: bool):
         """Enter or exit point-select mode for marker *idx*."""
         if checked:
@@ -193,8 +195,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         scene_pos = event.scenePos()
         data_pos = self._view_box.mapSceneToView(scene_pos)
 
-        x_sb = self._spinbox("x",idx)
-        y_sb = self._spinbox("y",idx)
+        x_sb = self._spinbox("x", idx)
+        y_sb = self._spinbox("y", idx)
         # point to spinboxes (note this triggers set_position)
         x_sb.setValue(data_pos.x())
         y_sb.setValue(data_pos.y())
@@ -202,14 +204,14 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         x_sb.send_value()
         y_sb.send_value()
 
-        #force marker to be visible
+        # force marker to be visible
         self._visibility_button(idx).setChecked(True)
 
         # finish selection
         self._select_button(idx).setChecked(False)
         event.accept()
 
-    def _on_spinbox_changed(self, value: float, axis: str, index: int ):
+    def _on_spinbox_changed(self, value: float, axis: str, index: int):
         """Update marker overlay when spinbox values change externally."""
         if axis == "x":
             self._markers[index].x = value

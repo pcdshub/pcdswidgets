@@ -6,7 +6,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import logging
 
-from pydm.widgets import PyDMImageView, PyDMSpinbox
+from pydm.widgets import PyDMImageView
 from qtpy.QtCore import QPointF, Qt
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
