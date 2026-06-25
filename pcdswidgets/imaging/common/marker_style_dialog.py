@@ -1,7 +1,5 @@
 """Dialog for selecting marker display style, line thickness, hatch pattern, and arm length."""
 
-from __future__ import annotations
-
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (
     QButtonGroup,
