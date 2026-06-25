@@ -92,8 +92,8 @@ class CameraViewerStretchBase(DesignerWidget):
             ("text", """${cam_prefix}"""),
         ],
         "image_view": [
-            ("imageChannel", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_waveform_channel}"),
-            ("widthChannel", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_width_channel}"),
+            ("imageChannel", """${img_protocol}${cam_prefix}${stream_plugin}${suffix_waveform_channel}"""),
+            ("widthChannel", """${img_protocol}${cam_prefix}${stream_plugin}${suffix_width_channel}"""),
         ],
         "nickname_label": [
             ("text", """${nickname}"""),
@@ -120,10 +120,10 @@ class CameraViewerStretchBase(DesignerWidget):
     cam_prefix = pyqtProperty(str, get_cam_prefix, set_cam_prefix)
 
     def get_img_protocol(self) -> str:
-        return self._get_macro("img_protocol")
+        return self.get_macro("img_protocol")
 
     def set_img_protocol(self, value: str) -> None:
-        self._set_macro("img_protocol", value)
+        self.set_macro("img_protocol", value)
 
     img_protocol = pyqtProperty(str, get_img_protocol, set_img_protocol)
 
@@ -136,25 +136,25 @@ class CameraViewerStretchBase(DesignerWidget):
     nickname = pyqtProperty(str, get_nickname, set_nickname)
 
     def get_stream_plugin(self) -> str:
-        return self._get_macro("stream_plugin")
+        return self.get_macro("stream_plugin")
 
     def set_stream_plugin(self, value: str) -> None:
-        self._set_macro("stream_plugin", value)
+        self.set_macro("stream_plugin", value)
 
     stream_plugin = pyqtProperty(str, get_stream_plugin, set_stream_plugin)
 
     def get_suffix_waveform_channel(self) -> str:
-        return self._get_macro("suffix_waveform_channel")
+        return self.get_macro("suffix_waveform_channel")
 
     def set_suffix_waveform_channel(self, value: str) -> None:
-        self._set_macro("suffix_waveform_channel", value)
+        self.set_macro("suffix_waveform_channel", value)
 
     suffix_waveform_channel = pyqtProperty(str, get_suffix_waveform_channel, set_suffix_waveform_channel)
 
     def get_suffix_width_channel(self) -> str:
-        return self._get_macro("suffix_width_channel")
+        return self.get_macro("suffix_width_channel")
 
     def set_suffix_width_channel(self, value: str) -> None:
-        self._set_macro("suffix_width_channel", value)
+        self.set_macro("suffix_width_channel", value)
 
     suffix_width_channel = pyqtProperty(str, get_suffix_width_channel, set_suffix_width_channel)
