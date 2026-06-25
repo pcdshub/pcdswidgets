@@ -6,7 +6,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import logging
 
-from pydm.widgets import PyDMImageView
+from pydm.widgets import PyDMImageView, PyDMSpinbox
 from qtpy.QtCore import QPointF, Qt
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
@@ -65,7 +65,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._init_button_icons()
         self._connect_buttons()
 
-        # monitor spinboxes for changes not cause by the use (camonitor / initial read)
+        # monitor spinboxes for changes (camonitor / initial read/ user typed)
         for spinbox in self.roi_spinboxes:
             spinbox.valueChanged.connect(self._on_spinbox_changed)
 
@@ -217,11 +217,17 @@ class EpicsRoiFull(EpicsRoiFullBase):
             data_pos = self._view_box.mapSceneToView(scene_pos)
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
 
-    def _on_spinbox_changed(self, _value=None):
+    def _on_spinbox_changed(self, new_value=None):
         """update the ROI if spinbox values change not due to user input"""
-        # only update ROI if the move controls are not active
+        # only update ROI displayed if the move controls are not active
         if not self.user_moving_roi:
-            values = [sb.value for sb in self.roi_spinboxes]
+            sender = self.sender()
+            values = []
+            for sb in self.roi_spinboxes:
+                if sb is sender and new_value is not None:
+                    values.append(new_value)
+                else:
+                    values.append(sb.value)
             if None in values:
                 return
             if self.is_xy_center:
