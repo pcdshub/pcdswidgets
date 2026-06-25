@@ -1,7 +1,5 @@
 """Managed point-of-interest marker for camera image overlays."""
 
-from __future__ import annotations
-
 from enum import IntEnum
 
 import pyqtgraph as pg
