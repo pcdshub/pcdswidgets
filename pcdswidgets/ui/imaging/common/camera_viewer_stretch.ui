@@ -162,6 +162,12 @@
       </layout>
      </widget>
      <widget class="QScrollArea" name="sidebar_scroll">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>410</width>
@@ -170,7 +176,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>420</width>
+        <width>1300</width>
         <height>16777215</height>
        </size>
       </property>
