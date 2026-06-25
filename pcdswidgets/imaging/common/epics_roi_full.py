@@ -51,7 +51,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         super().__init__(*args, **kwargs)
 
         self._set_macro_defaults()
-        self._nickname = "ROI SELECT"
+        self._nickname = "ROI Selection"
 
         self._image_view: PyDMImageView = None
         self._view_box = None

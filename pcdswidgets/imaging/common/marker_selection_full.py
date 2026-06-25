@@ -52,6 +52,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_macro_defaults()
+        self._nickname = "Point Marker Selection"
 
         self._image_view: PyDMImageView = None
         self._view_box = None
@@ -276,3 +277,11 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._set_marker_color(3, color)
 
     color_4 = pyqtProperty(QColor, get_color_4, set_color_4)
+
+    def get_nickname(self) -> str:
+        return self._nickname
+
+    def set_nickname(self, value: str) -> None:
+        self._nickname = value
+
+    nickname = pyqtProperty(str, get_nickname, set_nickname)
