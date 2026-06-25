@@ -217,6 +217,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Change line style and width</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -236,6 +239,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Click to place marker 1 on image</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -254,6 +260,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle marker 1 visibility</string>
        </property>
        <property name="text">
         <string/>
@@ -453,6 +462,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Change line style and width</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -472,6 +484,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Click to place marker 2 on image</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -490,6 +505,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle marker 2 visibility</string>
        </property>
        <property name="text">
         <string/>
@@ -689,6 +707,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Change line style and width</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -708,6 +729,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Click to place marker 3 on image</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -726,6 +750,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle marker 3 visibility</string>
        </property>
        <property name="text">
         <string/>
@@ -925,6 +952,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Change line style and width</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -944,6 +974,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Click to place marker 4 on image</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -962,6 +995,9 @@
          <width>45</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle marker 4 visibility</string>
        </property>
        <property name="text">
         <string/>
