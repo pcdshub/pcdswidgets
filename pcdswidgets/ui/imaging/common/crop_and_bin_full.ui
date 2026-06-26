@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinbox" name="bin_x_spinbox">
+      <widget class="PyDMSpinboxEnter" name="bin_x_spinbox">
        <property name="toolTip">
         <string/>
        </property>
@@ -122,7 +122,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinbox" name="bin_y_spinbox">
+      <widget class="PyDMSpinboxEnter" name="bin_y_spinbox">
        <property name="toolTip">
         <string/>
        </property>
@@ -258,7 +258,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PyDMSpinbox" name="roi_x_spinbox">
+      <widget class="PyDMSpinboxEnter" name="roi_x_spinbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -330,7 +330,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="PyDMSpinbox" name="roi_y_spinbox">
+      <widget class="PyDMSpinboxEnter" name="roi_y_spinbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -388,7 +388,7 @@
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PyDMSpinbox" name="roi_width_spinbox">
+      <widget class="PyDMSpinboxEnter" name="roi_width_spinbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -446,7 +446,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="PyDMSpinbox" name="roi_height_spinbox">
+      <widget class="PyDMSpinboxEnter" name="roi_height_spinbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -892,9 +892,9 @@
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>PyDMSpinbox</class>
+   <class>PyDMSpinboxEnter</class>
    <extends>QDoubleSpinBox</extends>
-   <header>pydm.widgets.spinbox</header>
+   <header>pcdswidgets.imaging.common.spinbox</header>
   </customwidget>
  </customwidgets>
  <resources/>

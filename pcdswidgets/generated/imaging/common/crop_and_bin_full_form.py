@@ -9,8 +9,9 @@
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.spinbox import PyDMSpinbox
 from qtpy import QtCore, QtGui, QtWidgets
+
+from pcdswidgets.imaging.common.spinbox import PyDMSpinboxEnter
 
 
 class Ui_Form(object):
@@ -37,7 +38,7 @@ class Ui_Form(object):
         self.bin_x_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.bin_x_label.setObjectName("bin_x_label")
         self.horizontalLayout_2.addWidget(self.bin_x_label)
-        self.bin_x_spinbox = PyDMSpinbox(Form)
+        self.bin_x_spinbox = PyDMSpinboxEnter(Form)
         self.bin_x_spinbox.setToolTip("")
         self.bin_x_spinbox.setKeyboardTracking(False)
         self.bin_x_spinbox.setMaximum(9.0)
@@ -58,7 +59,7 @@ class Ui_Form(object):
         self.bin_y_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.bin_y_label.setObjectName("bin_y_label")
         self.horizontalLayout_2.addWidget(self.bin_y_label)
-        self.bin_y_spinbox = PyDMSpinbox(Form)
+        self.bin_y_spinbox = PyDMSpinboxEnter(Form)
         self.bin_y_spinbox.setToolTip("")
         self.bin_y_spinbox.setKeyboardTracking(False)
         self.bin_y_spinbox.setMaximum(9.0)
@@ -105,7 +106,7 @@ class Ui_Form(object):
         self.roi_y_label = QtWidgets.QLabel(Form)
         self.roi_y_label.setObjectName("roi_y_label")
         self.gridLayout_2.addWidget(self.roi_y_label, 0, 2, 1, 1)
-        self.roi_x_spinbox = PyDMSpinbox(Form)
+        self.roi_x_spinbox = PyDMSpinboxEnter(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -133,7 +134,7 @@ class Ui_Form(object):
         self.roi_width_label = QtWidgets.QLabel(Form)
         self.roi_width_label.setObjectName("roi_width_label")
         self.gridLayout_2.addWidget(self.roi_width_label, 0, 4, 1, 1)
-        self.roi_y_spinbox = PyDMSpinbox(Form)
+        self.roi_y_spinbox = PyDMSpinboxEnter(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -155,7 +156,7 @@ class Ui_Form(object):
         self.roi_y_spinbox.setWriteOnPress(True)
         self.roi_y_spinbox.setObjectName("roi_y_spinbox")
         self.gridLayout_2.addWidget(self.roi_y_spinbox, 0, 3, 1, 1)
-        self.roi_width_spinbox = PyDMSpinbox(Form)
+        self.roi_width_spinbox = PyDMSpinboxEnter(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -177,7 +178,7 @@ class Ui_Form(object):
         self.roi_width_spinbox.setWriteOnPress(True)
         self.roi_width_spinbox.setObjectName("roi_width_spinbox")
         self.gridLayout_2.addWidget(self.roi_width_spinbox, 0, 5, 1, 1)
-        self.roi_height_spinbox = PyDMSpinbox(Form)
+        self.roi_height_spinbox = PyDMSpinboxEnter(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
