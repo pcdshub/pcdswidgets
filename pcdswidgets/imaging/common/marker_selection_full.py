@@ -26,8 +26,8 @@ logger = logging.getLogger(__name__)
 
 # Default colors per marker index (these can be overwritten in designer)
 _DEFAULT_COLORS = [
-    QColor("red"),
     QColor("green"),
+    QColor("yellow"),
     QColor("cyan"),
     QColor("magenta"),
 ]
