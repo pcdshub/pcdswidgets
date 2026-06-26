@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>395</width>
+    <height>109</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>395</width>
+    <height>70</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>430</width>
+    <height>109</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>HW Resolution and Binning</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <property name="leftMargin">
+    <number>4</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="bin_x_label">
+       <property name="text">
+        <string>Bin X:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMSpinbox" name="bin_x_spinbox">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="maximum">
+        <double>9.000000000000000</double>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:BinX</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>9.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="bin_y_label">
+       <property name="text">
+        <string>Bin Y:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMSpinbox" name="bin_y_spinbox">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="maximum">
+        <double>9.000000000000000</double>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:BinY</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>9.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="sync_bins_checkbox">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Sync Bin XandY</string>
+       </property>
+       <property name="text">
+        <string>sync</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>10</width>
+         <height>19</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reset_roi_button">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>45</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="crop_button">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>45</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="roi_x_label">
+       <property name="text">
+        <string>X:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="roi_y_label">
+       <property name="text">
+        <string>Y:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="PyDMSpinbox" name="roi_x_spinbox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:MinX</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QLabel" name="roi_height_label">
+       <property name="text">
+        <string>Height:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="roi_width_label">
+       <property name="text">
+        <string>Width:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="PyDMSpinbox" name="roi_y_spinbox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:MinY</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="PyDMSpinbox" name="roi_width_spinbox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:SizeX</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7">
+      <widget class="PyDMSpinbox" name="roi_height_spinbox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="monitorDisp">
+        <bool>true</bool>
+       </property>
+       <property name="channel">
+        <string>${cam_prefix}:SizeY</string>
+       </property>
+       <property name="userDefinedLimits">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="roi_tools_row" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>19</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="move_button">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="center_button">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="draw_button">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="confirm_button">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancel_button">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_resolution">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <item>
+      <spacer name="spacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="sensor_static_label">
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Sensor:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="sensor_width_label">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>calc://eff_w?expr=A/B&amp;A=${cam_prefix}:SizeX_RBV&amp;B=${cam_prefix}:BinX_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="sensor_x_sep_label">
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>x</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="sensor_height_label">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>calc://eff_w?expr=A/B&amp;A=${cam_prefix}:SizeX_RBV&amp;B=${cam_prefix}:BinX_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="effective_static_label">
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>--&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="effective_width_label">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>calc://eff_w?expr=A/B&amp;A=${cam_prefix}:SizeX_RBV&amp;B=${cam_prefix}:BinX_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="effective_x_sep_label">
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>x</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="effective_height_label">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>calc://eff_w?expr=A/B&amp;A=${cam_prefix}:SizeX_RBV&amp;B=${cam_prefix}:BinX_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMSpinbox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pydm.widgets.spinbox</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
