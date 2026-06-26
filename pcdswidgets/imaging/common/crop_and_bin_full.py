@@ -202,7 +202,7 @@ class CropAndBinFull(CropAndBinFullBase):
         self._set_controls_enabled(True)
 
     def _set_controls_enabled(self, enabled: bool):
-        """Enable/disable all spinboxes and bin controls."""
+        """Enable/disable or toggle visibility all spinboxes and bin controls."""
         for widget in (
             self.bin_x_spinbox,
             self.bin_y_spinbox,
@@ -211,10 +211,13 @@ class CropAndBinFull(CropAndBinFullBase):
             self.roi_width_spinbox,
             self.roi_height_spinbox,
             self.sync_bins_checkbox,
+        ):
+            widget.setEnabled(enabled)
+        for widget in (
             self.crop_button,
             self.reset_roi_button,
         ):
-            widget.setEnabled(enabled)
+            widget.setVisible(enabled)
 
     def _set_roi_to_full_image(self):
         """Set the ROI rect to cover the entire currently-displayed image."""
