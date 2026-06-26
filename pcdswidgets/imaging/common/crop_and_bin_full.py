@@ -7,7 +7,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 
 from pydm.widgets import PyDMImageView
-from qtpy.QtCore import QPointF, Qt
+from qtpy.QtCore import QPointF, Qt, QTimer
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
 
@@ -62,6 +62,14 @@ class CropAndBinFull(CropAndBinFullBase):
         self._in_crop_mode = False
         self._last_bin_x: float = 1
         self._last_bin_y: float = 1
+        self._bin_x_initialized = False
+        self._bin_y_initialized = False
+
+        # Cooldown timer: area detector sends take real time when changing bin size
+        self._cooldown_timer = QTimer(self)
+        self._cooldown_timer.setSingleShot(True)
+        self._cooldown_timer.setInterval(1000)
+        self._cooldown_timer.timeout.connect(self._on_cooldown_done)
 
         self.roi_rect = CamROI(QColor(CROP_BOX_COLOR), 2, self)
 
@@ -96,11 +104,6 @@ class CropAndBinFull(CropAndBinFullBase):
         self.bin_x_spinbox.valueChanged.connect(self._on_bin_x_changed)
         self.bin_y_spinbox.valueChanged.connect(self._on_bin_y_changed)
 
-        # Bin readback tracking (update _last_bin from PV readbacks)
-        self.bin_x_spinbox.valueChanged.connect(self._track_bin_x_readback)
-        self.bin_y_spinbox.valueChanged.connect(self._track_bin_y_readback)
-
-        # Bin send interception (rescale ROI when user sends new bin)
         self.bin_x_spinbox.send_value_signal[float].connect(self._on_bin_x_sent)
         self.bin_y_spinbox.send_value_signal[float].connect(self._on_bin_y_sent)
 
@@ -166,30 +169,50 @@ class CropAndBinFull(CropAndBinFullBase):
 
 
     def _on_sync_toggled(self, checked: bool):
+        self.bin_y_spinbox.setEnabled(not checked)
         if checked:
             # Immediately sync Y to X
             self.bin_y_spinbox.setValue(self.bin_x_spinbox.value)
             self.bin_y_spinbox.send_value()
 
-    def _track_bin_x_readback(self, value: float):
-        """Update _last_bin_x only from PV readbacks (not user edits)."""
-        if self.bin_x_spinbox.valueBeingSet and value > 0:
-            self._last_bin_x = value
+    def _maybe_auto_sync(self):
+        """If both bins have been read and are equal, enable sync checkbox."""
+        if self._bin_x_initialized and self._bin_y_initialized:
+            if self._last_bin_x == self._last_bin_y:
+                self.sync_bins_checkbox.setChecked(True)
 
-    def _track_bin_y_readback(self, value: float):
-        """Update _last_bin_y only from PV readbacks (not user edits)."""
-        if self.bin_y_spinbox.valueBeingSet and value > 0:
-            self._last_bin_y = value
+    def _start_cooldown(self, _value=None):
+        """Disable controls for 2s after a PV write to let hardware apply."""
+        if self._in_crop_mode:
+            return
+        self._set_controls_enabled(False)
+        self._cooldown_timer.start()
+
+    def _on_cooldown_done(self):
+        """Re-enable controls after cooldown."""
+        if not self._in_crop_mode:
+            self._set_controls_enabled(True)
 
     def _on_bin_x_changed(self, value):
+        print("check x")
+        self._start_cooldown()
+        if self.bin_x_spinbox.valueBeingSet and value > 0:
+            self._last_bin_x = value
+            if not self._bin_x_initialized:
+                self._bin_x_initialized = True
+                self._maybe_auto_sync()
         if self.sync_bins_checkbox.isChecked():
             self.bin_y_spinbox.setValue(value)
             self.bin_y_spinbox.send_value()
 
     def _on_bin_y_changed(self, value):
-        if self.sync_bins_checkbox.isChecked():
-            self.bin_x_spinbox.setValue(value)
-            self.bin_x_spinbox.send_value()
+        print("check y")
+        self._start_cooldown()
+        if self.bin_y_spinbox.valueBeingSet and value > 0:
+            self._last_bin_y = value
+            if not self._bin_y_initialized:
+                self._bin_y_initialized = True
+                self._maybe_auto_sync()
 
     def _on_bin_x_sent(self, new_bin_x: float):
         """Rescale ROI X fields when BinX is sent, preserving physical sensor region."""
@@ -266,7 +289,6 @@ class CropAndBinFull(CropAndBinFullBase):
         """Enable/disable or toggle visibility all spinboxes and bin controls."""
         for widget in (
             self.bin_x_spinbox,
-            self.bin_y_spinbox,
             self.roi_x_spinbox,
             self.roi_y_spinbox,
             self.roi_width_spinbox,
@@ -274,6 +296,10 @@ class CropAndBinFull(CropAndBinFullBase):
             self.sync_bins_checkbox,
         ):
             widget.setEnabled(enabled)
+        # bin_y stays disabled when sync is on
+        self.bin_y_spinbox.setEnabled(
+            enabled and not self.sync_bins_checkbox.isChecked()
+        )
         for widget in (
             self.crop_button,
             self.reset_roi_button,
