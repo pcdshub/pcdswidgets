@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>HW Resolution and Binning</string>
+   <string>HW Crop and Bin</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

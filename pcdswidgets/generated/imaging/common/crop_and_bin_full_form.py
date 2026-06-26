@@ -348,7 +348,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "HW Resolution and Binning"))
+        Form.setWindowTitle(_translate("Form", "HW Crop and Bin"))
         self.bin_x_label.setText(_translate("Form", "Bin X:"))
         self.bin_x_spinbox.setProperty("channel", _translate("Form", "${cam_prefix}:BinX"))
         self.bin_y_label.setText(_translate("Form", "Bin Y:"))
