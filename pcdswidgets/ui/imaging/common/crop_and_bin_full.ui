@@ -70,43 +70,49 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
        <property name="maximum">
         <double>9.000000000000000</double>
        </property>
-       <property name="showUnits">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveBorder" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>${cam_prefix}:BinX</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>9.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -129,43 +135,49 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
        <property name="maximum">
         <double>9.000000000000000</double>
        </property>
-       <property name="showUnits">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveBorder" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>${cam_prefix}:BinY</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>9.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -277,40 +289,43 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="monitorDisp">
-        <bool>true</bool>
-       </property>
-       <property name="channel">
-        <string>${cam_prefix}:MinX</string>
-       </property>
-       <property name="userDefinedLimits">
-        <bool>true</bool>
-       </property>
-       <property name="userMaximum">
-        <double>99999.000000000000000</double>
-       </property>
-       <property name="precision">
+       <property name="decimals">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>${cam_prefix}:MinX</string>
+       </property>
+       <property name="userDefinedLimits" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum" stdset="0">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -349,40 +364,43 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="monitorDisp">
-        <bool>true</bool>
-       </property>
-       <property name="channel">
-        <string>${cam_prefix}:MinY</string>
-       </property>
-       <property name="userDefinedLimits">
-        <bool>true</bool>
-       </property>
-       <property name="userMaximum">
-        <double>99999.000000000000000</double>
-       </property>
-       <property name="precision">
+       <property name="decimals">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>${cam_prefix}:MinY</string>
+       </property>
+       <property name="userDefinedLimits" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum" stdset="0">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -407,40 +425,43 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="monitorDisp">
-        <bool>true</bool>
-       </property>
-       <property name="channel">
-        <string>${cam_prefix}:SizeX</string>
-       </property>
-       <property name="userDefinedLimits">
-        <bool>true</bool>
-       </property>
-       <property name="userMaximum">
-        <double>99999.000000000000000</double>
-       </property>
-       <property name="precision">
+       <property name="decimals">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>${cam_prefix}:SizeX</string>
+       </property>
+       <property name="userDefinedLimits" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum" stdset="0">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -465,40 +486,43 @@
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="monitorDisp">
-        <bool>true</bool>
-       </property>
-       <property name="channel">
-        <string>${cam_prefix}:SizeY</string>
-       </property>
-       <property name="userDefinedLimits">
-        <bool>true</bool>
-       </property>
-       <property name="userMaximum">
-        <double>99999.000000000000000</double>
-       </property>
-       <property name="precision">
+       <property name="decimals">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>${cam_prefix}:SizeY</string>
+       </property>
+       <property name="userDefinedLimits" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="userMaximum" stdset="0">
+        <double>99999.000000000000000</double>
+       </property>
+       <property name="precision" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="showStepExponent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
