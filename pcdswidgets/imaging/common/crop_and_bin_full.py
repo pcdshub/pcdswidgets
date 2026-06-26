@@ -60,6 +60,8 @@ class CropAndBinFull(CropAndBinFullBase):
         self._view_box = None
         self._draw_origin: QPointF = None
         self._in_crop_mode = False
+        self._last_bin_x: float = 1
+        self._last_bin_y: float = 1
 
         self.roi_rect = CamROI(QColor(CROP_BOX_COLOR), 2, self)
 
@@ -94,6 +96,14 @@ class CropAndBinFull(CropAndBinFullBase):
         self.bin_x_spinbox.valueChanged.connect(self._on_bin_x_changed)
         self.bin_y_spinbox.valueChanged.connect(self._on_bin_y_changed)
 
+        # Bin readback tracking (update _last_bin from PV readbacks)
+        self.bin_x_spinbox.valueChanged.connect(self._track_bin_x_readback)
+        self.bin_y_spinbox.valueChanged.connect(self._track_bin_y_readback)
+
+        # Bin send interception (rescale ROI when user sends new bin)
+        self.bin_x_spinbox.send_value_signal[float].connect(self._on_bin_x_sent)
+        self.bin_y_spinbox.send_value_signal[float].connect(self._on_bin_y_sent)
+
         # Crop-mode tool toggles
         self.move_button.clicked.connect(self._on_move_toggle)
         self.center_button.clicked.connect(self._on_center_toggle)
@@ -121,20 +131,23 @@ class CropAndBinFull(CropAndBinFullBase):
 
 
     def _on_reset(self):
-        """Reset ROI to full sensor: MinX=0, MinY=0, SizeX=max, SizeY=max."""
+        """Reset ROI to full sensor: MinX=0, MinY=0, SizeX=max/bin, SizeY=max/bin."""
         self.roi_x_spinbox.setValue(0)
         self.roi_x_spinbox.send_value()
         self.roi_y_spinbox.setValue(0)
         self.roi_y_spinbox.send_value()
 
         # Read sensor max from the readback labels if available
+        # Divide by current bin since PVs are in binned units
         sensor_w = self._get_sensor_max_x()
         sensor_h = self._get_sensor_max_y()
+        bin_x = max(self._last_bin_x, 1)
+        bin_y = max(self._last_bin_y, 1)
         if sensor_w is not None:
-            self.roi_width_spinbox.setValue(sensor_w)
+            self.roi_width_spinbox.setValue(int(sensor_w / bin_x))
             self.roi_width_spinbox.send_value()
         if sensor_h is not None:
-            self.roi_height_spinbox.setValue(sensor_h)
+            self.roi_height_spinbox.setValue(int(sensor_h / bin_y))
             self.roi_height_spinbox.send_value()
 
     def _get_sensor_max_x(self) -> float | None:
@@ -158,6 +171,16 @@ class CropAndBinFull(CropAndBinFullBase):
             self.bin_y_spinbox.setValue(self.bin_x_spinbox.value)
             self.bin_y_spinbox.send_value()
 
+    def _track_bin_x_readback(self, value: float):
+        """Update _last_bin_x only from PV readbacks (not user edits)."""
+        if self.bin_x_spinbox.valueBeingSet and value > 0:
+            self._last_bin_x = value
+
+    def _track_bin_y_readback(self, value: float):
+        """Update _last_bin_y only from PV readbacks (not user edits)."""
+        if self.bin_y_spinbox.valueBeingSet and value > 0:
+            self._last_bin_y = value
+
     def _on_bin_x_changed(self, value):
         if self.sync_bins_checkbox.isChecked():
             self.bin_y_spinbox.setValue(value)
@@ -167,6 +190,44 @@ class CropAndBinFull(CropAndBinFullBase):
         if self.sync_bins_checkbox.isChecked():
             self.bin_x_spinbox.setValue(value)
             self.bin_x_spinbox.send_value()
+
+    def _on_bin_x_sent(self, new_bin_x: float):
+        """Rescale ROI X fields when BinX is sent, preserving physical sensor region."""
+        old_bin_x = self._last_bin_x
+        if new_bin_x <= 0 or old_bin_x <= 0:
+            return
+        if new_bin_x == old_bin_x:
+            return
+        ratio = old_bin_x / new_bin_x
+        # Write size first to avoid exceeding max frame
+        old_size_x = self.roi_width_spinbox.value or 0
+        old_min_x = self.roi_x_spinbox.value or 0
+        new_size_x = int(round(old_size_x * ratio))
+        new_min_x = int(round(old_min_x * ratio))
+        self.roi_width_spinbox.setValue(new_size_x)
+        self.roi_width_spinbox.send_value()
+        self.roi_x_spinbox.setValue(new_min_x)
+        self.roi_x_spinbox.send_value()
+        self._last_bin_x = new_bin_x
+
+    def _on_bin_y_sent(self, new_bin_y: float):
+        """Rescale ROI Y fields when BinY is sent, preserving physical sensor region."""
+        old_bin_y = self._last_bin_y
+        if new_bin_y <= 0 or old_bin_y <= 0:
+            return
+        if new_bin_y == old_bin_y:
+            return
+        ratio = old_bin_y / new_bin_y
+        # Write size first to avoid exceeding max frame
+        old_size_y = self.roi_height_spinbox.value or 0
+        old_min_y = self.roi_y_spinbox.value or 0
+        new_size_y = int(round(old_size_y * ratio))
+        new_min_y = int(round(old_min_y * ratio))
+        self.roi_height_spinbox.setValue(new_size_y)
+        self.roi_height_spinbox.send_value()
+        self.roi_y_spinbox.setValue(new_min_y)
+        self.roi_y_spinbox.send_value()
+        self._last_bin_y = new_bin_y
 
     def _enter_crop_mode(self):
         """Enter crop mode: freeze controls, show ROI tools, default to move."""
@@ -221,17 +282,12 @@ class CropAndBinFull(CropAndBinFullBase):
 
     def _set_roi_to_full_image(self):
         """Set the ROI rect to cover the entire currently-displayed image."""
-        # Current displayed image size = SizeX/BinX, SizeY/BinY
-        bin_x = max(self.bin_x_spinbox.value or 1, 1)
-        bin_y = max(self.bin_y_spinbox.value or 1, 1)
+        # SizeX/SizeY are already in binned units = displayed pixel count
         size_x = self.roi_width_spinbox.value or 0
         size_y = self.roi_height_spinbox.value or 0
 
-        display_w = size_x / bin_x
-        display_h = size_y / bin_y
-
-        if display_w > 0 and display_h > 0:
-            self.roi_rect.set_geometry_from_corner(0, 0, display_w, display_h)
+        if size_x > 0 and size_y > 0:
+            self.roi_rect.set_geometry_from_corner(0, 0, size_x, size_y)
         else:
             self.roi_rect.set_geometry_from_corner(0, 0, 1, 1)
 
@@ -288,39 +344,32 @@ class CropAndBinFull(CropAndBinFullBase):
 
 
     def _on_confirm(self):
-        """Compute final ROI accounting for current crop+bin, write to PVs."""
+        """Write drawn ROI to PVs. Drawn coords are in binned-pixel units."""
         drawn_x, drawn_y, drawn_w, drawn_h = self.roi_rect.get_geometry_wrt_corner()
 
-        # Current state (values that are currently applied to the hardware)
-        bin_x = max(self.bin_x_spinbox.value or 1, 1)
-        bin_y = max(self.bin_y_spinbox.value or 1, 1)
+        # The ROI overlay is on the displayed (binned) image, so drawn
+        # coordinates are already in binned units. Offset by current MinX/MinY
+        # to get the new absolute position in binned coords.
         old_min_x = self.roi_x_spinbox.value or 0
         old_min_y = self.roi_y_spinbox.value or 0
 
-        # Transform drawn pixels back to sensor coordinates
-        new_min_x = old_min_x + (drawn_x * bin_x)
-        new_min_y = old_min_y + (drawn_y * bin_y)
-        new_size_x = drawn_w * bin_x
-        new_size_y = drawn_h * bin_y
-
-        # Ensure integer values
-        new_min_x = int(round(new_min_x))
-        new_min_y = int(round(new_min_y))
-        new_size_x = int(round(new_size_x))
-        new_size_y = int(round(new_size_y))
+        new_min_x = int(round(old_min_x + drawn_x))
+        new_min_y = int(round(old_min_y + drawn_y))
+        new_size_x = int(round(drawn_w))
+        new_size_y = int(round(drawn_h))
 
         # Exit crop mode first (re-enables spinboxes for writing)
         self._exit_crop_mode()
 
-        # Write new values to PVs
-        self.roi_x_spinbox.setValue(new_min_x)
-        self.roi_x_spinbox.send_value()
-        self.roi_y_spinbox.setValue(new_min_y)
-        self.roi_y_spinbox.send_value()
+        # Write size first, then position to avoid exceeding max
         self.roi_width_spinbox.setValue(new_size_x)
         self.roi_width_spinbox.send_value()
         self.roi_height_spinbox.setValue(new_size_y)
         self.roi_height_spinbox.send_value()
+        self.roi_x_spinbox.setValue(new_min_x)
+        self.roi_x_spinbox.send_value()
+        self.roi_y_spinbox.setValue(new_min_y)
+        self.roi_y_spinbox.send_value()
 
     def _on_cancel(self):
         """Discard crop selection and return to normal mode."""
