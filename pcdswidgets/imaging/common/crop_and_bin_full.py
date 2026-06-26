@@ -194,25 +194,31 @@ class CropAndBinFull(CropAndBinFullBase):
             self._set_controls_enabled(True)
 
     def _on_bin_x_changed(self, value):
-        print("check x")
+        if self.bin_x_spinbox.valueBeingSet:
+            # PV readback — just track value, don't send or sync
+            if value > 0:
+                self._last_bin_x = value
+                if not self._bin_x_initialized:
+                    self._bin_x_initialized = True
+                    self._maybe_auto_sync()
+            return
+        # User-initiated change
         self._start_cooldown()
-        if self.bin_x_spinbox.valueBeingSet and value > 0:
-            self._last_bin_x = value
-            if not self._bin_x_initialized:
-                self._bin_x_initialized = True
-                self._maybe_auto_sync()
         if self.sync_bins_checkbox.isChecked():
             self.bin_y_spinbox.setValue(value)
             self.bin_y_spinbox.send_value()
 
     def _on_bin_y_changed(self, value):
-        print("check y")
+        if self.bin_y_spinbox.valueBeingSet:
+            # PV readback — just track value
+            if value > 0:
+                self._last_bin_y = value
+                if not self._bin_y_initialized:
+                    self._bin_y_initialized = True
+                    self._maybe_auto_sync()
+            return
+        # User-initiated or sync-driven change
         self._start_cooldown()
-        if self.bin_y_spinbox.valueBeingSet and value > 0:
-            self._last_bin_y = value
-            if not self._bin_y_initialized:
-                self._bin_y_initialized = True
-                self._maybe_auto_sync()
 
     def _on_bin_x_sent(self, new_bin_x: float):
         """Rescale ROI X fields when BinX is sent, preserving physical sensor region."""
