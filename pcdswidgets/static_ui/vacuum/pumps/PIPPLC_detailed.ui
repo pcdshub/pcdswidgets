@@ -386,6 +386,11 @@
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
            <widget class="PyDMLineEdit" name="protection_setpoint_setpoint">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(238, 238, 238)</string>
             </property>
@@ -396,6 +401,11 @@
           </item>
           <item>
            <widget class="PyDMLineEdit" name="setpoint_hysteresis_setpoint">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(238, 238, 238)</string>
             </property>
@@ -406,6 +416,11 @@
           </item>
           <item>
            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>

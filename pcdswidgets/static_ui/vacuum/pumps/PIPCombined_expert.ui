@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>585</width>
+    <width>498</width>
     <height>717</height>
    </rect>
   </property>
@@ -70,11 +70,11 @@
     </spacer>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBox_3">
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>140</height>
+       <height>70</height>
       </size>
      </property>
      <property name="font">
@@ -83,15 +83,18 @@
       </font>
      </property>
      <property name="title">
-      <string>PLC Interface Readback</string>
+      <string>IOC Interface Control</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,2,1">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_11">
+         <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_6">
+           <widget class="PyDMLabel" name="PyDMLabel_25">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -101,43 +104,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Pressure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::RichText</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_7">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;State&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::RichText</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_8">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;HV Enabled&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enable&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
@@ -147,9 +114,9 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_12">
+         <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
-           <widget class="PyDMLabel" name="PLC_Pressure_2">
+           <widget class="PyDMLabel" name="IOC_Enable_RB_3">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -162,110 +129,65 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:PRESS_RBV</string>
+             <string>ca://${prefix}:ISENABLED</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
-            <property name="precisionFromPV">
+            <property name="channel">
+             <string>ca://${prefix}:ISENABLED</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="PyDMEnumComboBox" name="IOC_Enable_3">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(238, 238, 238)</string>
+            </property>
+            <property name="editable">
              <bool>true</bool>
             </property>
-            <property name="channel">
-             <string>ca://${prefix}:PRESS_RBV</string>
-            </property>
-            <property name="displayFormat">
-             <enum>PyDMLabel::Exponential</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PLC_State_2">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:STATE_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+            <property name="insertPolicy">
+             <enum>QComboBox::InsertAtBottom</enum>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:STATE_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PLC_HV_DI_2">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:HV_DI_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:HV_DI_RBV</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_13">
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_4">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_5">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_3">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <string>ca://${prefix}:STATEDES</string>
             </property>
            </widget>
           </item>
@@ -1025,11 +947,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="groupBox">
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>100</height>
+       <height>140</height>
       </size>
      </property>
      <property name="font">
@@ -1038,18 +960,15 @@
       </font>
      </property>
      <property name="title">
-      <string>IOC Interface Config</string>
+      <string>PLC Interface Readback</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_16">
+         <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_25">
+           <widget class="PyDMLabel" name="PyDMLabel_6">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -1059,7 +978,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enable&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Pressure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
@@ -1067,7 +986,7 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_26">
+           <widget class="PyDMLabel" name="PyDMLabel_7">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -1077,7 +996,25 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Protection Setpoint&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;State&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::RichText</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_8">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;HV Enabled&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
@@ -1087,9 +1024,9 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_17">
+         <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
-           <widget class="PyDMLabel" name="IOC_Enable_RB_3">
+           <widget class="PyDMLabel" name="PLC_Pressure_2">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -1102,70 +1039,24 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:ISENABLED</string>
+             <string>ca://${prefix}:PRESS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
-            <property name="channel">
-             <string>ca://${prefix}:ISENABLED</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="IOC_Protection_RB_3">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:TTL_OFF_RB</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+            <property name="precisionFromPV">
+             <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:TTL_OFF_RB</string>
+             <string>ca://${prefix}:PRESS_RBV</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="leftMargin">
-           <number>10</number>
-          </property>
-          <property name="rightMargin">
-           <number>10</number>
-          </property>
           <item>
-           <widget class="PyDMEnumComboBox" name="IOC_Enable_3">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>100</height>
-             </size>
-            </property>
+           <widget class="PyDMLabel" name="PLC_State_2">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -1174,25 +1065,22 @@
             <property name="toolTip">
              <string/>
             </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(238, 238, 238)</string>
+             <string notr="true"/>
             </property>
-            <property name="editable">
-             <bool>true</bool>
+            <property name="text">
+             <string>ca://${prefix}:STATE_RBV</string>
             </property>
-            <property name="insertPolicy">
-             <enum>QComboBox::InsertAtBottom</enum>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:STATEDES</string>
+             <string>ca://${prefix}:STATE_RBV</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMLineEdit" name="IOC_Protection_SP_3">
+           <widget class="PyDMLabel" name="PLC_HV_DI_2">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -1202,13 +1090,59 @@
              <string/>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(238, 238, 238)</string>
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:HV_DI_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:TTL_OFF_SP</string>
+             <string>ca://${prefix}:HV_DI_RBV</string>
             </property>
-            <property name="displayFormat">
-             <enum>PyDMLineEdit::Exponential</enum>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_4">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_5">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_3">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1244,11 +1178,6 @@
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
   </customwidget>
  </customwidgets>
  <resources/>

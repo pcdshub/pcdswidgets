@@ -20,8 +20,8 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-from ..utils import refresh_style
 from ..builder.designer_widget import fix_pcdswidgets_filename
+from ..utils import refresh_style
 
 logger = logging.getLogger(__name__)
 
