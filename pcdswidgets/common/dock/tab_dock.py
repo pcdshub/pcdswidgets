@@ -140,9 +140,7 @@ class TabDock(QWidget):
 
     @classmethod
     def _get_instance(cls) -> "TabDock":
-        """
-        Return the TabDock instance or raise if there is not one.
-        """
+        """Return the TabDock instance or raise if there is not one."""
         try:
             return cls._instance
         except AttributeError as exc:
@@ -205,9 +203,7 @@ class TabDock(QWidget):
         return tab_widget
 
     def show_settings(self):
-        """
-        Show dock settings in a pop-up dialog
-        """
+        """Show dock settings in a pop-up dialog."""
         settings = self._get_settings_widget()
         settings.setParent(self)
         settings.setParent(None)  # type: ignore
@@ -215,9 +211,7 @@ class TabDock(QWidget):
         settings.show()
 
     def _get_settings_widget(self) -> QWidget:
-        """
-        Assemble the dock settings pop-up dialog
-        """
+        """Assemble the dock settings pop-up dialog."""
         if self.settings_widget is not None:
             return self.settings_widget
 
@@ -250,9 +244,7 @@ class TabDock(QWidget):
         return outer_widget
 
     def apply_settings(self):
-        """
-        Apply settings changes from the dock settings dialog.
-        """
+        """Apply settings changes from the dock settings dialog."""
         cols = self.dock_columns_spinbox.value()
         self.dock_cols = cols
         rows = self.dock_rows_spinbox.value()
@@ -292,7 +284,7 @@ class TabDock(QWidget):
 
     def get_open_tab_widget(self) -> QTabWidget:
         """
-        Returns the first tab widget that is empty and visible.
+        Return the first tab widget that is empty and visible.
 
         If no tab widget is empty and visible, returns the first tab widget.
         """
@@ -303,9 +295,7 @@ class TabDock(QWidget):
         return self.tab_widgets[0][0]
 
     def has_empty_tab(self) -> bool:
-        """
-        Returns True if any tab is empty as visible.
-        """
+        """Return True if any tab is empty as visible."""
         for tab_row in self.tab_widgets:
             for tab_inst in tab_row:
                 if tab_inst.isVisible() and tab_inst.count() == 0:
@@ -315,7 +305,9 @@ class TabDock(QWidget):
     @classmethod
     def add_to_dock_user_keybinds(cls, widget: DeferredWidget, title: str = ""):
         """
-        The main way to add widgets to the dock.
+        Add widgets to the dock, based on the user keypresses.
+
+        This is the first intended way to add widgets from external code.
 
         This checks the user's modifier keys and opens the widget in the current tab (default),
         a new tab (ctrl), or a new window (shift, or invisible dock) as appropriate.
@@ -339,7 +331,9 @@ class TabDock(QWidget):
         cls, widget: DeferredWidget, title: str = "", pos: QPoint | None = None, menu: QMenu | None = None
     ) -> QMenu:
         """
-        The other main way to add widgets to the dock, with a multiple choice menu.
+        Add widgets to the dock, with a multiple choice menu.
+
+        This is the second intended way to add widgets from external code.
 
         Rather than using modifier keys like add_to_dock_user_keybinds, this creates
         a compact menu with each variant as an option.
@@ -388,7 +382,9 @@ class TabDock(QWidget):
         menu: QMenu | None = None,
     ) -> QMenu:
         """
-        The third main way to add widgets to the dock, with a menu and multiple widgets at once.
+        Add widgets to the dock, with a menu and multiple widgets at once.
+
+        This is the third intended way to add widgets from external code.
 
         This creates a compact menu where we can either open every widget in a new tab or every widget
         in a new window.
@@ -430,7 +426,9 @@ class TabDock(QWidget):
         cls, widget: DeferredWidget, title: str = "", new_tab: bool = False, tab_widget: QTabWidget | None = None
     ):
         """
-        Adds a widget to the tabbed docking area.
+        Add a widget to the tabbed docking area.
+
+        This is used internally in TabDock to service the external-facing methods.
 
         Parameters
         ----------
@@ -510,7 +508,7 @@ class TabDock(QWidget):
 
     def detach_from_dock(self, tab_widget: QTabWidget):
         """
-        Moves the widget from the currently opened tab into a floating window.
+        Move the widget from the currently opened tab into a floating window.
 
         The tab text will be preserved and moved to the window's title.
         """
@@ -522,7 +520,7 @@ class TabDock(QWidget):
     @classmethod
     def open_in_new_window(cls, widget: DeferredWidget, title: str = ""):
         """
-        Moves a widget into a floating window and let it be tracked by the dock.
+        Move a widget into a floating window and let it be tracked by the dock.
 
         In contrast with a window opened by a PydmRelatedDisplay widget, this allows the floating window
         to be recalled to the dock at any time.
@@ -609,7 +607,7 @@ class TabDock(QWidget):
 
     def show_attach_menu(self, tab_widget: QTabWidget, pos: QPoint | None = None) -> QMenu:
         """
-        Creates a menu that can be used to reattach one tracked widget to the dock.
+        Create a menu that can be used to reattach one tracked widget to the dock.
 
         The window title will be preserved and placed in the tab's text field.
         """
@@ -634,16 +632,12 @@ class TabDock(QWidget):
         self.update_attach_enabled()
 
     def update_attach_enabled(self):
-        """
-        Enables the attach button if we have any detached widgets, otherwise disables it
-        """
+        """Enable the attach button if we have any detached widgets, otherwise disables it."""
         for button in self.attach_buttons:
             button.setEnabled(bool(self.detached_widgets))
 
     def close_tab(self, tab_widget: QTabWidget):
-        """
-        Removes the currently opened tab
-        """
+        """Remove the currently opened tab."""
         tab_widget.removeTab(tab_widget.currentIndex())
 
 
@@ -703,10 +697,10 @@ def unpack_deferred_widget_list(
 
 
 def ctrl_pressed() -> bool:
-    """Returns True if ctrl key is pressed."""
+    """Return True if ctrl key is pressed."""
     return bool(QApplication.keyboardModifiers() & Qt.ControlModifier)
 
 
 def shift_pressed() -> bool:
-    """Returns True if shift key is pressed."""
+    """Return True if shift key is pressed."""
     return bool(QApplication.keyboardModifiers() & Qt.ShiftModifier)

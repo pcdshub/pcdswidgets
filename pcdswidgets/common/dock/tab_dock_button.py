@@ -1,6 +1,4 @@
-"""
-A simple push button to open pydm screens in the TabDock widget.
-"""
+"""A simple push button to open pydm screens in the TabDock widget."""
 
 from typing import cast
 
@@ -55,9 +53,7 @@ class TabDockButton(QPushButton):
         self.cached_widget: QWidget | None = None
 
     def build_widget(self) -> QWidget:
-        """
-        Create or re-use the widget defined by the pydm file.
-        """
+        """Create or re-use the widget defined by the pydm file."""
         fname = find_file(
             self._filename,
             raise_if_not_found=True,
@@ -81,15 +77,11 @@ class TabDockButton(QPushButton):
         return display
 
     def open_in_dock(self):
-        """
-        Place the widget defined by this button into the dock based on the key modifiers.
-        """
+        """Place the widget defined by this button into the dock based on the key modifiers."""
         TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
 
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
-        """
-        On right-click, open a menu to decide where the widget should go.
-        """
+        """On right-click, open a menu to decide where the widget should go."""
         TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
 
     def readFilename(self) -> str:
