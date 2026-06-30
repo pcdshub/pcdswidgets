@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
+    <width>679</width>
     <height>717</height>
    </rect>
   </property>
@@ -83,7 +83,7 @@
       </font>
      </property>
      <property name="title">
-      <string>IOC Interface Control</string>
+      <string>Controller Control</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -212,7 +212,7 @@
       </font>
      </property>
      <property name="title">
-      <string>IOC Interface Readback</string>
+      <string>Controller Readback</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -881,11 +881,16 @@
               <height>76</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>Expected = 'OFF'</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -903,11 +908,16 @@
               <height>76</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>Expected = 'LOG_P'</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -925,11 +935,16 @@
               <height>76</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>Expected = '13'</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

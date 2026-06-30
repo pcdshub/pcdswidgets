@@ -98,7 +98,7 @@
       </font>
      </property>
      <property name="title">
-      <string>IOC Interface Control</string>
+      <string>Controller Control</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -225,7 +225,7 @@
       </font>
      </property>
      <property name="title">
-      <string>IOC Interface Readback</string>
+      <string>Controller Readback</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
