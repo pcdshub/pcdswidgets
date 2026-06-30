@@ -36,7 +36,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="PyDMSpinbox" name="y_spinbox">
+      <widget class="PyDMSpinboxEnter" name="y_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -46,46 +46,49 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showUnits">
+       <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>ca://${cam_prefix}${roi_plugin}${suffix_Y}</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>99999.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PyDMSpinbox" name="width_spinbox">
+      <widget class="PyDMSpinboxEnter" name="width_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -95,46 +98,49 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showUnits">
+       <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>ca://${cam_prefix}${roi_plugin}${suffix_WidthX}</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>99999.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PyDMSpinbox" name="x_spinbox">
+      <widget class="PyDMSpinboxEnter" name="x_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -144,40 +150,43 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showUnits">
+       <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>ca://${cam_prefix}${roi_plugin}${suffix_X}</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>99999.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -190,7 +199,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="PyDMSpinbox" name="height_spinbox">
+      <widget class="PyDMSpinboxEnter" name="height_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -200,40 +209,43 @@
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showUnits">
+       <property name="keyboardTracking">
         <bool>false</bool>
        </property>
-       <property name="precisionFromPV">
+       <property name="showUnits" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveContent">
+       <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="alarmSensitiveBorder">
+       <property name="alarmSensitiveContent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="PyDMToolTip">
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
         <string/>
        </property>
-       <property name="monitorDisp">
+       <property name="monitorDisp" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <string>ca://${cam_prefix}${roi_plugin}${suffix_WidthY}</string>
        </property>
-       <property name="userDefinedLimits">
+       <property name="userDefinedLimits" stdset="0">
         <bool>true</bool>
        </property>
-       <property name="userMaximum">
+       <property name="userMaximum" stdset="0">
         <double>99999.000000000000000</double>
        </property>
-       <property name="precision">
+       <property name="precision" stdset="0">
         <number>0</number>
        </property>
-       <property name="showStepExponent">
+       <property name="showStepExponent" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="writeOnPress">
+       <property name="writeOnPress" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -435,9 +447,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMSpinbox</class>
+   <class>PyDMSpinboxEnter</class>
    <extends>QDoubleSpinBox</extends>
-   <header>pydm.widgets.spinbox</header>
+   <header>pcdswidgets.imaging.common.spinbox</header>
   </customwidget>
   <customwidget>
    <class>ColorButton</class>
