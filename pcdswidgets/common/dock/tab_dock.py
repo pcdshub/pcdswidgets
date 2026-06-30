@@ -169,6 +169,16 @@ class TabDock(QWidget):
         self.apply_settings_button = QPushButton("Apply")
 
     @classmethod
+    def _get_instance(cls) -> "TabDock":
+        """
+        Return the TabDock instance or raise if there is not one.
+        """
+        try:
+            return cls._instance
+        except AttributeError as exc:
+            raise RuntimeError("No TabDock widget exists! Cannot do any dock actions!") from exc
+
+    @classmethod
     def set_fixed_tab_width(cls, width: int):
         """
         Set the width of the individual tab widgets that make up the TabDock widget.
@@ -181,7 +191,7 @@ class TabDock(QWidget):
         width : int
             The width of the tab areas in pixels.
         """
-        self = cls._instance
+        self = cls._get_instance()
         self.fixed_dock_width = width
         for tab_row in self.tab_widgets:
             for tab_inst in tab_row:
@@ -348,7 +358,7 @@ class TabDock(QWidget):
             The title of the tab and/or window.
             If omitted we'll use the widget's windowTitle
         """
-        if shift_pressed() or not cls._instance.isVisible():
+        if shift_pressed() or not cls._get_instance().isVisible():
             cls.open_in_new_window(widget=widget, title=title)
         else:
             new_tab = ctrl_pressed()
@@ -382,7 +392,7 @@ class TabDock(QWidget):
         -------
         menu : QMenu
         """
-        self = cls._instance
+        self = cls._get_instance()
         if menu is None:
             menu = QMenu()
         self.clean_detached_widgets()
@@ -431,7 +441,7 @@ class TabDock(QWidget):
         -------
         menu : QMenu
         """
-        self = cls._instance
+        self = cls._get_instance()
         if menu is None:
             menu = QMenu()
         self.clean_detached_widgets()
@@ -467,7 +477,7 @@ class TabDock(QWidget):
             Otherwise, we'll find the first open dock, or default to the first dock if all are
             occupied.
         """
-        self = cls._instance
+        self = cls._get_instance()
         if tab_widget is None:
             tab_widget = self.get_open_tab_widget()
         idx = None
@@ -555,7 +565,7 @@ class TabDock(QWidget):
             The title of the tab and/or window.
             If omitted we'll use the widget's windowTitle.
         """
-        self = cls._instance
+        self = cls._get_instance()
         self.clean_detached_widgets()
 
         widget, title = unpack_deferred_widget(widget=widget, title=title)
