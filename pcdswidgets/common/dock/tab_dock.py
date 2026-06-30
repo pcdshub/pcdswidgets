@@ -3,6 +3,9 @@ Implementation of a tabbed dock widget.
 
 This is more constrained and opinionated than the built-in Qt docking elements,
 and it is easier to deploy than the Qt Advanced Docking system, with accordingly less functionality.
+
+This was originally LucidDock and LucidDockButton from the lucid module,
+ported here to have lighter dependencies and to be more generic.
 """
 
 from functools import partial
