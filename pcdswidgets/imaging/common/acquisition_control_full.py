@@ -7,8 +7,8 @@ This file can be safely edited to change the runtime behavior of the widget.
 from qtpy.QtWidgets import QComboBox, QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.acquisition_control_full_base import AcquisitionControlFullBase
+from pcdswidgets.icons.glyphs import CAM_COG
 
 
 class AcquisitionControlFull(AcquisitionControlFullBase):
@@ -18,7 +18,7 @@ class AcquisitionControlFull(AcquisitionControlFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.camera,
+        icon=CAM_COG,
     )
 
     def __init__(self, *args, **kwargs):

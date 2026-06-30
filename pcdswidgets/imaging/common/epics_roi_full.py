@@ -17,9 +17,8 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.epics_roi_full_base import EpicsRoiFullBase
-from pcdswidgets.icons.glyphs import CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS
+from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, MOVE, PEN_TOOL, THICKNESS
 from pcdswidgets.imaging.common.cam_roi import CamROI
 
 logger = logging.getLogger(__name__)
@@ -45,14 +44,14 @@ class EpicsRoiFull(EpicsRoiFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.camera,
+        icon=CAM_COG,
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._set_macro_defaults()
-        self._nickname = "ROI SELECT"
+        self._nickname = "ROI Selection"
 
         self._image_view: PyDMImageView = None
         self._view_box = None
@@ -66,7 +65,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self._init_button_icons()
         self._connect_buttons()
 
-        # monitor spinboxes for changes not cause by the use (camonitor / initial read)
+        # monitor spinboxes for changes (camonitor / initial read/ user typed)
         for spinbox in self.roi_spinboxes:
             spinbox.valueChanged.connect(self._on_spinbox_changed)
 
@@ -80,8 +79,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             "suffix_WidthY": "SizeY",
         }
         for name, value in default_map.items():
-            if (name not in self._macro_values) or (self._macro_values[name] == ""):
-                self._macro_values[name] = value
+            self._macro_values[name] = value
 
     def _init_button_icons(self):
         """Assign SVG icons to the toolbar buttons."""
@@ -219,11 +217,17 @@ class EpicsRoiFull(EpicsRoiFullBase):
             data_pos = self._view_box.mapSceneToView(scene_pos)
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
 
-    def _on_spinbox_changed(self, _value=None):
+    def _on_spinbox_changed(self, new_value=None):
         """update the ROI if spinbox values change not due to user input"""
-        # only update ROI if the move controls are not active
+        # only update ROI displayed if the move controls are not active
         if not self.user_moving_roi:
-            values = [sb.value for sb in self.roi_spinboxes]
+            sender = self.sender()
+            values = []
+            for sb in self.roi_spinboxes:
+                if sb is sender and new_value is not None:
+                    values.append(new_value)
+                else:
+                    values.append(sb.value)
             if None in values:
                 return
             if self.is_xy_center:
@@ -236,7 +240,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
     @property
     def roi_spinboxes(self):
         """Coordinate control spinboxes in geometry order: (x, y, width_x, width_y)."""
-        return (self.x_spinbox, self.y_spinbox, self.height_spinbox, self.width_spinbox)
+        return (self.x_spinbox, self.y_spinbox, self.width_spinbox, self.height_spinbox)
 
     @property
     def interactive_buttons(self):

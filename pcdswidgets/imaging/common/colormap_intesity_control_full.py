@@ -12,8 +12,8 @@ from pyqtgraph.widgets.HistogramLUTWidget import HistogramLUTWidget
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.colormap_intesity_control_full_base import ColormapIntesityControlFullBase
+from pcdswidgets.icons.glyphs import CAM_COG
 
 _COLORMAP_ORDER = [
     PyDMColorMap.Inferno,
@@ -34,7 +34,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
-        icon=IconOptions.camera,
+        icon=CAM_COG,
     )
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
