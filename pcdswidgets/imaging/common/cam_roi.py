@@ -12,11 +12,11 @@ class CamROI(pg.ROI):
     Extends ``pg.ROI`` with:
 
     - Pen-width-aware bounding rect (prevents clipping of thick outlines).
-    - No default handles (avoids stale handle artifacts on rebuild).
+    - No default dragging handles (avoids stale handle artifacts on rebuild).
     - Pen and hover-pen management via ``update_pen``.
     - Movability toggling with automatic handle lifecycle.
-    - Geometry accessors using center + size representation (matching
-      typical EPICS area-detector ROI plugin PVs).
+    - Geometry accessors using center(or startpoint) + size representation (matching
+      typical EPICS PVs).
     """
 
     def __init__(self, ini_color, init_width, parent_window, **kwargs):
@@ -176,10 +176,3 @@ class CamROI(pg.ROI):
             self.setAcceptedMouseButtons(Qt.NoButton)
             while self.handles:
                 self.removeHandle(0)
-
-    def set_interactive(self, allowed: bool) -> None:
-        """Enable/disable mouse interaction without changing movability state."""
-        if allowed:
-            self.setAcceptedMouseButtons(Qt.LeftButton)
-        else:
-            self.setAcceptedMouseButtons(Qt.NoButton)

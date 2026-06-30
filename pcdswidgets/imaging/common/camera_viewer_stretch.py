@@ -21,9 +21,6 @@ from .collapsible_section import CollapsibleSection
 
 logger = logging.getLogger(__name__)
 
-CA_SUFFIX = ":ArrayData"
-PVA_SUFFIX = "_PVA:Image1"
-
 
 class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_toggle: QtWidgets.QPushButton
@@ -44,6 +41,9 @@ class CameraViewerStretch(CameraViewerStretchBase):
         self._initializing = True
         self._adopted_widgets: list[QtWidgets.QWidget] = []
         super().__init__(parent)
+
+        self._set_macro_defaults()
+
         self._frame_count = 0
         self._fps_rolling_buffer = deque(maxlen=5)
         self._first_show = True
@@ -53,6 +53,9 @@ class CameraViewerStretch(CameraViewerStretchBase):
             CameraViewerStretch._internal_widget_names = {
                 child.objectName() for child in self.findChildren(QtWidgets.QWidget) if child.objectName()
             }
+
+        # Fix axis orientation: Area Detector uses C-order (row-major) data
+        self.image_view.readingOrder = 1  # Clike
 
         # Display FPS timer
         self._fps_timer = QTimer(self)
@@ -68,16 +71,16 @@ class CameraViewerStretch(CameraViewerStretchBase):
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
         self._initializing = False
 
-    def set_cam_prefix(self, value: str) -> None:
-        """Override to propagate cam_prefix to adopted sub-widgets."""
-        super().set_cam_prefix(value)
-        self._propagate_cam_prefix(value)
-
-    def _propagate_cam_prefix(self, value: str) -> None:
-        """Push cam_prefix to all adopted sub-widgets that accept it."""
-        for widget in self._adopted_widgets:
-            if hasattr(widget, "cam_prefix"):
-                widget.cam_prefix = value
+    def _set_macro_defaults(self):
+        """Populate unset macros with sensible defaults for ROI1."""
+        default_map = {
+            "stream_plugin": ":IMAGE1:",
+            "img_protocol": "ca://",
+            "suffix_waveform_channel": "ArrayData",
+            "suffix_width_channel": "ArraySize0_RBV",
+        }
+        for name, value in default_map.items():
+            self._macro_values[name] = value
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
@@ -163,6 +166,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
         )
         # add the children in collapsible sections
         cam_prefix = self._macro_values.get("cam_prefix", "")
+        cam_stream_plugin = self._macro_values.get("stream_plugin", "IMAGE1")
+
         for child in candidates:
             section = CollapsibleSection(
                 child,
@@ -172,14 +177,16 @@ class CameraViewerStretch(CameraViewerStretchBase):
             sidebar_layout.addWidget(section)
             section.show()
             self._adopted_widgets.append(child)
-            # Propagate cam_prefix to sub-widget at adoption time
+            # Propagate macros to sub-widget at adoption time
             if cam_prefix and hasattr(child, "cam_prefix"):
                 child.cam_prefix = cam_prefix
+            if cam_stream_plugin and hasattr(child, "stream_plugin"):
+                child.stream_plugin = cam_stream_plugin
             # Link sub-widget to our image_view if it supports it
             if hasattr(child, "link_parent_widgets"):
                 child.link_parent_widgets(self)
             logger.debug(
-                "Adopted child %s as collapsible '%s'",
+                "Adopted child %s'",
                 child.objectName() or type(child).__name__,
             )
         # add a vertical spacer to push all widgets to the top
