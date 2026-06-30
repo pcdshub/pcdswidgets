@@ -96,24 +96,24 @@ def shift_pressed() -> bool:
     return bool(QApplication.keyboardModifiers() & Qt.ShiftModifier)
 
 
-class LucidDock(QWidget):
+class TabDock(QWidget):
     """
     The right-hand widget in the main screen that other screens can be embedded within.
 
     This is basically a tab widget that implements some dock/undock functionality.
 
-    It is expected but not enforced that only one LucidDock exists at a time.
+    It is expected but not enforced that only one TabDock exists at a time.
     Most of the functionality is exposed as classmethods so that other code does not have
-    to locate the dock singleton, instead you can reference the LucidDock class directly.
+    to locate the dock singleton, instead you can reference the TabDock class directly.
 
-    You should usually populate the dock by calling LucidDock.add_to_dock_user_keybinds,
+    You should usually populate the dock by calling TabDock.add_to_dock_user_keybinds,
     which will:
     - Replace the current tab if no modifiers are held
     - Add a new tab if the ctrl modifier key is held
     - Open in a new window if the shift modifier key is held
     - Open in a new window if the dock is not visible
 
-    or LucidDock.add_to_dock_user_menu, which does the same but with
+    or TabDock.add_to_dock_user_menu, which does the same but with
     clickable menu options.
 
     Parameters
@@ -122,12 +122,12 @@ class LucidDock(QWidget):
         Standard qt parent argument
     """
 
-    _instance: ClassVar["LucidDock"]
+    _instance: ClassVar["TabDock"]
 
     grid_changed = Signal()
 
     def __init__(self, parent: QWidget | None = None):
-        LucidDock._instance = self
+        TabDock._instance = self
         super().__init__(parent)
 
         self.tab_widgets: list[list[QTabWidget]] = [[]]
@@ -158,7 +158,7 @@ class LucidDock(QWidget):
     @classmethod
     def set_fixed_dock_width(cls, width: int):
         """
-        Choose the width of the individual tab widgets that make up the LucidDock widget.
+        Choose the width of the individual tab widgets that make up the TabDock widget.
 
         Parameters
         ----------
@@ -226,7 +226,7 @@ class LucidDock(QWidget):
             return self.settings_widget
 
         outer_widget = QWidget()
-        outer_widget.setWindowTitle("Lucid Dock Settings")
+        outer_widget.setWindowTitle("Dock Settings")
         outer_layout = QVBoxLayout()
         outer_widget.setLayout(outer_layout)
 
@@ -651,7 +651,7 @@ class LucidDock(QWidget):
         tab_widget.removeTab(tab_widget.currentIndex())
 
 
-class LucidDockButton(QPushButton):
+class TabDockButton(QPushButton):
     """
     A QPushButton that opens a PyDM screen in the dock when clicked.
 
@@ -705,13 +705,13 @@ class LucidDockButton(QPushButton):
         """
         Place the widget defined by this button into the dock based on the key modifiers.
         """
-        LucidDock.add_to_dock_user_keybinds(widget=self.build_widget)
+        TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
 
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
         """
         On right-click, open a menu to decide where the widget should go.
         """
-        LucidDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
+        TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
 
     def readFilename(self) -> str:
         return self._filename
