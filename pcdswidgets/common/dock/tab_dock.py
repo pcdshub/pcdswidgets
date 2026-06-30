@@ -141,7 +141,7 @@ class TabDock(QWidget):
         self.tab_widgets: list[list[QTabWidget]] = [[]]
         self.detached_widgets: set[QWidget] = set()
 
-        self.fixed_dock_width = 850
+        self.fixed_tab_width = 850
         self.dock_cols = 1
 
         self.attach_buttons: list[QToolButton] = []
@@ -154,6 +154,7 @@ class TabDock(QWidget):
 
         first_tabs = self._create_subdock(settings_button=self.settings_button)
         self.tab_widgets[0].append(first_tabs)
+        self.set_fixed_tab_width(self.fixed_tab_width)
 
         self.glayout = QGridLayout()
         self.glayout.addWidget(first_tabs)
@@ -187,7 +188,7 @@ class TabDock(QWidget):
             The width of the tab areas in pixels.
         """
         self = cls._get_instance()
-        self.fixed_dock_width = width
+        self.fixed_tab_width = width
         for tab_row in self.tab_widgets:
             for tab_inst in tab_row:
                 tab_inst.setFixedWidth(width)
@@ -290,7 +291,7 @@ class TabDock(QWidget):
                 tab_row.append(new_tabs)
             for col_idx, tab_inst in enumerate(tab_row):
                 tab_inst.setVisible(bool(row_idx < rows and col_idx < cols))
-        self.set_fixed_tab_width(self.fixed_dock_width)
+        self.set_fixed_tab_width(self.fixed_tab_width)
         self.grid_changed.emit()
 
     def show_correct_tab_buttons(self, new_idx: int, tab_widget: QTabWidget):
