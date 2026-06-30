@@ -1,5 +1,8 @@
 """
-Dock widget definitions
+Implementation of a tabbed dock widget.
+
+This is more constrained and opinionated than the built-in Qt docking elements,
+and it is easier to deploy than the Qt Advanced Docking system, with accordingly less functionality.
 """
 
 from functools import partial
@@ -41,20 +44,22 @@ except ImportError:
 ifont = IconFont()
 
 DOCK_CONTROLS = """
-This dock can hold any dockable PyDM or Typhos screen.
+This dock can hold any dockable screen.
 
 Buttons that have the anchor mouseover cursor are dockable.
-All Typhos screens from the grid are dockable.
 
-Click on a dockable button to replace the current tab.
+Right click on such a button to bring up an options menu.
 
-Ctrl + click to open the screen in a new tab.
-Shift + click to open the screen in a new window.
+The shortcuts are:
 
-Right click to bring up a menu with the above options.
+- Left click on a dockable button to replace the current tab.
+- Ctrl + click to open the screen in a new tab.
+- Shift + click to open the screen in a new window.
 
-Click the up arrow to bring a tab into a new window.
-Click the down arrow to bring a window into a new tab.
+The arrows have the following behavior:
+
+- Click the up arrow to bring a tab into a new window.
+- Click the down arrow to bring a window into a tab.
 
 Screens that are already open will be moved instead of opened again,
 unless their source files have been modified.
@@ -98,11 +103,14 @@ def shift_pressed() -> bool:
 
 class TabDock(QWidget):
     """
-    The right-hand widget in the main screen that other screens can be embedded within.
+    A widget that implements tabbed dock/undock functionality.
 
-    This is basically a tab widget that implements some dock/undock functionality.
+    The widget contents of the dock can be changed using a TabDockButton,
+    or by implementing other widgets that call the classmethods here.
 
     It is expected but not enforced that only one TabDock exists at a time.
+    If multiple TabDock widgets exist, the most recently created dock is the main dock.
+
     Most of the functionality is exposed as classmethods so that other code does not have
     to locate the dock singleton, instead you can reference the TabDock class directly.
 
@@ -156,9 +164,12 @@ class TabDock(QWidget):
         self.apply_settings_button = QPushButton("Apply")
 
     @classmethod
-    def set_fixed_dock_width(cls, width: int):
+    def set_fixed_tab_width(cls, width: int):
         """
-        Choose the width of the individual tab widgets that make up the TabDock widget.
+        Set the width of the individual tab widgets that make up the TabDock widget.
+
+        Every tab widget will have the same width.
+        The default tab width is 850, defined in this class's __init__.
 
         Parameters
         ----------
@@ -269,7 +280,7 @@ class TabDock(QWidget):
                 tab_row.append(new_tabs)
             for col_idx, tab_inst in enumerate(tab_row):
                 tab_inst.setVisible(bool(row_idx < rows and col_idx < cols))
-        self.set_fixed_dock_width(self.fixed_dock_width)
+        self.set_fixed_tab_width(self.fixed_dock_width)
         self.grid_changed.emit()
 
     def show_correct_tab_buttons(self, new_idx: int, tab_widget: QTabWidget):
@@ -319,7 +330,7 @@ class TabDock(QWidget):
     @classmethod
     def add_to_dock_user_keybinds(cls, widget: DeferredWidget, title: str = ""):
         """
-        The main way other code should add widgets to the dock.
+        The main way to add widgets to the dock.
 
         This checks the user's modifier keys and opens the widget in the current tab (default),
         a new tab (ctrl), or a new window (shift, or invisible dock) as appropriate.
@@ -653,7 +664,7 @@ class TabDock(QWidget):
 
 class TabDockButton(QPushButton):
     """
-    A QPushButton that opens a PyDM screen in the dock when clicked.
+    A QPushButton that opens a PyDM screen in the TabDock when clicked.
 
     The user must set the "filename" property to the path of the screen to use,
     and may optionally set the "macro" property to the macro string used
