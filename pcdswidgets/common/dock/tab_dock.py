@@ -130,6 +130,11 @@ class TabDock(QWidget):
         Standard qt parent argument
     """
 
+    _qt_designer_ = {
+        "group": "ECS Common Dock",
+        "is_container": False,
+    }
+
     _instance: ClassVar["TabDock"]
 
     grid_changed = Signal()
@@ -675,6 +680,11 @@ class TabDockButton(QPushButton):
     parent : QWidget, optional
         Standard qt parent argument
     """
+
+    _qt_designer_ = {
+        "group": "ECS Common Dock",
+        "is_container": False,
+    }
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
