@@ -39,7 +39,8 @@ except ImportError:
 ifont = IconFont()
 
 DOCK_CONTROLS = """
-This dock can hold any dockable screen.
+This dock can hold any PyDM screen or qt widget.
+You can populate the dock via other widgets, such as dockable buttons.
 
 Buttons that have the anchor mouseover cursor are dockable.
 
@@ -56,44 +57,17 @@ The arrows have the following behavior:
 - Click the up arrow to bring a tab into a new window.
 - Click the down arrow to bring a window into a tab.
 
-Screens that are already open will be moved instead of opened again,
-unless their source files have been modified.
+Screens that are already open will be moved instead of opening a second copy.
+
+For screens that are sourced from a TabDockButton, we will check the source
+file for updates when you try to open them in the dock again, otherwise
+the screens will be cached.
 """
 
-
+# Type helpers: some functions here accept fully constructed widgets or functions that produce them later as-needed
 DeferredWidget = QWidget | Callable[[], QWidget]
 DeferredWidgetList = list[QWidget] | Callable[[], list[QWidget]]
 DeferredTitleList = list[str] | Callable[[], list[str]]
-
-
-def unpack_deferred_widget(widget: DeferredWidget, title: str = "") -> tuple[QWidget, str]:
-    if not isinstance(widget, QWidget):
-        widget = widget()
-    if not title:
-        title = widget.windowTitle()
-    return widget, title
-
-
-def unpack_deferred_widget_list(
-    widget_list: DeferredWidgetList, title_list: DeferredTitleList | None
-) -> tuple[list[QWidget], list[str]]:
-    if not isinstance(widget_list, list):
-        widget_list = widget_list()
-    if title_list is None:
-        title_list = [widget.windowTitle() for widget in widget_list]
-    if not isinstance(title_list, list):
-        title_list = title_list()
-    return widget_list, title_list
-
-
-def ctrl_pressed() -> bool:
-    """Returns True if ctrl key is pressed."""
-    return bool(QApplication.keyboardModifiers() & Qt.ControlModifier)
-
-
-def shift_pressed() -> bool:
-    """Returns True if shift key is pressed."""
-    return bool(QApplication.keyboardModifiers() & Qt.ShiftModifier)
 
 
 class TabDock(QWidget):
@@ -671,3 +645,68 @@ class TabDock(QWidget):
         Removes the currently opened tab
         """
         tab_widget.removeTab(tab_widget.currentIndex())
+
+
+def unpack_deferred_widget(widget: DeferredWidget, title: str = "") -> tuple[QWidget, str]:
+    """
+    Resolve a deferred widget to the corresponding widget instance and title for the TabDock.
+
+    Parameters
+    ----------
+    widget : DeferredWidget
+        This should a fully-formed QWidget,
+        or a no-arguments callable that produces this widget.
+    title : str, optional
+        The title to associate with the widget.
+        If none is provided, use the widget's window title.
+
+    Returns
+    -------
+    QWidget, str
+        The widget object and title to use in the dock.
+    """
+    if not isinstance(widget, QWidget):
+        widget = widget()
+    if not title:
+        title = widget.windowTitle()
+    return widget, title
+
+
+def unpack_deferred_widget_list(
+    widget_list: DeferredWidgetList, title_list: DeferredTitleList | None
+) -> tuple[list[QWidget], list[str]]:
+    """
+    Resolve deferred widget lists to the corresponding widget instances and titles for the TabDock.
+
+    Parameters
+    ----------
+    widget_list : DeferredWidgetList
+        This should be a fully-formed list of QWidget instances,
+        or a no-arguments callable that produces this list.
+    title_list : DeferredTitleList, optional
+        The list of titles to associate with each widget,
+        or a no-arguments callable that produces this list.
+        If neither is provided, use each widget's window title.
+
+    Returns
+    -------
+    list[QWidget], list[str]
+        The widget objects and titles to use in the dock.
+    """
+    if not isinstance(widget_list, list):
+        widget_list = widget_list()
+    if title_list is None:
+        title_list = [widget.windowTitle() for widget in widget_list]
+    if not isinstance(title_list, list):
+        title_list = title_list()
+    return widget_list, title_list
+
+
+def ctrl_pressed() -> bool:
+    """Returns True if ctrl key is pressed."""
+    return bool(QApplication.keyboardModifiers() & Qt.ControlModifier)
+
+
+def shift_pressed() -> bool:
+    """Returns True if shift key is pressed."""
+    return bool(QApplication.keyboardModifiers() & Qt.ShiftModifier)
