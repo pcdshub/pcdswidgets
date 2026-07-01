@@ -67,6 +67,8 @@ SmaractOpenLoopContextDouble = "pcdswidgets.motion.smaract.smaract_open_loop_con
 SmaractTipTiltDouble = "pcdswidgets.motion.smaract.smaract_tip_tilt_double:SmaractTipTiltDouble"
 SmaractTipTiltFull = "pcdswidgets.motion.smaract.smaract_tip_tilt_full:SmaractTipTiltFull"
 SvgMultiStateLED = "pcdswidgets.motion.common.svg_multi_state_led:SvgMultiStateLED"
+TabDock = "pcdswidgets.common.dock.tab_dock:TabDock"
+TabDockButton = "pcdswidgets.common.dock.tab_dock_button:TabDockButton"
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 
 [project.optional-dependencies]
