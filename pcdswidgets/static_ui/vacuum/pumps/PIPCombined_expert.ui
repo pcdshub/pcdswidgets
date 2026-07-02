@@ -437,6 +437,9 @@
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:PMON</string>
             </property>
@@ -476,6 +479,9 @@
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:IMON</string>
             </property>
@@ -514,6 +520,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
             </property>
             <property name="channel">
              <string>ca://${prefix}:VMON</string>
@@ -1058,6 +1067,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
             </property>
             <property name="precisionFromPV">
              <bool>true</bool>

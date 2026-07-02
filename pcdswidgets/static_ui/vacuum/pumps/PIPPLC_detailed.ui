@@ -161,6 +161,9 @@
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
              <string>ca://${prefix}:PRESS_RBV</string>
             </property>
