@@ -48,8 +48,8 @@ class CollapsibleSection(QWidget):
     @staticmethod
     def _infer_title(content: QWidget) -> str:
         """Extract a display title from a widget."""
-        nickname = getattr(content, "nickname", None)
-        if isinstance(nickname, str) and nickname.strip():
+        nickname = content.property("nickname")
+        if nickname and nickname.strip():
             return nickname.strip()
 
         title_lbl = getattr(content, "title_label", None)
