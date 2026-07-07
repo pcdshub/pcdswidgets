@@ -98,7 +98,12 @@ class YamlToolbar(QtWidgets.QWidget):
 
             buttons = tab_params.get("buttons", {})
             for button_text, button_config in buttons.items():
-                button_widget = self._button_factory(button_text, button_config)
+                try:
+                    button_widget = self._button_factory(button_text, button_config)
+                except Exception as exc:
+                    logger.error(f"Error creating {button_text} button with exception {exc}, skipping.")
+                    logger.debug(exc, exc_info=True)
+                    continue
                 page.layout().addWidget(button_widget)
 
             def min_scroll_size_hint(*args, **kwargs):
