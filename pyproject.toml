@@ -92,6 +92,11 @@ test = [
     "pytest-timeout>=2.4.0",
     "tomlkit>=0.14.0",
 ]
+typhos = [
+    "happi>=3.0.1",
+    "pcdsdevices>=10.4.0",
+    "typhos>=4.3.0",
+]
 
 [tool.setuptools.packages.find]
 where = [ ".",]
