@@ -11,6 +11,7 @@ name = "pcdswidgets"
 requires-python = ">=3.12"
 dependencies = [
     "pydm>=1.9.0",
+    "pyyaml>=6.0.3",
     "qtpy>=2.4.3",
 ]
 
@@ -70,6 +71,7 @@ SvgMultiStateLED = "pcdswidgets.motion.common.svg_multi_state_led:SvgMultiStateL
 TabDock = "pcdswidgets.common.dock.tab_dock:TabDock"
 TabDockButton = "pcdswidgets.common.dock.tab_dock_button:TabDockButton"
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
+YamlToolbar = "pcdswidgets.common.toolbar.yaml_toolbar:YamlToolbar"
 
 [project.optional-dependencies]
 dev = [
