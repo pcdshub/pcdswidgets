@@ -5,6 +5,7 @@ import functools
 import logging
 from typing import Callable, cast
 
+from pydm.utilities import is_qt_designer
 from qtpy import QtCore
 from qtpy.QtCore import QEvent, QSize, Qt
 from qtpy.QtGui import QHoverEvent, QMouseEvent
@@ -238,9 +239,14 @@ class IndicatorGroup(BaseDeviceButton):
 class IndicatorGrid(QWidget):
     """GridLayout of all Indicators"""
 
+    _qt_designer_ = {
+        "group": "ECS Common Dock",
+        "is_container": False,
+    }
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-        self.beamline = ""
+        self._beamline = ""
         self.grid = QGridLayout()
         self.setLayout(self.grid)
         self.grid.setSpacing(0)
@@ -251,6 +257,16 @@ class IndicatorGrid(QWidget):
 QWidget[selected="true"] {background-color: rgba(20, 140, 210, 150);}
             """
         )
+
+    def set_beamline(self, beamline: str):
+        self._beamline = beamline
+        if not is_qt_designer():
+            self.load_happi(beamline)
+
+    def get_beamline(self) -> str:
+        return self._beamline
+
+    beamline = Property("QString", get_beamline, set_beamline)
 
     @property
     def groups(self):
@@ -309,11 +325,9 @@ QWidget[selected="true"] {background-color: rgba(20, 140, 210, 150);}
             stand, system = location.split("|")
             self.add_devices(dev_list, stand=stand, system=system)
 
-    def load_happi(self):
-        if not self.beamline:
-            return
+    def load_happi(self, beamline: str):
         self.loader = HappiLoader(
-            beamline=self.beamline, group_keys=("location_group", "functional_group"), callbacks=[]
+            beamline=[beamline], group_keys=("location_group", "functional_group"), callbacks=[self.add_from_dict]
         )
         self.loader.start()
 
