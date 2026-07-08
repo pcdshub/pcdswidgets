@@ -1,20 +1,18 @@
 """Overview of the Experimental Area"""
 
 import collections
+import functools
 import logging
-import os
 from typing import Callable, cast
 
-import yaml
-from pydm.widgets import PyDMRelatedDisplayButton, PyDMShellCommand
-from qtpy import QtCore, QtWidgets
+from qtpy import QtCore
 from qtpy.QtCore import QEvent, QSize, Qt
 from qtpy.QtGui import QHoverEvent, QMouseEvent
 from qtpy.QtWidgets import QGridLayout, QMenu, QPushButton, QWidget
-from typhos.utils import reload_widget_stylesheet
 
-from .dock import LucidDock, LucidDockButton
-from .utils import SnakeLayout, display_for_device, indicator_for_device
+from pcdswidgets.common.toolbar.yaml_toolbar import YamlTabLayout
+
+from .tab_dock import TabDock
 
 try:
     from qtpy.QtCore import Property  # type: ignore  # noqa: I001
@@ -66,7 +64,7 @@ class BaseDeviceButton(QPushButton):
         menu_devices = [action.text() for action in self.device_menu.actions()]
         if self._OPEN_ALL not in menu_devices:
             sub_menu = self.device_menu.addMenu(self._OPEN_ALL)
-            LucidDock.add_many_to_dock_user_menu(
+            TabDock.add_many_to_dock_user_menu(
                 widget_list=self.show_all,
                 title_list=self.get_all_titles,
                 menu=sub_menu,
@@ -82,7 +80,7 @@ class BaseDeviceButton(QPushButton):
 
     def _add_to_menu(self, widget_func: Callable[[], QWidget], text: str):
         sub_menu = self.device_menu.addMenu(text)
-        LucidDock.add_to_dock_user_menu(widget=widget_func, title=text, menu=sub_menu)
+        TabDock.add_to_dock_user_menu(widget=widget_func, title=text, menu=sub_menu)
         sub_menu.setDefaultAction(sub_menu.actions()[0])
         self.device_menu.addMenu(sub_menu)
 
@@ -109,10 +107,10 @@ class BaseDeviceButton(QPushButton):
                 device = self.devices[0]
                 deferred_widget = self._show_device_wrapper(self.devices[0])
                 if event.button() == Qt.LeftButton:
-                    LucidDock.add_to_dock_user_keybinds(widget=deferred_widget, title=device.name)
+                    TabDock.add_to_dock_user_keybinds(widget=deferred_widget, title=device.name)
                     return True
                 elif event.button() == Qt.RightButton:
-                    LucidDock.add_to_dock_user_menu(widget=deferred_widget, title=device.name, pos=event.globalPos())
+                    TabDock.add_to_dock_user_menu(widget=deferred_widget, title=device.name, pos=event.globalPos())
                     return True
             elif event.button() in (Qt.LeftButton, Qt.RightButton):
                 self.device_menu.exec_(event.globalPos())
@@ -151,7 +149,7 @@ class IndicatorCell(BaseDeviceButton):
         super().__init__(*args, **kwargs)
         # Disable borders on the widget unless a hover occurs
         self.setStyleSheet("QPushButton:!hover {border: None}")
-        self.setLayout(SnakeLayout(self.max_columns))
+        self.setLayout(YamlTabLayout(self.max_columns))
         self.layout().setSpacing(self.spacing)
         self.layout().setContentsMargins(*4 * [self.margin])
         self._selecting_widgets = []
@@ -187,15 +185,17 @@ class IndicatorCell(BaseDeviceButton):
 
     def _devices_shown(self, shown, selector=None):
         """Callback when corresponding ``TyphosSuite`` is accessed"""
+        import typhos.utils
+
         selector = selector or self
         # On first selection
         if shown and selector not in self._selecting_widgets:
             self._selecting_widgets.append(selector)
-            reload_widget_stylesheet(self)
+            typhos.utils.reload_widget_stylesheet(self)
         # On closure
         elif not shown and selector in self._selecting_widgets:
             self._selecting_widgets.remove(selector)
-            reload_widget_stylesheet(self)
+            typhos.utils.reload_widget_stylesheet(self)
 
 
 class IndicatorGroup(BaseDeviceButton):
@@ -240,6 +240,7 @@ class IndicatorGrid(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+        self.beamline = ""
         self.grid = QGridLayout()
         self.setLayout(self.grid)
         self.grid.setSpacing(0)
@@ -308,86 +309,113 @@ QWidget[selected="true"] {background-color: rgba(20, 140, 210, 150);}
             stand, system = location.split("|")
             self.add_devices(dev_list, stand=stand, system=system)
 
-
-class QuickAccessToolbar(QtWidgets.QWidget):
-    """Tab Widget with tabs containing buttons defined via a yaml file"""
-
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
-
-        self._tools_file = ""
-        self._tools = None
-        self._default_config = {"cols": 4}
-        self.default_dock_button = None
-        self._setup_ui()
-
-    def set_tools_file(self, file: str):
-        if not file:
+    def load_happi(self):
+        if not self.beamline:
             return
-        self._tools_file = file
-        with open(file) as tf:
-            self._tools = yaml.full_load(tf)
-        self._assemble_tabs()
+        self.loader = HappiLoader(
+            beamline=self.beamline, group_keys=("location_group", "functional_group"), callbacks=[]
+        )
+        self.loader.start()
 
-    def _setup_ui(self):
-        self.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
 
-        main_layout = QtWidgets.QVBoxLayout()
-        self.setLayout(main_layout)
-        self.tab = QtWidgets.QTabWidget()
-        main_layout.addWidget(self.tab)
+def get_happi_entry_value(entry, key):
+    value = entry.metadata.get(key, None)
+    if not value:
+        raise ValueError(f"Invalid Key ({key} not in {entry}.")
+    return value
 
-    def _assemble_tabs(self):
-        if self._tools is None:
-            return
-        self.tab.clear()
-        for tab_name, tab_params in self._tools.items():
-            page = QtWidgets.QWidget()
 
-            config = dict(self._default_config)
-            config.update(tab_params.get("config", {}))
+class HappiLoader(QtCore.QThread):
+    def __init__(self, *args, beamline, group_keys, callbacks, **kwargs):
+        self.beamline = beamline
+        self.group_keys = group_keys
+        self.callbacks = callbacks
+        super().__init__(*args, **kwargs)
 
-            cols = config.get("cols", 4)
-            page.setLayout(SnakeLayout(cols))
+    def _load_from_happi(self, row_group_key, col_group_key):
+        """Fill with Data from Happi"""
+        cli = get_happi_client()
+        results = []
+        for line in self.beamline:
+            results += cli.search(beamline=line, active=True)
 
-            buttons = tab_params.get("buttons", {})
-            for button_text, button_config in buttons.items():
-                button_widget = self._button_factory(button_text, button_config)
-                page.layout().addWidget(button_widget)
+        dev_groups = collections.defaultdict(list)
 
-            def min_scroll_size_hint(*args, **kwargs):
-                return QtCore.QSize(40, 40)
+        if not len(results):
+            raise ValueError(f"Could not find entries for beamline {self.beamline}")
 
-            scroll_area = QtWidgets.QScrollArea()
-            scroll_area.setWidgetResizable(True)
-            scroll_area.setWidget(page)
-            scroll_area.minimumSizeHint = min_scroll_size_hint
-            self.tab.addTab(scroll_area, tab_name)
+        import typhos
 
-    def _button_factory(self, text, config):
-        tp = config.pop("type")
-        btn = QPushButton()
-        if tp == "shell":
-            btn = PyDMShellCommand()
-            btn.showIcon = False
-            btn.setText(text)
-        elif tp == "display":
-            btn = PyDMRelatedDisplayButton()
-            btn.showIcon = False
-            btn.setText(text)
-        elif tp == "dock":
-            btn = LucidDockButton()
-            btn.setText(text)
-            if self.default_dock_button is None or config.pop("default", False):
-                self.default_dock_button = btn
+        with typhos.utils.no_device_lazy_load():
+            for res in results:
+                try:
+                    stand = get_happi_entry_value(res, row_group_key)
+                    system = get_happi_entry_value(res, col_group_key)
+                    dev_obj = res.get(threaded=True)
+                    dev_groups[f"{stand}|{system}"].append(dev_obj)
+                except Exception:
+                    logger.exception("Failed to load device %s", res)
+                    continue
+        return dev_groups
 
-        for prop, val in config.items():
-            if prop == "filename":
-                if not os.path.isabs(val):
-                    val = os.path.join(os.path.dirname(self._tools_file), val)
-            try:
-                setattr(btn, prop, val)
-            except Exception as ex:
-                logger.error(f"Failed to set property {prop} with value {val} for {tp}: {ex}")
+    def run(self):
+        row_group_key, col_group_key = self.group_keys
 
-        return btn
+        dev_groups = self._load_from_happi(row_group_key, col_group_key)
+
+        # Call the callback using the Receiver Slot Thread
+        for cb in self.callbacks:
+            f = functools.partial(cb, devices=dev_groups)
+            QtCore.QTimer.singleShot(0, f)
+
+
+device_display_cache = {}
+
+
+def display_for_device(device):
+    """Create a TyphosDeviceDisplay for a given device"""
+    import typhos.display
+    import typhos.utils
+
+    try:
+        return device_display_cache[device]
+    except KeyError:
+        ...
+    with typhos.utils.no_device_lazy_load():
+        logger.debug("Creating device display for %r", device)
+        display = typhos.display.TyphosDeviceDisplay.from_device(device, scroll_option="scrollbar")
+        typhos.utils.apply_standard_stylesheets(widget=display)
+    device_display_cache[device] = display
+    return display
+
+
+_HAPPI_CLIENT = None
+
+
+def get_happi_client():
+    """
+    Create and cache a happi client from configuration
+    """
+    global _HAPPI_CLIENT
+    import happi
+
+    if _HAPPI_CLIENT is None:
+        _HAPPI_CLIENT = happi.Client.from_config()
+    return _HAPPI_CLIENT
+
+
+def indicator_for_device(device):  # type: ignore
+    """Create a QWidget to indicate the alarm state of a QWidget"""
+    import typhos.alarm
+
+    try:
+        hints = device.hints["fields"]
+    except (AttributeError, KeyError):
+        hints = []
+    circle = typhos.alarm.TyphosAlarmCircle()  # type: ignore
+    if hints:
+        circle.kindLevel = typhos.alarm.TyphosAlarmCircle.KindLevel.HINTED  # type: ignore
+    else:
+        circle.kindLevel = typhos.alarm.TyphosAlarmCircle.KindLevel.NORMAL  # type: ignore
+    circle.add_device(device)
+    return circle
