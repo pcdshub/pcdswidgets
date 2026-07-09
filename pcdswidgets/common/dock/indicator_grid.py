@@ -16,6 +16,7 @@ import collections
 import functools
 import logging
 import textwrap
+import warnings
 from typing import Any, Callable, Iterable, Protocol, cast
 
 from pydm.utilities import is_qt_designer
@@ -368,10 +369,61 @@ class IndicatorGrid(QWidget):
 
     def load_happi(self, beamline: str):
         """Load happi devices into the grid using a background thread."""
+        self.configure_ophyd()
         self.loader = HappiLoader(
             beamline=[beamline], group_keys=("location_group", "functional_group"), callbacks=[self.add_from_dict]
         )
         self.loader.start()
+
+    def configure_ophyd(self):
+        """
+        Configure settings for ophyd that make the grid experience smoother.
+
+        For this to work properly, this widget must be the first thing in the application to be using
+        ophyd devices, which should usually be true.
+
+        This does a few things:
+        - Silences some noisy loggers
+        - Silences some useless warnings
+        - Works around the access control bug that only affects las-console
+        - Increase the timeouts
+        """
+        from epics.pv import PV
+        from ophyd.ophydobj import OphydObject
+        from ophyd.signal import EpicsSignalBase
+
+        def ensure_read_write_on_conn(instance):
+            """
+            Subscribe our update function if and only if it is an EPICS signal
+            """
+            if not isinstance(instance, EpicsSignalBase):
+                return
+            instance.subscribe(update_rw, event_type=instance.SUB_META, run=False)
+
+        def update_rw(obj: EpicsSignalBase, connected: bool, **md):
+            """
+            If the signal appears to be affected by the access bug, reach into pyepics and get the access rights update.
+            """
+            if connected and not obj.read_access:
+                pv_objs: list[PV] = [obj._read_pv]  # type: ignore
+                try:
+                    pv_objs.append(obj._write_pv)  # type: ignore
+                except AttributeError:
+                    ...
+                for pv in pv_objs:
+                    pv.force_read_access_rights()
+                    obj._pv_access_callback(read_access=pv.read_access, write_access=pv.write_access, pv=pv)
+
+        logging.getLogger("pyPDB.dbd.yacc").setLevel(logging.WARNING)
+        logging.getLogger("ophyd").setLevel(logging.WARNING)
+
+        warnings.simplefilter("ignore", UserWarning)
+
+        OphydObject.add_instantiation_callback(ensure_read_write_on_conn)
+        EpicsSignalBase.set_defaults(
+            timeout=10,
+            connection_timeout=10,
+        )
 
 
 def get_happi_entry_value(entry: Entry, key: str) -> Any:
@@ -419,7 +471,9 @@ class HappiLoader(QtCore.QThread):
                     dev_obj = res.get(threaded=True)
                     dev_groups[f"{stand}|{system}"].append(dev_obj)
                 except Exception:
-                    logger.exception("Failed to load device %s", res)
+                    name = res.metadata["name"]
+                    logger.error("Failed to load device %s", name)
+                    logger.debug("Failed to load device %s", name, exc_info=True)
                     continue
         return dev_groups
 
