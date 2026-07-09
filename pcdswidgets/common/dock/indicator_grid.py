@@ -525,7 +525,7 @@ def get_happi_client():
 
 
 def indicator_for_device(device):  # type: ignore
-    """Create a QWidget to indicate the alarm state of a QWidget."""
+    """Create a QWidget to indicate the alarm state of a Device."""
     # Embed optional dependency imports in function call
     from typhos.alarm import TyphosAlarmCircle
 
