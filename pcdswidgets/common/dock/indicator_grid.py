@@ -379,14 +379,15 @@ class IndicatorGrid(QWidget):
         """
         Configure settings for ophyd that make the grid experience smoother.
 
-        For this to work properly, this widget must be the first thing in the application to be using
-        ophyd devices, which should usually be true.
+        Note that if an EpicsSignal has already been created, we will be unable to edit
+        the epics timeout settings. In this case we will continue, but you may get
+        error spam at startup if you have many devices loaded in the table.
 
         This does a few things:
         - Silences some noisy loggers
         - Silences some useless warnings
         - Works around the access control bug that only affects las-console
-        - Increase the timeouts
+        - Increases the timeouts
         """
         from epics.pv import PV
         from ophyd.ophydobj import OphydObject
@@ -420,10 +421,13 @@ class IndicatorGrid(QWidget):
         warnings.simplefilter("ignore", UserWarning)
 
         OphydObject.add_instantiation_callback(ensure_read_write_on_conn)
-        EpicsSignalBase.set_defaults(
-            timeout=10,
-            connection_timeout=10,
-        )
+        try:
+            EpicsSignalBase.set_defaults(
+                timeout=10,
+                connection_timeout=10,
+            )
+        except RuntimeError:
+            logger.warning("Unable to set timeouts in IndicatorGrid beacuse an EpicsSignal has already been created.")
 
 
 def get_happi_entry_value(entry: Entry, key: str) -> Any:
