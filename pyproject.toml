@@ -95,7 +95,6 @@ test = [
 ]
 typhos = [
     "happi>=3.0.1",
-    "pcdsdevices>=10.4.0",
     "typhos>=4.3.0",
 ]
 

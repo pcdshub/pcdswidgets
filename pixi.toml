@@ -22,6 +22,7 @@ pyqt5-stubs = "==5.15.6.0"
 pcdswidgets = { path = ".", editable = true, extras = ["dev", "doc", "test"] }
 
 [feature.typhos.pypi-dependencies]
+pcdsdevices = ">=10.4.0"
 pcdswidgets = { path = ".", editable = true, extras = ["dev", "doc", "test", "typhos"] }
 
 [environments]
