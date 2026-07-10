@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>50</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Motor State Mover</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="midLineWidth">
+      <number>0</number>
+     </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <!-- Title header removed as requested -->
+     <item row="1" column="0">
+      <layout class="QVBoxLayout" name="statusIndicatorLayout">
+       <item>
+        <widget class="PyDMByteIndicator" name="statusIndicator">
+      <property name="toolTip">
+       <string>Green when all group status PVs are OK; red if any are true.</string>
+      </property>
+      <property name="whatsThis">
+       <string>Combined status indicator for the motor state group.</string>
+      </property>
+      <property name="alarmSensitiveContent" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="alarmSensitiveBorder" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="channel" stdset="0">
+       <string>ca://${MOTOR}:STATE:STATUS</string>
+      </property>
+      <property name="showLabels" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="bigEndian" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="circles" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="numBits" stdset="0">
+       <number>1</number>
+      </property>
+      <property name="shift" stdset="0">
+       <number>0</number>
+      </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="statusIndicatorLabel">
+      <property name="text">
+       <string>All OK</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignVCenter</set>
+      </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="1">
+      <layout class="QVBoxLayout" name="movingIndicatorLayout">
+       <item>
+        <widget class="PyDMByteIndicator" name="movingIndicator">
+      <property name="toolTip">
+       <string>Shows motor motion state: stopped or moving.</string>
+      </property>
+      <property name="whatsThis">
+       <string>Byte indicator that reflects motor movement state using BUSY_RBV.</string>
+      </property>
+      <property name="alarmSensitiveContent" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="alarmSensitiveBorder" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="channel" stdset="0">
+       <string>ca://${MOTOR}:STATE:BUSY_RBV</string>
+      </property>
+      <property name="showLabels" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="bigEndian" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="circles" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="numBits" stdset="0">
+       <number>1</number>
+      </property>
+      <property name="shift" stdset="0">
+       <number>0</number>
+      </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="movingIndicatorLabel">
+      <property name="text">
+       <string>Stopped / Moving</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignVCenter</set>
+      </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="2">
+      <widget class="PyDMLineEdit" name="deviceLabel">
+       <property name="toolTip">
+        <string>Edit the device label directly. Defaults from the base PV name.</string>
+       </property>
+       <property name="whatsThis">
+        <string>This editable field displays the device label from the base PV name and allows direct editing in the screen.</string>
+       </property>
+       <property name="styleSheet">
+        <string>color: rgb(43, 43, 43); background-color: rgb(250, 250, 250);</string>
+       </property>
+       <property name="channel" stdset="0">
+        <string>ca://${MOTOR}:DEVICE_LABEL</string>
+       </property>
+       <property name="text">
+        <string>${MOTOR}</string>
+       </property>
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+      <item row="1" column="3">
+       <widget class="PyDMLabel" name="stateReadback">
+        <property name="toolTip">
+         <string>Current motor state readback.</string>
+        </property>
+        <property name="whatsThis">
+         <string>This label displays the readback value for the selected state.</string>
+        </property>
+        <property name="styleSheet">
+         <string>color: rgb(43, 43, 43);</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${MOTOR}:STATE:GET_RBV</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="PyDMEnumComboBox" name="stateSelector">
+        <property name="toolTip">
+         <string>Select the desired motor state.</string>
+        </property>
+        <property name="whatsThis">
+         <string>This dropdown writes the selected state to the setpoint PV.</string>
+        </property>
+        <property name="styleSheet">
+         <string>color: rgb(43, 43, 43); background-color: rgb(250, 250, 250);</string>
+        </property>
+        <property name="channel" stdset="0">
+         <string>ca://${MOTOR}:STATE:SET</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <layout class="QVBoxLayout" name="errorLayout">
+        <item>
+         <widget class="QLabel" name="errorLabel">
+          <property name="text">
+           <string>Error</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLabel" name="errorStatus">
+          <property name="toolTip">
+           <string>Readback of the current error ID.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Shows the current motor error identifier.</string>
+          </property>
+          <property name="styleSheet">
+           <string>color: rgb(43, 43, 43);</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://${MOTOR}:STATE:ERRID_RBV</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="6">
+       <layout class="QVBoxLayout" name="controlsLayout">
+        <item>
+         <widget class="PyDMPushButton" name="clearErrorButton">
+          <property name="toolTip">
+           <string>Clear the current motor error.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Writes a reset value to clear the motor error state.</string>
+          </property>
+          <property name="text">
+           <string>Clear Error</string>
+          </property>
+          <property name="styleSheet">
+           <string>color: rgb(34, 34, 34); background-color: rgb(238, 238, 238);</string>
+          </property>
+          <property name="channel" stdset="0">
+           <string>ca://${MOTOR}:STATE:RESET</string>
+          </property>
+          <property name="pressValue" stdset="0">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMShellCommand" name="expertScreenButton">
+          <property name="toolTip">
+           <string>Open the expert screen.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Expert screen button uses a shell command widget and shows the gear icon.</string>
+          </property>
+          <property name="styleSheet">
+           <string>min-width: 30px; min-height: 22px; max-height: 22px;</string>
+          </property>
+          <property name="text">
+           <string/></property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMPushButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.pushbutton</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMShellCommand</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.shell_command</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
