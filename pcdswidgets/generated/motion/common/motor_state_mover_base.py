@@ -76,14 +76,14 @@ class MotorStateMoverBase(DesignerWidget):
             ("channel", "ca://${MOTOR}:STATE:RESET"),
         ],
         "deviceLabel": [
-            ("channel", "ca://${MOTOR}:DEVICE_LABEL"),
             ("text", "${MOTOR}"),
+            ("channel", "ca://${MOTOR}:DEVICE_LABEL"),
         ],
         "errorStatus": [
             ("channel", "ca://${MOTOR}:STATE:ERRID_RBV"),
         ],
         "movingIndicator": [
-            ("channel", "ca://${MOTOR}:STATE:BUSY_RBV"),
+            ("channel", "ca://${MOTOR}:STATE:DONE_RBV"),
         ],
         "stateReadback": [
             ("channel", "ca://${MOTOR}:STATE:GET_RBV"),
@@ -92,7 +92,7 @@ class MotorStateMoverBase(DesignerWidget):
             ("channel", "ca://${MOTOR}:STATE:SET"),
         ],
         "statusIndicator": [
-            ("channel", "ca://${MOTOR}:STATE:STATUS"),
+            ("channel", "ca://${MOTOR}:STATE:ERR_RBV"),
         ],
     }
 
