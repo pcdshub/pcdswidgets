@@ -6,7 +6,8 @@ base_cls = MotorBeckhoffSlitsBase
 macro_names = ['prefix']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -32,14 +33,21 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     ByteIndicatorCenter2Move: "PyDMByteIndicator"
     ByteIndicatorGap1Move: "PyDMByteIndicator"
     ByteIndicatorGap2Move: "PyDMByteIndicator"
+    Center: "QtWidgets.QLabel"
+    CenterLabel1: "QtWidgets.QLabel"
     CenterRBV1: "PyDMLabel"
     CenterRBV2: "PyDMLabel"
     CenterSet1: "PyDMLineEdit"
     CenterSet2: "PyDMLineEdit"
+    Form: "QtWidgets.QWidget"
+    GapLabel1: "QtWidgets.QLabel"
+    GapLabel2: "QtWidgets.QLabel"
     GapRBV1: "PyDMLabel"
     GapRBV2: "PyDMLabel"
     GapSet1: "PyDMLineEdit"
     GapSet2: "PyDMLineEdit"
+    frame: "QtWidgets.QFrame"
+    layoutWidget: "QtWidgets.QWidget"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -98,40 +106,40 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "ByteIndicatorCenter1Move": [
-            ("channel", "ca://${prefix}:ACTUAL_XCENTER_RBV.MOVN"),
+            ("channel", """ca://${prefix}:ACTUAL_XCENTER_RBV.MOVN"""),
         ],
         "ByteIndicatorCenter2Move": [
-            ("channel", "ca://${prefix}:ACTUAL_YCENTER_RBV.MOVN"),
+            ("channel", """ca://${prefix}:ACTUAL_YCENTER_RBV.MOVN"""),
         ],
         "ByteIndicatorGap1Move": [
-            ("channel", "ca://${prefix}:ACTUAL_XWIDTH_RBV.MOVN"),
+            ("channel", """ca://${prefix}:ACTUAL_XWIDTH_RBV.MOVN"""),
         ],
         "ByteIndicatorGap2Move": [
-            ("channel", "ca://${prefix}:ACTUAL_YWIDTH_RBV.MOVN"),
+            ("channel", """ca://${prefix}:ACTUAL_YWIDTH_RBV.MOVN"""),
         ],
         "CenterRBV1": [
-            ("channel", "ca://${prefix}:ACTUAL_XCENTER_RBV"),
+            ("channel", """ca://${prefix}:ACTUAL_XCENTER_RBV"""),
         ],
         "CenterRBV2": [
-            ("channel", "ca://${prefix}:ACTUAL_YCENTER_RBV"),
+            ("channel", """ca://${prefix}:ACTUAL_YCENTER_RBV"""),
         ],
         "CenterSet1": [
-            ("channel", "ca://${prefix}:XCEN_REQ"),
+            ("channel", """ca://${prefix}:XCEN_REQ"""),
         ],
         "CenterSet2": [
-            ("channel", "ca://${prefix}:YCEN_REQ"),
+            ("channel", """ca://${prefix}:YCEN_REQ"""),
         ],
         "GapRBV1": [
-            ("channel", "ca://${prefix}:ACTUAL_XWIDTH_RBV"),
+            ("channel", """ca://${prefix}:ACTUAL_XWIDTH_RBV"""),
         ],
         "GapRBV2": [
-            ("channel", "ca://${prefix}:ACTUAL_YWIDTH_RBV"),
+            ("channel", """ca://${prefix}:ACTUAL_YWIDTH_RBV"""),
         ],
         "GapSet1": [
-            ("channel", "ca://${prefix}:XWID_REQ"),
+            ("channel", """ca://${prefix}:XWID_REQ"""),
         ],
         "GapSet2": [
-            ("channel", "ca://${prefix}:YWID_REQ"),
+            ("channel", """ca://${prefix}:YWID_REQ"""),
         ],
     }
 
@@ -142,9 +150,9 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
         }
 
     def get_prefix(self) -> str:
-        return self._get_macro("prefix")
+        return self.get_macro("prefix")
 
     def set_prefix(self, value: str) -> None:
-        self._set_macro("prefix", value)
+        self.set_macro("prefix", value)
 
     prefix = pyqtProperty(str, get_prefix, set_prefix)

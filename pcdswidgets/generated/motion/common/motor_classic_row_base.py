@@ -6,7 +6,8 @@ base_cls = MotorClassicRowBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,7 @@ except ImportError:
 
 
 class MotorClassicRowBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     PyDMByteIndicator: "PyDMByteIndicator"
     PyDMByteIndicator_2: "PyDMByteIndicator"
     PyDMByteIndicator_mvn: "PyDMByteIndicator"
@@ -40,6 +42,7 @@ class MotorClassicRowBase(DesignerWidget):
     PyDMPushButton_twkL: "PyDMPushButton"
     PyDMPushButton_twkR: "PyDMPushButton"
     PyDMShellCommand: "PyDMShellCommand"
+    main_frame: "QtWidgets.QFrame"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -98,43 +101,43 @@ class MotorClassicRowBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "PyDMByteIndicator": [
-            ("channel", "ca://${MOTOR}.LLS"),
+            ("channel", """ca://${MOTOR}.LLS"""),
         ],
         "PyDMByteIndicator_2": [
-            ("channel", "ca://${MOTOR}.HLS"),
+            ("channel", """ca://${MOTOR}.HLS"""),
         ],
         "PyDMByteIndicator_mvn": [
-            ("channel", "ca://${MOTOR}.MOVN"),
+            ("channel", """ca://${MOTOR}.MOVN"""),
         ],
         "PyDMLabel": [
-            ("channel", "ca://${MOTOR}.EGU"),
+            ("channel", """ca://${MOTOR}.EGU"""),
         ],
         "PyDMLabel_name": [
-            ("channel", "ca://${MOTOR}.DESC"),
+            ("channel", """ca://${MOTOR}.DESC"""),
         ],
         "PyDMLabel_rbv": [
-            ("channel", "ca://${MOTOR}.RBV"),
+            ("channel", """ca://${MOTOR}.RBV"""),
         ],
         "PyDMLineEdit": [
-            ("channel", "ca://${MOTOR}.TWV"),
+            ("channel", """ca://${MOTOR}.TWV"""),
         ],
         "PyDMLineEdit_setpoint": [
-            ("channel", "ca://${MOTOR}.VAL"),
+            ("channel", """ca://${MOTOR}.VAL"""),
         ],
         "PyDMPushButton_stop": [
-            ("channel", "ca://${MOTOR}.STOP"),
+            ("channel", """ca://${MOTOR}.STOP"""),
         ],
         "PyDMPushButton_twkL": [
-            ("channel", "ca://${MOTOR}.TWR"),
+            ("channel", """ca://${MOTOR}.TWR"""),
         ],
         "PyDMPushButton_twkR": [
-            ("channel", "ca://${MOTOR}.TWF"),
+            ("channel", """ca://${MOTOR}.TWF"""),
         ],
         "PyDMShellCommand": [
             (
                 "commands",
                 [
-                    "motor-expert-screen ${MOTOR}",
+                    """motor-expert-screen ${MOTOR}""",
                 ],
             ),
         ],
@@ -147,9 +150,9 @@ class MotorClassicRowBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("MOTOR")
+        return self.get_macro("MOTOR")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("MOTOR", value)
+        self.set_macro("MOTOR", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)

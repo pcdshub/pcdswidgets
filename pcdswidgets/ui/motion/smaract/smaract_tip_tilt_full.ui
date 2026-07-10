@@ -1092,7 +1092,9 @@ color: rgb(0, 0, 0);</string>
           <string>cog</string>
          </property>
          <property name="filenames">
-          <stringlist/>
+          <stringlist>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
          </property>
          <property name="titles">
           <stringlist/>
@@ -1104,7 +1106,9 @@ color: rgb(0, 0, 0);</string>
           <bool>false</bool>
          </property>
          <property name="macros">
-          <stringlist/>
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${vertical_motor}&quot;}</string>
+          </stringlist>
          </property>
          <property name="openInNewWindow">
           <bool>true</bool>
@@ -1167,7 +1171,9 @@ color: rgb(0, 0, 0);</string>
           <string>cog</string>
          </property>
          <property name="filenames">
-          <stringlist/>
+          <stringlist>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
          </property>
          <property name="titles">
           <stringlist/>
@@ -1179,7 +1185,9 @@ color: rgb(0, 0, 0);</string>
           <bool>false</bool>
          </property>
          <property name="macros">
-          <stringlist/>
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${horizontal_motor}&quot;}</string>
+          </stringlist>
          </property>
          <property name="openInNewWindow">
           <bool>true</bool>
