@@ -634,9 +634,6 @@ background-color: rgb(250, 250, 250);</string>
           <property name="monitorDisp">
            <bool>false</bool>
           </property>
-          <property name="channel">
-           <string>ca://${MOTOR}:SEQ_SELN</string>
-          </property>
           <property name="PyDMIcon">
            <string/>
           </property>
@@ -654,12 +651,6 @@ background-color: rgb(250, 250, 250);</string>
           </property>
           <property name="confirmMessage">
            <string>Are you sure you want to proceed?</string>
-          </property>
-          <property name="pressValue">
-           <string>48</string>
-          </property>
-          <property name="releaseValue">
-           <string>None</string>
           </property>
           <property name="relativeChange">
            <bool>false</bool>

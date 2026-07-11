@@ -1,0 +1,30 @@
+[workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+exclude-newer = "7d"
+
+[tasks]
+test = "pytest"
+install = "./pixi_scripts/install.sh"
+
+[activation]
+scripts = ["./pixi_scripts/env_setup.sh"]
+
+[dependencies]
+python = "==3.12.12"
+numpy = ">=2.4.6,<3"
+pyqt = "==5.15.9"
+
+[pypi-dependencies]
+pyqt5-stubs = "==5.15.6.0"
+
+[feature.base.pypi-dependencies]
+pcdswidgets = { path = ".", editable = true, extras = ["dev", "doc", "test"] }
+
+[feature.typhos.pypi-dependencies]
+pcdsdevices = ">=10.4.0"
+pcdswidgets = { path = ".", editable = true, extras = ["dev", "doc", "test", "typhos"] }
+
+[environments]
+default = ["base"]
+typhos = ["typhos"]
