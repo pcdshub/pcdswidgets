@@ -54,6 +54,7 @@ MarkerSelectionFull = "pcdswidgets.imaging.common.marker_selection_full:MarkerSe
 MotorBeckhoffSlits = "pcdswidgets.motion.common.motor_beckhoff_slits:MotorBeckhoffSlits"
 MotorClassicFull = "pcdswidgets.motion.common.motor_classic_full:MotorClassicFull"
 MotorClassicRow = "pcdswidgets.motion.common.motor_classic_row:MotorClassicRow"
+MotorClassicVert = "pcdswidgets.motion.common.motor_classic_vert:MotorClassicVert"
 MotorTcClassicRow = "pcdswidgets.motion.common.motor_tc_classic_row:MotorTcClassicRow"
 NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
