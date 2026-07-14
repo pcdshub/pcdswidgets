@@ -16,14 +16,6 @@ from pcdswidgets.common.dock.tab_dock import TabDock
 TESTS_DIR = Path(__file__).parent.resolve()
 
 
-@pytest.fixture(scope="function")
-def tab_dock(qtbot: QtBot) -> TabDock:
-    dock = TabDock()
-    dock.show()
-    qtbot.addWidget(dock)
-    return dock
-
-
 def test_add_to_dock_user_keybinds(tab_dock: TabDock, monkeypatch: pytest.MonkeyPatch, qtbot: QtBot):
     # Mock our own methods to check if they got called
     add_to_dock_mock = Mock()
