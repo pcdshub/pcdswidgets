@@ -129,7 +129,7 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
 
         Parameters
         ----------
-        value : int
+        value : string
         """
         if value is None:
             return
