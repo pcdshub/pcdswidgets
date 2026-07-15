@@ -6,14 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>101</height>
+    <width>820</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Motor State Mover</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QFrame" name="frame">
      <property name="sizePolicy">
@@ -23,365 +35,473 @@
       </sizepolicy>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Plain</enum>
      </property>
      <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="midLineWidth">
       <number>0</number>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <spacer name="leftSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+     <layout class="QVBoxLayout" name="frameLayout">
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <property name="leftMargin">
+       <number>14</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>14</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="mainRow">
+        <property name="spacing">
+         <number>14</number>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1">
-       <layout class="QVBoxLayout" name="statusIndicatorLayout">
-        <item>
-         <widget class="PyDMByteIndicator" name="statusIndicator">
-          <property name="toolTip">
-           <string>Green when all group status PVs are OK; red if any are true.</string>
+        <item alignment="Qt::AlignVCenter">
+         <widget class="QWidget" name="statusIndicatorBox" native="true">
+          <layout class="QVBoxLayout" name="statusIndicatorLayout">
+          <property name="spacing">
+           <number>2</number>
           </property>
-          <property name="whatsThis">
-           <string>Combined status indicator for the motor state group.</string>
-          </property>
-          <property name="alarmSensitiveContent">
-           <bool>false</bool>
-          </property>
-          <property name="alarmSensitiveBorder">
-           <bool>true</bool>
-          </property>
-          <property name="PyDMToolTip">
-           <string/>
-          </property>
-          <property name="channel">
-           <string>ca://${MOTOR}:STATE:ERR_RBV</string>
-          </property>
-          <property name="blinkOnChange">
-           <bool>false</bool>
-          </property>
-          <property name="toggleMode">
-           <bool>false</bool>
-          </property>
-          <property name="blinkInterval">
-           <number>99</number>
-          </property>
-          <property name="showLabels">
-           <bool>false</bool>
-          </property>
-          <property name="bigEndian">
-           <bool>false</bool>
-          </property>
-          <property name="circles">
-           <bool>true</bool>
-          </property>
-          <property name="numBits">
-           <number>1</number>
-          </property>
-          <property name="shift">
+          <property name="leftMargin">
            <number>0</number>
           </property>
-          <property name="labels">
-           <stringlist>
-            <string>Bit 0</string>
-           </stringlist>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="statusIndicatorLabel">
-          <property name="text">
-           <string>Status</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="2">
-       <spacer name="spacer1">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="3">
-       <layout class="QVBoxLayout" name="movingIndicatorLayout">
-        <item>
-         <widget class="PyDMByteIndicator" name="movingIndicator">
-          <property name="toolTip">
-           <string>Shows motor motion state: stopped or moving.</string>
-          </property>
-          <property name="whatsThis">
-           <string>Byte indicator that reflects motor movement state using BUSY_RBV.</string>
-          </property>
-          <property name="alarmSensitiveContent">
-           <bool>false</bool>
-          </property>
-          <property name="alarmSensitiveBorder">
-           <bool>true</bool>
-          </property>
-          <property name="PyDMToolTip">
-           <string/>
-          </property>
-          <property name="channel">
-           <string>ca://${MOTOR}:STATE:DONE_RBV</string>
-          </property>
-          <property name="blinkOnChange">
-           <bool>false</bool>
-          </property>
-          <property name="toggleMode">
-           <bool>false</bool>
-          </property>
-          <property name="blinkInterval">
-           <number>99</number>
-          </property>
-          <property name="showLabels">
-           <bool>false</bool>
-          </property>
-          <property name="bigEndian">
-           <bool>false</bool>
-          </property>
-          <property name="circles">
-           <bool>true</bool>
-          </property>
-          <property name="numBits">
-           <number>1</number>
-          </property>
-          <property name="shift">
+          <property name="topMargin">
            <number>0</number>
           </property>
-          <property name="labels">
-           <stringlist>
-            <string>Bit 0</string>
-           </stringlist>
+          <property name="rightMargin">
+           <number>0</number>
           </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="PyDMByteIndicator" name="statusIndicator">
+            <property name="minimumSize">
+             <size>
+              <width>36</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>36</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Green when the motor status is OK; red on error.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Combined status indicator for the motor state group (STATE:ERR_RBV).</string>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>false</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:STATE:ERR_RBV</string>
+            </property>
+            <property name="onColor">
+             <color>
+              <red>255</red>
+              <green>0</green>
+              <blue>0</blue>
+             </color>
+            </property>
+            <property name="offColor">
+             <color>
+              <red>0</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </property>
+            <property name="blinkOnChange">
+             <bool>false</bool>
+            </property>
+            <property name="toggleMode">
+             <bool>false</bool>
+            </property>
+            <property name="blinkInterval">
+             <number>99</number>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="bigEndian">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
+            </property>
+            <property name="numBits">
+             <number>1</number>
+            </property>
+            <property name="shift">
+             <number>0</number>
+            </property>
+            <property name="labels">
+             <stringlist>
+              <string>Bit 0</string>
+             </stringlist>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statusIndicatorLabel">
+            <property name="styleSheet">
+             <string>color: rgb(17, 17, 17); background: transparent;</string>
+            </property>
+            <property name="text">
+             <string>ok</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          </layout>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="movingIndicatorLabel">
-          <property name="text">
-           <string>Done</string>
+        <item alignment="Qt::AlignVCenter">
+         <widget class="QWidget" name="movingIndicatorBox" native="true">
+          <layout class="QVBoxLayout" name="movingIndicatorLayout">
+          <property name="spacing">
+           <number>2</number>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="leftMargin">
+           <number>0</number>
           </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="PyDMByteIndicator" name="movingIndicator">
+            <property name="minimumSize">
+             <size>
+              <width>36</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>36</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Blue while the motor is moving; dark when the move is done.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Byte indicator that reflects motor movement state using STATE:DONE_RBV.</string>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>false</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:STATE:DONE_RBV</string>
+            </property>
+            <property name="onColor">
+             <color>
+              <red>60</red>
+              <green>60</green>
+              <blue>60</blue>
+             </color>
+            </property>
+            <property name="offColor">
+             <color>
+              <red>20</red>
+              <green>100</green>
+              <blue>239</blue>
+             </color>
+            </property>
+            <property name="blinkOnChange">
+             <bool>false</bool>
+            </property>
+            <property name="toggleMode">
+             <bool>false</bool>
+            </property>
+            <property name="blinkInterval">
+             <number>99</number>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="bigEndian">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
+            </property>
+            <property name="numBits">
+             <number>1</number>
+            </property>
+            <property name="shift">
+             <number>0</number>
+            </property>
+            <property name="labels">
+             <stringlist>
+              <string>Bit 0</string>
+             </stringlist>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="movingIndicatorLabel">
+            <property name="styleSheet">
+             <string>color: rgb(17, 17, 17); background: transparent;</string>
+            </property>
+            <property name="text">
+             <string>moving</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          </layout>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item row="1" column="4">
-       <spacer name="spacer2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="5">
-       <widget class="PyDMLineEdit" name="deviceLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Edit the device label directly. Defaults from the base PV name.</string>
-        </property>
-        <property name="whatsThis">
-         <string>This editable field displays the device label from the base PV name and allows direct editing in the screen.</string>
-        </property>
-        <property name="styleSheet">
-         <string>color: rgb(43, 43, 43); background-color: rgb(250, 250, 250);</string>
-        </property>
-        <property name="text">
-         <string>${MOTOR}</string>
-        </property>
-        <property name="readOnly">
-         <bool>false</bool>
-        </property>
-        <property name="channel">
-         <string>ca://${MOTOR}:DEVICE_LABEL</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <spacer name="spacer3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="7">
-       <widget class="PyDMLabel" name="stateReadback">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>300</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Current motor state readback.</string>
-        </property>
-        <property name="whatsThis">
-         <string>This label displays the readback value for the selected state.</string>
-        </property>
-        <property name="styleSheet">
-         <string>color: rgb(43, 43, 43);</string>
-        </property>
-        <property name="channel">
-         <string>ca://${MOTOR}:STATE:GET_RBV</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="8">
-       <spacer name="spacer4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="9">
-       <widget class="PyDMEnumComboBox" name="stateSelector">
-        <property name="toolTip">
-         <string>Select the desired motor state.</string>
-        </property>
-        <property name="whatsThis">
-         <string>This dropdown writes the selected state to the setpoint PV.</string>
-        </property>
-        <property name="styleSheet">
-         <string>color: rgb(43, 43, 43); background-color: rgb(250, 250, 250);</string>
-        </property>
-        <property name="channel">
-         <string>ca://${MOTOR}:STATE:SET</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="10">
-       <spacer name="spacer5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="11">
-       <layout class="QVBoxLayout" name="errorLayout">
-        <item alignment="Qt::AlignHCenter">
-         <widget class="QLabel" name="errorLabel">
+        <item alignment="Qt::AlignVCenter">
+         <widget class="PyDMLabel" name="stateReadback">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="text">
-           <string>Error</string>
+          <property name="minimumSize">
+           <size>
+            <width>220</width>
+            <height>58</height>
+           </size>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="maximumSize">
+           <size>
+            <width>340</width>
+            <height>58</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item alignment="Qt::AlignHCenter">
-         <widget class="PyDMLabel" name="errorStatus">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="font">
+           <font>
+            <pointsize>22</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="toolTip">
-           <string>Readback of the current error ID.</string>
+           <string>Current motor state readback (STATE:GET_RBV).</string>
           </property>
           <property name="whatsThis">
-           <string>Shows the current motor error identifier.</string>
+           <string>This label displays the readback value for the current state.</string>
           </property>
           <property name="styleSheet">
-           <string>color: rgb(43, 43, 43);</string>
+           <string>color: rgb(255, 255, 255); background-color: rgb(11, 58, 232); border-radius: 3px; padding: 0px 14px;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:STATE:GET_RBV</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignVCenter">
+         <widget class="PyDMEnumComboBox" name="stateSelector">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Select the desired motor state (writes STATE:SET).</string>
+          </property>
+          <property name="whatsThis">
+           <string>This dropdown writes the selected state to the setpoint PV.</string>
+          </property>
+          <property name="styleSheet">
+           <string>PyDMEnumComboBox {
+    color: rgb(120, 120, 120);
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(42, 91, 215);
+    border-radius: 3px;
+    padding-left: 10px;
+}
+PyDMEnumComboBox::drop-down {
+    width: 26px;
+    border-left: 1px solid rgb(208, 208, 208);
+}
+PyDMEnumComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid rgb(154, 154, 154);
+    margin-right: 8px;
+}</string>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:STATE:SET</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignVCenter">
+         <widget class="PyDMRelatedDisplayButton" name="expertScreenButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Open the expert screen (Normal + Configuration tabs).</string>
+          </property>
+          <property name="whatsThis">
+           <string>Opens motor_state_mover_expert.ui, forwarding the MOTOR, STATE_COUNT and MOTOR_TOKENS macros.</string>
+          </property>
+          <property name="styleSheet">
+           <string>color: rgb(20, 20, 20); background-color: rgb(245, 245, 245); border: 1px solid rgb(219, 219, 219); border-radius: 4px;</string>
+          </property>
+          <property name="text">
+           <string>Expert
+Screen</string>
+          </property>
+          <property name="showIcon">
+           <bool>false</bool>
+          </property>
+          <property name="openInNewWindow">
+           <bool>true</bool>
+          </property>
+          <property name="filenames">
+           <stringlist>
+            <string>motor_state_mover_expert.py</string>
+           </stringlist>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="statusRow">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item alignment="Qt::AlignVCenter">
+         <widget class="PyDMLabel" name="errorStatus">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Current motor state/error message (STATE:ERRID_RBV).</string>
+          </property>
+          <property name="whatsThis">
+           <string>Shows the current motor state/error description string.</string>
+          </property>
+          <property name="styleSheet">
+           <string>color: rgb(125, 125, 125); background: transparent;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <property name="channel">
            <string>ca://${MOTOR}:STATE:ERRID_RBV</string>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item row="1" column="12">
-       <spacer name="spacer6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="13">
-       <layout class="QVBoxLayout" name="controlsLayout">
         <item>
+         <spacer name="statusSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item alignment="Qt::AlignVCenter">
          <widget class="PyDMPushButton" name="clearErrorButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -389,14 +509,33 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="toolTip">
-           <string>Clear the current motor error.</string>
+           <string>Clear the current motor error (writes STATE:RESET).</string>
           </property>
           <property name="whatsThis">
            <string>Writes a reset value to clear the motor error state.</string>
           </property>
           <property name="styleSheet">
-           <string>color: rgb(34, 34, 34); background-color: rgb(238, 238, 238);</string>
+           <string>color: rgb(20, 20, 20); background-color: rgb(245, 245, 245); border: 1px solid rgb(219, 219, 219); border-radius: 4px;</string>
           </property>
           <property name="text">
            <string>Clear Error</string>
@@ -409,42 +548,7 @@
           </property>
          </widget>
         </item>
-        <item alignment="Qt::AlignHCenter">
-         <widget class="PyDMShellCommand" name="expertScreenButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>Open the expert screen.</string>
-          </property>
-          <property name="whatsThis">
-           <string>Expert screen button uses a shell command widget and shows the gear icon.</string>
-          </property>
-          <property name="styleSheet">
-           <string>min-width: 30px; min-height: 22px; max-height: 22px;</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
        </layout>
-      </item>
-      <item row="1" column="14">
-       <spacer name="rightSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>
@@ -468,19 +572,14 @@
    <header>pydm.widgets.enum_combo_box</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
-   <class>PyDMShellCommand</class>
+   <class>PyDMRelatedDisplayButton</class>
    <extends>QPushButton</extends>
-   <header>pydm.widgets.shell_command</header>
+   <header>pydm.widgets.related_display_button</header>
   </customwidget>
  </customwidgets>
  <resources/>

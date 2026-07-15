@@ -29,7 +29,6 @@ except ImportError:
 
 class MotorStateMoverBase(DesignerWidget):
     clearErrorButton: "PyDMPushButton"
-    deviceLabel: "PyDMLineEdit"
     errorStatus: "PyDMLabel"
     movingIndicator: "PyDMByteIndicator"
     stateReadback: "PyDMLabel"
@@ -41,7 +40,6 @@ class MotorStateMoverBase(DesignerWidget):
         "MOTOR": [
             "statusIndicator",
             "movingIndicator",
-            "deviceLabel",
             "stateReadback",
             "stateSelector",
             "errorStatus",
@@ -50,9 +48,6 @@ class MotorStateMoverBase(DesignerWidget):
     }
     _widget_to_macro = {
         "clearErrorButton": [
-            "MOTOR",
-        ],
-        "deviceLabel": [
             "MOTOR",
         ],
         "errorStatus": [
@@ -74,10 +69,6 @@ class MotorStateMoverBase(DesignerWidget):
     _widget_to_pre_template = {
         "clearErrorButton": [
             ("channel", "ca://${MOTOR}:STATE:RESET"),
-        ],
-        "deviceLabel": [
-            ("text", "${MOTOR}"),
-            ("channel", "ca://${MOTOR}:DEVICE_LABEL"),
         ],
         "errorStatus": [
             ("channel", "ca://${MOTOR}:STATE:ERRID_RBV"),
