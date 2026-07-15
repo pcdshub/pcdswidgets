@@ -7,9 +7,9 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 
 from pydm.widgets import PyDMImageView
-from qtpy.QtCore import QPointF, Qt, QTimer
+from qtpy.QtCore import QPointF, Qt
 from qtpy.QtGui import QColor, QIcon, QPixmap
-from qtpy.QtWidgets import QPushButton
+from qtpy.QtWidgets import QPushButton, QSpinBox
 
 try:
     from qtpy.QtCore import pyqtProperty
@@ -17,23 +17,46 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.crop_and_bin_full_base import CropAndBinFullBase
-from pcdswidgets.icons.glyphs import CHECK, X_CIRCLE, CROSSHAIR, MOVE, PEN_TOOL, TRASH, SCISSORS, CAM_COG
+from pcdswidgets.icons.glyphs import (
+    CAM_COG,
+    CHECK,
+    MOVE,
+    PEN_TOOL,
+    TRASH,
+    X_CIRCLE,
+)
 from pcdswidgets.imaging.common.cam_roi import CamROI
+from pcdswidgets.imaging.common.coordinate_transform import CoordinateTransform
+from pcdswidgets.imaging.common.crop_confirm_dialog import ChangeEntry, CropConfirmDialog
+from pcdswidgets.imaging.common.pv_write_worker import PVReadWorker, PVWriteWorker
+
 logger = logging.getLogger(__name__)
 
-DEFAULT_SENSOR_MAX_X_SUFFIX = "MaxSizeX_RBV"
-DEFAULT_SENSOR_MAX_Y_SUFFIX = "MaxSizeY_RBV"
-CROP_BOX_COLOR = "green"
+DEFAULT_CROP_BOX_COLOR = "green"
+
+# Default dependent PV suffixes, overwritten in designer
+# these PVs get overwritten if global crop/bin settings are changed
+DEFAULT_DEP_X = [":ROI1:MinX", ":Over1:5:PositionX", ":Over1:6:PositionX",
+                 ":Over1:7:PositionX", ":Over1:8:PositionX"]
+DEFAULT_DEP_Y = [":ROI1:MinY", ":Over1:5:PositionY", ":Over1:6:PositionY",
+                 ":Over1:7:PositionY", ":Over1:8:PositionY"]
+DEFAULT_DEP_SIZE_X = [":ROI1:SizeX"]
+DEFAULT_DEP_SIZE_Y = [":ROI1:SizeY"]
+
+# Default coordinate transform PVs (drawing overlays on the screen)
+DEFAULT_X_START ="IMAGE1:ROI:MinX_RBV"
+DEFAULT_Y_START = "IMAGE1:ROI:MinY_RBV"
+DEFAULT_BIN_X = ":IMAGE1:ROI:BinX"
+DEFAULT_BIN_Y = ":IMAGE1:ROI:BinY"
+
 
 class CropAndBinFull(CropAndBinFullBase):
     """Hardware crop-and-bin control widget.
 
-    Provides spinbox-based editing of MinX/MinY/SizeX/SizeY and BinX/BinY
-    PVs, with an interactive crop mode that overlays a draggable ROI on
-    the parent camera viewer.  PV writes are deferred until the user
-    confirms the crop selection.
+    Provides spinbox-based editing of MinX/MinY/SizeX/SizeY and BinX/BinY.
+    Spinboxes are decoupled from PVs — changes are previewed in a confirmation
+    dialog and written sequentially via a worker thread.
     """
 
     designer_options = DesignerOptions(
@@ -42,49 +65,56 @@ class CropAndBinFull(CropAndBinFullBase):
         icon=CAM_COG
     )
 
-    crop_button: QPushButton
     reset_roi_button: QPushButton
+    confirm_button: QPushButton
     draw_button: QPushButton
     move_button: QPushButton
-    center_button: QPushButton
-    confirm_button: QPushButton
     cancel_button: QPushButton
+
+    bin_x_spinbox: QSpinBox
+    bin_y_spinbox: QSpinBox
+    roi_x_spinbox: QSpinBox
+    roi_y_spinbox: QSpinBox
+    roi_width_spinbox: QSpinBox
+    roi_height_spinbox: QSpinBox
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._sensor_max_x_suffix = DEFAULT_SENSOR_MAX_X_SUFFIX
-        self._sensor_max_y_suffix = DEFAULT_SENSOR_MAX_Y_SUFFIX
-
-        self._image_view: PyDMImageView = None
+        self._image_view: PyDMImageView | None = None
         self._view_box = None
-        self._draw_origin: QPointF = None
-        self._in_crop_mode = False
-        self._last_bin_x: float = 1
-        self._last_bin_y: float = 1
-        self._bin_x_initialized = False
-        self._bin_y_initialized = False
+        self._draw_origin: QPointF | None = None
+        self._in_edit_mode = False
+        self._write_worker: PVWriteWorker | None = None
+        self._read_worker: PVReadWorker | None = None
+        self._syncing_roi = False  # guard for ROI ↔ spinbox feedback loop
 
-        # Cooldown timer: area detector sends take real time when changing bin size
-        self._cooldown_timer = QTimer(self)
-        self._cooldown_timer.setSingleShot(True)
-        self._cooldown_timer.setInterval(1000)
-        self._cooldown_timer.timeout.connect(self._on_cooldown_done)
+        # RBV snapshot captured on edit-mode entry
+        self._rbv_snapshot: dict[str, int] = {}
 
-        self.roi_rect = CamROI(QColor(CROP_BOX_COLOR), 2, self)
+        # Dependent PV suffix lists
+        self._dependent_pvs_x: list[str] = list(DEFAULT_DEP_X)
+        self._dependent_pvs_y: list[str] = list(DEFAULT_DEP_Y)
+        self._dependent_pvs_size_x: list[str] = list(DEFAULT_DEP_SIZE_X)
+        self._dependent_pvs_size_y: list[str] = list(DEFAULT_DEP_SIZE_Y)
+
+        self._crop_box_color: QColor = QColor(DEFAULT_CROP_BOX_COLOR)
+        self.roi_rect = CamROI(self._crop_box_color, 2, self)
 
         self._init_button_icons()
-        self._connect_buttons()
+        self._connect_signals()
 
+        # Initial visibility: only spinboxes + tools + trash visible
         self.roi_tools_row.setVisible(False)
+        self.confirm_button.setVisible(False)
+        self.cancel_button.setVisible(False)
 
+    # ── Setup ─────────────────────────────────────────────────────────────
 
     def _init_button_icons(self):
         icon_map = {
-            SCISSORS: self.crop_button,
             TRASH: self.reset_roi_button,
             MOVE: self.move_button,
-            CROSSHAIR: self.center_button,
             PEN_TOOL: self.draw_button,
             CHECK: self.confirm_button,
             X_CIRCLE: self.cancel_button,
@@ -94,30 +124,33 @@ class CropAndBinFull(CropAndBinFullBase):
             icon.addPixmap(QPixmap(path), QIcon.Normal, QIcon.Off)
             button.setIcon(icon)
 
-    def _connect_buttons(self):
-        # main controls
-        self.crop_button.clicked.connect(self._enter_crop_mode)
+    def _connect_signals(self):
+        # buttons
         self.reset_roi_button.clicked.connect(self._on_reset)
-
-        # Bin X and Y sync
-        self.sync_bins_checkbox.toggled.connect(self._on_sync_toggled)
-        self.bin_x_spinbox.valueChanged.connect(self._on_bin_x_changed)
-        self.bin_y_spinbox.valueChanged.connect(self._on_bin_y_changed)
-
-        self.bin_x_spinbox.send_value_signal[float].connect(self._on_bin_x_sent)
-        self.bin_y_spinbox.send_value_signal[float].connect(self._on_bin_y_sent)
-
-        # Crop-mode tool toggles
-        self.move_button.clicked.connect(self._on_move_toggle)
-        self.center_button.clicked.connect(self._on_center_toggle)
-        self.draw_button.clicked.connect(self._on_draw_toggle)
-
-        # Confirm / cancel
         self.confirm_button.clicked.connect(self._on_confirm)
         self.cancel_button.clicked.connect(self._on_cancel)
+        self.move_button.clicked.connect(self._on_move_toggle)
+        self.draw_button.clicked.connect(self._on_draw_toggle)
+
+        # spinboxes
+        self.sync_bins_checkbox.toggled.connect(self._on_sync_toggled)
+        self.bin_x_spinbox.valueChanged.connect(self._on_spinbox_edited)
+        self.bin_y_spinbox.valueChanged.connect(self._on_spinbox_edited)
+        self.roi_x_spinbox.valueChanged.connect(self._on_spinbox_edited)
+        self.roi_y_spinbox.valueChanged.connect(self._on_spinbox_edited)
+        self.roi_width_spinbox.valueChanged.connect(self._on_spinbox_edited)
+        self.roi_height_spinbox.valueChanged.connect(self._on_spinbox_edited)
+
+        # user changes ROI with MOVE
+        self.roi_rect.sigRegionChanged.connect(self._on_roi_changed)
 
     def link_parent_widgets(self, parent) -> None:
-        """Attach ROI overlay to parent's PyDMImageView ViewBox."""
+        """
+        Attach ROI overlay to parent's PyDMImageView ViewBox.
+
+        Called by parent on adoption
+        """
+
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
         else:
@@ -132,221 +165,464 @@ class CropAndBinFull(CropAndBinFullBase):
         self._view_box.scene().sigMouseClicked.connect(self._on_scene_clicked)
         self._view_box.scene().sigMouseMoved.connect(self._on_scene_moved)
 
+    def after_set_macro(self, macro_name: str, value: str) -> None:
+        """Sync spinbox values from RBV labels once cam_prefix is set."""
+        if macro_name == "cam_prefix" and value:
+            self._sync_spinboxes_from_hardware()
 
-    def _on_reset(self):
-        """Reset ROI to full sensor: MinX=0, MinY=0, SizeX=max/bin, SizeY=max/bin."""
-        self.roi_x_spinbox.setValue(0)
-        self.roi_x_spinbox.send_value()
-        self.roi_y_spinbox.setValue(0)
-        self.roi_y_spinbox.send_value()
+    # ── RBV Helpers ────────────────────────────────────────────────────────
 
-        # Read sensor max from the readback labels if available
-        # Divide by current bin since PVs are in binned units
-        sensor_w = self._get_sensor_max_x()
-        sensor_h = self._get_sensor_max_y()
-        bin_x = max(self._last_bin_x, 1)
-        bin_y = max(self._last_bin_y, 1)
-        if sensor_w is not None:
-            self.roi_width_spinbox.setValue(int(sensor_w / bin_x))
-            self.roi_width_spinbox.send_value()
-        if sensor_h is not None:
-            self.roi_height_spinbox.setValue(int(sensor_h / bin_y))
-            self.roi_height_spinbox.send_value()
-
-    def _get_sensor_max_x(self) -> float | None:
-        """Read current sensor max X from the label widget's channel value."""
+    def _rbv_value(self, label_name: str) -> float | None:
+        """Read current numeric value from a PyDMLabel's displayed text."""
+        label = getattr(self, label_name, None)
+        if label is None:
+            return None
         try:
-            return float(self.sensor_width_label.text())
+            return float(label.text())
         except (ValueError, AttributeError):
             return None
 
-    def _get_sensor_max_y(self) -> float | None:
-        """Read current sensor max Y from the label widget's channel value."""
-        try:
-            return float(self.sensor_height_label.text())
-        except (ValueError, AttributeError):
-            return None
+    def _rbv_map(self) -> dict[str, float | None]:
+        """Map spinbox names to their current RBV label values."""
+        return {
+            "bin_x": self._rbv_value("bin_x_rbv_label"),
+            "bin_y": self._rbv_value("bin_y_rbv_label"),
+            "roi_x": self._rbv_value("roi_x_rbv_label"),
+            "roi_y": self._rbv_value("roi_y_rbv_label"),
+            "roi_width": self._rbv_value("roi_width_rbv_label"),
+            "roi_height": self._rbv_value("roi_height_rbv_label"),
+        }
 
+    def _spinbox_map(self) -> dict[str, int]:
+        """Map spinbox names to their current spinbox values."""
+        return {
+            "bin_x": self.bin_x_spinbox,
+            "bin_y": self.bin_y_spinbox,
+            "roi_x": self.roi_x_spinbox,
+            "roi_y": self.roi_y_spinbox,
+            "roi_width": self.roi_width_spinbox,
+            "roi_height": self.roi_height_spinbox,
+        }
+
+    def _sync_spinboxes_from_hardware(self):
+        """Set spinbox values from current RBV labels."""
+        rbv = self._rbv_map()
+
+        for key, spinbox in self._spinbox_map().items():
+            val = rbv.get(key)
+            if val is not None:
+                spinbox:QSpinBox
+                spinbox.blockSignals(True)
+                spinbox.setValue(int(val))
+                spinbox.blockSignals(False)
+
+    def _on_spinbox_edited(self, _value=None):
+        """Called on any spinbox valueChanged — sync bins, manage edit mode, update ROI."""
+        # handle syncing X and Y bins together
+        sender = self.sender()
+        if sender is self.bin_x_spinbox and self.sync_bins_checkbox.isChecked():
+            self.bin_y_spinbox.blockSignals(True)
+            self.bin_y_spinbox.setValue(self.bin_x_spinbox.value())
+            self.bin_y_spinbox.blockSignals(False)
+
+        #trigger edit mode if values are changed
+        if self._in_edit_mode:
+            self._sync_roi_from_spinboxes()
+        else:
+            self._enter_edit_mode()
 
     def _on_sync_toggled(self, checked: bool):
         self.bin_y_spinbox.setEnabled(not checked)
         if checked:
-            # Immediately sync Y to X
-            self.bin_y_spinbox.setValue(self.bin_x_spinbox.value)
-            self.bin_y_spinbox.send_value()
+            self.bin_y_spinbox.setValue(self.bin_x_spinbox.value())
 
-    def _maybe_auto_sync(self):
-        """If both bins have been read and are equal, enable sync checkbox."""
-        if self._bin_x_initialized and self._bin_y_initialized:
-            if self._last_bin_x == self._last_bin_y:
-                self.sync_bins_checkbox.setChecked(True)
+    # ── Confirm / Write ────────────────────────────────────────────────────
 
-    def _start_cooldown(self, _value=None):
-        """Disable controls for 2s after a PV write to let hardware apply."""
-        if self._in_crop_mode:
+    def _on_confirm(self):
+        """Initiate the confirm flow: read dependent PVs, then show dialog."""
+        prefix = self.get_cam_prefix()
+        if not prefix:
             return
+
+        # Collect which dependent PVs we need to read
+        dep_pvs = self._get_dependent_pv_names(prefix)
+        if not dep_pvs:
+            # No dependent PVs to read — go straight to dialog
+            self._show_confirm_dialog({})
+            return
+
+        # Launch background read, then show dialog on completion
         self._set_controls_enabled(False)
-        self._cooldown_timer.start()
+        self._read_worker = PVReadWorker(dep_pvs, parent=self)
+        self._read_worker.finished.connect(self._on_dep_reads_done)
+        self._read_worker.start()
 
-    def _on_cooldown_done(self):
-        """Re-enable controls after cooldown."""
-        if not self._in_crop_mode:
-            self._set_controls_enabled(True)
+    def _get_dependent_pv_names(self, prefix: str) -> list[str]:
+        """Determine which dependent PVs need reading based on current changes."""
+        rbv = self._rbv_map()
+        spinbox = self._spinbox_map()
+        pvs: list[str] = []
 
-    def _on_bin_x_changed(self, value):
-        if self.bin_x_spinbox.valueBeingSet:
-            # PV readback — just track value, don't send or sync
-            if value > 0:
-                self._last_bin_x = value
-                if not self._bin_x_initialized:
-                    self._bin_x_initialized = True
-                    self._maybe_auto_sync()
-            return
-        # User-initiated change
-        self._start_cooldown()
-        if self.sync_bins_checkbox.isChecked():
-            self.bin_y_spinbox.setValue(value)
-            self.bin_y_spinbox.send_value()
+        delta_x = spinbox["roi_x"] - int(rbv.get("roi_x") or 0)
+        delta_y = spinbox["roi_y"] - int(rbv.get("roi_y") or 0)
+        if delta_x != 0:
+            pvs.extend(f"{prefix}{s}" for s in self._dependent_pvs_x)
+        if delta_y != 0:
+            pvs.extend(f"{prefix}{s}" for s in self._dependent_pvs_y)
 
-    def _on_bin_y_changed(self, value):
-        if self.bin_y_spinbox.valueBeingSet:
-            # PV readback — just track value
-            if value > 0:
-                self._last_bin_y = value
-                if not self._bin_y_initialized:
-                    self._bin_y_initialized = True
-                    self._maybe_auto_sync()
-            return
-        # User-initiated or sync-driven change
-        self._start_cooldown()
+        old_bin_x = int(rbv.get("bin_x") or 1)
+        old_bin_y = int(rbv.get("bin_y") or 1)
+        if old_bin_x != spinbox["bin_x"]:
+            pvs.extend(f"{prefix}{s}" for s in self._dependent_pvs_size_x)
+        if old_bin_y != spinbox["bin_y"]:
+            pvs.extend(f"{prefix}{s}" for s in self._dependent_pvs_size_y)
 
-    def _on_bin_x_sent(self, new_bin_x: float):
-        """Rescale ROI X fields when BinX is sent, preserving physical sensor region."""
-        old_bin_x = self._last_bin_x
-        if new_bin_x <= 0 or old_bin_x <= 0:
-            return
-        if new_bin_x == old_bin_x:
-            return
-        ratio = old_bin_x / new_bin_x
-        # Write size first to avoid exceeding max frame
-        old_size_x = self.roi_width_spinbox.value or 0
-        old_min_x = self.roi_x_spinbox.value or 0
-        new_size_x = int(round(old_size_x * ratio))
-        new_min_x = int(round(old_min_x * ratio))
-        self.roi_width_spinbox.setValue(new_size_x)
-        self.roi_width_spinbox.send_value()
-        self.roi_x_spinbox.setValue(new_min_x)
-        self.roi_x_spinbox.send_value()
-        self._last_bin_x = new_bin_x
+        return pvs
 
-    def _on_bin_y_sent(self, new_bin_y: float):
-        """Rescale ROI Y fields when BinY is sent, preserving physical sensor region."""
-        old_bin_y = self._last_bin_y
-        if new_bin_y <= 0 or old_bin_y <= 0:
-            return
-        if new_bin_y == old_bin_y:
-            return
-        ratio = old_bin_y / new_bin_y
-        # Write size first to avoid exceeding max frame
-        old_size_y = self.roi_height_spinbox.value or 0
-        old_min_y = self.roi_y_spinbox.value or 0
-        new_size_y = int(round(old_size_y * ratio))
-        new_min_y = int(round(old_min_y * ratio))
-        self.roi_height_spinbox.setValue(new_size_y)
-        self.roi_height_spinbox.send_value()
-        self.roi_y_spinbox.setValue(new_min_y)
-        self.roi_y_spinbox.send_value()
-        self._last_bin_y = new_bin_y
-
-    def _enter_crop_mode(self):
-        """Enter crop mode: freeze controls, show ROI tools, default to move."""
-        self._in_crop_mode = True
-        self._draw_origin = None
-
-        # Freeze all editable controls
-        self._set_controls_enabled(False)
-
-        # Show tools row
-        self.roi_tools_row.setVisible(True)
-
-        # Set default ROI to full displayed image extent
-        self._set_roi_to_full_image()
-
-        # Default tool: move
-        self.move_button.setChecked(True)
-        self.center_button.setChecked(False)
-        self.draw_button.setChecked(False)
-        self.roi_rect.set_movable(True)
-        self.roi_rect.setVisible(True)
-
-    def _exit_crop_mode(self):
-        """Exit crop mode: hide ROI, re-enable controls."""
-        self._in_crop_mode = False
-        self._draw_origin = None
-
-        self.roi_rect.setVisible(False)
-        self.roi_rect.set_movable(False)
-        self.roi_tools_row.setVisible(False)
-        self.crop_button.setChecked(False)
-
+    def _on_dep_reads_done(self, read_values: dict[str, float | None]) -> None:
+        """Called when PVReadWorker finishes; show the confirmation dialog."""
         self._set_controls_enabled(True)
+        self._show_confirm_dialog(read_values)
+
+    def _show_confirm_dialog(self, dep_values: dict[str, float | None]) -> None:
+        """Build change list and present modal confirmation dialog."""
+        changes = self._build_change_list(dep_values)
+        if not changes:
+            self._exit_edit_mode()
+            return
+
+        dialog = CropConfirmDialog(changes, parent=self)
+        if dialog.exec_() != CropConfirmDialog.Accepted:
+            return
+
+        enabled = dialog.get_enabled_changes()
+        if not enabled:
+            return
+
+        write_seq = self._order_writes(enabled)
+        self._execute_writes(write_seq)
+
+    def _build_change_list(self, dep_values: dict[str, float | None]) -> list[ChangeEntry]:
+        """Build the full list of proposed changes (direct + dependent)."""
+        prefix = self.get_cam_prefix()
+        if not prefix:
+            return []
+
+        rbv = self._rbv_map()
+        spinbox = self._spinbox_map()
+        changes: list[ChangeEntry] = []
+
+        # Direct changes
+        self._collect_direct_changes(prefix, rbv, spinbox, changes)
+        # Dependent offset propagation
+        self._collect_offset_dependents(prefix, rbv, spinbox, dep_values, changes)
+        # Dependent bin-size scaling
+        self._collect_bin_dependents(prefix, rbv, spinbox, dep_values, changes)
+
+        return changes
+
+    def _collect_direct_changes(
+        self, prefix: str, rbv: dict, spinbox: dict, changes: list[ChangeEntry]
+    ) -> None:
+        pv_suffix = {
+            "bin_x": ":BinX", "bin_y": ":BinY",
+            "roi_x": ":MinX", "roi_y": ":MinY",
+            "roi_width": ":SizeX", "roi_height": ":SizeY",
+        }
+        for key, suffix in pv_suffix.items():
+            rbv_val = rbv.get(key)
+            sb_val = spinbox[key]
+            if rbv_val is not None and int(rbv_val) != sb_val:
+                changes.append(ChangeEntry(
+                    pv_name=f"{prefix}{suffix}",
+                    current_value=rbv_val,
+                    new_value=float(sb_val),
+                    category="bin" if "bin" in key else "roi",
+                ))
+
+    def _collect_offset_dependents(
+        self, prefix: str, rbv: dict, spinbox: dict,
+        dep_values: dict[str, float | None], changes: list[ChangeEntry],
+    ) -> None:
+        delta_x = spinbox["roi_x"] - int(rbv.get("roi_x") or 0)
+        delta_y = spinbox["roi_y"] - int(rbv.get("roi_y") or 0)
+
+        if delta_x != 0:
+            xform = CoordinateTransform.from_offset_change(delta_x)
+            self._append_dependent_pv_changes(
+                prefix, self._dependent_pvs_x, xform, dep_values, changes
+            )
+        if delta_y != 0:
+            xform = CoordinateTransform.from_offset_change(delta_y)
+            self._append_dependent_pv_changes(
+                prefix, self._dependent_pvs_y, xform, dep_values, changes
+            )
+
+    def _collect_bin_dependents(
+        self, prefix: str, rbv: dict, spinbox: dict,
+        dep_values: dict[str, float | None], changes: list[ChangeEntry],
+    ) -> None:
+        old_bin_x = rbv.get("bin_x") or 1
+        new_bin_x = spinbox["bin_x"]
+        old_bin_y = rbv.get("bin_y") or 1
+        new_bin_y = spinbox["bin_y"]
+
+        if int(old_bin_x) != new_bin_x:
+            xform = CoordinateTransform.from_bin_change(old_bin_x, new_bin_x)
+            self._append_dependent_pv_changes(
+                prefix, self._dependent_pvs_size_x, xform, dep_values, changes
+            )
+        if int(old_bin_y) != new_bin_y:
+            xform = CoordinateTransform.from_bin_change(old_bin_y, new_bin_y)
+            self._append_dependent_pv_changes(
+                prefix, self._dependent_pvs_size_y, xform, dep_values, changes
+            )
+
+    def _append_dependent_pv_changes(
+        self,
+        prefix: str,
+        suffixes: list[str],
+        xform: CoordinateTransform,
+        dep_values: dict[str, float | None],
+        changes: list[ChangeEntry],
+    ) -> None:
+        for suffix in suffixes:
+            pv = f"{prefix}{suffix}"
+            cur = dep_values.get(pv)
+            if cur is not None:
+                changes.append(ChangeEntry(
+                    pv_name=pv,
+                    current_value=cur,
+                    new_value=xform.forward(cur),
+                    category="dependent",
+                ))
+
+    def _order_writes(self, changes: list[ChangeEntry]) -> list[tuple[str, float]]:
+        """Sort changes into correct write order."""
+        prefix = self.get_cam_prefix()
+        # Priority order for direct PVs
+        order_keys = [
+            f"{prefix}:BinX", f"{prefix}:BinY",
+            f"{prefix}:SizeX", f"{prefix}:SizeY",
+            f"{prefix}:MinX", f"{prefix}:MinY",
+        ]
+
+        direct = []
+        dependent = []
+        for entry in changes:
+            if entry.category == "dependent":
+                dependent.append((entry.pv_name, entry.new_value))
+            else:
+                direct.append(entry)
+
+        # Sort direct by priority
+        def sort_key(e: ChangeEntry) -> int:
+            try:
+                return order_keys.index(e.pv_name)
+            except ValueError:
+                return len(order_keys)
+
+        direct.sort(key=sort_key)
+        result = [(e.pv_name, e.new_value) for e in direct]
+        result.extend(dependent)
+        return result
+
+    def _execute_writes(self, write_seq: list[tuple[str, float]]):
+        """Launch PVWriteWorker and disable controls during writes."""
+        self._set_controls_enabled(False)
+        self._write_worker = PVWriteWorker(write_seq, parent=self)
+        self._write_worker.finished_all.connect(self._on_writes_done)
+        self._write_worker.start()
+
+    def _on_writes_done(self, success: bool):
+        """Re-enable controls, sync spinboxes, and exit edit mode."""
+        self._set_controls_enabled(True)
+        if not success:
+            logger.warning("Some PV writes failed")
+        # Give hardware a moment, then sync and exit edit mode
+        from qtpy.QtCore import QTimer
+        QTimer.singleShot(500, self._after_write_sync)
+
+    def _after_write_sync(self):
+        self._sync_spinboxes_from_hardware()
+        self._exit_edit_mode()
 
     def _set_controls_enabled(self, enabled: bool):
-        """Enable/disable or toggle visibility all spinboxes and bin controls."""
-        for widget in (
-            self.bin_x_spinbox,
-            self.roi_x_spinbox,
-            self.roi_y_spinbox,
-            self.roi_width_spinbox,
-            self.roi_height_spinbox,
-            self.sync_bins_checkbox,
-        ):
-            widget.setEnabled(enabled)
-        # bin_y stays disabled when sync is on
+        for w in (self.bin_x_spinbox, self.bin_y_spinbox,
+                  self.roi_x_spinbox, self.roi_y_spinbox,
+                  self.roi_width_spinbox, self.roi_height_spinbox,
+                  self.sync_bins_checkbox,
+                  self.reset_roi_button, self.confirm_button,
+                  self.cancel_button, self.move_button, self.draw_button):
+            w.setEnabled(enabled)
         self.bin_y_spinbox.setEnabled(
             enabled and not self.sync_bins_checkbox.isChecked()
         )
-        for widget in (
-            self.crop_button,
-            self.reset_roi_button,
-        ):
-            widget.setVisible(enabled)
 
-    def _set_roi_to_full_image(self):
-        """Set the ROI rect to cover the entire currently-displayed image."""
-        # SizeX/SizeY are already in binned units = displayed pixel count
-        size_x = self.roi_width_spinbox.value or 0
-        size_y = self.roi_height_spinbox.value or 0
+    # ── Reset (full sensor) ───────────────────────────────────────────────
 
-        if size_x > 0 and size_y > 0:
-            self.roi_rect.set_geometry_from_corner(0, 0, size_x, size_y)
+    def _on_reset(self):
+        """Set spinboxes to bin=1, full sensor and go straight to confirm."""
+        sensor_w = self._rbv_value("sensor_width_label")
+        sensor_h = self._rbv_value("sensor_height_label")
+
+        self.bin_x_spinbox.blockSignals(True)
+        self.bin_y_spinbox.blockSignals(True)
+        self.roi_x_spinbox.blockSignals(True)
+        self.roi_y_spinbox.blockSignals(True)
+        self.roi_width_spinbox.blockSignals(True)
+        self.roi_height_spinbox.blockSignals(True)
+
+        self.bin_x_spinbox.setValue(1)
+        self.bin_y_spinbox.setValue(1)
+        self.roi_x_spinbox.setValue(0)
+        self.roi_y_spinbox.setValue(0)
+        if sensor_w is not None:
+            self.roi_width_spinbox.setValue(int(sensor_w))
+        if sensor_h is not None:
+            self.roi_height_spinbox.setValue(int(sensor_h))
+
+        self.bin_x_spinbox.blockSignals(False)
+        self.bin_y_spinbox.blockSignals(False)
+        self.roi_x_spinbox.blockSignals(False)
+        self.roi_y_spinbox.blockSignals(False)
+        self.roi_width_spinbox.blockSignals(False)
+        self.roi_height_spinbox.blockSignals(False)
+
+        # Skip edit mode — go straight to confirm
+        if self._has_unsaved_changes():
+            self._on_confirm()
         else:
-            self.roi_rect.set_geometry_from_corner(0, 0, 1, 1)
+            # Already at full sensor; nothing to do
+            self._sync_spinboxes_from_hardware()
 
+    # ── Cancel ─────────────────────────────────────────────────────────────
+
+    def _on_cancel(self):
+        """Revert spinboxes to RBV and exit edit mode."""
+        self._sync_spinboxes_from_hardware()
+        self._exit_edit_mode()
+
+    # ── Edit Mode ──────────────────────────────────────────────────────────
+
+    def _enter_edit_mode(self):
+        if self._in_edit_mode:
+            return
+        self._in_edit_mode = True
+
+        # Capture RBV snapshot for ROI ↔ spinbox coordinate mapping
+        rbv = self._rbv_map()
+        self._rbv_snapshot = {
+            k: int(v) if v is not None else 0 for k, v in rbv.items()
+        }
+
+        # Show action buttons, hide trash
+        self.confirm_button.setVisible(True)
+        self.cancel_button.setVisible(True)
+        self.reset_roi_button.setVisible(False)
+
+        # Show ROI synced to current spinbox values
+        self._sync_roi_from_spinboxes()
+        self.roi_rect.setVisible(True)
+
+    def _exit_edit_mode(self):
+        if not self._in_edit_mode:
+            return
+        self._in_edit_mode = False
+        self._draw_origin = None
+        self._rbv_snapshot = {}
+
+        # Hide ROI and action buttons, show trash
+        self.roi_rect.setVisible(False)
+        self.roi_rect.set_movable(False)
+        self.confirm_button.setVisible(False)
+        self.cancel_button.setVisible(False)
+        self.reset_roi_button.setVisible(True)
+
+        # Deselect tools
+        self.move_button.setChecked(False)
+        self.draw_button.setChecked(False)
+
+    # ── ROI ↔ Spinbox Sync ─────────────────────────────────────────────────
+
+    def _sync_roi_from_spinboxes(self):
+        """Update ROI rect geometry from current spinbox values.
+
+        ROI position is relative to the displayed image; the displayed image
+        corresponds to the RBV snapshot captured on edit-mode entry.
+        """
+        if self._syncing_roi:
+            return
+        self._syncing_roi = True
+        try:
+            snap = self._rbv_snapshot
+            roi_x = self.roi_x_spinbox.value() - snap.get("roi_x", 0)
+            roi_y = self.roi_y_spinbox.value() - snap.get("roi_y", 0)
+            roi_w = self.roi_width_spinbox.value()
+            roi_h = self.roi_height_spinbox.value()
+            if roi_w > 0 and roi_h > 0:
+                self.roi_rect.set_geometry_from_corner(roi_x, roi_y, roi_w, roi_h)
+        finally:
+            self._syncing_roi = False
+
+    def _on_roi_changed(self):
+        """Called when ROI is moved/resized interactively — update spinboxes."""
+        if self._syncing_roi:
+            return
+        self._syncing_roi = True
+        try:
+            roi_x, roi_y, roi_w, roi_h = self.roi_rect.get_geometry_wrt_corner()
+            snap = self._rbv_snapshot
+
+            new_min_x = int(round(snap.get("roi_x", 0) + roi_x))
+            new_min_y = int(round(snap.get("roi_y", 0) + roi_y))
+            new_w = int(round(roi_w))
+            new_h = int(round(roi_h))
+
+            for sb, val in [
+                (self.roi_x_spinbox, new_min_x),
+                (self.roi_y_spinbox, new_min_y),
+                (self.roi_width_spinbox, new_w),
+                (self.roi_height_spinbox, new_h),
+            ]:
+                sb.blockSignals(True)
+                sb.setValue(val)
+                sb.blockSignals(False)
+        finally:
+            self._syncing_roi = False
+
+    # ── Tool Toggles ──────────────────────────────────────────────────────
 
     def _on_move_toggle(self):
-        self.move_button.setChecked(True)
-        self.center_button.setChecked(False)
-        self.draw_button.setChecked(False)
-        self._draw_origin = None
-        self.roi_rect.set_movable(True)
-
-    def _on_center_toggle(self):
-        self.center_button.setChecked(True)
-        self.move_button.setChecked(False)
-        self.draw_button.setChecked(False)
-        self._draw_origin = None
-        self.roi_rect.set_movable(False)
+        if self.move_button.isChecked():
+            self.draw_button.setChecked(False)
+            self._draw_origin = None
+            if not self._in_edit_mode:
+                self._enter_edit_mode()
+            self.roi_rect.set_movable(True)
+        else:
+            self.roi_rect.set_movable(False)
+            if not self._has_unsaved_changes():
+                self._exit_edit_mode()
 
     def _on_draw_toggle(self):
-        self.draw_button.setChecked(True)
-        self.move_button.setChecked(False)
-        self.center_button.setChecked(False)
-        self._draw_origin = None
-        self.roi_rect.set_movable(False)
+        if self.draw_button.isChecked():
+            self.move_button.setChecked(False)
+            self._draw_origin = None
+            self.roi_rect.set_movable(False)
+            if not self._in_edit_mode:
+                self._enter_edit_mode()
+        else:
+            self._draw_origin = None
+            if not self._has_unsaved_changes():
+                self._exit_edit_mode()
+
+    # ── Scene Interaction ──────────────────────────────────────────────────
 
     def _on_scene_clicked(self, event):
-        if not self._in_crop_mode:
+        if not self._in_edit_mode:
+            return
+        if not self.draw_button.isChecked():
             return
         if event.button() != Qt.LeftButton:
             return
@@ -354,72 +630,65 @@ class CropAndBinFull(CropAndBinFullBase):
         scene_pos = event.scenePos()
         data_pos = self._view_box.mapSceneToView(scene_pos)
 
-        if self.draw_button.isChecked():
-            if self._draw_origin is None:
-                self._draw_origin = data_pos
-                self.roi_rect.setPos(data_pos.x(), data_pos.y())
-                self.roi_rect.setSize([1, 1])
-            else:
-                self.roi_rect.set_from_corners(self._draw_origin, data_pos)
-                self._draw_origin = None
-            event.accept()
-        elif self.center_button.isChecked():
-            self.roi_rect.move_center_to(data_pos)
-            event.accept()
+        if self._draw_origin is None:
+            self._draw_origin = data_pos
+            self.roi_rect.setPos(data_pos.x(), data_pos.y())
+            self.roi_rect.setSize([1, 1])
+        else:
+            self.roi_rect.set_from_corners(self._draw_origin, data_pos)
+            self._draw_origin = None
+            # Sync spinboxes from the drawn rectangle
+            self._on_roi_changed()
+        event.accept()
 
     def _on_scene_moved(self, scene_pos):
-        if not self._in_crop_mode:
+        if not self._in_edit_mode:
             return
         if self._draw_origin is not None:
             data_pos = self._view_box.mapSceneToView(scene_pos)
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
 
+    # ── Designer Properties ────────────────────────────────────────────────
 
-    def _on_confirm(self):
-        """Write drawn ROI to PVs. Drawn coords are in binned-pixel units."""
-        drawn_x, drawn_y, drawn_w, drawn_h = self.roi_rect.get_geometry_wrt_corner()
+    def get_dependent_pvs_x(self) -> list[str]:
+        return self._dependent_pvs_x
 
-        # The ROI overlay is on the displayed (binned) image, so drawn
-        # coordinates are already in binned units. Offset by current MinX/MinY
-        # to get the new absolute position in binned coords.
-        old_min_x = self.roi_x_spinbox.value or 0
-        old_min_y = self.roi_y_spinbox.value or 0
+    def set_dependent_pvs_x(self, value: list[str]) -> None:
+        self._dependent_pvs_x = value if value else []
 
-        new_min_x = int(round(old_min_x + drawn_x))
-        new_min_y = int(round(old_min_y + drawn_y))
-        new_size_x = int(round(drawn_w))
-        new_size_y = int(round(drawn_h))
+    dependent_pvs_x = pyqtProperty("QStringList", get_dependent_pvs_x, set_dependent_pvs_x)
 
-        # Exit crop mode first (re-enables spinboxes for writing)
-        self._exit_crop_mode()
+    def get_dependent_pvs_y(self) -> list[str]:
+        return self._dependent_pvs_y
 
-        # Write size first, then position to avoid exceeding max
-        self.roi_width_spinbox.setValue(new_size_x)
-        self.roi_width_spinbox.send_value()
-        self.roi_height_spinbox.setValue(new_size_y)
-        self.roi_height_spinbox.send_value()
-        self.roi_x_spinbox.setValue(new_min_x)
-        self.roi_x_spinbox.send_value()
-        self.roi_y_spinbox.setValue(new_min_y)
-        self.roi_y_spinbox.send_value()
+    def set_dependent_pvs_y(self, value: list[str]) -> None:
+        self._dependent_pvs_y = value if value else []
 
-    def _on_cancel(self):
-        """Discard crop selection and return to normal mode."""
-        self._exit_crop_mode()
+    dependent_pvs_y = pyqtProperty("QStringList", get_dependent_pvs_y, set_dependent_pvs_y)
 
-    def get_sensor_max_x_suffix(self) -> str:
-        return self._sensor_max_x_suffix
+    def get_dependent_pvs_size_x(self) -> list[str]:
+        return self._dependent_pvs_size_x
 
-    def set_sensor_max_x_suffix(self, value: str) -> None:
-        self._sensor_max_x_suffix = value
+    def set_dependent_pvs_size_x(self, value: list[str]) -> None:
+        self._dependent_pvs_size_x = value if value else []
 
-    sensor_max_x_suffix = pyqtProperty(str, get_sensor_max_x_suffix, set_sensor_max_x_suffix)
+    dependent_pvs_size_x = pyqtProperty("QStringList", get_dependent_pvs_size_x, set_dependent_pvs_size_x)
 
-    def get_sensor_max_y_suffix(self) -> str:
-        return self._sensor_max_y_suffix
+    def get_dependent_pvs_size_y(self) -> list[str]:
+        return self._dependent_pvs_size_y
 
-    def set_sensor_max_y_suffix(self, value: str) -> None:
-        self._sensor_max_y_suffix = value
+    def set_dependent_pvs_size_y(self, value: list[str]) -> None:
+        self._dependent_pvs_size_y = value if value else []
 
-    sensor_max_y_suffix = pyqtProperty(str, get_sensor_max_y_suffix, set_sensor_max_y_suffix)
+    dependent_pvs_size_y = pyqtProperty("QStringList", get_dependent_pvs_size_y, set_dependent_pvs_size_y)
+
+    def get_crop_box_color(self) -> QColor:
+        return self._crop_box_color
+
+    def set_crop_box_color(self, color: QColor) -> None:
+        self._crop_box_color = QColor(color)
+        if self.roi_rect is not None:
+            self.roi_rect.change_pen(color=self._crop_box_color)
+
+    crop_box_color = pyqtProperty("QColor", get_crop_box_color, set_crop_box_color)
 

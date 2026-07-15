@@ -31,73 +31,71 @@ except ImportError:
 class CropAndBinFullBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
     bin_x_label: "QtWidgets.QLabel"
-    bin_x_spinbox: "PyDMSpinboxEnter"
+    bin_x_rbv_label: "PyDMLabel"
+    bin_x_spinbox: "QtWidgets.QSpinBox"
     bin_y_label: "QtWidgets.QLabel"
-    bin_y_spinbox: "PyDMSpinboxEnter"
+    bin_y_rbv_label: "PyDMLabel"
+    bin_y_spinbox: "QtWidgets.QSpinBox"
     cancel_button: "QtWidgets.QPushButton"
-    center_button: "QtWidgets.QPushButton"
     confirm_button: "QtWidgets.QPushButton"
-    crop_button: "QtWidgets.QPushButton"
     draw_button: "QtWidgets.QPushButton"
-    effective_height_label: "PyDMLabel"
-    effective_static_label: "QtWidgets.QLabel"
-    effective_width_label: "PyDMLabel"
     effective_x_sep_label: "QtWidgets.QLabel"
     move_button: "QtWidgets.QPushButton"
+    rbv_bin_sep_label: "QtWidgets.QLabel"
+    rbv_bin_sep_label_2: "QtWidgets.QLabel"
+    rbv_bin_sep_label_3: "QtWidgets.QLabel"
+    rbv_binxy_sep_label: "QtWidgets.QLabel"
+    rbv_xy_sep_label: "QtWidgets.QLabel"
     reset_roi_button: "QtWidgets.QPushButton"
     roi_height_label: "QtWidgets.QLabel"
-    roi_height_spinbox: "PyDMSpinboxEnter"
+    roi_height_rbv_label: "PyDMLabel"
+    roi_height_spinbox: "QtWidgets.QSpinBox"
     roi_tools_row: "QtWidgets.QWidget"
     roi_width_label: "QtWidgets.QLabel"
-    roi_width_spinbox: "PyDMSpinboxEnter"
+    roi_width_rbv_label: "PyDMLabel"
+    roi_width_spinbox: "QtWidgets.QSpinBox"
     roi_x_label: "QtWidgets.QLabel"
-    roi_x_spinbox: "PyDMSpinboxEnter"
+    roi_x_rbv_label: "PyDMLabel"
+    roi_x_spinbox: "QtWidgets.QSpinBox"
     roi_y_label: "QtWidgets.QLabel"
-    roi_y_spinbox: "PyDMSpinboxEnter"
+    roi_y_rbv_label: "PyDMLabel"
+    roi_y_spinbox: "QtWidgets.QSpinBox"
     sensor_height_label: "PyDMLabel"
-    sensor_static_label: "QtWidgets.QLabel"
     sensor_width_label: "PyDMLabel"
     sensor_x_sep_label: "QtWidgets.QLabel"
+    sensor_x_sep_label_2: "QtWidgets.QLabel"
     sync_bins_checkbox: "QtWidgets.QCheckBox"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "cam_prefix": [
-            "bin_x_spinbox",
-            "bin_y_spinbox",
-            "roi_x_spinbox",
-            "roi_y_spinbox",
-            "roi_width_spinbox",
-            "roi_height_spinbox",
             "sensor_width_label",
             "sensor_height_label",
-            "effective_width_label",
-            "effective_height_label",
+            "bin_y_rbv_label",
+            "bin_x_rbv_label",
+            "roi_x_rbv_label",
+            "roi_y_rbv_label",
+            "roi_width_rbv_label",
+            "roi_height_rbv_label",
         ],
     }
     _widget_to_macro = {
-        "bin_x_spinbox": [
+        "bin_x_rbv_label": [
             "cam_prefix",
         ],
-        "bin_y_spinbox": [
+        "bin_y_rbv_label": [
             "cam_prefix",
         ],
-        "effective_height_label": [
+        "roi_height_rbv_label": [
             "cam_prefix",
         ],
-        "effective_width_label": [
+        "roi_width_rbv_label": [
             "cam_prefix",
         ],
-        "roi_height_spinbox": [
+        "roi_x_rbv_label": [
             "cam_prefix",
         ],
-        "roi_width_spinbox": [
-            "cam_prefix",
-        ],
-        "roi_x_spinbox": [
-            "cam_prefix",
-        ],
-        "roi_y_spinbox": [
+        "roi_y_rbv_label": [
             "cam_prefix",
         ],
         "sensor_height_label": [
@@ -108,35 +106,29 @@ class CropAndBinFullBase(DesignerWidget):
         ],
     }
     _widget_to_pre_template = {
-        "bin_x_spinbox": [
-            ("channel", """${cam_prefix}:BinX"""),
+        "bin_x_rbv_label": [
+            ("channel", """${cam_prefix}:BinX_RBV"""),
         ],
-        "bin_y_spinbox": [
-            ("channel", """${cam_prefix}:BinY"""),
+        "bin_y_rbv_label": [
+            ("channel", """${cam_prefix}:BinY_RBV"""),
         ],
-        "effective_height_label": [
-            ("channel", """calc://eff_w?expr=A/B&A=${cam_prefix}:SizeX_RBV&B=${cam_prefix}:BinX_RBV"""),
+        "roi_height_rbv_label": [
+            ("channel", """${cam_prefix}:SizeY_RBV"""),
         ],
-        "effective_width_label": [
-            ("channel", """calc://eff_w?expr=A/B&A=${cam_prefix}:SizeX_RBV&B=${cam_prefix}:BinX_RBV"""),
+        "roi_width_rbv_label": [
+            ("channel", """${cam_prefix}:SizeX_RBV"""),
         ],
-        "roi_height_spinbox": [
-            ("channel", """${cam_prefix}:SizeY"""),
+        "roi_x_rbv_label": [
+            ("channel", """${cam_prefix}:MinX_RBV"""),
         ],
-        "roi_width_spinbox": [
-            ("channel", """${cam_prefix}:SizeX"""),
-        ],
-        "roi_x_spinbox": [
-            ("channel", """${cam_prefix}:MinX"""),
-        ],
-        "roi_y_spinbox": [
-            ("channel", """${cam_prefix}:MinY"""),
+        "roi_y_rbv_label": [
+            ("channel", """${cam_prefix}:MinY_RBV"""),
         ],
         "sensor_height_label": [
-            ("channel", """calc://eff_w?expr=A/B&A=${cam_prefix}:SizeX_RBV&B=${cam_prefix}:BinX_RBV"""),
+            ("channel", """${cam_prefix}:MaxSizeY_RBV"""),
         ],
         "sensor_width_label": [
-            ("channel", """calc://eff_w?expr=A/B&A=${cam_prefix}:SizeX_RBV&B=${cam_prefix}:BinX_RBV"""),
+            ("channel", """${cam_prefix}:MaxSizeX_RBV"""),
         ],
     }
 
