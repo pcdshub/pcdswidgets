@@ -28,8 +28,8 @@ from pcdswidgets.icons.glyphs import (
 )
 from pcdswidgets.imaging.common.cam_roi import CamROI
 from pcdswidgets.imaging.common.coordinate_transform import CoordinateTransform
-from pcdswidgets.imaging.common.crop_confirm_dialog import ChangeEntry, CropConfirmDialog
-from pcdswidgets.imaging.common.pv_write_worker import PVReadWorker, PVWriteWorker
+from pcdswidgets.imaging.common.batch_pv_writer import BatchPVWriterDialog, PVChange
+from pcdswidgets.imaging.common.pv_write_worker import PVReadWorker
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +85,6 @@ class CropAndBinFull(CropAndBinFullBase):
         self._view_box = None
         self._draw_origin: QPointF | None = None
         self._in_edit_mode = False
-        self._write_worker: PVWriteWorker | None = None
         self._read_worker: PVReadWorker | None = None
         self._syncing_roi = False  # guard for ROI ↔ spinbox feedback loop
 
@@ -291,18 +290,20 @@ class CropAndBinFull(CropAndBinFullBase):
             self._exit_edit_mode()
             return
 
-        dialog = CropConfirmDialog(changes, parent=self)
-        if dialog.exec_() != CropConfirmDialog.Accepted:
-            return
+        # Order changes for sequential write (bin -> size -> position -> dependent)
+        changes = self._order_change_list(changes)
 
-        enabled = dialog.get_enabled_changes()
-        if not enabled:
-            return
+        dialog = BatchPVWriterDialog(changes, parent=self)
+        result = dialog.exec_()
 
-        write_seq = self._order_writes(enabled)
-        self._execute_writes(write_seq)
+        # Dialog handles writes + verification internally.
+        # On accept (success or user chose continue), sync and exit.
+        # On reject (cancel or undo), just exit edit mode.
+        from qtpy.QtCore import QTimer
+        QTimer.singleShot(500, self._after_write_sync)
+        self._exit_edit_mode()
 
-    def _build_change_list(self, dep_values: dict[str, float | None]) -> list[ChangeEntry]:
+    def _build_change_list(self, dep_values: dict[str, float | None]) -> list[PVChange]:
         """Build the full list of proposed changes (direct + dependent)."""
         prefix = self.get_cam_prefix()
         if not prefix:
@@ -310,7 +311,7 @@ class CropAndBinFull(CropAndBinFullBase):
 
         rbv = self._rbv_map()
         spinbox = self._spinbox_map()
-        changes: list[ChangeEntry] = []
+        changes: list[PVChange] = []
 
         # Direct changes
         self._collect_direct_changes(prefix, rbv, spinbox, changes)
@@ -322,7 +323,7 @@ class CropAndBinFull(CropAndBinFullBase):
         return changes
 
     def _collect_direct_changes(
-        self, prefix: str, rbv: dict, spinbox: dict, changes: list[ChangeEntry]
+        self, prefix: str, rbv: dict, spinbox: dict, changes: list[PVChange]
     ) -> None:
         pv_suffix = {
             "bin_x": ":BinX", "bin_y": ":BinY",
@@ -333,16 +334,15 @@ class CropAndBinFull(CropAndBinFullBase):
             rbv_val = rbv.get(key)
             sb_val = spinbox[key]
             if rbv_val is not None and int(rbv_val) != sb_val:
-                changes.append(ChangeEntry(
+                changes.append(PVChange(
                     pv_name=f"{prefix}{suffix}",
                     current_value=rbv_val,
                     new_value=float(sb_val),
-                    category="bin" if "bin" in key else "roi",
                 ))
 
     def _collect_offset_dependents(
         self, prefix: str, rbv: dict, spinbox: dict,
-        dep_values: dict[str, float | None], changes: list[ChangeEntry],
+        dep_values: dict[str, float | None], changes: list[PVChange],
     ) -> None:
         delta_x = spinbox["roi_x"] - int(rbv.get("roi_x") or 0)
         delta_y = spinbox["roi_y"] - int(rbv.get("roi_y") or 0)
@@ -360,7 +360,7 @@ class CropAndBinFull(CropAndBinFullBase):
 
     def _collect_bin_dependents(
         self, prefix: str, rbv: dict, spinbox: dict,
-        dep_values: dict[str, float | None], changes: list[ChangeEntry],
+        dep_values: dict[str, float | None], changes: list[PVChange],
     ) -> None:
         old_bin_x = rbv.get("bin_x") or 1
         new_bin_x = spinbox["bin_x"]
@@ -384,21 +384,20 @@ class CropAndBinFull(CropAndBinFullBase):
         suffixes: list[str],
         xform: CoordinateTransform,
         dep_values: dict[str, float | None],
-        changes: list[ChangeEntry],
+        changes: list[PVChange],
     ) -> None:
         for suffix in suffixes:
             pv = f"{prefix}{suffix}"
             cur = dep_values.get(pv)
             if cur is not None:
-                changes.append(ChangeEntry(
+                changes.append(PVChange(
                     pv_name=pv,
                     current_value=cur,
                     new_value=xform.forward(cur),
-                    category="dependent",
                 ))
 
-    def _order_writes(self, changes: list[ChangeEntry]) -> list[tuple[str, float]]:
-        """Sort changes into correct write order."""
+    def _order_change_list(self, changes: list[PVChange]) -> list[PVChange]:
+        """Sort changes into correct write order: bin -> size -> position -> dependent."""
         prefix = self.get_cam_prefix()
         # Priority order for direct PVs
         order_keys = [
@@ -407,41 +406,13 @@ class CropAndBinFull(CropAndBinFullBase):
             f"{prefix}:MinX", f"{prefix}:MinY",
         ]
 
-        direct = []
-        dependent = []
-        for entry in changes:
-            if entry.category == "dependent":
-                dependent.append((entry.pv_name, entry.new_value))
-            else:
-                direct.append(entry)
-
-        # Sort direct by priority
-        def sort_key(e: ChangeEntry) -> int:
+        def sort_key(e: PVChange) -> int:
             try:
                 return order_keys.index(e.pv_name)
             except ValueError:
                 return len(order_keys)
 
-        direct.sort(key=sort_key)
-        result = [(e.pv_name, e.new_value) for e in direct]
-        result.extend(dependent)
-        return result
-
-    def _execute_writes(self, write_seq: list[tuple[str, float]]):
-        """Launch PVWriteWorker and disable controls during writes."""
-        self._set_controls_enabled(False)
-        self._write_worker = PVWriteWorker(write_seq, parent=self)
-        self._write_worker.finished_all.connect(self._on_writes_done)
-        self._write_worker.start()
-
-    def _on_writes_done(self, success: bool):
-        """Re-enable controls, sync spinboxes, and exit edit mode."""
-        self._set_controls_enabled(True)
-        if not success:
-            logger.warning("Some PV writes failed")
-        # Give hardware a moment, then sync and exit edit mode
-        from qtpy.QtCore import QTimer
-        QTimer.singleShot(500, self._after_write_sync)
+        return sorted(changes, key=sort_key)
 
     def _after_write_sync(self):
         self._sync_spinboxes_from_hardware()
