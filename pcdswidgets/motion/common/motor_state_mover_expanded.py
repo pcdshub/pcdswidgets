@@ -195,25 +195,14 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             form.addWidget(_row_label(label), row, 0)
             channel = f"ca://{self._motor}:{suffix}"
             if kind == "led":
-                form.addWidget(
-                    _bool_led(channel, error=label == "error"),
-                    row,
-                    1,
-                    QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
-                )
+                form.addWidget(_bool_bar(channel, error=label == "error"), row, 1)
             else:
                 form.addWidget(_signal_value(channel, as_string=kind == "string"), row, 1)
             row += 1
 
-        # reset_cmd: an indicator plus a Command push button
+        # reset_cmd: just the Command push button (the LED was redundant)
         form.addWidget(_row_label("reset_cmd"), row, 0)
-        cmd_wrap = QtWidgets.QWidget()
-        cmd_lay = QtWidgets.QHBoxLayout(cmd_wrap)
-        cmd_lay.setContentsMargins(0, 0, 0, 0)
-        cmd_lay.setSpacing(8)
-        cmd_lay.addWidget(_reset_indicator(f"ca://{self._motor}:{_RESET_SUFFIX}"))
-        cmd_lay.addWidget(_command_button(f"ca://{self._motor}:{_RESET_SUFFIX}"), 1)
-        form.addWidget(cmd_wrap, row, 1)
+        form.addWidget(_command_button(f"ca://{self._motor}:{_RESET_SUFFIX}"), row, 1)
 
         self._normal_layout.addWidget(panel)
         self._normal_layout.addStretch(1)
@@ -348,31 +337,43 @@ def _signal_value(channel: str, as_string: bool = False) -> PyDMLabel:
 
 
 def _bool_led(channel: str, error: bool = False) -> PyDMByteIndicator:
+    # Full-width horizontal bar (like the Typhos expert screens), not a circle.
     ind = PyDMByteIndicator()
-    ind.setFixedSize(18, 18)
     ind.numBits = 1
-    ind.circles = True
+    ind.circles = False
     ind.showLabels = False
+    ind.orientation = QtCore.Qt.Horizontal
     ind.alarmSensitiveContent = False
     ind.alarmSensitiveBorder = False
     ind.onColor = QtGui.QColor(220, 40, 40) if error else QtGui.QColor(0, 192, 0)
     ind.offColor = QtGui.QColor(183, 183, 183)
+    ind.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    ind.setMinimumHeight(26)
     ind.channel = channel
     return ind
 
 
-def _reset_indicator(channel: str) -> PyDMByteIndicator:
-    ind = PyDMByteIndicator()
-    ind.setFixedSize(18, 18)
-    ind.numBits = 1
-    ind.circles = True
-    ind.showLabels = False
-    ind.alarmSensitiveContent = False
-    ind.alarmSensitiveBorder = False
-    ind.onColor = QtGui.QColor(0, 192, 0)
-    ind.offColor = QtGui.QColor(80, 80, 80)
-    ind.channel = channel
-    return ind
+def _bool_bar(channel: str, error: bool = False) -> QtWidgets.QWidget:
+    # Colored bar with the value shown as text on top, matching the Typhos
+    # expert screens. The byte indicator supplies the color; a transparent
+    # PyDMLabel overlaid in the same grid cell supplies the value text.
+    container = QtWidgets.QWidget()
+    container.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    container.setMinimumHeight(26)
+    stack = QtWidgets.QGridLayout(container)
+    stack.setContentsMargins(0, 0, 0, 0)
+
+    bar = _bool_led(channel, error=error)
+    value = PyDMLabel()
+    value.setFont(_bold(10))
+    value.setAlignment(QtCore.Qt.AlignCenter)
+    value.setStyleSheet("PyDMLabel { color: white; background: transparent; }")
+    value.channel = channel
+
+    stack.addWidget(bar, 0, 0)
+    stack.addWidget(value, 0, 0)
+    value.raise_()
+    return container
 
 
 def _command_button(channel: str) -> PyDMPushButton:
