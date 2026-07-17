@@ -76,7 +76,7 @@ class MotorStateMoverBase(DesignerWidget):
             ("channel", "ca://${MOTOR}:STATE:RESET"),
         ],
         "errorStatus": [
-            ("channel", "ca://${MOTOR}:STATE:ERRID_RBV"),
+            ("channel", "ca://${MOTOR}:STATE:ERRMSG_RBV"),
         ],
         "expertScreenButton": [
             (
@@ -87,7 +87,7 @@ class MotorStateMoverBase(DesignerWidget):
             ),
         ],
         "movingIndicator": [
-            ("channel", "ca://${MOTOR}:STATE:DONE_RBV"),
+            ("channel", "ca://${MOTOR}:STATE:BUSY_RBV"),
         ],
         "stateReadback": [
             ("channel", "ca://${MOTOR}:STATE:GET_RBV"),

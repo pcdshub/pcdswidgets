@@ -30,6 +30,7 @@ with ``{NN}`` the zero-padded 2-digit state index and ``{leaf}`` one of
 from __future__ import annotations
 
 from pydm.widgets.byte import PyDMByteIndicator
+from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
@@ -50,14 +51,15 @@ _CELL_TXT = "rgb(51, 51, 51)"
 _CELL_BG = "rgb(244, 244, 244)"
 _CELL_BD = "rgb(201, 201, 201)"
 
-# "Normal" tab device signals: (row label, PV suffix under ${MOTOR}).
-# NOTE: BUSY_RBV and ERRMSG_RBV are best-guess suffixes -- confirm against the IOC.
+# "Normal" tab device signals: (row label, PV suffix under ${MOTOR}, kind).
+# kind: "led" -> boolean rendered as an LED indicator; "text" -> numeric text;
+#       "string" -> char waveform decoded and shown as a string.
 _NORMAL_SIGNALS = (
-    ("busy", "STATE:BUSY_RBV"),
-    ("done", "STATE:DONE_RBV"),
-    ("error", "STATE:ERR_RBV"),
-    ("error_id", "STATE:ERRID_RBV"),
-    ("error_message", "STATE:ERRMSG_RBV"),
+    ("busy", "STATE:BUSY_RBV", "led"),
+    ("done", "STATE:DONE_RBV", "led"),
+    ("error", "STATE:ERR_RBV", "led"),
+    ("error_id", "STATE:ERRID_RBV", "text"),
+    ("error_message", "STATE:ERRMSG_RBV", "string"),
 )
 _RESET_SUFFIX = "STATE:RESET"
 
@@ -189,9 +191,18 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         form.setColumnStretch(1, 1)
 
         row = 0
-        for label, suffix in _NORMAL_SIGNALS:
+        for label, suffix, kind in _NORMAL_SIGNALS:
             form.addWidget(_row_label(label), row, 0)
-            form.addWidget(_signal_value(f"ca://{self._motor}:{suffix}"), row, 1)
+            channel = f"ca://{self._motor}:{suffix}"
+            if kind == "led":
+                form.addWidget(
+                    _bool_led(channel, error=label == "error"),
+                    row,
+                    1,
+                    QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                )
+            else:
+                form.addWidget(_signal_value(channel, as_string=kind == "string"), row, 1)
             row += 1
 
         # reset_cmd: an indicator plus a Command push button
@@ -318,18 +329,36 @@ def _row_label(text: str) -> QtWidgets.QLabel:
     return lab
 
 
-def _signal_value(channel: str) -> PyDMLabel:
+def _signal_value(channel: str, as_string: bool = False) -> PyDMLabel:
     lab = PyDMLabel()
     lab.setFont(_plain(10))
     lab.setMinimumHeight(26)
     lab.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
     lab.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    if as_string:
+        # ERRMSG_RBV is a char waveform; decode it to a string instead of
+        # showing the raw array of character codes.
+        lab.displayFormat = DisplayFormat.String
     lab.setStyleSheet(
         f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
         f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
     )
     lab.channel = channel
     return lab
+
+
+def _bool_led(channel: str, error: bool = False) -> PyDMByteIndicator:
+    ind = PyDMByteIndicator()
+    ind.setFixedSize(18, 18)
+    ind.numBits = 1
+    ind.circles = True
+    ind.showLabels = False
+    ind.alarmSensitiveContent = False
+    ind.alarmSensitiveBorder = False
+    ind.onColor = QtGui.QColor(220, 40, 40) if error else QtGui.QColor(0, 192, 0)
+    ind.offColor = QtGui.QColor(183, 183, 183)
+    ind.channel = channel
+    return ind
 
 
 def _reset_indicator(channel: str) -> PyDMByteIndicator:
