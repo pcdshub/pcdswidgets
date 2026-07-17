@@ -276,7 +276,7 @@
               <string>color: rgb(17, 17, 17); background: transparent;</string>
              </property>
              <property name="text">
-              <string>moving</string>
+              <string>done</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
