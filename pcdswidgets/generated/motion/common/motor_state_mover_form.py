@@ -145,6 +145,7 @@ class Ui_Form(object):
         self.expertScreenButton.setShowIcon(False)
         self.expertScreenButton.setOpenInNewWindow(True)
         self.expertScreenButton.setFilenames(["motor_state_mover_expert.py"])
+        self.expertScreenButton.setMacros(["MOTOR=${MOTOR}"])
         self.expertScreenButton.setObjectName("expertScreenButton")
         self.mainRow.addWidget(self.expertScreenButton, 0, QtCore.Qt.AlignVCenter)
         self.frameLayout.addLayout(self.mainRow)

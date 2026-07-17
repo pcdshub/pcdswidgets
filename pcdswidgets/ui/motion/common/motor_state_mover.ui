@@ -437,6 +437,11 @@ Screen</string>
             <string>motor_state_mover_expert.py</string>
            </stringlist>
           </property>
+          <property name="macros">
+           <stringlist>
+            <string>MOTOR=${MOTOR}</string>
+           </stringlist>
+          </property>
          </widget>
         </item>
        </layout>

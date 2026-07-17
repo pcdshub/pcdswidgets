@@ -30,6 +30,7 @@ except ImportError:
 class MotorStateMoverBase(DesignerWidget):
     clearErrorButton: "PyDMPushButton"
     errorStatus: "PyDMLabel"
+    expertScreenButton: "PyDMRelatedDisplayButton"
     movingIndicator: "PyDMByteIndicator"
     stateReadback: "PyDMLabel"
     stateSelector: "PyDMEnumComboBox"
@@ -42,6 +43,7 @@ class MotorStateMoverBase(DesignerWidget):
             "movingIndicator",
             "stateReadback",
             "stateSelector",
+            "expertScreenButton",
             "errorStatus",
             "clearErrorButton",
         ],
@@ -51,6 +53,9 @@ class MotorStateMoverBase(DesignerWidget):
             "MOTOR",
         ],
         "errorStatus": [
+            "MOTOR",
+        ],
+        "expertScreenButton": [
             "MOTOR",
         ],
         "movingIndicator": [
@@ -72,6 +77,14 @@ class MotorStateMoverBase(DesignerWidget):
         ],
         "errorStatus": [
             ("channel", "ca://${MOTOR}:STATE:ERRID_RBV"),
+        ],
+        "expertScreenButton": [
+            (
+                "macros",
+                [
+                    "MOTOR=${MOTOR}",
+                ],
+            ),
         ],
         "movingIndicator": [
             ("channel", "ca://${MOTOR}:STATE:DONE_RBV"),
