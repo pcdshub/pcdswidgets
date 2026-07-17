@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
+    <width>680</width>
     <height>110</height>
    </rect>
   </property>
@@ -236,16 +236,16 @@
              </property>
              <property name="onColor">
               <color>
-               <red>60</red>
-               <green>60</green>
-               <blue>60</blue>
+               <red>20</red>
+               <green>100</green>
+               <blue>239</blue>
               </color>
              </property>
              <property name="offColor">
               <color>
-               <red>20</red>
-               <green>100</green>
-               <blue>239</blue>
+               <red>150</red>
+               <green>150</green>
+               <blue>150</blue>
               </color>
              </property>
              <property name="showLabels">
@@ -296,13 +296,13 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>220</width>
+            <width>170</width>
             <height>46</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>340</width>
+            <width>240</width>
             <height>46</height>
            </size>
           </property>
@@ -340,7 +340,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>150</width>
             <height>46</height>
            </size>
           </property>
