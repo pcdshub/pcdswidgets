@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>120</height>
+    <height>122</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,222 +67,222 @@
         <item alignment="Qt::AlignVCenter">
          <widget class="QWidget" name="statusIndicatorBox" native="true">
           <layout class="QVBoxLayout" name="statusIndicatorLayout">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item alignment="Qt::AlignHCenter">
-           <widget class="PyDMByteIndicator" name="statusIndicator">
-            <property name="minimumSize">
-             <size>
-              <width>36</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>36</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Green when the motor status is OK; red on error.</string>
-            </property>
-            <property name="whatsThis">
-             <string>Combined status indicator for the motor state group (STATE:ERR_RBV).</string>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>false</bool>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>false</bool>
-            </property>
-            <property name="PyDMToolTip">
-             <string/>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:STATE:ERR_RBV</string>
-            </property>
-            <property name="onColor">
-             <color>
-              <red>255</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="offColor">
-             <color>
-              <red>0</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="blinkOnChange">
-             <bool>false</bool>
-            </property>
-            <property name="toggleMode">
-             <bool>false</bool>
-            </property>
-            <property name="blinkInterval">
-             <number>99</number>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="bigEndian">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
-            <property name="numBits">
-             <number>1</number>
-            </property>
-            <property name="shift">
-             <number>0</number>
-            </property>
-            <property name="labels">
-             <stringlist>
-              <string>Bit 0</string>
-             </stringlist>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="statusIndicatorLabel">
-            <property name="styleSheet">
-             <string>color: rgb(17, 17, 17); background: transparent;</string>
-            </property>
-            <property name="text">
-             <string>ok</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="PyDMByteIndicator" name="statusIndicator">
+             <property name="minimumSize">
+              <size>
+               <width>36</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>36</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Green when the motor status is OK; red on error.</string>
+             </property>
+             <property name="whatsThis">
+              <string>Combined status indicator for the motor state group (STATE:ERR_RBV).</string>
+             </property>
+             <property name="alarmSensitiveContent">
+              <bool>false</bool>
+             </property>
+             <property name="alarmSensitiveBorder">
+              <bool>false</bool>
+             </property>
+             <property name="PyDMToolTip">
+              <string/>
+             </property>
+             <property name="channel">
+              <string>ca://${MOTOR}:STATE:ERR_RBV</string>
+             </property>
+             <property name="blinkOnChange">
+              <bool>false</bool>
+             </property>
+             <property name="toggleMode">
+              <bool>false</bool>
+             </property>
+             <property name="blinkInterval">
+              <number>99</number>
+             </property>
+             <property name="onColor">
+              <color>
+               <red>255</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </property>
+             <property name="offColor">
+              <color>
+               <red>0</red>
+               <green>255</green>
+               <blue>0</blue>
+              </color>
+             </property>
+             <property name="showLabels">
+              <bool>false</bool>
+             </property>
+             <property name="bigEndian">
+              <bool>false</bool>
+             </property>
+             <property name="circles">
+              <bool>true</bool>
+             </property>
+             <property name="numBits">
+              <number>1</number>
+             </property>
+             <property name="shift">
+              <number>0</number>
+             </property>
+             <property name="labels">
+              <stringlist>
+               <string>Bit 0</string>
+              </stringlist>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="statusIndicatorLabel">
+             <property name="styleSheet">
+              <string>color: rgb(17, 17, 17); background: transparent;</string>
+             </property>
+             <property name="text">
+              <string>ok</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
         <item alignment="Qt::AlignVCenter">
          <widget class="QWidget" name="movingIndicatorBox" native="true">
           <layout class="QVBoxLayout" name="movingIndicatorLayout">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item alignment="Qt::AlignHCenter">
-           <widget class="PyDMByteIndicator" name="movingIndicator">
-            <property name="minimumSize">
-             <size>
-              <width>36</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>36</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Blue while the motor is moving; dark when the move is done.</string>
-            </property>
-            <property name="whatsThis">
-             <string>Byte indicator that reflects motor movement state using STATE:DONE_RBV.</string>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>false</bool>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>false</bool>
-            </property>
-            <property name="PyDMToolTip">
-             <string/>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:STATE:DONE_RBV</string>
-            </property>
-            <property name="onColor">
-             <color>
-              <red>60</red>
-              <green>60</green>
-              <blue>60</blue>
-             </color>
-            </property>
-            <property name="offColor">
-             <color>
-              <red>20</red>
-              <green>100</green>
-              <blue>239</blue>
-             </color>
-            </property>
-            <property name="blinkOnChange">
-             <bool>false</bool>
-            </property>
-            <property name="toggleMode">
-             <bool>false</bool>
-            </property>
-            <property name="blinkInterval">
-             <number>99</number>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="bigEndian">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
-            <property name="numBits">
-             <number>1</number>
-            </property>
-            <property name="shift">
-             <number>0</number>
-            </property>
-            <property name="labels">
-             <stringlist>
-              <string>Bit 0</string>
-             </stringlist>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="movingIndicatorLabel">
-            <property name="styleSheet">
-             <string>color: rgb(17, 17, 17); background: transparent;</string>
-            </property>
-            <property name="text">
-             <string>moving</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item alignment="Qt::AlignHCenter">
+            <widget class="PyDMByteIndicator" name="movingIndicator">
+             <property name="minimumSize">
+              <size>
+               <width>36</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>36</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Blue while the motor is moving; dark when the move is done.</string>
+             </property>
+             <property name="whatsThis">
+              <string>Byte indicator that reflects motor movement state using STATE:DONE_RBV.</string>
+             </property>
+             <property name="alarmSensitiveContent">
+              <bool>false</bool>
+             </property>
+             <property name="alarmSensitiveBorder">
+              <bool>false</bool>
+             </property>
+             <property name="PyDMToolTip">
+              <string/>
+             </property>
+             <property name="channel">
+              <string>ca://${MOTOR}:STATE:BUSY_RBV</string>
+             </property>
+             <property name="blinkOnChange">
+              <bool>false</bool>
+             </property>
+             <property name="toggleMode">
+              <bool>false</bool>
+             </property>
+             <property name="blinkInterval">
+              <number>99</number>
+             </property>
+             <property name="onColor">
+              <color>
+               <red>60</red>
+               <green>60</green>
+               <blue>60</blue>
+              </color>
+             </property>
+             <property name="offColor">
+              <color>
+               <red>20</red>
+               <green>100</green>
+               <blue>239</blue>
+              </color>
+             </property>
+             <property name="showLabels">
+              <bool>false</bool>
+             </property>
+             <property name="bigEndian">
+              <bool>false</bool>
+             </property>
+             <property name="circles">
+              <bool>true</bool>
+             </property>
+             <property name="numBits">
+              <number>1</number>
+             </property>
+             <property name="shift">
+              <number>0</number>
+             </property>
+             <property name="labels">
+              <stringlist>
+               <string>Bit 0</string>
+              </stringlist>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="movingIndicatorLabel">
+             <property name="styleSheet">
+              <string>color: rgb(17, 17, 17); background: transparent;</string>
+             </property>
+             <property name="text">
+              <string>moving</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -426,21 +426,21 @@ PyDMEnumComboBox::down-arrow {
            <string>Expert
 Screen</string>
           </property>
-          <property name="showIcon">
-           <bool>false</bool>
-          </property>
-          <property name="openInNewWindow">
-           <bool>true</bool>
-          </property>
           <property name="filenames">
            <stringlist>
             <string>motor_state_mover_expert.py</string>
            </stringlist>
           </property>
+          <property name="showIcon">
+           <bool>false</bool>
+          </property>
           <property name="macros">
            <stringlist>
             <string>MOTOR=${MOTOR}</string>
            </stringlist>
+          </property>
+          <property name="openInNewWindow">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -486,10 +486,13 @@ Screen</string>
            <string>color: rgb(125, 125, 125); background: transparent;</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}:STATE:ERRID_RBV</string>
+           <string>ca://${MOTOR}:STATE:ERRMSG_RBV</string>
+          </property>
+          <property name="displayFormat">
+           <enum>PyDMLabel::String</enum>
           </property>
          </widget>
         </item>
