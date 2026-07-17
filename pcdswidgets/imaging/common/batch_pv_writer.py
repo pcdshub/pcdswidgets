@@ -102,6 +102,34 @@ class _UndoWorker(QThread):
         self.finished.emit(all_ok)
 
 
+class PVReadWorker(QThread):
+    """Batch-read a list of PVs in a background thread.
+
+    Signals
+    -------
+    finished : dict[str, float | None]
+        Emitted with mapping of pv_name -> value (None if read failed).
+    """
+
+    finished = Signal(object)
+
+    def __init__(self, pv_names: list[str], timeout: float = 2.0, parent=None):
+        super().__init__(parent)
+        self._pv_names = pv_names
+        self._timeout = timeout
+
+    def run(self) -> None:
+        results: dict[str, float | None] = {}
+        for pv_name in self._pv_names:
+            try:
+                val = epics.caget(pv_name, timeout=self._timeout)
+                results[pv_name] = float(val) if val is not None else None
+            except Exception:
+                logger.debug("caget failed for %s", pv_name)
+                results[pv_name] = None
+        self.finished.emit(results)
+
+
 class BatchPVWriterDialog(QDialog):
     """Modal dialog that previews, writes, verifies, and optionally undoes PV changes.
 

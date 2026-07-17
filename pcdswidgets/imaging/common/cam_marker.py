@@ -1,10 +1,14 @@
 """Managed point-of-interest marker for camera image overlays."""
 
+from __future__ import annotations
+
 from enum import IntEnum
 
 import pyqtgraph as pg
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
+
+from pcdswidgets.imaging.common.coordinate_transform import CoordinateTransform
 
 
 class MarkerStyle(IntEnum):
@@ -20,6 +24,12 @@ class CamMarker:
     Renders on a pyqtgraph ViewBox as either crosshairs of varying sizes
     or infinite (full-span) lines.  Wraps the graphic items so style
     changes preserve the marker position.
+
+    Supports optional coordinate transforms (transform_x / transform_y) that
+    map logical (sensor/spinbox) units to on-screen pixel coordinates. When
+    transforms are set, the x/y properties store and return logical values;
+    rendering uses the forward-transformed screen coordinates. If transforms
+    are not ready (PV-backed but no value received yet), rendering is suppressed.
 
     Parameters
     ----------
@@ -44,12 +54,63 @@ class CamMarker:
         self._style = style
         self._arm_length = arm_length
         self._hatch_pattern = hatch_pattern
-        self._x, self._y = 0.0, 0.0
+        self._x, self._y = 0.0, 0.0  # logical coordinates
         self._visible = False
         self._view_box = None
 
+        # Optional coordinate transforms (logical → screen)
+        self._transform_x: CoordinateTransform | None = None
+        self._transform_y: CoordinateTransform | None = None
+
         # Graphic items managed by this marker
         self._items: list[pg.GraphicsObject] = []
+
+    # ── Transform management ─────────────────────────────────────────────
+
+    @property
+    def transform_x(self) -> CoordinateTransform | None:
+        return self._transform_x
+
+    @transform_x.setter
+    def transform_x(self, xform: CoordinateTransform | None) -> None:
+        if self._transform_x is not None:
+            self._transform_x.values_changed.disconnect(self._on_transform_changed)
+        self._transform_x = xform
+        if xform is not None:
+            xform.values_changed.connect(self._on_transform_changed)
+
+    @property
+    def transform_y(self) -> CoordinateTransform | None:
+        return self._transform_y
+
+    @transform_y.setter
+    def transform_y(self, xform: CoordinateTransform | None) -> None:
+        if self._transform_y is not None:
+            self._transform_y.values_changed.disconnect(self._on_transform_changed)
+        self._transform_y = xform
+        if xform is not None:
+            xform.values_changed.connect(self._on_transform_changed)
+
+    def _on_transform_changed(self) -> None:
+        """Re-render from stored logical position when transform PVs update."""
+        self._update_positions()
+
+    def _transforms_ready(self) -> bool:
+        if self._transform_x is not None and not self._transform_x.ready:
+            return False
+        if self._transform_y is not None and not self._transform_y.ready:
+            return False
+        return True
+
+    def _screen_x(self) -> float:
+        if self._transform_x is not None:
+            return self._transform_x.forward(self._x)
+        return self._x
+
+    def _screen_y(self) -> float:
+        if self._transform_y is not None:
+            return self._transform_y.forward(self._y)
+        return self._y
 
     def attach(self, view_box) -> None:
         """Attach this marker to a pyqtgraph ViewBox."""
@@ -162,20 +223,32 @@ class CamMarker:
         self._items.clear()
 
     def _update_positions(self) -> None:
-        """Reposition items to the current center point."""
+        """Reposition items to the current center point (in screen coords)."""
         if not self._items:
             return
+        if not self._transforms_ready():
+            # Hide items until transforms are ready
+            for item in self._items:
+                item.setVisible(False)
+            return
+
+        # Ensure items are visible (in case they were hidden by not-ready)
+        for item in self._items:
+            item.setVisible(self._visible)
+
+        sx = self._screen_x()
+        sy = self._screen_y()
 
         if self._style == MarkerStyle.INFINITE_LINES:
-            self._items[0].setValue(self.y)  # horizontal
-            self._items[1].setValue(self.x)  # vertical
+            self._items[0].setValue(sy)  # horizontal
+            self._items[1].setValue(sx)  # vertical
         else:
             arm = float(self._arm_length)
             # 4 arm starting from center
-            self._items[0].setData([self.x, self.x - arm], [self.y, self.y])
-            self._items[1].setData([self.x, self.x + arm], [self.y, self.y])
-            self._items[2].setData([self.x, self.x], [self.y, self.y + arm])
-            self._items[3].setData([self.x, self.x], [self.y, self.y - arm])
+            self._items[0].setData([sx, sx - arm], [sy, sy])
+            self._items[1].setData([sx, sx + arm], [sy, sy])
+            self._items[2].setData([sx, sx], [sy, sy + arm])
+            self._items[3].setData([sx, sx], [sy, sy - arm])
 
     def _update_pens(self) -> None:
         """Apply current pen settings to all graphic items."""

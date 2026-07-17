@@ -1,5 +1,5 @@
 """
-QThread workers needed for sequential PV reads and writes via EPICS CA.
+QThread workers needed for sequential PV writes via EPICS CA.
 """
 
 from __future__ import annotations
@@ -10,34 +10,6 @@ import epics
 from qtpy.QtCore import QThread, Signal
 
 logger = logging.getLogger(__name__)
-
-
-class PVReadWorker(QThread):
-    """Batch-read a list of PVs in a background thread.
-
-    Signals
-    -------
-    finished : dict[str, float | None]
-        Emitted with mapping of pv_name -> value (None if read failed).
-    """
-
-    finished = Signal(object)
-
-    def __init__(self, pv_names: list[str], timeout: float = 2.0, parent=None):
-        super().__init__(parent)
-        self._pv_names = pv_names
-        self._timeout = timeout
-
-    def run(self) -> None:
-        results: dict[str, float | None] = {}
-        for pv_name in self._pv_names:
-            try:
-                val = epics.caget(pv_name, timeout=self._timeout)
-                results[pv_name] = float(val) if val is not None else None
-            except Exception:
-                logger.debug("caget failed for %s", pv_name)
-                results[pv_name] = None
-        self.finished.emit(results)
 
 
 class PVWriteWorker(QThread):

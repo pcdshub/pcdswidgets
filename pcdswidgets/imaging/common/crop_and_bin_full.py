@@ -26,10 +26,13 @@ from pcdswidgets.icons.glyphs import (
     TRASH,
     X_CIRCLE,
 )
+from pcdswidgets.imaging.common.batch_pv_writer import (
+    BatchPVWriterDialog,
+    PVChange,
+    PVReadWorker,
+)
 from pcdswidgets.imaging.common.cam_roi import CamROI
 from pcdswidgets.imaging.common.coordinate_transform import CoordinateTransform
-from pcdswidgets.imaging.common.batch_pv_writer import BatchPVWriterDialog, PVChange
-from pcdswidgets.imaging.common.pv_write_worker import PVReadWorker
 
 logger = logging.getLogger(__name__)
 
@@ -45,10 +48,10 @@ DEFAULT_DEP_SIZE_X = [":ROI1:SizeX"]
 DEFAULT_DEP_SIZE_Y = [":ROI1:SizeY"]
 
 # Default coordinate transform PVs (drawing overlays on the screen)
-DEFAULT_X_START ="IMAGE1:ROI:MinX_RBV"
-DEFAULT_Y_START = "IMAGE1:ROI:MinY_RBV"
-DEFAULT_BIN_X = ":IMAGE1:ROI:BinX"
-DEFAULT_BIN_Y = ":IMAGE1:ROI:BinY"
+DEFAULT_X_START = ["IMAGE1:ROI:MinX_RBV"]
+DEFAULT_Y_START = ["IMAGE1:ROI:MinY_RBV"]
+DEFAULT_BIN_X = [":IMAGE1:ROI:BinX"]
+DEFAULT_BIN_Y = [":IMAGE1:ROI:BinY"]
 
 
 class CropAndBinFull(CropAndBinFullBase):
@@ -86,7 +89,6 @@ class CropAndBinFull(CropAndBinFullBase):
         self._draw_origin: QPointF | None = None
         self._in_edit_mode = False
         self._read_worker: PVReadWorker | None = None
-        self._syncing_roi = False  # guard for ROI ↔ spinbox feedback loop
 
         # RBV snapshot captured on edit-mode entry
         self._rbv_snapshot: dict[str, int] = {}
@@ -96,6 +98,12 @@ class CropAndBinFull(CropAndBinFullBase):
         self._dependent_pvs_y: list[str] = list(DEFAULT_DEP_Y)
         self._dependent_pvs_size_x: list[str] = list(DEFAULT_DEP_SIZE_X)
         self._dependent_pvs_size_y: list[str] = list(DEFAULT_DEP_SIZE_Y)
+
+        # Coordinate transform PV suffixes (IMAGE1 display start/bin)
+        self._image_x_start_pv: str = DEFAULT_X_START
+        self._image_y_start_pv: str = DEFAULT_Y_START
+        self._image_bin_x_pv: str = DEFAULT_BIN_X
+        self._image_bin_y_pv: str = DEFAULT_BIN_Y
 
         self._crop_box_color: QColor = QColor(DEFAULT_CROP_BOX_COLOR)
         self.roi_rect = CamROI(self._crop_box_color, 2, self)
@@ -165,9 +173,10 @@ class CropAndBinFull(CropAndBinFullBase):
         self._view_box.scene().sigMouseMoved.connect(self._on_scene_moved)
 
     def after_set_macro(self, macro_name: str, value: str) -> None:
-        """Sync spinbox values from RBV labels once cam_prefix is set."""
+        """Sync spinbox values and build coordinate transforms once cam_prefix is set."""
         if macro_name == "cam_prefix" and value:
             self._sync_spinboxes_from_hardware()
+            self._build_roi_transforms(value)
 
     # ── RBV Helpers ────────────────────────────────────────────────────────
 
@@ -214,6 +223,60 @@ class CropAndBinFull(CropAndBinFullBase):
                 spinbox.blockSignals(True)
                 spinbox.setValue(int(val))
                 spinbox.blockSignals(False)
+
+    def _build_roi_transforms(self, prefix: str) -> None:
+        """Construct and connect the sensor -> screen transform pipeline on the CamROI.
+
+        The transform maps hardware ROI sensor coordinates to on-screen pixel
+        coordinates using the IMAGE1 display's start position and bin PVs:
+            screen_px = (sensor_px - start) / bin
+
+        Implemented as a two-stage pipeline per axis:
+          Stage 1: subtract start (offset_pv = start PV, negate_offset=True)
+          Stage 2: divide by bin (scale_pv = bin PV, invert_scale=True)
+        """
+        x_offset_pv = f"ca://{prefix}{self._image_x_start_pv}" if self._image_x_start_pv else ""
+        x_scale_pv = f"ca://{prefix}{self._image_bin_x_pv}" if self._image_bin_x_pv else ""
+        y_offset_pv = f"ca://{prefix}{self._image_y_start_pv}" if self._image_y_start_pv else ""
+        y_scale_pv = f"ca://{prefix}{self._image_bin_y_pv}" if self._image_bin_y_pv else ""
+
+        # Disconnect old transforms if any
+        if self.roi_rect.transform_x is not None:
+            self.roi_rect.transform_x.disconnect()
+        if self.roi_rect.transform_y is not None:
+            self.roi_rect.transform_y.disconnect()
+
+        # Stage 2: divide by bin (applied after stage 1)
+        bin_stage_x = CoordinateTransform(
+            scale_pv=x_scale_pv,
+            invert_scale=True,
+            parent=self,
+        )
+        bin_stage_y = CoordinateTransform(
+            scale_pv=y_scale_pv,
+            invert_scale=True,
+            parent=self,
+        )
+
+        # Stage 1: subtract start, then chain to stage 2
+        xform_x = CoordinateTransform(
+            offset_pv=x_offset_pv,
+            negate_offset=True,
+            stages=[bin_stage_x],
+            parent=self,
+        )
+        xform_y = CoordinateTransform(
+            offset_pv=y_offset_pv,
+            negate_offset=True,
+            stages=[bin_stage_y],
+            parent=self,
+        )
+
+        self.roi_rect.transform_x = xform_x
+        self.roi_rect.transform_y = xform_y
+
+        xform_x.connect()
+        xform_y.connect()
 
     def _on_spinbox_edited(self, _value=None):
         """Called on any spinbox valueChanged — sync bins, manage edit mode, update ROI."""
@@ -294,7 +357,7 @@ class CropAndBinFull(CropAndBinFullBase):
         changes = self._order_change_list(changes)
 
         dialog = BatchPVWriterDialog(changes, parent=self)
-        result = dialog.exec_()
+        dialog.exec_()
 
         # Dialog handles writes + verification internally.
         # On accept (success or user chose continue), sync and exit.
@@ -519,48 +582,46 @@ class CropAndBinFull(CropAndBinFullBase):
     def _sync_roi_from_spinboxes(self):
         """Update ROI rect geometry from current spinbox values.
 
-        ROI position is relative to the displayed image; the displayed image
-        corresponds to the RBV snapshot captured on edit-mode entry.
+        Spinbox values are in hardware ROI (sensor) pixel coordinates.
+        CamROI's transform pipeline handles mapping to screen coordinates.
         """
-        if self._syncing_roi:
-            return
-        self._syncing_roi = True
-        try:
-            snap = self._rbv_snapshot
-            roi_x = self.roi_x_spinbox.value() - snap.get("roi_x", 0)
-            roi_y = self.roi_y_spinbox.value() - snap.get("roi_y", 0)
-            roi_w = self.roi_width_spinbox.value()
-            roi_h = self.roi_height_spinbox.value()
-            if roi_w > 0 and roi_h > 0:
-                self.roi_rect.set_geometry_from_corner(roi_x, roi_y, roi_w, roi_h)
-        finally:
-            self._syncing_roi = False
+        roi_x = self.roi_x_spinbox.value()
+        roi_y = self.roi_y_spinbox.value()
+        roi_w = self.roi_width_spinbox.value()
+        roi_h = self.roi_height_spinbox.value()
+
+        if roi_w > 0 and roi_h > 0:
+            self.roi_rect.set_geometry_from_corner(roi_x, roi_y, roi_w, roi_h)
 
     def _on_roi_changed(self):
-        """Called when ROI is moved/resized interactively — update spinboxes."""
-        if self._syncing_roi:
-            return
-        self._syncing_roi = True
-        try:
-            roi_x, roi_y, roi_w, roi_h = self.roi_rect.get_geometry_wrt_corner()
-            snap = self._rbv_snapshot
+        """Called when ROI is moved/resized interactively — update spinboxes.
 
-            new_min_x = int(round(snap.get("roi_x", 0) + roi_x))
-            new_min_y = int(round(snap.get("roi_y", 0) + roi_y))
-            new_w = int(round(roi_w))
-            new_h = int(round(roi_h))
+        CamROI stores and returns logical (sensor) coordinates, so we read
+        them directly and update spinboxes.
+        """
+        # When ROI is moved interactively, update its logical geometry from screen
+        pos = self.roi_rect.pos()
+        size = self.roi_rect.size()
+        self.roi_rect.set_from_screen_pos_and_size(
+            pos.x(), pos.y(), size.x(), size.y()
+        )
 
-            for sb, val in [
-                (self.roi_x_spinbox, new_min_x),
-                (self.roi_y_spinbox, new_min_y),
-                (self.roi_width_spinbox, new_w),
-                (self.roi_height_spinbox, new_h),
-            ]:
-                sb.blockSignals(True)
-                sb.setValue(val)
-                sb.blockSignals(False)
-        finally:
-            self._syncing_roi = False
+        lx, ly, lw, lh = self.roi_rect.get_geometry_wrt_corner()
+
+        new_min_x = int(round(lx))
+        new_min_y = int(round(ly))
+        new_w = int(round(lw))
+        new_h = int(round(lh))
+
+        for sb, val in [
+            (self.roi_x_spinbox, new_min_x),
+            (self.roi_y_spinbox, new_min_y),
+            (self.roi_width_spinbox, new_w),
+            (self.roi_height_spinbox, new_h),
+        ]:
+            sb.blockSignals(True)
+            sb.setValue(val)
+            sb.blockSignals(False)
 
     # ── Tool Toggles ──────────────────────────────────────────────────────
 
@@ -608,8 +669,17 @@ class CropAndBinFull(CropAndBinFullBase):
         else:
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
             self._draw_origin = None
-            # Sync spinboxes from the drawn rectangle
-            self._on_roi_changed()
+            # Sync spinboxes from the drawn rectangle (logical values)
+            lx, ly, lw, lh = self.roi_rect.get_geometry_wrt_corner()
+            for sb, val in [
+                (self.roi_x_spinbox, int(round(lx))),
+                (self.roi_y_spinbox, int(round(ly))),
+                (self.roi_width_spinbox, int(round(lw))),
+                (self.roi_height_spinbox, int(round(lh))),
+            ]:
+                sb.blockSignals(True)
+                sb.setValue(val)
+                sb.blockSignals(False)
         event.accept()
 
     def _on_scene_moved(self, scene_pos):
@@ -652,6 +722,38 @@ class CropAndBinFull(CropAndBinFullBase):
         self._dependent_pvs_size_y = value if value else []
 
     dependent_pvs_size_y = pyqtProperty("QStringList", get_dependent_pvs_size_y, set_dependent_pvs_size_y)
+
+    def get_image_x_start_pv(self) -> str:
+        return self._image_x_start_pv
+
+    def set_image_x_start_pv(self, value: str) -> None:
+        self._image_x_start_pv = value if value else DEFAULT_X_START
+
+    image_x_start_pv = pyqtProperty(str, get_image_x_start_pv, set_image_x_start_pv)
+
+    def get_image_y_start_pv(self) -> str:
+        return self._image_y_start_pv
+
+    def set_image_y_start_pv(self, value: str) -> None:
+        self._image_y_start_pv = value if value else DEFAULT_Y_START
+
+    image_y_start_pv = pyqtProperty(str, get_image_y_start_pv, set_image_y_start_pv)
+
+    def get_image_bin_x_pv(self) -> str:
+        return self._image_bin_x_pv
+
+    def set_image_bin_x_pv(self, value: str) -> None:
+        self._image_bin_x_pv = value if value else DEFAULT_BIN_X
+
+    image_bin_x_pv = pyqtProperty(str, get_image_bin_x_pv, set_image_bin_x_pv)
+
+    def get_image_bin_y_pv(self) -> str:
+        return self._image_bin_y_pv
+
+    def set_image_bin_y_pv(self, value: str) -> None:
+        self._image_bin_y_pv = value if value else DEFAULT_BIN_Y
+
+    image_bin_y_pv = pyqtProperty(str, get_image_bin_y_pv, set_image_bin_y_pv)
 
     def get_crop_box_color(self) -> QColor:
         return self._crop_box_color
