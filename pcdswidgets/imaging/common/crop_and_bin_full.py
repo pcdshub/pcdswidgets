@@ -26,13 +26,8 @@ from pcdswidgets.icons.glyphs import (
     TRASH,
     X_CIRCLE,
 )
-from pcdswidgets.imaging.common.batch_pv_writer import (
-    BatchPVWriterDialog,
-    PVChange,
-    PVReadWorker,
-)
+from pcdswidgets.imaging.common.batch_pv_writer import BatchPVWriterDialog, PVChange
 from pcdswidgets.imaging.common.cam_roi import CamROI
-from pcdswidgets.imaging.common.coordinate_transform import CoordinateTransform
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +83,6 @@ class CropAndBinFull(CropAndBinFullBase):
         self._view_box = None
         self._draw_origin: QPointF | None = None
         self._in_edit_mode = False
-        self._read_worker: PVReadWorker | None = None
 
         # RBV snapshot captured on edit-mode entry
         self._rbv_snapshot: dict[str, int] = {}
@@ -148,7 +142,7 @@ class CropAndBinFull(CropAndBinFullBase):
         self.roi_width_spinbox.valueChanged.connect(self._on_spinbox_edited)
         self.roi_height_spinbox.valueChanged.connect(self._on_spinbox_edited)
 
-        # user changes ROI with MOVE
+        # track screen when user changes ROI when moving
         self.roi_rect.sigRegionChanged.connect(self._on_roi_changed)
 
     def link_parent_widgets(self, parent) -> None:
@@ -225,69 +219,27 @@ class CropAndBinFull(CropAndBinFullBase):
                 spinbox.blockSignals(False)
 
     def _build_roi_transforms(self, prefix: str) -> None:
-        """Construct and connect the sensor -> screen transform pipeline on the CamROI.
+        """Intialize the CoordinateTransform object and connect to the CamROI.
 
         The transform maps hardware ROI sensor coordinates to on-screen pixel
-        coordinates using the IMAGE1 display's start position and bin PVs:
-            screen_px = (sensor_px - start) / bin
+        coordinates by reading PVs for Bins and Offsets of upstream ADPlugins:
 
-        Implemented as a two-stage pipeline per axis:
-          Stage 1: subtract start (offset_pv = start PV, negate_offset=True)
-          Stage 2: divide by bin (scale_pv = bin PV, invert_scale=True)
+        Takes in a list for recursive transforms:
+            x1 = (x0 - xstart_1) / binpv_1
         """
-        x_offset_pv = f"ca://{prefix}{self._image_x_start_pv}" if self._image_x_start_pv else ""
-        x_scale_pv = f"ca://{prefix}{self._image_bin_x_pv}" if self._image_bin_x_pv else ""
-        y_offset_pv = f"ca://{prefix}{self._image_y_start_pv}" if self._image_y_start_pv else ""
-        y_scale_pv = f"ca://{prefix}{self._image_bin_y_pv}" if self._image_bin_y_pv else ""
-
-        # Disconnect old transforms if any
-        if self.roi_rect.transform_x is not None:
-            self.roi_rect.transform_x.disconnect()
-        if self.roi_rect.transform_y is not None:
-            self.roi_rect.transform_y.disconnect()
-
-        # Stage 2: divide by bin (applied after stage 1)
-        bin_stage_x = CoordinateTransform(
-            scale_pv=x_scale_pv,
-            invert_scale=True,
-            parent=self,
-        )
-        bin_stage_y = CoordinateTransform(
-            scale_pv=y_scale_pv,
-            invert_scale=True,
-            parent=self,
-        )
-
-        # Stage 1: subtract start, then chain to stage 2
-        xform_x = CoordinateTransform(
-            offset_pv=x_offset_pv,
-            negate_offset=True,
-            stages=[bin_stage_x],
-            parent=self,
-        )
-        xform_y = CoordinateTransform(
-            offset_pv=y_offset_pv,
-            negate_offset=True,
-            stages=[bin_stage_y],
-            parent=self,
-        )
-
-        self.roi_rect.transform_x = xform_x
-        self.roi_rect.transform_y = xform_y
-
-        xform_x.connect()
-        xform_y.connect()
+        return
+        #TODO
 
     def _on_spinbox_edited(self, _value=None):
-        """Called on any spinbox valueChanged — sync bins, manage edit mode, update ROI."""
-        # handle syncing X and Y bins together
+        """callback for any spinbox valueChanged"""
+
+        # handle syncing X and Y bins together if checked
         sender = self.sender()
         if sender is self.bin_x_spinbox and self.sync_bins_checkbox.isChecked():
             self.bin_y_spinbox.blockSignals(True)
             self.bin_y_spinbox.setValue(self.bin_x_spinbox.value())
             self.bin_y_spinbox.blockSignals(False)
 
-        #trigger edit mode if values are changed
         if self._in_edit_mode:
             self._sync_roi_from_spinboxes()
         else:
@@ -301,23 +253,16 @@ class CropAndBinFull(CropAndBinFullBase):
     # ── Confirm / Write ────────────────────────────────────────────────────
 
     def _on_confirm(self):
-        """Initiate the confirm flow: read dependent PVs, then show dialog."""
+        """Build change list and show the confirmation dialog.
+
+        The dialog handles reading current PV values itself.
+        """
         prefix = self.get_cam_prefix()
         if not prefix:
             return
 
-        # Collect which dependent PVs we need to read
-        dep_pvs = self._get_dependent_pv_names(prefix)
-        if not dep_pvs:
-            # No dependent PVs to read — go straight to dialog
-            self._show_confirm_dialog({})
-            return
+        self._show_confirm_dialog()
 
-        # Launch background read, then show dialog on completion
-        self._set_controls_enabled(False)
-        self._read_worker = PVReadWorker(dep_pvs, parent=self)
-        self._read_worker.finished.connect(self._on_dep_reads_done)
-        self._read_worker.start()
 
     def _get_dependent_pv_names(self, prefix: str) -> list[str]:
         """Determine which dependent PVs need reading based on current changes."""
@@ -346,9 +291,9 @@ class CropAndBinFull(CropAndBinFullBase):
         self._set_controls_enabled(True)
         self._show_confirm_dialog(read_values)
 
-    def _show_confirm_dialog(self, dep_values: dict[str, float | None]) -> None:
+    def _show_confirm_dialog(self) -> None:
         """Build change list and present modal confirmation dialog."""
-        changes = self._build_change_list(dep_values)
+        changes = self._build_change_list()
         if not changes:
             self._exit_edit_mode()
             return
@@ -366,7 +311,7 @@ class CropAndBinFull(CropAndBinFullBase):
         QTimer.singleShot(500, self._after_write_sync)
         self._exit_edit_mode()
 
-    def _build_change_list(self, dep_values: dict[str, float | None]) -> list[PVChange]:
+    def _build_change_list(self) -> list[PVChange]:
         """Build the full list of proposed changes (direct + dependent)."""
         prefix = self.get_cam_prefix()
         if not prefix:
@@ -379,9 +324,9 @@ class CropAndBinFull(CropAndBinFullBase):
         # Direct changes
         self._collect_direct_changes(prefix, rbv, spinbox, changes)
         # Dependent offset propagation
-        self._collect_offset_dependents(prefix, rbv, spinbox, dep_values, changes)
+        self._collect_offset_dependents(prefix, rbv, spinbox, changes)
         # Dependent bin-size scaling
-        self._collect_bin_dependents(prefix, rbv, spinbox, dep_values, changes)
+        self._collect_bin_dependents(prefix, rbv, spinbox, changes)
 
         return changes
 
@@ -399,31 +344,31 @@ class CropAndBinFull(CropAndBinFullBase):
             if rbv_val is not None and int(rbv_val) != sb_val:
                 changes.append(PVChange(
                     pv_name=f"{prefix}{suffix}",
-                    current_value=rbv_val,
-                    new_value=float(sb_val),
+                    change=float(sb_val - rbv_val),
+                    is_multiply=False,
                 ))
 
     def _collect_offset_dependents(
         self, prefix: str, rbv: dict, spinbox: dict,
-        dep_values: dict[str, float | None], changes: list[PVChange],
+        changes: list[PVChange],
     ) -> None:
         delta_x = spinbox["roi_x"] - int(rbv.get("roi_x") or 0)
         delta_y = spinbox["roi_y"] - int(rbv.get("roi_y") or 0)
 
         if delta_x != 0:
-            xform = CoordinateTransform.from_offset_change(delta_x)
             self._append_dependent_pv_changes(
-                prefix, self._dependent_pvs_x, xform, dep_values, changes
+                prefix, self._dependent_pvs_x,
+                change=float(delta_x), is_multiply=False, changes=changes,
             )
         if delta_y != 0:
-            xform = CoordinateTransform.from_offset_change(delta_y)
             self._append_dependent_pv_changes(
-                prefix, self._dependent_pvs_y, xform, dep_values, changes
+                prefix, self._dependent_pvs_y,
+                change=float(delta_y), is_multiply=False, changes=changes,
             )
 
     def _collect_bin_dependents(
         self, prefix: str, rbv: dict, spinbox: dict,
-        dep_values: dict[str, float | None], changes: list[PVChange],
+        changes: list[PVChange],
     ) -> None:
         old_bin_x = rbv.get("bin_x") or 1
         new_bin_x = spinbox["bin_x"]
@@ -431,33 +376,33 @@ class CropAndBinFull(CropAndBinFullBase):
         new_bin_y = spinbox["bin_y"]
 
         if int(old_bin_x) != new_bin_x:
-            xform = CoordinateTransform.from_bin_change(old_bin_x, new_bin_x)
+            scale = old_bin_x / new_bin_x if new_bin_x != 0 else 1.0
             self._append_dependent_pv_changes(
-                prefix, self._dependent_pvs_size_x, xform, dep_values, changes
+                prefix, self._dependent_pvs_size_x,
+                change=scale, is_multiply=True, changes=changes,
             )
         if int(old_bin_y) != new_bin_y:
-            xform = CoordinateTransform.from_bin_change(old_bin_y, new_bin_y)
+            scale = old_bin_y / new_bin_y if new_bin_y != 0 else 1.0
             self._append_dependent_pv_changes(
-                prefix, self._dependent_pvs_size_y, xform, dep_values, changes
+                prefix, self._dependent_pvs_size_y,
+                change=scale, is_multiply=True, changes=changes,
             )
 
     def _append_dependent_pv_changes(
         self,
         prefix: str,
         suffixes: list[str],
-        xform: CoordinateTransform,
-        dep_values: dict[str, float | None],
+        change: float,
+        is_multiply: bool,
         changes: list[PVChange],
     ) -> None:
         for suffix in suffixes:
             pv = f"{prefix}{suffix}"
-            cur = dep_values.get(pv)
-            if cur is not None:
-                changes.append(PVChange(
-                    pv_name=pv,
-                    current_value=cur,
-                    new_value=xform.forward(cur),
-                ))
+            changes.append(PVChange(
+                pv_name=pv,
+                change=change,
+                is_multiply=is_multiply,
+            ))
 
     def _order_change_list(self, changes: list[PVChange]) -> list[PVChange]:
         """Sort changes into correct write order: bin -> size -> position -> dependent."""

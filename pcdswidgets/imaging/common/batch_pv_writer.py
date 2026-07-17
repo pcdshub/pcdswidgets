@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import epics
 from qtpy.QtCore import Qt, QThread, Signal
@@ -26,12 +26,29 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class PVChange:
-    """One proposed PV write."""
+    """One proposed PV change.
 
+    Parameters
+    ----------
+    pv_name : str
+        EPICS PV to write.
+    change : float
+        Value to add (``is_multiply=False``) or multiply (``is_multiply=True``).
+    is_multiply : bool
+        If True, ``new = current * change``; otherwise ``new = current + change``.
+    """
     pv_name: str
-    current_value: float | None
-    new_value: float
+    change: float
+    is_multiply: bool = False
     enabled: bool = True
+    # Populated by BatchPVWriterDialog after reading
+    current_value: float | None = field(default=None, repr=False)
+    new_value: float | None = field(default=None, repr=False)
+
+    def compute_new_value(self, current: float) -> float:
+        if self.is_multiply:
+            return current * self.change
+        return current + self.change
 
 
 class _VerifyWorker(QThread):
@@ -157,13 +174,15 @@ class BatchPVWriterDialog(QDialog):
         self._checkboxes: list[QCheckBox] = []
         self._worker: _VerifyWorker | None = None
         self._undo_worker: _UndoWorker | None = None
+        self._read_worker: PVReadWorker | None = None
         self._build_ui()
+        self._start_reading()
 
     def _build_ui(self) -> None:
         layout = QVBoxLayout(self)
 
-        header = QLabel("<b>The following PVs will be written:</b>")
-        layout.addWidget(header)
+        self._header = QLabel("<b>Reading current PV values\u2026</b>")
+        layout.addWidget(self._header)
 
         # Table
         self._table = QTableWidget(len(self._changes), self.NUM_COLS)
@@ -192,19 +211,16 @@ class BatchPVWriterDialog(QDialog):
             # PV name
             self._table.setItem(row, self.COL_PV, QTableWidgetItem(entry.pv_name))
 
-            # Current value
-            cur_text = f"{entry.current_value:.0f}" if entry.current_value is not None else "?"
-            self._table.setItem(row, self.COL_CURRENT, QTableWidgetItem(cur_text))
+            # Current value (placeholder while reading)
+            self._table.setItem(row, self.COL_CURRENT, QTableWidgetItem("\u2026"))
 
             # Arrow
             arrow = QTableWidgetItem("\u2192")
             arrow.setTextAlignment(Qt.AlignCenter)
             self._table.setItem(row, self.COL_ARROW, arrow)
 
-            # New value
-            self._table.setItem(
-                row, self.COL_NEW, QTableWidgetItem(f"{entry.new_value:.0f}")
-            )
+            # New value (placeholder while reading)
+            self._table.setItem(row, self.COL_NEW, QTableWidgetItem("\u2026"))
 
             # Status (initially empty)
             self._table.setItem(row, self.COL_STATUS, QTableWidgetItem(""))
@@ -218,11 +234,38 @@ class BatchPVWriterDialog(QDialog):
 
         layout.addWidget(self._table)
 
-        # Buttons
+        # Buttons – OK disabled until reading completes
         self._buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self._buttons.button(QDialogButtonBox.Ok).setEnabled(False)
         self._buttons.accepted.connect(self._on_ok)
         self._buttons.rejected.connect(self.reject)
         layout.addWidget(self._buttons)
+
+    def _start_reading(self) -> None:
+        """Kick off background PV reads for all changes."""
+        pv_names = [c.pv_name for c in self._changes]
+        self._read_worker = PVReadWorker(pv_names, parent=self)
+        self._read_worker.finished.connect(self._on_read_done)
+        self._read_worker.start()
+
+    def _on_read_done(self, results: dict[str, float | None]) -> None:
+        """Populate current/new columns and enable OK."""
+        self._header.setText("<b>The following PVs will be written:</b>")
+
+        for row, entry in enumerate(self._changes):
+            cur = results.get(entry.pv_name)
+            entry.current_value = cur
+            cur_text = f"{cur:.0f}" if cur is not None else "?"
+            self._table.item(row, self.COL_CURRENT).setText(cur_text)
+
+            if cur is not None:
+                entry.new_value = entry.compute_new_value(cur)
+                self._table.item(row, self.COL_NEW).setText(f"{entry.new_value:.0f}")
+            else:
+                entry.new_value = None
+                self._table.item(row, self.COL_NEW).setText("?")
+
+        self._buttons.button(QDialogButtonBox.Ok).setEnabled(True)
 
     def _on_ok(self) -> None:
         """Write enabled PVs, verify, then close or offer undo."""
@@ -297,10 +340,10 @@ class BatchPVWriterDialog(QDialog):
         self.reject()
 
     def _get_enabled_changes(self) -> list[PVChange]:
-        """Return the list of changes the user has left checked."""
+        """Return the list of changes the user has left checked and readable."""
         result: list[PVChange] = []
         for entry, cb in zip(self._changes, self._checkboxes):
-            if cb.isChecked():
+            if cb.isChecked() and entry.new_value is not None:
                 result.append(entry)
         return result
 
