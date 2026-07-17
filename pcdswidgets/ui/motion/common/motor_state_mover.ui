@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>122</height>
+    <height>110</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,14 +86,14 @@
             <widget class="PyDMByteIndicator" name="statusIndicator">
              <property name="minimumSize">
               <size>
-               <width>36</width>
-               <height>36</height>
+               <width>32</width>
+               <height>32</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>36</width>
-               <height>36</height>
+               <width>32</width>
+               <height>32</height>
               </size>
              </property>
              <property name="toolTip">
@@ -197,14 +197,14 @@
             <widget class="PyDMByteIndicator" name="movingIndicator">
              <property name="minimumSize">
               <size>
-               <width>36</width>
-               <height>36</height>
+               <width>32</width>
+               <height>32</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>36</width>
-               <height>36</height>
+               <width>32</width>
+               <height>32</height>
               </size>
              </property>
              <property name="toolTip">
@@ -297,18 +297,18 @@
           <property name="minimumSize">
            <size>
             <width>220</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>340</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>22</pointsize>
+            <pointsize>20</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -341,18 +341,18 @@
           <property name="minimumSize">
            <size>
             <width>200</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <pointsize>16</pointsize>
            </font>
           </property>
           <property name="toolTip">
@@ -397,13 +397,13 @@ PyDMEnumComboBox::down-arrow {
           <property name="minimumSize">
            <size>
             <width>150</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>150</width>
-            <height>58</height>
+            <height>46</height>
            </size>
           </property>
           <property name="font">
