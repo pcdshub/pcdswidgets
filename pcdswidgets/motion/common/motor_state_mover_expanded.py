@@ -33,6 +33,7 @@ from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.label import PyDMLabel
+from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -67,10 +68,11 @@ _NORMAL_SIGNALS = (
     ("busy", "STATE:BUSY_RBV", "led"),
     ("done", "STATE:DONE_RBV", "led"),
     ("error", "STATE:ERR_RBV", "error_led"),
-    ("error_id", "STATE:ERRID_RBV", "text"),
+    ("error_id", "STATE:ERRID_RBV", "led"),
     ("error_message", "STATE:ERRMSG_RBV", "error_msg"),
 )
 _ERROR_SUFFIX = "STATE:ERR_RBV"
+_RESET_SUFFIX = "STATE:RESET"
 
 _TAB_STYLE = (
     "QTabWidget::pane { border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
@@ -225,6 +227,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                 widget = _signal_value(channel)
             form.addWidget(widget, row, 1)
             row += 1
+
+        # reset_cmd: the command button, kept but with no (redundant) label text
+        form.addWidget(_row_label("reset_cmd"), row, 0)
+        form.addWidget(_command_button(f"ca://{self._motor}:{_RESET_SUFFIX}"), row, 1)
 
         self._normal_layout.addWidget(panel)
         self._normal_layout.addStretch(1)
@@ -437,5 +443,20 @@ def _error_message(channel: str, error_channel: str) -> _ErrorMessage:
     lab = _ErrorMessage(error_channel)
     lab.channel = channel
     return lab
+
+
+def _command_button(channel: str) -> PyDMPushButton:
+    # No label -- the "Command" text was redundant; the button still writes.
+    btn = PyDMPushButton()
+    btn.setText("")
+    btn.setMinimumHeight(26)
+    btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    btn.pressValue = "1"
+    btn.setStyleSheet(
+        "color: rgb(20, 20, 20); background: rgb(245, 245, 245);"
+        " border: 1px solid rgb(219, 219, 219); border-radius: 4px; padding: 2px 10px;"
+    )
+    btn.channel = channel
+    return btn
 
 
