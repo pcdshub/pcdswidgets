@@ -208,7 +208,7 @@ class Ui_Form(object):
         )
         self.movingIndicator.setChannel(_translate("Form", "ca://${MOTOR}:STATE:BUSY_RBV"))
         self.movingIndicatorLabel.setStyleSheet(_translate("Form", "color: rgb(17, 17, 17); background: transparent;"))
-        self.movingIndicatorLabel.setText(_translate("Form", "moving"))
+        self.movingIndicatorLabel.setText(_translate("Form", "done"))
         self.stateReadback.setToolTip(_translate("Form", "Current motor state readback (STATE:GET_RBV)."))
         self.stateReadback.setWhatsThis(
             _translate("Form", "This label displays the readback value for the current state.")
