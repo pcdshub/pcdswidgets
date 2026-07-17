@@ -30,6 +30,7 @@ with ``{NN}`` the zero-padded 2-digit state index and ``{leaf}`` one of
 from __future__ import annotations
 
 from pydm.widgets.byte import PyDMByteIndicator
+from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
@@ -52,20 +53,25 @@ _CELL_BG = "rgb(244, 244, 244)"
 _CELL_BD = "rgb(201, 201, 201)"
 
 # boolean-bar colors: Typhos blue when set, grey when clear (matches the plain
-# state mover's moving LED)
+# state mover's moving LED). The error bar toggles blue (clear) / red (set), and
+# the error message turns red only while the error flag is set.
 _BAR_ON = "rgb(20, 100, 239)"
 _BAR_OFF = "rgb(150, 150, 150)"
+_BAR_RED = "rgb(220, 40, 40)"
 
 # "Normal" tab device signals: (row label, PV suffix under ${MOTOR}, kind).
-# kind: "led" -> boolean rendered as an LED indicator; "text" -> numeric text;
-#       "string" -> char waveform decoded and shown as a string.
+# kind: "led" -> boolean bar, blue (set) / grey (clear);
+#       "error_led" -> boolean bar, red (set) / blue (clear);
+#       "text" -> numeric text;
+#       "error_msg" -> char waveform decoded as a string, red while ERR is set.
 _NORMAL_SIGNALS = (
     ("busy", "STATE:BUSY_RBV", "led"),
     ("done", "STATE:DONE_RBV", "led"),
-    ("error", "STATE:ERR_RBV", "led"),
+    ("error", "STATE:ERR_RBV", "error_led"),
     ("error_id", "STATE:ERRID_RBV", "text"),
-    ("error_message", "STATE:ERRMSG_RBV", "string"),
+    ("error_message", "STATE:ERRMSG_RBV", "error_msg"),
 )
+_ERROR_SUFFIX = "STATE:ERR_RBV"
 _RESET_SUFFIX = "STATE:RESET"
 
 _TAB_STYLE = (
@@ -195,14 +201,20 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         form.setVerticalSpacing(6)
         form.setColumnStretch(1, 1)
 
+        error_channel = f"ca://{self._motor}:{_ERROR_SUFFIX}"
         row = 0
         for label, suffix, kind in _NORMAL_SIGNALS:
             form.addWidget(_row_label(label), row, 0)
             channel = f"ca://{self._motor}:{suffix}"
             if kind == "led":
-                form.addWidget(_bool_bar(channel), row, 1)
-            else:
-                form.addWidget(_signal_value(channel, as_string=kind == "string"), row, 1)
+                widget = _bool_bar(channel)
+            elif kind == "error_led":
+                widget = _bool_bar(channel, on_color=_BAR_RED, off_color=_BAR_ON)
+            elif kind == "error_msg":
+                widget = _error_message(channel, error_channel)
+            else:  # text
+                widget = _signal_value(channel)
+            form.addWidget(widget, row, 1)
             row += 1
 
         # reset_cmd: just the Command push button (the LED was redundant)
@@ -323,16 +335,12 @@ def _row_label(text: str) -> QtWidgets.QLabel:
     return lab
 
 
-def _signal_value(channel: str, as_string: bool = False) -> PyDMLabel:
+def _signal_value(channel: str) -> PyDMLabel:
     lab = PyDMLabel()
     lab.setFont(_plain(10))
     lab.setMinimumHeight(26)
     lab.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
     lab.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-    if as_string:
-        # ERRMSG_RBV is a char waveform; decode it to a string instead of
-        # showing the raw array of character codes.
-        lab.displayFormat = DisplayFormat.String
     lab.setStyleSheet(
         f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
         f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
@@ -342,11 +350,18 @@ def _signal_value(channel: str, as_string: bool = False) -> PyDMLabel:
 
 
 class _BoolBar(PyDMLabel):
-    """Full-width rounded bar (Typhos-style): blue when the value is set, grey
-    when clear, with the value shown as text."""
+    """Full-width rounded bar (Typhos-style) with the value shown as text.
+    Background is ``on_color`` when the value is set, ``off_color`` when clear."""
 
-    def __init__(self, parent: QtWidgets.QWidget | None = None):
+    def __init__(
+        self,
+        on_color: str = _BAR_ON,
+        off_color: str = _BAR_OFF,
+        parent: QtWidgets.QWidget | None = None,
+    ):
         super().__init__(parent)
+        self._on_color = on_color
+        self._off_color = off_color
         self.setFont(_bold(10))
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.setMinimumHeight(26)
@@ -357,7 +372,7 @@ class _BoolBar(PyDMLabel):
 
     def _paint(self, on: bool) -> None:
         self.setStyleSheet(
-            f"PyDMLabel {{ color: white; background: {_BAR_ON if on else _BAR_OFF};"
+            f"PyDMLabel {{ color: white; background: {self._on_color if on else self._off_color};"
             f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; }}"
         )
 
@@ -366,10 +381,62 @@ class _BoolBar(PyDMLabel):
         self._paint(bool(new_value))
 
 
-def _bool_bar(channel: str) -> _BoolBar:
-    bar = _BoolBar()
+class _ErrorMessage(PyDMLabel):
+    """Decoded error-message string (char waveform). Highlights red only while
+    the separate error flag (``error_channel``) is set, plain otherwise."""
+
+    def __init__(self, error_channel: str, parent: QtWidgets.QWidget | None = None):
+        super().__init__(parent)
+        self.setFont(_plain(10))
+        self.setMinimumHeight(26)
+        self.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.displayFormat = DisplayFormat.String
+        self.alarmSensitiveContent = False
+        self.alarmSensitiveBorder = False
+        self._paint(False)
+
+        # a second channel drives only the color, tracking the error flag
+        self._error_chan = PyDMChannel(address=error_channel, value_slot=self._error_changed)
+        self._error_chan.connect()
+        chan = self._error_chan
+        self.destroyed.connect(lambda: _safe_disconnect(chan))
+
+    def _paint(self, error: bool) -> None:
+        if error:
+            self.setStyleSheet(
+                f"PyDMLabel {{ color: white; background: {_BAR_RED};"
+                f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
+            )
+        else:
+            self.setStyleSheet(
+                f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
+                f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
+            )
+
+    def _error_changed(self, value) -> None:
+        self._paint(bool(value))
+
+
+def _safe_disconnect(chan: PyDMChannel) -> None:
+    # Called from the widget's destroyed signal; the underlying connection may
+    # already be gone during app teardown, so ignore that case.
+    try:
+        chan.disconnect()
+    except Exception:
+        pass
+
+
+def _bool_bar(channel: str, on_color: str = _BAR_ON, off_color: str = _BAR_OFF) -> _BoolBar:
+    bar = _BoolBar(on_color=on_color, off_color=off_color)
     bar.channel = channel
     return bar
+
+
+def _error_message(channel: str, error_channel: str) -> _ErrorMessage:
+    lab = _ErrorMessage(error_channel)
+    lab.channel = channel
+    return lab
 
 
 def _command_button(channel: str) -> PyDMPushButton:
