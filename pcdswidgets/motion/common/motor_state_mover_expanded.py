@@ -33,7 +33,6 @@ from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.label import PyDMLabel
-from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -72,7 +71,6 @@ _NORMAL_SIGNALS = (
     ("error_message", "STATE:ERRMSG_RBV", "error_msg"),
 )
 _ERROR_SUFFIX = "STATE:ERR_RBV"
-_RESET_SUFFIX = "STATE:RESET"
 
 _TAB_STYLE = (
     "QTabWidget::pane { border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
@@ -109,12 +107,22 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._outer.setSpacing(8)
 
         # plain state mover on top, always visible (reused verbatim, minus its
-        # own Expert Screen button -- we are already inside the expert screen)
+        # own Expert Screen button -- we are already inside the expert screen --
+        # and its error message, which the Normal tab already shows)
         self.plainMover = MotorStateMover(self)
         expert_btn = getattr(self.plainMover, "expertScreenButton", None)
         if expert_btn is not None:
             expert_btn.hide()
-        self._outer.addWidget(self.plainMover)
+        error_status = getattr(self.plainMover, "errorStatus", None)
+        if error_status is not None:
+            error_status.hide()
+        # keep the plain mover at its own (.ui) size so GET/SET don't stretch to
+        # the width of the config grid below
+        top_row = QtWidgets.QHBoxLayout()
+        top_row.setContentsMargins(0, 0, 0, 0)
+        top_row.addWidget(self.plainMover)
+        top_row.addStretch(1)
+        self._outer.addLayout(top_row)
 
         self.tabs = QtWidgets.QTabWidget(self)
         self.tabs.setStyleSheet(_TAB_STYLE)
@@ -207,7 +215,8 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             form.addWidget(_row_label(label), row, 0)
             channel = f"ca://{self._motor}:{suffix}"
             if kind == "led":
-                widget = _bool_bar(channel)
+                # non-error signals stay blue by default (Typhos-style)
+                widget = _bool_bar(channel, on_color=_BAR_ON, off_color=_BAR_ON)
             elif kind == "error_led":
                 widget = _bool_bar(channel, on_color=_BAR_RED, off_color=_BAR_ON)
             elif kind == "error_msg":
@@ -216,10 +225,6 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                 widget = _signal_value(channel)
             form.addWidget(widget, row, 1)
             row += 1
-
-        # reset_cmd: just the Command push button (the LED was redundant)
-        form.addWidget(_row_label("reset_cmd"), row, 0)
-        form.addWidget(_command_button(f"ca://{self._motor}:{_RESET_SUFFIX}"), row, 1)
 
         self._normal_layout.addWidget(panel)
         self._normal_layout.addStretch(1)
@@ -403,16 +408,11 @@ class _ErrorMessage(PyDMLabel):
         self.destroyed.connect(lambda: _safe_disconnect(chan))
 
     def _paint(self, error: bool) -> None:
-        if error:
-            self.setStyleSheet(
-                f"PyDMLabel {{ color: white; background: {_BAR_RED};"
-                f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
-            )
-        else:
-            self.setStyleSheet(
-                f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
-                f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
-            )
+        # blue by default, red only while the error flag is set
+        self.setStyleSheet(
+            f"PyDMLabel {{ color: white; background: {_BAR_RED if error else _BAR_ON};"
+            f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; padding: 2px 10px; }}"
+        )
 
     def _error_changed(self, value) -> None:
         self._paint(bool(value))
@@ -439,15 +439,3 @@ def _error_message(channel: str, error_channel: str) -> _ErrorMessage:
     return lab
 
 
-def _command_button(channel: str) -> PyDMPushButton:
-    btn = PyDMPushButton()
-    btn.setText("Command")
-    btn.setFont(_bold(10))
-    btn.setMinimumHeight(26)
-    btn.pressValue = "1"
-    btn.setStyleSheet(
-        "color: rgb(20, 20, 20); background: rgb(245, 245, 245);"
-        " border: 1px solid rgb(219, 219, 219); border-radius: 4px; padding: 2px 10px;"
-    )
-    btn.channel = channel
-    return btn
