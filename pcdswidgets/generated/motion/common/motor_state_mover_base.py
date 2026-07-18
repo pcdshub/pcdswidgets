@@ -32,6 +32,7 @@ class MotorStateMoverBase(DesignerWidget):
     errorStatus: "PyDMLabel"
     expertScreenButton: "PyDMRelatedDisplayButton"
     movingIndicator: "PyDMByteIndicator"
+    movingIndicatorLabel: "MovingLabel"
     stateReadback: "PyDMLabel"
     stateSelector: "PyDMEnumComboBox"
     statusIndicator: "PyDMByteIndicator"
@@ -41,6 +42,7 @@ class MotorStateMoverBase(DesignerWidget):
         "MOTOR": [
             "statusIndicator",
             "movingIndicator",
+            "movingIndicatorLabel",
             "stateReadback",
             "stateSelector",
             "expertScreenButton",
@@ -59,6 +61,9 @@ class MotorStateMoverBase(DesignerWidget):
             "MOTOR",
         ],
         "movingIndicator": [
+            "MOTOR",
+        ],
+        "movingIndicatorLabel": [
             "MOTOR",
         ],
         "stateReadback": [
@@ -87,6 +92,9 @@ class MotorStateMoverBase(DesignerWidget):
             ),
         ],
         "movingIndicator": [
+            ("channel", "ca://${MOTOR}:STATE:BUSY_RBV"),
+        ],
+        "movingIndicatorLabel": [
             ("channel", "ca://${MOTOR}:STATE:BUSY_RBV"),
         ],
         "stateReadback": [

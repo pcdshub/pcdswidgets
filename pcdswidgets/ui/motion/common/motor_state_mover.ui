@@ -271,7 +271,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="movingIndicatorLabel">
+            <widget class="MovingLabel" name="movingIndicatorLabel">
              <property name="styleSheet">
               <string>color: rgb(17, 17, 17); background: transparent;</string>
              </property>
@@ -280,6 +280,15 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+             <property name="alarmSensitiveContent">
+              <bool>false</bool>
+             </property>
+             <property name="alarmSensitiveBorder">
+              <bool>false</bool>
+             </property>
+             <property name="channel">
+              <string>ca://${MOTOR}:STATE:BUSY_RBV</string>
              </property>
             </widget>
            </item>
@@ -568,6 +577,11 @@ Screen</string>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>MovingLabel</class>
+   <extends>QLabel</extends>
+   <header>pcdswidgets.motion.common.state_mover_common</header>
   </customwidget>
   <customwidget>
    <class>PyDMByteIndicator</class>
