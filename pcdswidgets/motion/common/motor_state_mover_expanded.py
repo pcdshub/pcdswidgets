@@ -55,6 +55,7 @@ _CELL_BD = "rgb(201, 201, 201)"
 # state mover's moving LED). The error bar toggles blue (clear) / red (set), and
 # the error message turns red only while the error flag is set.
 _BAR_ON = "rgb(20, 100, 239)"
+_BAR_ON_HOVER = "rgb(15, 80, 200)"
 _BAR_OFF = "rgb(150, 150, 150)"
 _BAR_RED = "rgb(220, 40, 40)"
 
@@ -461,8 +462,9 @@ def _command_button(channel: str) -> PyDMPushButton:
     btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     btn.pressValue = "1"
     btn.setStyleSheet(
-        "color: rgb(20, 20, 20); background: rgb(245, 245, 245);"
-        " border: 1px solid rgb(219, 219, 219); border-radius: 4px; padding: 2px 10px;"
+        f"PyDMPushButton {{ background: {_BAR_ON}; border: 1px solid rgba(0, 0, 0, 40);"
+        f" border-radius: 4px; padding: 2px 10px; }}"
+        f"PyDMPushButton:hover {{ background: {_BAR_ON_HOVER}; }}"
     )
     btn.channel = channel
     return btn
