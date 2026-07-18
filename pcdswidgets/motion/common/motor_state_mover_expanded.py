@@ -29,7 +29,6 @@ with ``{NN}`` the zero-padded 2-digit state index and ``{leaf}`` one of
 
 from __future__ import annotations
 
-from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.label import PyDMLabel
@@ -73,6 +72,10 @@ _NORMAL_SIGNALS = (
 )
 _ERROR_SUFFIX = "STATE:ERR_RBV"
 _RESET_SUFFIX = "STATE:RESET"
+
+# fixed width of the plain state mover (matches the Form width in
+# motor_state_mover.ui) so the expert's top row keeps the plain screen's size
+_PLAIN_MOVER_WIDTH = 680
 
 _TAB_STYLE = (
     "QTabWidget::pane { border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
@@ -118,8 +121,19 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         error_status = getattr(self.plainMover, "errorStatus", None)
         if error_status is not None:
             error_status.hide()
-        # keep the plain mover at its own (.ui) size so GET/SET don't stretch to
-        # the width of the config grid below
+        # move Clear Error up onto the main row, in line with the GET/SET widgets
+        # (its own status row is now empty -- error message lives in the Normal tab)
+        clear_btn = getattr(self.plainMover, "clearErrorButton", None)
+        if clear_btn is not None and hasattr(self.plainMover, "mainRow"):
+            self.plainMover.mainRow.addWidget(clear_btn)
+        status_row = getattr(self.plainMover, "statusRow", None)
+        if status_row is not None:
+            for i in reversed(range(status_row.count())):
+                if status_row.itemAt(i).spacerItem() is not None:
+                    status_row.takeAt(i)  # drop the leftover spacer so the row collapses
+        # keep the plain mover at the plain screen's fixed width so the GET/SET
+        # widgets stay the same size (and don't stretch to the config grid width)
+        self.plainMover.setFixedWidth(_PLAIN_MOVER_WIDTH)
         top_row = QtWidgets.QHBoxLayout()
         top_row.setContentsMargins(0, 0, 0, 0)
         top_row.addWidget(self.plainMover)
@@ -264,15 +278,14 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         grid.setHorizontalSpacing(6)
         grid.setVerticalSpacing(5)
 
-        # header rows: State | Motor k (Setpoint, Velo, Move OK) x N
+        # header rows: State | Motor k (Setpoint, Velo) x N
         grid.addWidget(_hdr("State"), 0, 0, 2, 1)
         col = 1
         for m, _token in enumerate(tokens):
-            grid.addWidget(_hdr(f"Motor {m + 1}"), 0, col, 1, 3)
+            grid.addWidget(_hdr(f"Motor {m + 1}"), 0, col, 1, 2)
             grid.addWidget(_hdr("Setpoint", sub=True), 1, col)
             grid.addWidget(_hdr("Velo", sub=True), 1, col + 1)
-            grid.addWidget(_hdr("Move OK", sub=True), 1, col + 2)
-            col += 3
+            col += 2
 
         for r in range(self._state_count):
             index = self._state_start + r
@@ -287,8 +300,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             for token in tokens:
                 grid.addWidget(_cell_label(self._channel(token, index, "SETPOINT")), row, col)
                 grid.addWidget(_cell_label(self._velo_channel(token)), row, col + 1)
-                grid.addWidget(_move_ok(self._channel(token, index, "MOVE_OK")), row, col + 2, QtCore.Qt.AlignCenter)
-                col += 3
+                col += 2
 
         self._config_layout.addWidget(box)
         self._config_layout.addStretch(1)
@@ -331,20 +343,6 @@ def _cell_label(channel: str, bold: bool = False, align=QtCore.Qt.AlignCenter, a
     )
     lab.channel = channel
     return lab
-
-
-def _move_ok(channel: str) -> PyDMByteIndicator:
-    ind = PyDMByteIndicator()
-    ind.setFixedSize(18, 18)
-    ind.numBits = 1
-    ind.circles = True
-    ind.showLabels = False
-    ind.alarmSensitiveContent = False
-    ind.alarmSensitiveBorder = False
-    ind.onColor = QtGui.QColor(0, 192, 0)
-    ind.offColor = QtGui.QColor(183, 183, 183)
-    ind.channel = channel
-    return ind
 
 
 def _row_label(text: str) -> QtWidgets.QLabel:

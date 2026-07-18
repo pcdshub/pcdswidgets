@@ -44,16 +44,21 @@ class MotorStateMover(MotorStateMoverBase):
         self._busy_timer.start()
 
     def _setup_moving_label(self) -> None:
-        """Connect the moving/done label once the MOTOR macro is populated."""
-        motor = self._get_macro("MOTOR")
-        if not motor:
+        """Connect the moving/done label to the same (resolved) channel the moving
+        LED uses, once the MOTOR macro has been substituted into it."""
+        channel = self.movingIndicator.channel
+        if not channel or "${" in channel:
             self._busy_timer.start()
             return
         self._busy_channel = PyDMChannel(
-            address=f"ca://{motor}:STATE:BUSY_RBV",
+            address=channel,
             value_slot=self._update_moving_label,
         )
         self._busy_channel.connect()
 
     def _update_moving_label(self, value) -> None:
-        self.movingIndicatorLabel.setText("moving" if value else "done")
+        try:
+            busy = bool(int(value))
+        except (TypeError, ValueError):
+            busy = bool(value)
+        self.movingIndicatorLabel.setText("moving" if busy else "done")
