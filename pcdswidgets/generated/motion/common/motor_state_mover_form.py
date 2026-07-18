@@ -15,6 +15,8 @@ from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from qtpy import QtCore, QtGui, QtWidgets
 
+from pcdswidgets.motion.common.state_mover_common import MovingLabel
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -95,8 +97,10 @@ class Ui_Form(object):
         self.movingIndicator.setLabels(["Bit 0"])
         self.movingIndicator.setObjectName("movingIndicator")
         self.movingIndicatorLayout.addWidget(self.movingIndicator, 0, QtCore.Qt.AlignHCenter)
-        self.movingIndicatorLabel = QtWidgets.QLabel(self.movingIndicatorBox)
+        self.movingIndicatorLabel = MovingLabel(self.movingIndicatorBox)
         self.movingIndicatorLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.movingIndicatorLabel.setAlarmSensitiveContent(False)
+        self.movingIndicatorLabel.setAlarmSensitiveBorder(False)
         self.movingIndicatorLabel.setObjectName("movingIndicatorLabel")
         self.movingIndicatorLayout.addWidget(self.movingIndicatorLabel)
         self.mainRow.addWidget(self.movingIndicatorBox, 0, QtCore.Qt.AlignVCenter)
@@ -209,6 +213,7 @@ class Ui_Form(object):
         self.movingIndicator.setChannel(_translate("Form", "ca://${MOTOR}:STATE:BUSY_RBV"))
         self.movingIndicatorLabel.setStyleSheet(_translate("Form", "color: rgb(17, 17, 17); background: transparent;"))
         self.movingIndicatorLabel.setText(_translate("Form", "done"))
+        self.movingIndicatorLabel.setChannel(_translate("Form", "ca://${MOTOR}:STATE:BUSY_RBV"))
         self.stateReadback.setToolTip(_translate("Form", "Current motor state readback (STATE:GET_RBV)."))
         self.stateReadback.setWhatsThis(
             _translate("Form", "This label displays the readback value for the current state.")
