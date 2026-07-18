@@ -273,8 +273,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         for r in range(self._state_count):
             index = self._state_start + r
             row = r + 2
-            # state name: read from the first motor token
-            name = _cell_label(self._channel(tokens[0], index, "NAME"), bold=True, align=QtCore.Qt.AlignLeft)
+            # state name: read from the first motor token (char waveform -> string)
+            name = _cell_label(
+                self._channel(tokens[0], index, "NAME"), bold=True, align=QtCore.Qt.AlignLeft, as_string=True
+            )
             grid.addWidget(name, row, 0)
 
             col = 1
@@ -308,13 +310,17 @@ def _hdr(text: str, sub: bool = False) -> QtWidgets.QLabel:
     return lab
 
 
-def _cell_label(channel: str, bold: bool = False, align=QtCore.Qt.AlignCenter) -> PyDMLabel:
+def _cell_label(channel: str, bold: bool = False, align=QtCore.Qt.AlignCenter, as_string: bool = False) -> PyDMLabel:
     lab = PyDMLabel()
     lab.setFont(_bold(10) if bold else _plain(10))
     lab.setFixedHeight(28)
     lab.setMinimumWidth(80)
     lab.setAlignment(align)
     lab.showUnits = True
+    if as_string:
+        # NAME_RBV is a char waveform; decode it to a string instead of showing
+        # the raw array of character codes.
+        lab.displayFormat = DisplayFormat.String
     lab.setStyleSheet(
         f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
         f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 0 8px; }}"
