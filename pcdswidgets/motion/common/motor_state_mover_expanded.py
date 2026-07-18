@@ -192,6 +192,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
     def _channel(self, token: str, index: int, leaf: str) -> str:
         return f"ca://{self._motor}:STATE:{token}:{index:02d}:{leaf}_RBV"
 
+    def _velo_channel(self, token: str) -> str:
+        # velocity is a per-motor readback (not per-state): {motor}:{token}:fVelocity_RBV
+        return f"ca://{self._motor}:{token}:fVelocity_RBV"
+
     @staticmethod
     def _clear_layout(layout: QtWidgets.QLayout) -> None:
         while layout.count():
@@ -282,7 +286,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             col = 1
             for token in tokens:
                 grid.addWidget(_cell_label(self._channel(token, index, "SETPOINT")), row, col)
-                grid.addWidget(_cell_label(self._channel(token, index, "VELO")), row, col + 1)
+                grid.addWidget(_cell_label(self._velo_channel(token)), row, col + 1)
                 grid.addWidget(_move_ok(self._channel(token, index, "MOVE_OK")), row, col + 2, QtCore.Qt.AlignCenter)
                 col += 3
 
