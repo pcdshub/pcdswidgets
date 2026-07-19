@@ -7,10 +7,10 @@ and configures it from the incoming macros.
 
 Macros:
     DEVICE       base prefix, e.g. ``TST:D3`` (required)
-    PMPS         truthy ("1"/"true") -> PMPS variant: the Configuration tab holds
-                 the PMPS controls (arb_enable, maint_mode) instead of the
-                 per-state motor grid. STATE_COUNT / MOTOR_TOKENS are ignored.
-    STATE_COUNT  number of states (int), e.g. ``4`` (standard variant)
+    PMPS         truthy ("1"/"true") -> PMPS variant: the Configuration tab adds
+                 the PMPS controls (arb_enable, maint_mode) above the per-state
+                 motor grid.
+    STATE_COUNT  number of states (int), e.g. ``4``
     MOTOR_TOKENS comma-separated per-motor tokens, e.g. ``D1M1,D2M1,D3M1``
 """
 
@@ -35,15 +35,17 @@ class MotorStateMoverExpert(Display):
 
         if str(macros.get("PMPS", "")).strip().lower() in _TRUTHY:
             self.expanded = MotorStateMoverExpandedPMPS()
-            self.expanded.setProperty("device", macros.get("DEVICE", ""))
         else:
             self.expanded = MotorStateMoverExpanded()
-            self.expanded.setProperty("device", macros.get("DEVICE", ""))
-            self.expanded.setProperty("motorTokens", macros.get("MOTOR_TOKENS", ""))
-            try:
-                self.expanded.setProperty("stateCount", int(macros.get("STATE_COUNT", 0)))
-            except (TypeError, ValueError):
-                self.expanded.setProperty("stateCount", 0)
+
+        # both variants use the per-state grid (the PMPS one shows it below its
+        # arb_enable / maint_mode controls), so feed all three to either widget
+        self.expanded.setProperty("device", macros.get("DEVICE", ""))
+        self.expanded.setProperty("motorTokens", macros.get("MOTOR_TOKENS", ""))
+        try:
+            self.expanded.setProperty("stateCount", int(macros.get("STATE_COUNT", 0)))
+        except (TypeError, ValueError):
+            self.expanded.setProperty("stateCount", 0)
 
         layout.addWidget(self.expanded)
 

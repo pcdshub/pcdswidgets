@@ -279,13 +279,13 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         elif idx != -1:
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
 
-    def _rebuild_grid(self) -> None:
-        self._clear_layout(self._config_layout)
-        if not self._config_provided():
-            self._sync_config_tab()
-            return
-
+    def _build_state_grid(self) -> QtWidgets.QWidget | None:
+        """Per-state motor grid (State | Motor k (Setpoint, Velo) x N), or None
+        when no state count / tokens were supplied."""
         tokens = self._tokens
+        if not (self._state_count > 0 and tokens):
+            return None
+
         box = QtWidgets.QWidget()
         grid = QtWidgets.QGridLayout(box)
         grid.setContentsMargins(0, 0, 0, 0)
@@ -316,15 +316,26 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                 grid.addWidget(_cell_label(self._velo_channel(token)), row, col + 1)
                 col += 2
 
-        self._config_layout.addWidget(box)
+        return box
+
+    def _rebuild_grid(self) -> None:
+        self._clear_layout(self._config_layout)
+        if not self._config_provided():
+            self._sync_config_tab()
+            return
+
+        box = self._build_state_grid()
+        if box is not None:
+            self._config_layout.addWidget(box)
         self._config_layout.addStretch(1)
         self._sync_config_tab()
 
 
 class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
-    """PMPS variant: the Configuration tab holds the PMPS controls
-    (arb_enable, maint_mode) -- each a value readback plus a setpoint selector,
-    sharing the ${MOTOR} prefix -- instead of the per-state motor grid."""
+    """PMPS variant: the Configuration tab holds the PMPS controls (arb_enable,
+    maint_mode) -- each a value readback plus a setpoint selector, sharing the
+    ${DEVICE} prefix -- with the per-state motor grid shown below them (when
+    state count / tokens are supplied)."""
 
     designer_options = DesignerOptions(
         group="ECS Motion Common",
@@ -337,15 +348,10 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
     }
 
     def _config_provided(self) -> bool:
-        # the PMPS controls only need the motor prefix (no state count / tokens)
+        # the PMPS controls only need the device prefix (no state count / tokens)
         return bool(self._device)
 
-    def _rebuild_grid(self) -> None:
-        self._clear_layout(self._config_layout)
-        if not self._config_provided():
-            self._sync_config_tab()
-            return
-
+    def _build_pmps_box(self) -> QtWidgets.QWidget:
         box = QtWidgets.QWidget()
         grid = QtWidgets.QGridLayout(box)
         grid.setContentsMargins(0, 0, 0, 0)
@@ -361,7 +367,24 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
             )
             grid.addWidget(_setpoint_combo(f"ca://{self._device}:{suffix}"), r, 2)
 
-        self._config_layout.addWidget(box)
+        return box
+
+    def _rebuild_grid(self) -> None:
+        self._clear_layout(self._config_layout)
+        if not self._config_provided():
+            self._sync_config_tab()
+            return
+
+        self._config_layout.addWidget(self._build_pmps_box())
+
+        # per-state settings shown below the PMPS controls, for consistency with
+        # the standard expert (only when state count / tokens are supplied)
+        state_box = self._build_state_grid()
+        if state_box is not None:
+            self._config_layout.addSpacing(12)
+            self._config_layout.addWidget(_hdr("States"))
+            self._config_layout.addWidget(state_box)
+
         self._config_layout.addStretch(1)
         self._sync_config_tab()
 
