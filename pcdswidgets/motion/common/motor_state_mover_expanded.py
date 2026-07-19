@@ -77,6 +77,9 @@ _RESET_SUFFIX = "STATE:RESET"
 # fixed width of the plain state mover (matches the Form width in
 # motor_state_mover.ui) so the expert's top row keeps the plain screen's size
 _PLAIN_MOVER_WIDTH = 680
+# height of the GET/SET widgets in motor_state_mover.ui -- the Clear Error button
+# is matched to this once it moves onto the main row in the expert
+_MAIN_ROW_HEIGHT = 46
 
 _TAB_STYLE = (
     "QTabWidget::pane { border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
@@ -126,6 +129,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         # (its own status row is now empty -- error message lives in the Normal tab)
         clear_btn = getattr(self.plainMover, "clearErrorButton", None)
         if clear_btn is not None and hasattr(self.plainMover, "mainRow"):
+            clear_btn.setFixedHeight(_MAIN_ROW_HEIGHT)  # match the GET/SET height
             self.plainMover.mainRow.addWidget(clear_btn)
         status_row = getattr(self.plainMover, "statusRow", None)
         if status_row is not None:
