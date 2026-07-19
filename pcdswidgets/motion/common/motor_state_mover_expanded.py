@@ -80,7 +80,7 @@ _RESET_SUFFIX = "STATE:RESET"
 # selector (ca://{device}:{suffix}). Confirm the suffixes against the IOC.
 _PMPS_ROWS = (
     ("arb_enable", "PMPS:ARB:ENABLE"),
-    ("maint_mode", "PMPS:MAINT:MODE"),
+    ("maint_mode", "PMPS:MAINT_MODE"),
 )
 
 # fixed width of the plain state mover (matches the Form width in
