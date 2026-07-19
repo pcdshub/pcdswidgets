@@ -75,12 +75,12 @@ _NORMAL_SIGNALS = (
 _ERROR_SUFFIX = "STATE:ERR_RBV"
 _RESET_SUFFIX = "STATE:RESET"
 
-# PMPS variant Configuration rows: (row label, PV suffix under ${MOTOR}).
-# Each row shows a value readback (ca://{motor}:{suffix}_RBV) and a setpoint
-# selector (ca://{motor}:{suffix}). Confirm the suffixes against the IOC.
+# PMPS variant Configuration rows: (row label, PV suffix under ${DEVICE}).
+# Each row shows a value readback (ca://{device}:{suffix}_RBV) and a setpoint
+# selector (ca://{device}:{suffix}). Confirm the suffixes against the IOC.
 _PMPS_ROWS = (
-    ("arb_enable", "STATE:ARB_ENABLE"),
-    ("maint_mode", "STATE:MAINT_MODE"),
+    ("arb_enable", "PMPS:ARB:ARB_ENABLE"),
+    ("maint_mode", "PMPS:MAINT_MODE"),
 )
 
 # fixed width of the plain state mover (matches the Form width in
@@ -115,7 +115,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
-        self._motor = ""
+        self._device = ""
         self._state_count = 0
         self._state_start = 1
         self._motor_tokens = ""
@@ -174,16 +174,16 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._rebuild_grid()
 
     # ------------------------------------------------------------------ props
-    def get_motor(self) -> str:
-        return self._motor
+    def get_device(self) -> str:
+        return self._device
 
-    def set_motor(self, value: str) -> None:
-        self._motor = value
-        self.plainMover.setProperty("motor", value)
+    def set_device(self, value: str) -> None:
+        self._device = value
+        self.plainMover.setProperty("device", value)
         self._rebuild_normal()
         self._rebuild_grid()
 
-    motor = pyqtProperty(str, get_motor, set_motor)
+    device = pyqtProperty(str, get_device, set_device)
 
     def get_state_count(self) -> int:
         return self._state_count
@@ -218,11 +218,11 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         return [t.strip() for t in self._motor_tokens.split(",") if t.strip()]
 
     def _channel(self, token: str, index: int, leaf: str) -> str:
-        return f"ca://{self._motor}:STATE:{token}:{index:02d}:{leaf}_RBV"
+        return f"ca://{self._device}:STATE:{token}:{index:02d}:{leaf}_RBV"
 
     def _velo_channel(self, token: str) -> str:
         # velocity is a per-motor readback (not per-state): {motor}:{token}:fVelocity_RBV
-        return f"ca://{self._motor}:{token}:fVelocity_RBV"
+        return f"ca://{self._device}:{token}:fVelocity_RBV"
 
     @staticmethod
     def _clear_layout(layout: QtWidgets.QLayout) -> None:
@@ -243,11 +243,11 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         form.setVerticalSpacing(6)
         form.setColumnStretch(1, 1)
 
-        error_channel = f"ca://{self._motor}:{_ERROR_SUFFIX}"
+        error_channel = f"ca://{self._device}:{_ERROR_SUFFIX}"
         row = 0
         for label, suffix, kind in _NORMAL_SIGNALS:
             form.addWidget(_row_label(label), row, 0)
-            channel = f"ca://{self._motor}:{suffix}"
+            channel = f"ca://{self._device}:{suffix}"
             if kind == "led":
                 # non-error signals stay blue by default (Typhos-style)
                 widget = _bool_bar(channel, on_color=_BAR_ON, off_color=_BAR_ON)
@@ -262,7 +262,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
         # reset_cmd: the command button, kept but with no (redundant) label text
         form.addWidget(_row_label("reset_cmd"), row, 0)
-        form.addWidget(_command_button(f"ca://{self._motor}:{_RESET_SUFFIX}"), row, 1)
+        form.addWidget(_command_button(f"ca://{self._device}:{_RESET_SUFFIX}"), row, 1)
 
         self._normal_layout.addWidget(panel)
         self._normal_layout.addStretch(1)
@@ -338,7 +338,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
 
     def _config_provided(self) -> bool:
         # the PMPS controls only need the motor prefix (no state count / tokens)
-        return bool(self._motor)
+        return bool(self._device)
 
     def _rebuild_grid(self) -> None:
         self._clear_layout(self._config_layout)
@@ -357,9 +357,9 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
         for r, (label, suffix) in enumerate(_PMPS_ROWS):
             grid.addWidget(_row_label(label), r, 0)
             grid.addWidget(
-                _bool_bar(f"ca://{self._motor}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1
+                _bool_bar(f"ca://{self._device}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1
             )
-            grid.addWidget(_setpoint_combo(f"ca://{self._motor}:{suffix}"), r, 2)
+            grid.addWidget(_setpoint_combo(f"ca://{self._device}:{suffix}"), r, 2)
 
         self._config_layout.addWidget(box)
         self._config_layout.addStretch(1)

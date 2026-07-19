@@ -112,7 +112,7 @@
               <string/>
              </property>
              <property name="channel">
-              <string>ca://${MOTOR}:STATE:ERR_RBV</string>
+              <string>ca://${DEVICE}:STATE:ERR_RBV</string>
              </property>
              <property name="blinkOnChange">
               <bool>false</bool>
@@ -223,7 +223,7 @@
               <string/>
              </property>
              <property name="channel">
-              <string>ca://${MOTOR}:STATE:BUSY_RBV</string>
+              <string>ca://${DEVICE}:STATE:BUSY_RBV</string>
              </property>
              <property name="blinkOnChange">
               <bool>false</bool>
@@ -288,7 +288,7 @@
               <bool>false</bool>
              </property>
              <property name="channel">
-              <string>ca://${MOTOR}:STATE:BUSY_RBV</string>
+              <string>ca://${DEVICE}:STATE:BUSY_RBV</string>
              </property>
             </widget>
            </item>
@@ -335,7 +335,7 @@
            <set>Qt::AlignCenter</set>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}:STATE:GET_RBV</string>
+           <string>ca://${DEVICE}:STATE:GET_RBV</string>
           </property>
          </widget>
         </item>
@@ -391,7 +391,7 @@ PyDMEnumComboBox::down-arrow {
 }</string>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}:STATE:SET</string>
+           <string>ca://${DEVICE}:STATE:SET</string>
           </property>
          </widget>
         </item>
@@ -445,7 +445,7 @@ Screen</string>
           </property>
           <property name="macros">
            <stringlist>
-            <string>MOTOR=${MOTOR}</string>
+            <string>DEVICE=${DEVICE}</string>
            </stringlist>
           </property>
           <property name="openInNewWindow">
@@ -498,7 +498,7 @@ Screen</string>
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}:STATE:ERRMSG_RBV</string>
+           <string>ca://${DEVICE}:STATE:ERRMSG_RBV</string>
           </property>
           <property name="displayFormat">
            <enum>PyDMLabel::String</enum>
@@ -558,7 +558,7 @@ Screen</string>
            <string>Clear Error</string>
           </property>
           <property name="channel">
-           <string>ca://${MOTOR}:STATE:RESET</string>
+           <string>ca://${DEVICE}:STATE:RESET</string>
           </property>
           <property name="pressValue">
            <string>1</string>

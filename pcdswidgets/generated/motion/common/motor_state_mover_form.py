@@ -148,7 +148,7 @@ class Ui_Form(object):
         self.expertScreenButton.setFont(font)
         self.expertScreenButton.setFilenames(["motor_state_mover_expert.py"])
         self.expertScreenButton.setShowIcon(False)
-        self.expertScreenButton.setMacros(["MOTOR=${MOTOR}"])
+        self.expertScreenButton.setMacros(["DEVICE=${DEVICE}"])
         self.expertScreenButton.setOpenInNewWindow(True)
         self.expertScreenButton.setObjectName("expertScreenButton")
         self.mainRow.addWidget(self.expertScreenButton, 0, QtCore.Qt.AlignVCenter)
@@ -201,7 +201,7 @@ class Ui_Form(object):
         self.statusIndicator.setWhatsThis(
             _translate("Form", "Combined status indicator for the motor state group (STATE:ERR_RBV).")
         )
-        self.statusIndicator.setChannel(_translate("Form", "ca://${MOTOR}:STATE:ERR_RBV"))
+        self.statusIndicator.setChannel(_translate("Form", "ca://${DEVICE}:STATE:ERR_RBV"))
         self.statusIndicatorLabel.setStyleSheet(_translate("Form", "color: rgb(17, 17, 17); background: transparent;"))
         self.statusIndicatorLabel.setText(_translate("Form", "ok"))
         self.movingIndicator.setToolTip(
@@ -210,10 +210,10 @@ class Ui_Form(object):
         self.movingIndicator.setWhatsThis(
             _translate("Form", "Byte indicator that reflects motor movement state using STATE:DONE_RBV.")
         )
-        self.movingIndicator.setChannel(_translate("Form", "ca://${MOTOR}:STATE:BUSY_RBV"))
+        self.movingIndicator.setChannel(_translate("Form", "ca://${DEVICE}:STATE:BUSY_RBV"))
         self.movingIndicatorLabel.setStyleSheet(_translate("Form", "color: rgb(17, 17, 17); background: transparent;"))
         self.movingIndicatorLabel.setText(_translate("Form", "done"))
-        self.movingIndicatorLabel.setChannel(_translate("Form", "ca://${MOTOR}:STATE:BUSY_RBV"))
+        self.movingIndicatorLabel.setChannel(_translate("Form", "ca://${DEVICE}:STATE:BUSY_RBV"))
         self.stateReadback.setToolTip(_translate("Form", "Current motor state readback (STATE:GET_RBV)."))
         self.stateReadback.setWhatsThis(
             _translate("Form", "This label displays the readback value for the current state.")
@@ -224,7 +224,7 @@ class Ui_Form(object):
                 "color: rgb(255, 255, 255); background-color: rgb(11, 58, 232); border-radius: 3px; padding: 0px 14px;",
             )
         )
-        self.stateReadback.setChannel(_translate("Form", "ca://${MOTOR}:STATE:GET_RBV"))
+        self.stateReadback.setChannel(_translate("Form", "ca://${DEVICE}:STATE:GET_RBV"))
         self.stateSelector.setToolTip(_translate("Form", "Select the desired motor state (writes STATE:SET)."))
         self.stateSelector.setWhatsThis(
             _translate("Form", "This dropdown writes the selected state to the setpoint PV.")
@@ -252,7 +252,7 @@ class Ui_Form(object):
                 "}",
             )
         )
-        self.stateSelector.setChannel(_translate("Form", "ca://${MOTOR}:STATE:SET"))
+        self.stateSelector.setChannel(_translate("Form", "ca://${DEVICE}:STATE:SET"))
         self.expertScreenButton.setToolTip(_translate("Form", "Open the expert screen (Normal + Configuration tabs)."))
         self.expertScreenButton.setWhatsThis(
             _translate(
@@ -269,7 +269,7 @@ class Ui_Form(object):
         self.errorStatus.setToolTip(_translate("Form", "Current motor state/error message (STATE:ERRID_RBV)."))
         self.errorStatus.setWhatsThis(_translate("Form", "Shows the current motor state/error description string."))
         self.errorStatus.setStyleSheet(_translate("Form", "color: rgb(125, 125, 125); background: transparent;"))
-        self.errorStatus.setChannel(_translate("Form", "ca://${MOTOR}:STATE:ERRMSG_RBV"))
+        self.errorStatus.setChannel(_translate("Form", "ca://${DEVICE}:STATE:ERRMSG_RBV"))
         self.clearErrorButton.setToolTip(_translate("Form", "Clear the current motor error (writes STATE:RESET)."))
         self.clearErrorButton.setWhatsThis(_translate("Form", "Writes a reset value to clear the motor error state."))
         self.clearErrorButton.setStyleSheet(
@@ -279,5 +279,5 @@ class Ui_Form(object):
             )
         )
         self.clearErrorButton.setText(_translate("Form", "Clear Error"))
-        self.clearErrorButton.setChannel(_translate("Form", "ca://${MOTOR}:STATE:RESET"))
+        self.clearErrorButton.setChannel(_translate("Form", "ca://${DEVICE}:STATE:RESET"))
         self.clearErrorButton.setPressValue(_translate("Form", "1"))
