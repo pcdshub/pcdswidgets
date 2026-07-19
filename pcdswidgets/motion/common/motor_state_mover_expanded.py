@@ -31,6 +31,7 @@ from __future__ import annotations
 
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
+from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
@@ -73,6 +74,14 @@ _NORMAL_SIGNALS = (
 )
 _ERROR_SUFFIX = "STATE:ERR_RBV"
 _RESET_SUFFIX = "STATE:RESET"
+
+# PMPS variant Configuration rows: (row label, PV suffix under ${MOTOR}).
+# Each row shows a value readback (ca://{motor}:{suffix}_RBV) and a setpoint
+# selector (ca://{motor}:{suffix}). Confirm the suffixes against the IOC.
+_PMPS_ROWS = (
+    ("arb_enable", "STATE:ARB_ENABLE"),
+    ("maint_mode", "STATE:MAINT_MODE"),
+)
 
 # fixed width of the plain state mover (matches the Form width in
 # motor_state_mover.ui) so the expert's top row keeps the plain screen's size
@@ -312,6 +321,51 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._sync_config_tab()
 
 
+class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
+    """PMPS variant: the Configuration tab holds the PMPS controls
+    (arb_enable, maint_mode) -- each a value readback plus a setpoint selector,
+    sharing the ${MOTOR} prefix -- instead of the per-state motor grid."""
+
+    designer_options = DesignerOptions(
+        group="ECS Motion Common",
+        is_container=False,
+        icon=IconOptions.NONE,
+    )
+    _qt_designer_ = {
+        "group": designer_options.group,
+        "is_container": designer_options.is_container,
+    }
+
+    def _config_provided(self) -> bool:
+        # the PMPS controls only need the motor prefix (no state count / tokens)
+        return bool(self._motor)
+
+    def _rebuild_grid(self) -> None:
+        self._clear_layout(self._config_layout)
+        if not self._config_provided():
+            self._sync_config_tab()
+            return
+
+        box = QtWidgets.QWidget()
+        grid = QtWidgets.QGridLayout(box)
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.setHorizontalSpacing(8)
+        grid.setVerticalSpacing(6)
+        grid.setColumnStretch(1, 1)
+        grid.setColumnStretch(2, 1)
+
+        for r, (label, suffix) in enumerate(_PMPS_ROWS):
+            grid.addWidget(_row_label(label), r, 0)
+            grid.addWidget(
+                _bool_bar(f"ca://{self._motor}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1
+            )
+            grid.addWidget(_setpoint_combo(f"ca://{self._motor}:{suffix}"), r, 2)
+
+        self._config_layout.addWidget(box)
+        self._config_layout.addStretch(1)
+        self._sync_config_tab()
+
+
 # --------------------------------------------------------------------- helpers
 def _plain(size: int) -> QtGui.QFont:
     return QtGui.QFont("DejaVu Sans", size)
@@ -456,6 +510,15 @@ def _error_message(channel: str, error_channel: str) -> _ErrorMessage:
     lab = _ErrorMessage(error_channel)
     lab.channel = channel
     return lab
+
+
+def _setpoint_combo(channel: str) -> PyDMEnumComboBox:
+    combo = PyDMEnumComboBox()
+    combo.setFont(_plain(10))
+    combo.setMinimumHeight(28)
+    combo.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    combo.channel = channel
+    return combo
 
 
 def _command_button(channel: str) -> PyDMPushButton:
