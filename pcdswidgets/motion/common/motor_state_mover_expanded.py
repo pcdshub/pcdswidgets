@@ -364,9 +364,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
 
         for r, (label, suffix) in enumerate(_PMPS_ROWS):
             grid.addWidget(_row_label(label), r, 0)
-            grid.addWidget(
-                _bool_bar(f"ca://{self._device}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1
-            )
+            grid.addWidget(_bool_bar(f"ca://{self._device}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1)
             grid.addWidget(_setpoint_combo(f"ca://{self._device}:{suffix}"), r, 2)
 
         return box
@@ -559,5 +557,3 @@ def _command_button(channel: str) -> PyDMPushButton:
     )
     btn.channel = channel
     return btn
-
-
