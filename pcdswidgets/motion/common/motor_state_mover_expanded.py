@@ -292,17 +292,17 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         grid.setHorizontalSpacing(6)
         grid.setVerticalSpacing(5)
 
-        # header rows: (no State header) | Motor k (Setpoint, Velo) x N
+        # header row: (no state / motor labels) | (Setpoint, Velo) x N,
+        # motors implied left-to-right in token order
         col = 1
-        for m, _token in enumerate(tokens):
-            grid.addWidget(_hdr(f"Motor {m + 1}"), 0, col, 1, 2)
-            grid.addWidget(_hdr("Setpoint", sub=True), 1, col)
-            grid.addWidget(_hdr("Velo", sub=True), 1, col + 1)
+        for _token in tokens:
+            grid.addWidget(_hdr("Setpoint", sub=True), 0, col)
+            grid.addWidget(_hdr("Velo", sub=True), 0, col + 1)
             col += 2
 
         for r in range(self._state_count):
             index = self._state_start + r
-            row = r + 2
+            row = r + 1
             # state name: read from the first device token (char waveform -> string)
             name = _cell_label(
                 self._channel(tokens[0], index, "NAME"),
