@@ -11,7 +11,7 @@ make venv
 - `./try_in_designer.sh` runs Qt Designer with the pcdswidgets plugin loaded.
 
 All screens are keyed by the **`DEVICE`** macro (the base prefix, e.g. `TST:D3`).
-Macros are passed as JSON with `-m`; JSON is used because `MOTOR_TOKENS` contains
+Macros are passed as JSON with `-m`; JSON is used because `DEVICE_TOKENS` contains
 commas.
 
 ## PyDM (runtime)
@@ -25,12 +25,12 @@ commas.
 
 ### Expert screen — standard (per-state configuration grid)
 
-Needs `STATE_COUNT` (number of states) and `MOTOR_TOKENS` (comma-separated
-per-motor tokens) for the Configuration tab; with only `DEVICE` you get the
+Needs `STATE_COUNT` (number of states) and `DEVICE_TOKENS` (comma-separated
+per-device tokens) for the Configuration tab; with only `DEVICE` you get the
 Normal tab.
 
 ```bash
-./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "STATE_COUNT": 4, "MOTOR_TOKENS": "D1M1,D2M1,D3M1"}' \
+./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "STATE_COUNT": 4, "DEVICE_TOKENS": "D1M1,D2M1,D3M1"}' \
   pcdswidgets/screens/motor_state_mover_expert.py
 ```
 
@@ -38,11 +38,11 @@ Normal tab.
 
 Set `PMPS` truthy (`"1"`, `"true"`, `"yes"`, `"on"`). The Configuration tab then
 shows the PMPS controls (`arb_enable`, `maint_mode`) above the per-state motor
-grid. Pass `STATE_COUNT` / `MOTOR_TOKENS` for the grid; with only `DEVICE` you
+grid. Pass `STATE_COUNT` / `DEVICE_TOKENS` for the grid; with only `DEVICE` you
 get just the PMPS controls.
 
 ```bash
-./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "PMPS": "1", "STATE_COUNT": 4, "MOTOR_TOKENS": "D1M1,D2M1,D3M1"}' \
+./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "PMPS": "1", "STATE_COUNT": 4, "DEVICE_TOKENS": "D1M1,D2M1,D3M1"}' \
   pcdswidgets/screens/motor_state_mover_expert.py
 ```
 
@@ -68,9 +68,9 @@ Notes:
 - The `MotorStateMover`, `MotorStateMoverExpanded`, and
   `MotorStateMoverExpandedPMPS` widgets appear in the Designer widget box. Set
   their `device` property (and, for the expanded widgets, `stateCount` /
-  `motorTokens`) via the widget's Core Properties editor (double-click the
+  `deviceTokens`) via the widget's Core Properties editor (double-click the
   widget).
 - The plain mover's **Expert Screen** button forwards `DEVICE` automatically;
-  `STATE_COUNT`, `MOTOR_TOKENS`, and `PMPS` are inherited from the parent
+  `STATE_COUNT`, `DEVICE_TOKENS`, and `PMPS` are inherited from the parent
   display's macros. So embedding the plain mover in a screen launched with those
   macros makes the button open the right expert variant.

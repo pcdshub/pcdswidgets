@@ -9,12 +9,12 @@ hidden -- we are already in the expert screen), then a tab group with
   error_id, error_message, reset_cmd), matching the plain state-mover expert
   screen.
 * **Configuration** -- shown *only* when the caller provides both ``stateCount``
-  and ``motorTokens`` (the plain expert screen has no config tab; the configured
+  and ``deviceTokens`` (the plain expert screen has no config tab; the configured
   one does). A read-only per-state config grid whose size is driven by two
   properties instead of a fixed .ui:
 
   - ``stateCount`` -- number of states (grid rows).
-  - ``motorTokens`` -- comma-separated per-motor tokens (grid motor-columns). The
+  - ``deviceTokens`` -- comma-separated per-device tokens (grid motor-columns). The
     tokens are device specific (e.g. ``D1M1,D3M1``) and cannot be generated from a
     count, so they are listed explicitly. ``motor_count`` == number of tokens.
 
@@ -118,7 +118,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._device = ""
         self._state_count = 0
         self._state_start = 1
-        self._motor_tokens = ""
+        self._device_tokens = ""
 
         self._outer = QtWidgets.QVBoxLayout(self)
         self._outer.setContentsMargins(8, 8, 8, 8)
@@ -164,7 +164,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self.tabs.addTab(self._normal_tab, "Normal")
 
         # "Configuration" tab: built here but attached only when state_count and
-        # motor tokens are provided by the caller (see _sync_config_tab)
+        # device tokens are provided by the caller (see _sync_config_tab)
         self._config_tab = QtWidgets.QWidget()
         self._config_layout = QtWidgets.QVBoxLayout(self._config_tab)
         self._config_layout.setContentsMargins(12, 12, 12, 12)
@@ -203,19 +203,19 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
     stateStartIndex = pyqtProperty(int, get_state_start, set_state_start)
 
-    def get_motor_tokens(self) -> str:
-        return self._motor_tokens
+    def get_device_tokens(self) -> str:
+        return self._device_tokens
 
-    def set_motor_tokens(self, value: str) -> None:
-        self._motor_tokens = value
+    def set_device_tokens(self, value: str) -> None:
+        self._device_tokens = value
         self._rebuild_grid()
 
-    motorTokens = pyqtProperty(str, get_motor_tokens, set_motor_tokens)
+    deviceTokens = pyqtProperty(str, get_device_tokens, set_device_tokens)
 
     # ------------------------------------------------------------------ build
     @property
     def _tokens(self) -> list[str]:
-        return [t.strip() for t in self._motor_tokens.split(",") if t.strip()]
+        return [t.strip() for t in self._device_tokens.split(",") if t.strip()]
 
     def _channel(self, token: str, index: int, leaf: str) -> str:
         return f"ca://{self._device}:STATE:{token}:{index:02d}:{leaf}_RBV"
@@ -304,7 +304,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         for r in range(self._state_count):
             index = self._state_start + r
             row = r + 2
-            # state name: read from the first motor token (char waveform -> string)
+            # state name: read from the first device token (char waveform -> string)
             name = _cell_label(
                 self._channel(tokens[0], index, "NAME"), bold=True, align=QtCore.Qt.AlignLeft, as_string=True
             )
