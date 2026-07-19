@@ -426,7 +426,7 @@ PyDMEnumComboBox::down-arrow {
            <string>Open the expert screen (Normal + Configuration tabs).</string>
           </property>
           <property name="whatsThis">
-           <string>Opens motor_state_mover_expert.ui, forwarding the MOTOR, STATE_COUNT and MOTOR_TOKENS macros.</string>
+           <string>Opens motor_state_mover_expert.py, forwarding the DEVICE, STATE_COUNT and DEVICE_TOKENS macros.</string>
           </property>
           <property name="styleSheet">
            <string>color: rgb(20, 20, 20); background-color: rgb(245, 245, 245); border: 1px solid rgb(219, 219, 219); border-radius: 4px;</string>

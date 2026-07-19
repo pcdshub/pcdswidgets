@@ -14,9 +14,9 @@ hidden -- we are already in the expert screen), then a tab group with
   properties instead of a fixed .ui:
 
   - ``stateCount`` -- number of states (grid rows).
-  - ``deviceTokens`` -- comma-separated per-device tokens (grid motor-columns). The
+  - ``deviceTokens`` -- comma-separated per-device tokens (grid columns). The
     tokens are device specific (e.g. ``D1M1,D3M1``) and cannot be generated from a
-    count, so they are listed explicitly. ``motor_count`` == number of tokens.
+    count, so they are listed explicitly. ``device_count`` == number of tokens.
 
 Everything here is read-only display (plus the reset command). Config cells
 resolve to::
