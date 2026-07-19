@@ -37,11 +37,12 @@ Normal tab.
 ### Expert screen — PMPS variant
 
 Set `PMPS` truthy (`"1"`, `"true"`, `"yes"`, `"on"`). The Configuration tab then
-shows the PMPS controls (`arb_enable`, `maint_mode`) instead of the motor grid,
-so `STATE_COUNT` / `MOTOR_TOKENS` are not needed.
+shows the PMPS controls (`arb_enable`, `maint_mode`) above the per-state motor
+grid. Pass `STATE_COUNT` / `MOTOR_TOKENS` for the grid; with only `DEVICE` you
+get just the PMPS controls.
 
 ```bash
-./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "PMPS": "1"}' \
+./try_in_pydm.sh -m '{"DEVICE": "TST:D3", "PMPS": "1", "STATE_COUNT": 4, "MOTOR_TOKENS": "D1M1,D2M1,D3M1"}' \
   pcdswidgets/screens/motor_state_mover_expert.py
 ```
 
