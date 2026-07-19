@@ -280,8 +280,8 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
 
     def _build_state_grid(self) -> QtWidgets.QWidget | None:
-        """Per-state motor grid (State | Motor k (Setpoint, Velo) x N), or None
-        when no state count / tokens were supplied."""
+        """Per-state grid (state name | Motor k (Setpoint, Velo) x N), or None
+        when no state count / tokens were supplied. Motors are numbered 1..n."""
         tokens = self._tokens
         if not (self._state_count > 0 and tokens):
             return None
@@ -292,8 +292,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         grid.setHorizontalSpacing(6)
         grid.setVerticalSpacing(5)
 
-        # header rows: State | Motor k (Setpoint, Velo) x N
-        grid.addWidget(_hdr("State"), 0, 0, 2, 1)
+        # header rows: (no State header) | Motor k (Setpoint, Velo) x N
         col = 1
         for m, _token in enumerate(tokens):
             grid.addWidget(_hdr(f"Motor {m + 1}"), 0, col, 1, 2)
@@ -306,7 +305,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             row = r + 2
             # state name: read from the first device token (char waveform -> string)
             name = _cell_label(
-                self._channel(tokens[0], index, "NAME"), bold=True, align=QtCore.Qt.AlignLeft, as_string=True
+                self._channel(tokens[0], index, "NAME"),
+                bold=True,
+                align=QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                as_string=True,
             )
             grid.addWidget(name, row, 0)
 
@@ -382,7 +384,6 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
         state_box = self._build_state_grid()
         if state_box is not None:
             self._config_layout.addSpacing(12)
-            self._config_layout.addWidget(_hdr("States"))
             self._config_layout.addWidget(state_box)
 
         self._config_layout.addStretch(1)
