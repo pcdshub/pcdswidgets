@@ -79,8 +79,8 @@ _RESET_SUFFIX = "STATE:RESET"
 # Each row shows a value readback (ca://{device}:{suffix}_RBV) and a setpoint
 # selector (ca://{device}:{suffix}). Confirm the suffixes against the IOC.
 _PMPS_ROWS = (
-    ("arb_enable", "PMPS:ARB:ARB_ENABLE"),
-    ("maint_mode", "PMPS:MAINT_MODE"),
+    ("arb_enable", "PMPS:ARB:ENABLE"),
+    ("maint_mode", "PMPS:MAINT:MODE"),
 )
 
 # fixed width of the plain state mover (matches the Form width in
