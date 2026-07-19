@@ -25,7 +25,7 @@ class MotorStateMover(MotorStateMoverBase):
         # Resolve the expert screen to an absolute path so the related-display
         # button finds it regardless of where the embedding display lives or
         # whether the screens dir is on PYDM_DISPLAYS_PATH. Mirrors the smaract
-        # widgets' approach. The MOTOR macro is forwarded via the button's
+        # widgets' approach. The DEVICE macro is forwarded via the button's
         # templated `macros` property (see the .ui).
         expert = Path(__file__).parents[2] / "screens" / "motor_state_mover_expert.py"
         self.expertScreenButton.setFilenames([str(expert)])

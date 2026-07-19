@@ -6,7 +6,7 @@ Opened from the plain :class:`MotorStateMover` "Expert Screen" button. Wraps one
 and configures it from the incoming macros.
 
 Macros:
-    MOTOR        base prefix, e.g. ``TST:D3`` (required)
+    DEVICE       base prefix, e.g. ``TST:D3`` (required)
     PMPS         truthy ("1"/"true") -> PMPS variant: the Configuration tab holds
                  the PMPS controls (arb_enable, maint_mode) instead of the
                  per-state motor grid. STATE_COUNT / MOTOR_TOKENS are ignored.
@@ -35,10 +35,10 @@ class MotorStateMoverExpert(Display):
 
         if str(macros.get("PMPS", "")).strip().lower() in _TRUTHY:
             self.expanded = MotorStateMoverExpandedPMPS()
-            self.expanded.setProperty("motor", macros.get("MOTOR", ""))
+            self.expanded.setProperty("device", macros.get("DEVICE", ""))
         else:
             self.expanded = MotorStateMoverExpanded()
-            self.expanded.setProperty("motor", macros.get("MOTOR", ""))
+            self.expanded.setProperty("device", macros.get("DEVICE", ""))
             self.expanded.setProperty("motorTokens", macros.get("MOTOR_TOKENS", ""))
             try:
                 self.expanded.setProperty("stateCount", int(macros.get("STATE_COUNT", 0)))
