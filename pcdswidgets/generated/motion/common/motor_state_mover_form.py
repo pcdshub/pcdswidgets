@@ -256,7 +256,8 @@ class Ui_Form(object):
         self.expertScreenButton.setToolTip(_translate("Form", "Open the expert screen (Normal + Configuration tabs)."))
         self.expertScreenButton.setWhatsThis(
             _translate(
-                "Form", "Opens motor_state_mover_expert.ui, forwarding the MOTOR, STATE_COUNT and MOTOR_TOKENS macros."
+                "Form",
+                "Opens motor_state_mover_expert.py, forwarding the DEVICE, STATE_COUNT and DEVICE_TOKENS macros.",
             )
         )
         self.expertScreenButton.setStyleSheet(
