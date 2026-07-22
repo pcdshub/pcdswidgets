@@ -74,6 +74,72 @@ class CamROI(pg.ROI):
         if xform is not None:
             xform.values_changed.connect(self._on_transform_changed)
 
+    def build_transforms(
+        self,
+        prefix: str,
+        offset_x_suffixes: list[str],
+        scale_x_suffixes: list[str],
+        offset_y_suffixes: list[str],
+        scale_y_suffixes: list[str],
+    ) -> None:
+        """Build and connect coordinate transforms from PV suffix lists.
+
+        Disconnects any existing transforms, builds chained
+        CoordinateTransform pipelines for X and Y, then connects
+        their PyDMChannels.
+
+        Each (offset[i], scale[i]) pair becomes one transform stage with
+        ``negate_offset=True`` and ``invert_scale=True``:
+        screen = (sensor - offset) / scale.
+        """
+        if self._transform_x is not None:
+            self._transform_x.disconnect()
+        if self._transform_y is not None:
+            self._transform_y.disconnect()
+
+        self.transform_x = self._make_transform_chain(
+            prefix, offset_x_suffixes, scale_x_suffixes
+        )
+        self.transform_y = self._make_transform_chain(
+            prefix, offset_y_suffixes, scale_y_suffixes
+        )
+
+        if self._transform_x is not None:
+            self._transform_x.connect()
+        if self._transform_y is not None:
+            self._transform_y.connect()
+
+    @staticmethod
+    def _make_transform_chain(
+        prefix: str, offset_suffixes: list[str], scale_suffixes: list[str]
+    ) -> CoordinateTransform | None:
+        """Build a chained CoordinateTransform from PV suffix lists."""
+        n = max(len(offset_suffixes), len(scale_suffixes))
+        if n == 0:
+            return None
+
+        downstream: list[CoordinateTransform] = []
+        for i in range(1, n):
+            offset_pv = f"{prefix}{offset_suffixes[i]}" if i < len(offset_suffixes) else None
+            scale_pv = f"{prefix}{scale_suffixes[i]}" if i < len(scale_suffixes) else None
+            downstream.append(CoordinateTransform(
+                offset_pv=offset_pv,
+                scale_pv=scale_pv,
+                negate_offset=True,
+                invert_scale=True,
+            ))
+
+        offset_pv_0 = f"{prefix}{offset_suffixes[0]}" if offset_suffixes else None
+        scale_pv_0 = f"{prefix}{scale_suffixes[0]}" if scale_suffixes else None
+
+        return CoordinateTransform(
+            offset_pv=offset_pv_0,
+            scale_pv=scale_pv_0,
+            negate_offset=True,
+            invert_scale=True,
+            stages=downstream or None,
+        )
+
     def _on_transform_changed(self) -> None:
         """Re-render from stored logical geometry when transform PVs update."""
         self._render_from_logical()
