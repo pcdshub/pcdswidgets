@@ -65,11 +65,11 @@ class YamlToolbar(QtWidgets.QWidget):
         file : str
             The absolute path to the config file.
         """
+        self._config_file = file
         if not file:
             return
         if not os.path.isfile(file):
             return
-        self._config_file = file
         with open(file) as tf:
             full_config = yaml.full_load(tf)
         self._assemble_tabs(full_config)
