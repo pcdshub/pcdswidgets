@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>191</height>
+    <height>155</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,31 +15,32 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="name_label">
+    <widget class="PyDMEmbeddedDisplay" name="emb_disp">
      <property name="toolTip">
-      <string>${NAME}</string>
+      <string/>
      </property>
-     <property name="text">
-      <string>Name: ${NAME}</string>
+     <property name="macros">
+      <string>{&quot;TITLE&quot;: &quot;${EMB_TITLE}&quot;}</string>
+     </property>
+     <property name="filename">
+      <string>pcdswidgets/tests/builder/subdisplay.ui</string>
+     </property>
+     <property name="recursiveDisplaySearch">
+      <bool>false</bool>
+     </property>
+     <property name="loadWhenShown">
+      <bool>true</bool>
+     </property>
+     <property name="disconnectWhenHidden">
+      <bool>true</bool>
+     </property>
+     <property name="followSymlinks">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="num_label">
-     <property name="text">
-      <string>Num: ${NUM}</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="name_num_label">
-     <property name="text">
-      <string>${NAME}:${NUM}</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="PyDMShellCommand" name="one_two_shell">
+    <widget class="PyDMRelatedDisplayButton" name="rel_disp">
      <property name="toolTip">
       <string/>
      </property>
@@ -58,33 +59,31 @@
      <property name="PyDMIcon">
       <string/>
      </property>
-     <property name="showConfirmDialog">
-      <bool>false</bool>
-     </property>
-     <property name="runCommandsInFullShell">
-      <bool>false</bool>
-     </property>
-     <property name="confirmMessage">
-      <string>Are you sure you want to proceed?</string>
-     </property>
-     <property name="environmentVariables">
-      <string/>
-     </property>
-     <property name="showIcon">
-      <bool>true</bool>
-     </property>
-     <property name="allowMultipleExecutions">
-      <bool>false</bool>
+     <property name="filenames">
+      <stringlist>
+       <string>pcdswidgets/tests/builder/subdisplay.ui</string>
+       <string>some/other/rel/path.ui</string>
+       <string>/wow/abs/path.ui</string>
+      </stringlist>
      </property>
      <property name="titles">
       <stringlist/>
      </property>
-     <property name="commands">
+     <property name="showIcon">
+      <bool>true</bool>
+     </property>
+     <property name="recursiveDisplaySearch">
+      <bool>false</bool>
+     </property>
+     <property name="macros">
       <stringlist>
-       <string>echo ${ONE}</string>
-       <string>echo ${TWO}</string>
-       <string>echo ${ONE}:${TWO}</string>
+       <string>{&quot;TITLE&quot;: &quot;${REL_TITLE}&quot;}</string>
+       <string></string>
+       <string></string>
       </stringlist>
+     </property>
+     <property name="openInNewWindow">
+      <bool>false</bool>
      </property>
      <property name="passwordProtected">
       <bool>false</bool>
@@ -95,7 +94,7 @@
      <property name="protectedPassword">
       <string/>
      </property>
-     <property name="showCurrentlyRunningIndication">
+     <property name="followSymlinks">
       <bool>false</bool>
      </property>
     </widget>
@@ -104,9 +103,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMShellCommand</class>
+   <class>PyDMEmbeddedDisplay</class>
+   <extends>QFrame</extends>
+   <header>pydm.widgets.embedded_display</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMRelatedDisplayButton</class>
    <extends>QPushButton</extends>
-   <header>pydm.widgets.shell_command</header>
+   <header>pydm.widgets.related_display_button</header>
   </customwidget>
  </customwidgets>
  <resources/>

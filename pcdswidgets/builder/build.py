@@ -8,6 +8,7 @@ from io import StringIO
 from pathlib import Path
 
 from jinja2 import Environment, PackageLoader
+from qtpy import QtWidgets
 from qtpy.uic import compileUi  # type: ignore
 
 
@@ -70,7 +71,8 @@ def build_base_widget(designer_ui: str, output_dir: str = ""):
     info_for_jinja = process_widget_macros(ui_info)
 
     macro_names = sorted(info_for_jinja.macro_set)
-    widget_names = sorted(info_for_jinja.widget_set)
+    all_widget_names = sorted(info_for_jinja.all_widget_set)
+    macro_widget_names = sorted(info_for_jinja.macro_widget_set)
 
     # Fill the template
     jinja_template = "ui_base_widget.j2"
@@ -82,7 +84,8 @@ def build_base_widget(designer_ui: str, output_dir: str = ""):
         form_cls=ui_info.form_cls,
         base_cls=base_cls,
         macro_names=macro_names,
-        widget_names=widget_names,
+        all_widget_names=all_widget_names,
+        macro_widget_names=macro_widget_names,
         widget_name_to_class=ui_info.widget_name_to_class,
         macro_to_widget=info_for_jinja.macro_to_widget,
         widget_to_macro=info_for_jinja.widget_to_macro,
@@ -181,7 +184,11 @@ def get_ui_info(designer_ui: str) -> UiInfo:
     for widget in tree.iter("widget"):
         name = widget.attrib["name"]
         cls = widget.attrib["class"]
-        widget_name_to_class[name] = cls
+        if hasattr(QtWidgets, cls):
+            clsname_text = f"QtWidgets.{cls}"
+        else:
+            clsname_text = cls
+        widget_name_to_class[name] = clsname_text
         for prop in widget.findall("property"):
             add_prop_to_widget_macros(widget_macros, name, prop)
 
@@ -212,7 +219,12 @@ def add_prop_to_widget_macros(widget_macros: defaultdict[str, dict[str, str | li
     if strlist_node is not None:
         # We have a list of strings! Some may have macros.
         all_str_nodes = strlist_node.findall("string")
-        all_str_literals = [node.text for node in all_str_nodes if node.text is not None]
+        all_str_literals = []
+        for node in all_str_nodes:
+            if node.text is None:
+                all_str_literals.append("")
+            else:
+                all_str_literals.append(node.text)
         for text in all_str_literals:
             if "${" in text:
                 widget_macros[name][prop.attrib["name"]] = all_str_literals
@@ -224,7 +236,8 @@ class InfoForJinja:
     """Distilled widget and macro information for easily filling in the jinja template."""
 
     macro_set: set[str]
-    widget_set: set[str]
+    all_widget_set: set[str]
+    macro_widget_set: set[str]
     macro_to_widget: dict[str, list[str]]
     widget_to_macro: dict[str, list[str]]
     widget_to_pre_templ_strs: dict[str, list[tuple[str, str]]]
@@ -235,12 +248,15 @@ def process_widget_macros(ui_info: UiInfo) -> InfoForJinja:
     """Convert the raw ui info into a more useful form for filling the jinja template."""
     ij = InfoForJinja(
         macro_set=set(),
-        widget_set=set(),
+        all_widget_set=set(),
+        macro_widget_set=set(),
         macro_to_widget=defaultdict(list),
         widget_to_macro={},
         widget_to_pre_templ_strs=defaultdict(list),
         widget_to_pre_templ_lists=defaultdict(list),
     )
+    for widget_name in ui_info.widget_name_to_class:
+        ij.all_widget_set.add(widget_name)
 
     for widget_name, prop_info in ui_info.widget_macros.items():
         macros_here = set()
@@ -257,7 +273,7 @@ def process_widget_macros(ui_info: UiInfo) -> InfoForJinja:
             else:
                 raise TypeError(f"Invalid macro type: {value_with_macro}")
         ij.macro_set.update(macros_here)
-        ij.widget_set.add(widget_name)
+        ij.macro_widget_set.add(widget_name)
         for macro in macros_here:
             ij.macro_to_widget[macro].append(widget_name)
         ij.widget_to_macro[widget_name] = sorted(macros_here)
