@@ -6,7 +6,8 @@ base_cls = SmaractTipTiltFullBase
 macro_names = ['horizontal_motor', 'vertical_motor']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,6 +29,12 @@ except ImportError:
 
 
 class SmaractTipTiltFullBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
+    frame: "QtWidgets.QFrame"
+    gridLayoutWidget: "QtWidgets.QWidget"
+    gridLayoutWidget_2: "QtWidgets.QWidget"
+    horizontal_expert_screen: "PyDMRelatedDisplayButton"
+    horizontal_invert: "QtWidgets.QCheckBox"
     horizontal_label: "PyDMLabel"
     horizontal_moving: "PyDMByteIndicator"
     horizontal_step_size: "PyDMLineEdit"
@@ -36,6 +43,8 @@ class SmaractTipTiltFullBase(DesignerWidget):
     step_left: "PyDMPushButton"
     step_right: "PyDMPushButton"
     step_up: "PyDMPushButton"
+    vertical_expert_screen: "PyDMRelatedDisplayButton"
+    vertical_invert: "QtWidgets.QCheckBox"
     vertical_label: "PyDMLabel"
     vertical_moving: "PyDMByteIndicator"
     vertical_step_size: "PyDMLineEdit"
@@ -50,6 +59,7 @@ class SmaractTipTiltFullBase(DesignerWidget):
             "horizontal_step_size",
             "horizontal_label",
             "horizontal_moving",
+            "horizontal_expert_screen",
         ],
         "vertical_motor": [
             "step_down",
@@ -58,9 +68,13 @@ class SmaractTipTiltFullBase(DesignerWidget):
             "vertical_label",
             "vertical_moving",
             "vertical_step_size",
+            "vertical_expert_screen",
         ],
     }
     _widget_to_macro = {
+        "horizontal_expert_screen": [
+            "horizontal_motor",
+        ],
         "horizontal_label": [
             "horizontal_motor",
         ],
@@ -83,6 +97,9 @@ class SmaractTipTiltFullBase(DesignerWidget):
             "horizontal_motor",
         ],
         "step_up": [
+            "vertical_motor",
+        ],
+        "vertical_expert_screen": [
             "vertical_motor",
         ],
         "vertical_label": [
@@ -99,45 +116,61 @@ class SmaractTipTiltFullBase(DesignerWidget):
         ],
     }
     _widget_to_pre_template = {
+        "horizontal_expert_screen": [
+            (
+                "macros",
+                [
+                    """{"motor": "${horizontal_motor}"}""",
+                ],
+            ),
+        ],
         "horizontal_label": [
-            ("channel", "ca://${horizontal_motor}.DESC"),
+            ("channel", """ca://${horizontal_motor}.DESC"""),
         ],
         "horizontal_moving": [
-            ("PyDMToolTip", "${horizontal_motor} is currently moving"),
-            ("channel", "ca://${horizontal_motor}.MOVN"),
+            ("PyDMToolTip", """${horizontal_motor} is currently moving"""),
+            ("channel", """ca://${horizontal_motor}.MOVN"""),
         ],
         "horizontal_step_size": [
-            ("channel", "ca://${horizontal_motor}:STEP_COUNT"),
+            ("channel", """ca://${horizontal_motor}:STEP_COUNT"""),
         ],
         "horizontal_step_total": [
-            ("text", "ca://${horizontal_motor}:TOTAL_STEP_COUNT"),
-            ("channel", "ca://${horizontal_motor}:TOTAL_STEP_COUNT"),
+            ("text", """ca://${horizontal_motor}:TOTAL_STEP_COUNT"""),
+            ("channel", """ca://${horizontal_motor}:TOTAL_STEP_COUNT"""),
         ],
         "step_down": [
-            ("channel", "ca://${vertical_motor}:STEP_REVERSE.PROC"),
+            ("channel", """ca://${vertical_motor}:STEP_REVERSE.PROC"""),
         ],
         "step_left": [
-            ("channel", "ca://${horizontal_motor}:STEP_REVERSE.PROC"),
+            ("channel", """ca://${horizontal_motor}:STEP_REVERSE.PROC"""),
         ],
         "step_right": [
-            ("channel", "ca://${horizontal_motor}:STEP_FORWARD.PROC"),
+            ("channel", """ca://${horizontal_motor}:STEP_FORWARD.PROC"""),
         ],
         "step_up": [
-            ("channel", "ca://${vertical_motor}:STEP_FORWARD.PROC"),
+            ("channel", """ca://${vertical_motor}:STEP_FORWARD.PROC"""),
+        ],
+        "vertical_expert_screen": [
+            (
+                "macros",
+                [
+                    """{"motor": "${vertical_motor}"}""",
+                ],
+            ),
         ],
         "vertical_label": [
-            ("channel", "ca://${vertical_motor}.DESC"),
+            ("channel", """ca://${vertical_motor}.DESC"""),
         ],
         "vertical_moving": [
-            ("PyDMToolTip", "${vertical_motor} is currently moving"),
-            ("channel", "ca://${vertical_motor}.MOVN"),
+            ("PyDMToolTip", """${vertical_motor} is currently moving"""),
+            ("channel", """ca://${vertical_motor}.MOVN"""),
         ],
         "vertical_step_size": [
-            ("channel", "ca://${vertical_motor}:STEP_COUNT"),
+            ("channel", """ca://${vertical_motor}:STEP_COUNT"""),
         ],
         "vertical_step_total": [
-            ("text", "ca://${vertical_motor}:TOTAL_STEP_COUNT"),
-            ("channel", "ca://${vertical_motor}:TOTAL_STEP_COUNT"),
+            ("text", """ca://${vertical_motor}:TOTAL_STEP_COUNT"""),
+            ("channel", """ca://${vertical_motor}:TOTAL_STEP_COUNT"""),
         ],
     }
 
@@ -149,17 +182,17 @@ class SmaractTipTiltFullBase(DesignerWidget):
         }
 
     def get_horizontal_motor(self) -> str:
-        return self._get_macro("horizontal_motor")
+        return self.get_macro("horizontal_motor")
 
     def set_horizontal_motor(self, value: str) -> None:
-        self._set_macro("horizontal_motor", value)
+        self.set_macro("horizontal_motor", value)
 
     horizontal_motor = pyqtProperty(str, get_horizontal_motor, set_horizontal_motor)
 
     def get_vertical_motor(self) -> str:
-        return self._get_macro("vertical_motor")
+        return self.get_macro("vertical_motor")
 
     def set_vertical_motor(self, value: str) -> None:
-        self._set_macro("vertical_motor", value)
+        self.set_macro("vertical_motor", value)
 
     vertical_motor = pyqtProperty(str, get_vertical_motor, set_vertical_motor)
