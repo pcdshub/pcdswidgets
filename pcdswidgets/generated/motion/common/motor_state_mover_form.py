@@ -14,13 +14,13 @@ from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.pushbutton import PyDMPushButton
 from pydm.widgets.shell_command import PyDMShellCommand
-from qtpy import QtCore, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(800, 101)
+        Form.resize(800, 113)
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame = QtWidgets.QFrame(Form)
@@ -122,6 +122,10 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.errorLabel.sizePolicy().hasHeightForWidth())
         self.errorLabel.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.errorLabel.setFont(font)
         self.errorLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.errorLabel.setObjectName("errorLabel")
         self.errorLayout.addWidget(self.errorLabel, 0, QtCore.Qt.AlignHCenter)
@@ -207,7 +211,7 @@ class Ui_Form(object):
             _translate("Form", "color: rgb(43, 43, 43); background-color: rgb(250, 250, 250);")
         )
         self.stateSelector.setChannel(_translate("Form", "ca://${MOTOR}:STATE:SET"))
-        self.errorLabel.setText(_translate("Form", "Error"))
+        self.errorLabel.setText(_translate("Form", "Err Code"))
         self.errorStatus.setToolTip(_translate("Form", "Readback of the current error ID."))
         self.errorStatus.setWhatsThis(_translate("Form", "Shows the current motor error identifier."))
         self.errorStatus.setStyleSheet(_translate("Form", "color: rgb(43, 43, 43);"))
