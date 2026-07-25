@@ -56,6 +56,7 @@ MotorBeckhoffSlits = "pcdswidgets.motion.common.motor_beckhoff_slits:MotorBeckho
 MotorClassicFull = "pcdswidgets.motion.common.motor_classic_full:MotorClassicFull"
 MotorClassicRow = "pcdswidgets.motion.common.motor_classic_row:MotorClassicRow"
 MotorClassicVert = "pcdswidgets.motion.common.motor_classic_vert:MotorClassicVert"
+MotorStateMover = "pcdswidgets.motion.common.motor_state_mover:MotorStateMover"
 MotorTcClassicRow = "pcdswidgets.motion.common.motor_tc_classic_row:MotorTcClassicRow"
 NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
