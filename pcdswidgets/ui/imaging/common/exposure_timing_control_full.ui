@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>395</width>
+    <height>77</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>390</width>
+    <height>60</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>747</width>
+    <height>80</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Exposure &amp; Timing</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="horizontalSpacing">
+    <number>2</number>
+   </property>
+   <item row="1" column="7">
+    <widget class="PyDMLabel" name="frame_rate_rbv">
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:GainAuto_RBV</string>
+     </property>
+     <property name="enableRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="PyDMLabel" name="acquire_time_rbv">
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:AcquireTime_RBV</string>
+     </property>
+     <property name="enableRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="PyDMEnumComboBox" name="gain_auto_combo">
+     <property name="minimumSize">
+      <size>
+       <width>65</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="monitorDisp">
+      <bool>false</bool>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:GainAuto</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_gain">
+     <property name="text">
+      <string>Gain:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="PyDMLineEdit" name="acquire_period_edit">
+     <property name="minimumSize">
+      <size>
+       <width>65</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="monitorDisp">
+      <bool>false</bool>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:AcquirePeriod</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QLabel" name="label_gain_auto">
+     <property name="text">
+      <string>Gain Auto: </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="PyDMLineEdit" name="acquire_time_edit">
+     <property name="minimumSize">
+      <size>
+       <width>65</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="monitorDisp">
+      <bool>false</bool>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:AcquireTime</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="PyDMLabel" name="acquire_period_rbv">
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:AcquirePeriod_RBV</string>
+     </property>
+     <property name="enableRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="label_period">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Period: </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_exposure">
+     <property name="text">
+      <string>Exposure:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="PyDMLabel" name="gain_rbv">
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:Gain_RBV</string>
+     </property>
+     <property name="enableRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1">
+    <widget class="PyDMLineEdit" name="gain_edit">
+     <property name="minimumSize">
+      <size>
+       <width>65</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="precision">
+      <number>0</number>
+     </property>
+     <property name="showUnits">
+      <bool>false</bool>
+     </property>
+     <property name="precisionFromPV">
+      <bool>true</bool>
+     </property>
+     <property name="alarmSensitiveContent">
+      <bool>false</bool>
+     </property>
+     <property name="alarmSensitiveBorder">
+      <bool>true</bool>
+     </property>
+     <property name="PyDMToolTip">
+      <string/>
+     </property>
+     <property name="monitorDisp">
+      <bool>false</bool>
+     </property>
+     <property name="channel">
+      <string>ca://${cam_prefix}:Gain</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

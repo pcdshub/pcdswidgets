@@ -7,7 +7,7 @@ PY_FORM := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_form.py)
 PY_BASE := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_base.py)
 PY_MAIN := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/%.py)
 
-BIN := .venv/bin
+BIN := .pixi/envs/default/bin
 BUILD_CMD := $(BIN)/python -m pcdswidgets.builder.build
 CHECK_FIX := $(BIN)/ruff check --exit-zero --fix --quiet
 FORMAT := $(BIN)/ruff format --quiet
@@ -15,13 +15,17 @@ FORMAT := $(BIN)/ruff format --quiet
 # We need to update the venv before doing any step and after doing all of them
 # The order matters here, except the py files in the build target could be done in any order
 all:
-	$(MAKE) venv
+	$(MAKE) pixi
 	$(MAKE) build
 	$(MAKE) inits
 	$(MAKE) pyproject.toml
-	$(MAKE) venv
+	$(MAKE) pixi
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
+
+# Special target for forcing rebuild of generated dir
+# make rebuild --always-make
+rebuild: $(PY_FORM) $(PY_BASE)
 
 # Need to re-run form and base if the ui file is updated
 $(PY_FORM): pcdswidgets/generated/%_form.py: pcdswidgets/ui/%.ui
@@ -47,5 +51,5 @@ inits:
 pyproject.toml: $(PY_SOURCE)
 	$(BIN)/python -m pcdswidgets.builder.entrypoint_finder
 
-venv:
-	./build_local_venv.sh
+pixi:
+	pixi run install
