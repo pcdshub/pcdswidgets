@@ -934,7 +934,7 @@ background-color: rgb(250, 250, 250);</string>
       </widget>
      </item>
      <item row="0" column="4" colspan="4">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="VerticalLabel">
        <property name="font">
         <font>
          <pointsize>11</pointsize>
@@ -948,7 +948,7 @@ background-color: rgb(250, 250, 250);</string>
       </widget>
      </item>
      <item row="0" column="0" colspan="4">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="HorizontalLabel">
        <property name="font">
         <font>
          <pointsize>11</pointsize>
