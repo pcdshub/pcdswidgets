@@ -173,7 +173,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._rebuild_normal()
         self._rebuild_grid()
 
-    # ------------------------------------------------------------------ props
+    # props
     def get_device(self) -> str:
         return self._device
 
@@ -212,7 +212,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
     deviceTokens = pyqtProperty(str, get_device_tokens, set_device_tokens)
 
-    # ------------------------------------------------------------------ build
+    # build
     @property
     def _tokens(self) -> list[str]:
         return [t.strip() for t in self._device_tokens.split(",") if t.strip()]
@@ -388,7 +388,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
         self._sync_config_tab()
 
 
-# --------------------------------------------------------------------- helpers
+# helpers
 def _plain(size: int) -> QtGui.QFont:
     return QtGui.QFont("DejaVu Sans", size)
 
