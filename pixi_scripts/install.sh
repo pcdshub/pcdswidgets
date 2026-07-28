@@ -6,11 +6,23 @@ set -e
 
 HERE="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 THIS_ENV="${HERE}"/..
-DEST="${THIS_ENV}"/.pixi/envs/default/plugins/designer/libpyqt5.so
-
-if [ -f "${DEST}" ]; then
-    exit 0
-fi
 
 PLUGIN=/cds/group/pcds/pyps/conda/designer_fix/3_12/libpyqt5.so
-cp "${PLUGIN}" "${DEST}"
+
+for envname in default typhos; do
+    dest_dir="${THIS_ENV}"/.pixi/envs/"${envname}"/plugins/designer
+    dest="${dest_dir}"/libpyqt5.so
+
+    if [ -f "${dest}" ]; then
+        echo "Skip designer plugin install in ${envname} environment: already installed."
+        continue
+    fi
+    if [ -d "${dest_dir}" ]; then
+        echo "Installing designer plugin in ${envname} environment."
+    else
+        echo "Skip designer plugin install in ${envname} environment: env does not exist yet."
+        continue
+    fi
+
+    cp "${PLUGIN}" "${dest}"
+done
