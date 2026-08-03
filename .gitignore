@@ -118,6 +118,3 @@ venv.bak/
 .pixi/*
 !.pixi/config.toml
 
-# local state-mover work artifacts (not tracked)
-/outputs/
-/docs/state_mover_usage.md
