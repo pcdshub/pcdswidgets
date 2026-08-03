@@ -36,8 +36,6 @@ from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
 
-from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.motion.common.motor_state_mover import MotorStateMover
 
 try:
@@ -103,14 +101,10 @@ _TAB_STYLE = (
 class MotorStateMoverExpanded(QtWidgets.QFrame):
     """Plain state mover + a read-only, dynamically sized state-config grid."""
 
-    designer_options = DesignerOptions(
-        group="ECS Motion Common",
-        is_container=False,
-        icon=IconOptions.NONE,
-    )
+    # Plain QFrame (not a DesignerWidget), so PyDM reads _qt_designer_ directly.
     _qt_designer_ = {
-        "group": designer_options.group,
-        "is_container": designer_options.is_container,
+        "group": "ECS Motion Common",
+        "is_container": False,
     }
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
@@ -338,16 +332,6 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
     maint_mode) -- each a value readback plus a setpoint selector, sharing the
     ${DEVICE} prefix -- with the per-state motor grid shown below them (when
     state count / tokens are supplied)."""
-
-    designer_options = DesignerOptions(
-        group="ECS Motion Common",
-        is_container=False,
-        icon=IconOptions.NONE,
-    )
-    _qt_designer_ = {
-        "group": designer_options.group,
-        "is_container": designer_options.is_container,
-    }
 
     def _config_provided(self) -> bool:
         # the PMPS controls only need the device prefix (no state count / tokens)

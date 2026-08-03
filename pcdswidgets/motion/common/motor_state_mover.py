@@ -16,7 +16,7 @@ class MotorStateMover(MotorStateMoverBase):
         icon=IconOptions.NONE,
     )
     # The expert-screen button's filename is a package-relative path
-    # (pcdswidgets/screens/motor_state_mover_expert.py); DesignerWidget's
+    # (pcdswidgets/motion/common/motor_state_mover_expert.py); DesignerWidget's
     # update_relative_paths() resolves it to the absolute install path at load.
     # The moving/done label (movingIndicatorLabel) is a promoted MovingLabel
     # bound to STATE:BUSY_RBV in the .ui, so both work with no runtime setup.
