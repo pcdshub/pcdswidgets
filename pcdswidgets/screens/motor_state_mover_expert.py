@@ -28,7 +28,7 @@ _TRUTHY = {"1", "true", "yes", "on"}
 class MotorStateMoverExpert(Display):
     def __init__(self, parent=None, args=None, macros=None):
         super().__init__(parent=parent, args=args, macros=macros)
-        macros = macros or {}
+        macros = self.macros()  # Display stores the macros; returns {} if none
 
         layout = QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
