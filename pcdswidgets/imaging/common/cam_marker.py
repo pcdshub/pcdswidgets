@@ -1,10 +1,13 @@
 """Managed point-of-interest marker for camera image overlays."""
 
+import math
 from enum import IntEnum
 
 import pyqtgraph as pg
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
+
+_ELLIPSE_SEGMENTS = 64
 
 
 class MarkerStyle(IntEnum):
@@ -12,14 +15,15 @@ class MarkerStyle(IntEnum):
 
     CROSSHAIR_LENGTH = 0
     INFINITE_LINES = 1
+    ELLIPSE = 2
 
 
 class CamMarker:
     """Composite marker overlay for a single point of interest.
 
-    Renders on a pyqtgraph ViewBox as either crosshairs of varying sizes
-    or infinite (full-span) lines.  Wraps the graphic items so style
-    changes preserve the marker position.
+    Renders on a pyqtgraph ViewBox as crosshairs of varying sizes,
+    infinite (full-span) lines, or an ellipse.  Wraps the graphic items so
+    style changes preserve the marker position.
 
     Parameters
     ----------
@@ -29,6 +33,15 @@ class CamMarker:
         Initial pen width in pixels.
     style : MarkerStyle
         Initial display style.
+    arm_length : int
+        Initial crosshair arm length, in data coordinates. Only used when
+        ``style`` is ``MarkerStyle.CROSSHAIR_LENGTH``.
+    radius_x : int
+        Initial ellipse radius along x, in data coordinates. Only used
+        when ``style`` is ``MarkerStyle.ELLIPSE``.
+    radius_y : int
+        Initial ellipse radius along y, in data coordinates. Only used
+        when ``style`` is ``MarkerStyle.ELLIPSE``.
     """
 
     def __init__(
@@ -37,12 +50,16 @@ class CamMarker:
         width: int = 2,
         style: MarkerStyle = MarkerStyle.CROSSHAIR_LENGTH,
         arm_length: int = 20,
+        radius_x: int = 5,
+        radius_y: int = 5,
         hatch_pattern: Qt.PenStyle = Qt.SolidLine,
     ):
         self._color = QColor(color)
         self._width = width
         self._style = style
         self._arm_length = arm_length
+        self._radius_x = radius_x
+        self._radius_y = radius_y
         self._hatch_pattern = hatch_pattern
         self._x, self._y = 0.0, 0.0
         self._visible = False
@@ -85,6 +102,20 @@ class CamMarker:
         self._arm_length = length
         self._update_positions()
 
+    def set_radius(self, radius: int) -> None:
+        """Set both radii at once, for a uniform (circular) ellipse."""
+        self._radius_x = radius
+        self._radius_y = radius
+        self._update_positions()
+
+    def set_radius_x(self, radius: int) -> None:
+        self._radius_x = radius
+        self._update_positions()
+
+    def set_radius_y(self, radius: int) -> None:
+        self._radius_y = radius
+        self._update_positions()
+
     def set_hatch_pattern(self, pattern: Qt.PenStyle) -> None:
         self._hatch_pattern = pattern
         self._update_pens()
@@ -124,6 +155,19 @@ class CamMarker:
         return self._arm_length
 
     @property
+    def radius(self) -> int:
+        """Radius along x, for callers that only care about a uniform (circular) ellipse."""
+        return self._radius_x
+
+    @property
+    def radius_x(self) -> int:
+        return self._radius_x
+
+    @property
+    def radius_y(self) -> int:
+        return self._radius_y
+
+    @property
     def hatch_pattern(self) -> Qt.PenStyle:
         return self._hatch_pattern
 
@@ -139,6 +183,10 @@ class CamMarker:
             h_line = pg.InfiniteLine(angle=0, pen=pen)
             v_line = pg.InfiniteLine(angle=90, pen=pen)
             self._items = [h_line, v_line]
+        elif self._style == MarkerStyle.ELLIPSE:
+            # A single closed polyline in data coordinates
+            ellipse = pg.PlotDataItem(pen=pen)
+            self._items = [ellipse]
         else:
             # 4 arms radiating from center for symmetric dash patterns
             left = pg.PlotDataItem(pen=pen)
@@ -169,6 +217,9 @@ class CamMarker:
         if self._style == MarkerStyle.INFINITE_LINES:
             self._items[0].setValue(self.y)  # horizontal
             self._items[1].setValue(self.x)  # vertical
+        elif self._style == MarkerStyle.ELLIPSE:
+            xs, ys = self._ellipse_points()
+            self._items[0].setData(xs, ys)
         else:
             arm = float(self._arm_length)
             # 4 arm starting from center
@@ -176,6 +227,18 @@ class CamMarker:
             self._items[1].setData([self.x, self.x + arm], [self.y, self.y])
             self._items[2].setData([self.x, self.x], [self.y, self.y + arm])
             self._items[3].setData([self.x, self.x], [self.y, self.y - arm])
+
+    def _ellipse_points(self) -> tuple[list[float], list[float]]:
+        """Compute a closed polyline approximating the ellipse in data coordinates."""
+        radius_x = float(self._radius_x)
+        radius_y = float(self._radius_y)
+        xs = []
+        ys = []
+        for i in range(_ELLIPSE_SEGMENTS + 1):
+            theta = 2 * math.pi * i / _ELLIPSE_SEGMENTS
+            xs.append(self.x + radius_x * math.cos(theta))
+            ys.append(self.y + radius_y * math.sin(theta))
+        return xs, ys
 
     def _update_pens(self) -> None:
         """Apply current pen settings to all graphic items."""

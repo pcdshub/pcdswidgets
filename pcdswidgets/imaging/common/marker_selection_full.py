@@ -226,6 +226,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             current_style=marker.style,
             current_width=marker.width,
             current_arm_length=marker.arm_length,
+            current_radius=marker.radius,
             current_hatch_pattern=marker.hatch_pattern,
             parent=self,
         )
@@ -235,6 +236,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
                 m.set_style(dlg.selected_style)
                 m.set_width(dlg.selected_width)
                 m.set_arm_length(dlg.selected_arm_length)
+                m.set_radius(dlg.selected_radius)
                 m.set_hatch_pattern(dlg.selected_hatch_pattern)
 
     def _get_marker_color(self, idx: int) -> QColor:

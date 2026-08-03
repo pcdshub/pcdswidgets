@@ -1,4 +1,4 @@
-"""Dialog for selecting marker display style, line thickness, hatch pattern, and arm length."""
+"""Dialog for selecting marker display style, line thickness, hatch pattern, arm length, and radius."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (
@@ -17,7 +17,7 @@ from qtpy.QtWidgets import (
 
 from pcdswidgets.imaging.common.cam_marker import MarkerStyle
 
-_HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
+HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
     ("Solid", Qt.SolidLine),
     ("Dotted", Qt.DotLine),
     ("Dashed", Qt.DashLine),
@@ -26,7 +26,7 @@ _HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
 
 
 class MarkerStyleDialog(QDialog):
-    """Popup dialog for configuring marker style, thickness, hatch pattern, and arm length.
+    """Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
 
     Parameters
     ----------
@@ -36,6 +36,8 @@ class MarkerStyleDialog(QDialog):
         The current pen thickness in pixels.
     current_arm_length : int
         The current crosshair arm length in pixels.
+    current_radius : int
+        The current ellipse radius in pixels.
     current_hatch_pattern : Qt.PenStyle
         The current line hatch pattern.
     parent : QWidget, optional
@@ -47,6 +49,7 @@ class MarkerStyleDialog(QDialog):
         current_style: MarkerStyle,
         current_width: int,
         current_arm_length: int = 20,
+        current_radius: int = 5,
         current_hatch_pattern: Qt.PenStyle = Qt.SolidLine,
         parent=None,
     ):
@@ -57,6 +60,7 @@ class MarkerStyleDialog(QDialog):
         self._selected_style = current_style
         self._selected_width = current_width
         self._selected_arm_length = current_arm_length
+        self._selected_radius = current_radius
         self._selected_hatch_pattern = current_hatch_pattern
 
         layout = QVBoxLayout(self)
@@ -68,16 +72,21 @@ class MarkerStyleDialog(QDialog):
         self._style_buttons = QButtonGroup(self)
         self._radio_length = QRadioButton("Crosshair (configurable length)")
         self._radio_infinite = QRadioButton("Infinite lines")
+        self._radio_ellipse = QRadioButton("Ellipse")
         self._style_buttons.addButton(self._radio_length, MarkerStyle.CROSSHAIR_LENGTH.value)
         self._style_buttons.addButton(self._radio_infinite, MarkerStyle.INFINITE_LINES.value)
+        self._style_buttons.addButton(self._radio_ellipse, MarkerStyle.ELLIPSE.value)
 
         if current_style == MarkerStyle.INFINITE_LINES:
             self._radio_infinite.setChecked(True)
+        elif current_style == MarkerStyle.ELLIPSE:
+            self._radio_ellipse.setChecked(True)
         else:
             self._radio_length.setChecked(True)
 
         style_layout.addWidget(self._radio_length)
         style_layout.addWidget(self._radio_infinite)
+        style_layout.addWidget(self._radio_ellipse)
 
         self._arm_length_row = QHBoxLayout()
         self._arm_length_label = QLabel("Arm length (px):")
@@ -88,19 +97,28 @@ class MarkerStyleDialog(QDialog):
         self._arm_length_row.addWidget(self._arm_length_spin)
         style_layout.addLayout(self._arm_length_row)
 
+        self._radius_row = QHBoxLayout()
+        self._radius_label = QLabel("Radius (px):")
+        self._radius_spin = QSpinBox()
+        self._radius_spin.setRange(5, 500)
+        self._radius_spin.setValue(current_radius)
+        self._radius_row.addWidget(self._radius_label)
+        self._radius_row.addWidget(self._radius_spin)
+        style_layout.addLayout(self._radius_row)
+
         layout.addWidget(style_group)
 
         self._style_buttons.idToggled.connect(self._on_style_toggled)
-        self._update_arm_length_visibility()
+        self._update_size_controls_visibility()
 
         hatch_group = QGroupBox("Line Hatch Pattern")
         hatch_layout = QHBoxLayout(hatch_group)
         hatch_layout.addWidget(QLabel("Pattern:"))
         self._hatch_combo = QComboBox()
-        for label, _pen_style in _HATCH_OPTIONS:
+        for label, _pen_style in HATCH_OPTIONS:
             self._hatch_combo.addItem(label)
         # Pre-select current pattern
-        for i, (_label, pen_style) in enumerate(_HATCH_OPTIONS):
+        for i, (_label, pen_style) in enumerate(HATCH_OPTIONS):
             if pen_style == current_hatch_pattern:
                 self._hatch_combo.setCurrentIndex(i)
                 break
@@ -133,12 +151,16 @@ class MarkerStyleDialog(QDialog):
         cancel_btn.clicked.connect(self.reject)
 
     def _on_style_toggled(self, _id: int, _checked: bool) -> None:
-        self._update_arm_length_visibility()
+        self._update_size_controls_visibility()
 
-    def _update_arm_length_visibility(self) -> None:
-        visible = self._radio_length.isChecked()
-        self._arm_length_label.setVisible(visible)
-        self._arm_length_spin.setVisible(visible)
+    def _update_size_controls_visibility(self) -> None:
+        arm_length_visible = self._radio_length.isChecked()
+        self._arm_length_label.setVisible(arm_length_visible)
+        self._arm_length_spin.setVisible(arm_length_visible)
+
+        radius_visible = self._radio_ellipse.isChecked()
+        self._radius_label.setVisible(radius_visible)
+        self._radius_spin.setVisible(radius_visible)
 
     def _accept(self):
         checked_id = self._style_buttons.checkedId()
@@ -146,8 +168,9 @@ class MarkerStyleDialog(QDialog):
             self._selected_style = MarkerStyle(checked_id)
         self._selected_width = self._thickness_spin.value()
         self._selected_arm_length = self._arm_length_spin.value()
+        self._selected_radius = self._radius_spin.value()
         hatch_idx = self._hatch_combo.currentIndex()
-        self._selected_hatch_pattern = _HATCH_OPTIONS[hatch_idx][1]
+        self._selected_hatch_pattern = HATCH_OPTIONS[hatch_idx][1]
         self.accept()
 
     @property
@@ -161,6 +184,10 @@ class MarkerStyleDialog(QDialog):
     @property
     def selected_arm_length(self) -> int:
         return self._selected_arm_length
+
+    @property
+    def selected_radius(self) -> int:
+        return self._selected_radius
 
     @property
     def selected_hatch_pattern(self) -> Qt.PenStyle:
