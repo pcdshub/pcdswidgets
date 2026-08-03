@@ -72,6 +72,27 @@ class SmaractTipTiltFull(SmaractTipTiltFullBase):
             widget = getattr(self, f"step_{d}")
             widget.set_channel(f"ca://{motor_pv}:STEP_{pv_suffix}.PROC")
 
+    def set_motors(self, horizontal_motor: str, vertical_motor: str) -> None:
+        """
+        Reassign which motor PVs drive the horizontal and vertical axes.
+
+        Setting the macros directly resets every step button to its
+        un-inverted FORWARD/REVERSE mapping, which would silently discard
+        the invert checkboxes' state - so both axes' inversion is
+        re-applied immediately after.
+
+        Parameters
+        ----------
+        horizontal_motor : str
+            PV to assign to the horizontal axis.
+        vertical_motor : str
+            PV to assign to the vertical axis.
+        """
+        self.set_macro("horizontal_motor", horizontal_motor)
+        self.set_macro("vertical_motor", vertical_motor)
+        self._invert_axis_channel("horizontal")
+        self._invert_axis_channel("vertical")
+
     def _invert_vertical(self) -> None:
         """Swap the FWD and BWD buttons for the vertical axis"""
         self._invert_axis_channel("vertical")
