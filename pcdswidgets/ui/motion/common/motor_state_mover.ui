@@ -437,7 +437,7 @@ Screen</string>
           </property>
           <property name="filenames">
            <stringlist>
-            <string>motor_state_mover_expert.py</string>
+            <string>pcdswidgets/screens/motor_state_mover_expert.py</string>
            </stringlist>
           </property>
           <property name="showIcon">

@@ -6,7 +6,8 @@ base_cls = MotorStateMoverBase
 macro_names = ['DEVICE']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,14 +29,19 @@ except ImportError:
 
 
 class MotorStateMoverBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     clearErrorButton: "PyDMPushButton"
     errorStatus: "PyDMLabel"
     expertScreenButton: "PyDMRelatedDisplayButton"
+    frame: "QtWidgets.QFrame"
     movingIndicator: "PyDMByteIndicator"
+    movingIndicatorBox: "QtWidgets.QWidget"
     movingIndicatorLabel: "MovingLabel"
     stateReadback: "PyDMLabel"
     stateSelector: "PyDMEnumComboBox"
     statusIndicator: "PyDMByteIndicator"
+    statusIndicatorBox: "QtWidgets.QWidget"
+    statusIndicatorLabel: "QtWidgets.QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -78,33 +84,33 @@ class MotorStateMoverBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "clearErrorButton": [
-            ("channel", "ca://${DEVICE}:STATE:RESET"),
+            ("channel", """ca://${DEVICE}:STATE:RESET"""),
         ],
         "errorStatus": [
-            ("channel", "ca://${DEVICE}:STATE:ERRMSG_RBV"),
+            ("channel", """ca://${DEVICE}:STATE:ERRMSG_RBV"""),
         ],
         "expertScreenButton": [
             (
                 "macros",
                 [
-                    "DEVICE=${DEVICE}",
+                    """DEVICE=${DEVICE}""",
                 ],
             ),
         ],
         "movingIndicator": [
-            ("channel", "ca://${DEVICE}:STATE:BUSY_RBV"),
+            ("channel", """ca://${DEVICE}:STATE:BUSY_RBV"""),
         ],
         "movingIndicatorLabel": [
-            ("channel", "ca://${DEVICE}:STATE:BUSY_RBV"),
+            ("channel", """ca://${DEVICE}:STATE:BUSY_RBV"""),
         ],
         "stateReadback": [
-            ("channel", "ca://${DEVICE}:STATE:GET_RBV"),
+            ("channel", """ca://${DEVICE}:STATE:GET_RBV"""),
         ],
         "stateSelector": [
-            ("channel", "ca://${DEVICE}:STATE:SET"),
+            ("channel", """ca://${DEVICE}:STATE:SET"""),
         ],
         "statusIndicator": [
-            ("channel", "ca://${DEVICE}:STATE:ERR_RBV"),
+            ("channel", """ca://${DEVICE}:STATE:ERR_RBV"""),
         ],
     }
 
@@ -115,9 +121,9 @@ class MotorStateMoverBase(DesignerWidget):
         }
 
     def get_device(self) -> str:
-        return self._get_macro("DEVICE")
+        return self.get_macro("DEVICE")
 
     def set_device(self, value: str) -> None:
-        self._set_macro("DEVICE", value)
+        self.set_macro("DEVICE", value)
 
     device = pyqtProperty(str, get_device, set_device)
