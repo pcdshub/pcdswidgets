@@ -49,7 +49,7 @@ class MarkerStyleDialog(QDialog):
         current_style: MarkerStyle,
         current_width: int,
         current_arm_length: int = 20,
-        current_radius: int = 5,
+        current_radius: int = 20,
         current_hatch_pattern: Qt.PenStyle = Qt.SolidLine,
         parent=None,
     ):
@@ -73,20 +73,25 @@ class MarkerStyleDialog(QDialog):
         self._radio_length = QRadioButton("Crosshair (configurable length)")
         self._radio_infinite = QRadioButton("Infinite lines")
         self._radio_ellipse = QRadioButton("Ellipse")
+        self._radio_infinite_ellipse = QRadioButton("Infinite lines + Ellipse")
         self._style_buttons.addButton(self._radio_length, MarkerStyle.CROSSHAIR_LENGTH.value)
         self._style_buttons.addButton(self._radio_infinite, MarkerStyle.INFINITE_LINES.value)
         self._style_buttons.addButton(self._radio_ellipse, MarkerStyle.ELLIPSE.value)
+        self._style_buttons.addButton(self._radio_infinite_ellipse, MarkerStyle.INFINITE_LINES_AND_ELLIPSE.value)
 
         if current_style == MarkerStyle.INFINITE_LINES:
             self._radio_infinite.setChecked(True)
         elif current_style == MarkerStyle.ELLIPSE:
             self._radio_ellipse.setChecked(True)
+        elif current_style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
+            self._radio_infinite_ellipse.setChecked(True)
         else:
             self._radio_length.setChecked(True)
 
         style_layout.addWidget(self._radio_length)
         style_layout.addWidget(self._radio_infinite)
         style_layout.addWidget(self._radio_ellipse)
+        style_layout.addWidget(self._radio_infinite_ellipse)
 
         self._arm_length_row = QHBoxLayout()
         self._arm_length_label = QLabel("Arm length (px):")
@@ -158,7 +163,7 @@ class MarkerStyleDialog(QDialog):
         self._arm_length_label.setVisible(arm_length_visible)
         self._arm_length_spin.setVisible(arm_length_visible)
 
-        radius_visible = self._radio_ellipse.isChecked()
+        radius_visible = self._radio_ellipse.isChecked() or self._radio_infinite_ellipse.isChecked()
         self._radius_label.setVisible(radius_visible)
         self._radius_spin.setVisible(radius_visible)
 

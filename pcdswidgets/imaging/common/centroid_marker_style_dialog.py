@@ -22,9 +22,9 @@ from pcdswidgets.imaging.common.marker_style_dialog import HATCH_OPTIONS
 class CentroidMarkerStyleDialog(QDialog):
     """Popup dialog for configuring the centroid tracker's marker.
 
-    Unlike ``MarkerStyleDialog``, this only offers the two symbol types
-    relevant to a centroid tracker (infinite lines, or an ellipse sized
-    from the beam width), and lets the user choose whether the ellipse
+    Unlike ``MarkerStyleDialog``, this only offers the symbol types relevant
+    to a centroid tracker (infinite lines, an ellipse sized from the beam
+    width, or both together), and lets the user choose whether the ellipse
     radius should track the live sigma readback or use a fixed default
     instead. There is also no "apply to all" option, since the centroid
     tracker only ever has a single marker.
@@ -33,7 +33,8 @@ class CentroidMarkerStyleDialog(QDialog):
     ----------
     current_style : MarkerStyle
         The currently active marker style (pre-selected in the dialog).
-        Expected to be ``MarkerStyle.INFINITE_LINES`` or ``MarkerStyle.ELLIPSE``.
+        Expected to be ``MarkerStyle.INFINITE_LINES``, ``MarkerStyle.ELLIPSE``,
+        or ``MarkerStyle.INFINITE_LINES_AND_ELLIPSE``.
     current_width : int
         The current pen thickness in pixels.
     current_hatch_pattern : Qt.PenStyle
@@ -52,7 +53,7 @@ class CentroidMarkerStyleDialog(QDialog):
         current_width: int,
         current_hatch_pattern: Qt.PenStyle = Qt.SolidLine,
         current_use_sigma_radius: bool = True,
-        current_default_radius: int = 5,
+        current_default_radius: int = 20,
         parent=None,
     ):
         super().__init__(parent)
@@ -74,16 +75,21 @@ class CentroidMarkerStyleDialog(QDialog):
         self._style_buttons = QButtonGroup(self)
         self._radio_infinite = QRadioButton("Infinite lines")
         self._radio_ellipse = QRadioButton("Ellipse")
+        self._radio_infinite_ellipse = QRadioButton("Infinite lines + Ellipse")
         self._style_buttons.addButton(self._radio_infinite, MarkerStyle.INFINITE_LINES.value)
         self._style_buttons.addButton(self._radio_ellipse, MarkerStyle.ELLIPSE.value)
+        self._style_buttons.addButton(self._radio_infinite_ellipse, MarkerStyle.INFINITE_LINES_AND_ELLIPSE.value)
 
         if current_style == MarkerStyle.INFINITE_LINES:
             self._radio_infinite.setChecked(True)
+        elif current_style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
+            self._radio_infinite_ellipse.setChecked(True)
         else:
             self._radio_ellipse.setChecked(True)
 
         style_layout.addWidget(self._radio_infinite)
         style_layout.addWidget(self._radio_ellipse)
+        style_layout.addWidget(self._radio_infinite_ellipse)
 
         # ── Ellipse radius source ────────────────────────────────────────
         self._use_sigma_checkbox = QCheckBox("Use sigma for radius")
@@ -142,10 +148,10 @@ class CentroidMarkerStyleDialog(QDialog):
         cancel_btn.clicked.connect(self.reject)
 
     def _update_controls_visibility(self, *_args) -> None:
-        is_ellipse = self._radio_ellipse.isChecked()
-        self._use_sigma_checkbox.setVisible(is_ellipse)
+        has_ellipse = self._radio_ellipse.isChecked() or self._radio_infinite_ellipse.isChecked()
+        self._use_sigma_checkbox.setVisible(has_ellipse)
 
-        show_default_radius = is_ellipse and not self._use_sigma_checkbox.isChecked()
+        show_default_radius = has_ellipse and not self._use_sigma_checkbox.isChecked()
         self._default_radius_label.setVisible(show_default_radius)
         self._default_radius_spin.setVisible(show_default_radius)
 

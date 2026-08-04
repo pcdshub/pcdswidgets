@@ -16,14 +16,16 @@ class MarkerStyle(IntEnum):
     CROSSHAIR_LENGTH = 0
     INFINITE_LINES = 1
     ELLIPSE = 2
+    INFINITE_LINES_AND_ELLIPSE = 3
 
 
 class CamMarker:
     """Composite marker overlay for a single point of interest.
 
     Renders on a pyqtgraph ViewBox as crosshairs of varying sizes,
-    infinite (full-span) lines, or an ellipse.  Wraps the graphic items so
-    style changes preserve the marker position.
+    infinite (full-span) lines, an ellipse, or infinite lines combined
+    with an ellipse.  Wraps the graphic items so style changes preserve
+    the marker position.
 
     Parameters
     ----------
@@ -38,10 +40,12 @@ class CamMarker:
         ``style`` is ``MarkerStyle.CROSSHAIR_LENGTH``.
     radius_x : int
         Initial ellipse radius along x, in data coordinates. Only used
-        when ``style`` is ``MarkerStyle.ELLIPSE``.
+        when ``style`` is ``MarkerStyle.ELLIPSE`` or
+        ``MarkerStyle.INFINITE_LINES_AND_ELLIPSE``.
     radius_y : int
         Initial ellipse radius along y, in data coordinates. Only used
-        when ``style`` is ``MarkerStyle.ELLIPSE``.
+        when ``style`` is ``MarkerStyle.ELLIPSE`` or
+        ``MarkerStyle.INFINITE_LINES_AND_ELLIPSE``.
     """
 
     def __init__(
@@ -50,8 +54,8 @@ class CamMarker:
         width: int = 2,
         style: MarkerStyle = MarkerStyle.CROSSHAIR_LENGTH,
         arm_length: int = 20,
-        radius_x: int = 5,
-        radius_y: int = 5,
+        radius_x: int = 20,
+        radius_y: int = 20,
         hatch_pattern: Qt.PenStyle = Qt.SolidLine,
     ):
         self._color = QColor(color)
@@ -187,6 +191,11 @@ class CamMarker:
             # A single closed polyline in data coordinates
             ellipse = pg.PlotDataItem(pen=pen)
             self._items = [ellipse]
+        elif self._style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
+            h_line = pg.InfiniteLine(angle=0, pen=pen)
+            v_line = pg.InfiniteLine(angle=90, pen=pen)
+            ellipse = pg.PlotDataItem(pen=pen)
+            self._items = [h_line, v_line, ellipse]
         else:
             # 4 arms radiating from center for symmetric dash patterns
             left = pg.PlotDataItem(pen=pen)
@@ -220,6 +229,11 @@ class CamMarker:
         elif self._style == MarkerStyle.ELLIPSE:
             xs, ys = self._ellipse_points()
             self._items[0].setData(xs, ys)
+        elif self._style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
+            self._items[0].setValue(self.y)  # horizontal
+            self._items[1].setValue(self.x)  # vertical
+            xs, ys = self._ellipse_points()
+            self._items[2].setData(xs, ys)
         else:
             arm = float(self._arm_length)
             # 4 arm starting from center
