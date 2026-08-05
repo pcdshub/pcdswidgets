@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
-    <height>90</height>
+    <width>380</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>360</width>
-    <height>90</height>
+    <width>370</width>
+    <height>120</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>370</width>
-    <height>102</height>
+    <width>380</width>
+    <height>133</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -181,7 +181,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Change marker color</string>
+        <string>Change centroid marker color</string>
        </property>
        <property name="text">
         <string/>
@@ -203,7 +203,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Change line style and width</string>
+        <string>Change centroid line style and width</string>
        </property>
        <property name="text">
         <string/>
@@ -225,7 +225,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Toggle marker visibility</string>
+        <string>Toggle centroid marker visibility</string>
        </property>
        <property name="text">
         <string/>
@@ -386,6 +386,172 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>90</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Max Intensity:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="max_value_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_max_value}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>65</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>65</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Threshold</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="threshold_mode_combo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Centroid threshold mode</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="threshold_value_edit">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Threshold value; press Enter to apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="threshold_rbv_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_centroid_threshold_rbv}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -406,62 +572,10 @@
      <item>
       <widget class="QPushButton" name="set_roi_button">
        <property name="toolTip">
-        <string>Set ROI from centroid</string>
+        <string>Set ROI based on centroid and beam width</string>
        </property>
        <property name="text">
         <string>Force Single ROI</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="PyDMPushButton" name="dummy_button">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="monitorDisp">
-        <bool>false</bool>
-       </property>
-       <property name="channel">
-        <string>${roi_plugin}</string>
-       </property>
-       <property name="PyDMIcon">
-        <string/>
-       </property>
-       <property name="passwordProtected">
-        <bool>false</bool>
-       </property>
-       <property name="password">
-        <string/>
-       </property>
-       <property name="protectedPassword">
-        <string/>
-       </property>
-       <property name="showConfirmDialog">
-        <bool>false</bool>
-       </property>
-       <property name="confirmMessage">
-        <string>Are you sure you want to proceed?</string>
-       </property>
-       <property name="pressValue">
-        <string>None</string>
-       </property>
-       <property name="releaseValue">
-        <string>None</string>
-       </property>
-       <property name="relativeChange">
-        <bool>false</bool>
-       </property>
-       <property name="writeWhenRelease">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -474,11 +588,6 @@
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMPushButton</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
    <class>ColorButton</class>
