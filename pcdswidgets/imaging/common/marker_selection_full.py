@@ -7,7 +7,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 
 from pydm.widgets import PyDMImageView, PyDMSpinbox
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
 
@@ -40,7 +40,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     Provides click-to-place, visibility toggle, and style/thickness controls
     for up to 4 point-of-interest markers overlaid on a PyDMImageView.
 
-    Positions are synced to EPICS via PyDMSpinboxs.
+    Positions are synced to EPICS via PyDMSpinboxes.
     """
 
     designer_options = DesignerOptions(
@@ -48,6 +48,10 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         is_container=False,
         icon=CAM_COG,
     )
+
+    # Emitted whenever a marker's persisted-worthy visual state changes
+    # (color, style/width/arm_length/radius/hatch_pattern, or visibility).
+    state_changed = Signal()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -114,7 +118,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             vis_btn.toggled.connect(lambda checked, idx=i: self._on_visibility_toggled(idx, checked))
 
             color_btn = self._color_button(i)
-            color_btn.colorChanged.connect(lambda color, idx=i: self._markers[idx].set_color(color))
+            color_btn.colorChanged.connect(lambda color, idx=i: self._on_color_changed(idx, color))
 
             style_btn = self._style_button(i)
             style_btn.clicked.connect(lambda _checked, idx=i: self._open_style_dialog(idx))
@@ -184,6 +188,11 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     def _on_visibility_toggled(self, idx: int, checked: bool):
         """Toggle marker overlay visibility."""
         self._markers[idx].set_visible(checked)
+        self.state_changed.emit()
+
+    def _on_color_changed(self, idx: int, color: QColor) -> None:
+        self._markers[idx].set_color(color)
+        self.state_changed.emit()
 
     def _on_scene_clicked(self, event):
         """Handle mouse clicks on the ViewBox scene for point-select mode."""
@@ -238,6 +247,43 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
                 m.set_arm_length(dlg.selected_arm_length)
                 m.set_radius(dlg.selected_radius)
                 m.set_hatch_pattern(dlg.selected_hatch_pattern)
+            self.state_changed.emit()
+
+    def get_marker_state(self, marker_number: int) -> dict:
+        """Return marker_number's (1-4) full visual state, for persistence."""
+        idx = marker_number - 1
+        marker = self._markers[idx]
+        return {
+            "color": marker.color.name(),
+            "style": int(marker.style),
+            "width": marker.width,
+            "arm_length": marker.arm_length,
+            "radius_x": marker.radius_x,
+            "radius_y": marker.radius_y,
+            "hatch_pattern": int(marker.hatch_pattern),
+            "visible": self._visibility_button(idx).isChecked(),
+        }
+
+    def set_marker_state(self, marker_number: int, state: dict) -> None:
+        """Apply a previously-saved marker_state to marker_number (1-4)."""
+        idx = marker_number - 1
+        marker = self._markers[idx]
+        if "color" in state:
+            self._set_marker_color(idx, QColor(state["color"]))
+        if "style" in state:
+            marker.set_style(MarkerStyle(state["style"]))
+        if "width" in state:
+            marker.set_width(state["width"])
+        if "arm_length" in state:
+            marker.set_arm_length(state["arm_length"])
+        if "radius_x" in state:
+            marker.set_radius_x(state["radius_x"])
+        if "radius_y" in state:
+            marker.set_radius_y(state["radius_y"])
+        if "hatch_pattern" in state:
+            marker.set_hatch_pattern(Qt.PenStyle(state["hatch_pattern"]))
+        if "visible" in state:
+            self._visibility_button(idx).setChecked(state["visible"])
 
     def _get_marker_color(self, idx: int) -> QColor:
         return self._markers[idx].color

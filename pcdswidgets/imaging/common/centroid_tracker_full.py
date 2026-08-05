@@ -450,6 +450,20 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     def _write_threshold(self, value: float) -> None:
         self._threshold_writer.write(value)
 
+    def get_threshold_state(self) -> dict:
+        """Return the threshold mode and its associated line-edit value, for persistence."""
+        return {
+            "mode": self.threshold_mode_combo.currentIndex(),
+            "value": self.threshold_value_edit.text(),
+        }
+
+    def set_threshold_state(self, state: dict) -> None:
+        """Apply a previously-saved threshold_state."""
+        if "value" in state:
+            self.threshold_value_edit.setText(state["value"])
+        if "mode" in state:
+            self.threshold_mode_combo.setCurrentIndex(state["mode"])
+
     def _set_roi_from_centroid(self):
         """Calculate a centroid +/- multiplier*FWHM ROI and push it to the shared EPICS ROI PVs."""
         if None in (self._centroid_x, self._centroid_y, self._sigma_x, self._sigma_y):
@@ -547,6 +561,39 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
                 marker.set_radius(self._default_radius)
 
             self.state_changed.emit()
+
+    def get_marker_style_state(self) -> dict:
+        """Return the centroid marker's full visual state, for persistence."""
+        return {
+            "color": self._marker.color.name(),
+            "style": int(self._marker.style),
+            "width": self._marker.width,
+            "hatch_pattern": int(self._marker.hatch_pattern),
+            "use_sigma_radius": self._use_sigma_radius,
+            "default_radius": self._default_radius,
+            "visible": self.centroid_visibility_button.isChecked(),
+        }
+
+    def set_marker_style_state(self, state: dict) -> None:
+        """Apply a previously-saved marker_style_state."""
+        if "color" in state:
+            self._set_marker_color(QColor(state["color"]))
+        if "style" in state:
+            self._marker.set_style(MarkerStyle(state["style"]))
+        if "width" in state:
+            self._marker.set_width(state["width"])
+        if "hatch_pattern" in state:
+            self._marker.set_hatch_pattern(Qt.PenStyle(state["hatch_pattern"]))
+        if "use_sigma_radius" in state:
+            self._use_sigma_radius = state["use_sigma_radius"]
+        if "default_radius" in state:
+            self._default_radius = state["default_radius"]
+        if self._use_sigma_radius:
+            self._update_marker_radius_from_sigma()
+        else:
+            self._marker.set_radius(self._default_radius)
+        if "visible" in state:
+            self.centroid_visibility_button.setChecked(state["visible"])
 
     def _get_marker_color(self) -> QColor:
         return self._marker.color
