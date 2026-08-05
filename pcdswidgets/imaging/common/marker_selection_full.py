@@ -62,6 +62,12 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._view_box = None
         self._active_select_idx: int | None = None  # which marker is in select mode
 
+        # A second, optional view the markers are also mirrored onto,
+        # offset live by its own feeding ROI's MinX/MinY.
+        self._secondary_view_box = None
+        self._secondary_offset_x = 0.0
+        self._secondary_offset_y = 0.0
+
         # Create marker overlays
         self._markers: list[CamMarker] = []
         for i in range(NUM_MARKERS):
@@ -153,7 +159,10 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         """Connect this marker widget to a parent's PyDMImageView.
 
         Called by the parent widget at adoption time. Attaches marker
-        overlay items to the ViewBox.
+        overlay items to the ViewBox, and - if the parent also carries a
+        `secondary_image_view` plus a `secondary_roi_widget` selecting the
+        ROI it's offset by - mirrors the same markers onto it too,
+        click-to-place included (see _link_secondary_view).
         """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
@@ -170,8 +179,65 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         for marker in self._markers:
             marker.attach(self._view_box)
 
-        # Listen for mouse clicks
-        self._view_box.scene().sigMouseClicked.connect(self._on_scene_clicked)
+        # Listen for mouse clicks. The primary (Camera) view is always in
+        # full-frame coordinates, i.e. offset (0, 0).
+        self._view_box.scene().sigMouseClicked.connect(
+            lambda event: self._on_scene_clicked(event, self._view_box, (0.0, 0.0))
+        )
+
+        self._link_secondary_view(
+            getattr(parent, "secondary_image_view", None), getattr(parent, "secondary_roi_widget", None)
+        )
+
+    def _link_secondary_view(self, secondary_image_view, secondary_roi_widget) -> None:
+        """Mirror all markers onto a second view, offset live by secondary_roi_widget's MinX/MinY.
+
+        Also lets the user click-to-place markers from that view: a click
+        there gives coordinates local to it, so the offset is added back
+        before writing to EPICS - the exact inverse of the display
+        transform. A marker can only be placed within that view's
+        *currently visible* region this way; to place one outside it, use
+        the primary view instead.
+        """
+        if secondary_image_view is None or secondary_roi_widget is None:
+            return
+
+        try:
+            plot_item = secondary_image_view.getView()
+            self._secondary_view_box = plot_item.getViewBox()
+        except Exception:
+            logger.error("Could not get ViewBox for secondary marker overlays")
+            return
+
+        # x_spinbox/y_spinbox.value are None before their first camonitor
+        # update; default to 0 until _on_secondary_offset_x/y_changed fires.
+        self._secondary_offset_x = secondary_roi_widget.x_spinbox.value or 0.0
+        self._secondary_offset_y = secondary_roi_widget.y_spinbox.value or 0.0
+        for marker in self._markers:
+            marker.attach(self._secondary_view_box, offset=(self._secondary_offset_x, self._secondary_offset_y))
+
+        secondary_roi_widget.x_spinbox.valueChanged.connect(self._on_secondary_offset_x_changed)
+        secondary_roi_widget.y_spinbox.valueChanged.connect(self._on_secondary_offset_y_changed)
+
+        # Live offset (not a snapshot) so a click always uses the ROI's
+        # current position, not whatever it was when this connection was made.
+        self._secondary_view_box.scene().sigMouseClicked.connect(
+            lambda event: self._on_scene_clicked(
+                event, self._secondary_view_box, (self._secondary_offset_x, self._secondary_offset_y)
+            )
+        )
+
+    def _on_secondary_offset_x_changed(self, value: float) -> None:
+        self._secondary_offset_x = value
+        self._apply_secondary_offset()
+
+    def _on_secondary_offset_y_changed(self, value: float) -> None:
+        self._secondary_offset_y = value
+        self._apply_secondary_offset()
+
+    def _apply_secondary_offset(self) -> None:
+        for marker in self._markers:
+            marker.set_offset(self._secondary_view_box, self._secondary_offset_x, self._secondary_offset_y)
 
     def _on_select_toggled(self, idx: int, checked: bool):
         """Enter or exit point-select mode for marker *idx*."""
@@ -194,8 +260,15 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._markers[idx].set_color(color)
         self.state_changed.emit()
 
-    def _on_scene_clicked(self, event):
-        """Handle mouse clicks on the ViewBox scene for point-select mode."""
+    def _on_scene_clicked(self, event, view_box, offset: tuple[float, float]):
+        """Handle mouse clicks on a ViewBox scene for point-select mode.
+
+        Works the same regardless of which view (primary or secondary) the
+        click came from - `view_box` converts the click to that view's local
+        coordinates, then `offset` (0, 0 for the primary view; the live ROI
+        offset for the secondary one) is added back to recover the absolute
+        full-frame position that's actually written to EPICS.
+        """
         if self._active_select_idx is None:
             return
         if event.button() != Qt.LeftButton:
@@ -203,13 +276,13 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
 
         idx = self._active_select_idx
         scene_pos = event.scenePos()
-        data_pos = self._view_box.mapSceneToView(scene_pos)
+        data_pos = view_box.mapSceneToView(scene_pos)
 
         x_sb = self._spinbox("x", idx)
         y_sb = self._spinbox("y", idx)
         # point to spinboxes (note this triggers set_position)
-        x_sb.setValue(data_pos.x())
-        y_sb.setValue(data_pos.y())
+        x_sb.setValue(data_pos.x() + offset[0])
+        y_sb.setValue(data_pos.y() + offset[1])
         # spinboxes to EPICS
         x_sb.send_value()
         y_sb.send_value()

@@ -66,6 +66,10 @@ class _PVWriter(QObject):
         self._channel: PyDMChannel | None = None
         self._address: str | None = None
         self._got_connection_update = False
+        self._retry_attempt = 0
+        self._retry_timer = QTimer(self)
+        self._retry_timer.setSingleShot(True)
+        self._retry_timer.timeout.connect(self._retry_if_still_silent)
 
     def set_address(self, address: str) -> None:
         if self._address == address:
@@ -77,20 +81,20 @@ class _PVWriter(QObject):
 
     def _connect(self, attempt: int) -> None:
         self._got_connection_update = False
+        self._retry_attempt = attempt
         self._channel = PyDMChannel(
             address=self._address, value_signal=self._value_signal, connection_slot=self._on_connection_changed
         )
         self._channel.connect()
         if attempt < _CONNECT_RETRY_MAX_ATTEMPTS:
-            address = self._address
-            QTimer.singleShot(_CONNECT_RETRY_INTERVAL_MS, lambda: self._retry_if_still_silent(address, attempt))
+            self._retry_timer.start(_CONNECT_RETRY_INTERVAL_MS)
 
-    def _retry_if_still_silent(self, address: str, attempt: int) -> None:
-        """Reconnect with a fresh channel if connection_slot never fired at all for *address*."""
-        if self._got_connection_update or self._address != address:
+    def _retry_if_still_silent(self) -> None:
+        """Reconnect with a fresh channel if connection_slot never fired at all."""
+        if self._got_connection_update:
             return
         self._channel.disconnect()
-        self._connect(attempt=attempt + 1)
+        self._connect(attempt=self._retry_attempt + 1)
 
     def _on_connection_changed(self, connected: bool) -> None:
         self._got_connection_update = True
@@ -125,12 +129,18 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._centroid_x = None
         self._centroid_y = None
 
-        # The centroid readback is relative to the source ROI's cropped sub-array;
+        # The centroid readback is relative to the source ROI's own sub-array;
         # _update_absolute_centroid adds these back to get full-frame coordinates.
         self._source_roi_min_x: float = 0.0
         self._source_roi_min_y: float = 0.0
         self._centroid_x_raw = None
         self._centroid_y_raw = None
+
+        # A second, optional view the marker is also mirrored onto
+        # (display-only), offset live by its own feeding ROI's MinX/MinY.
+        self._secondary_view_box = None
+        self._secondary_offset_x = 0.0
+        self._secondary_offset_y = 0.0
 
         # Used to convert the 1/e^2 and % of max threshold modes to a raw value.
         self._max_value = None
@@ -462,7 +472,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         if "value" in state:
             self.threshold_value_edit.setText(state["value"])
         if "mode" in state:
-            self.threshold_mode_combo.setCurrentIndex(state["mode"])
+            mode = state["mode"]
+            self.threshold_mode_combo.blockSignals(True)
+            self.threshold_mode_combo.setCurrentIndex(mode)
+            self.threshold_mode_combo.blockSignals(False)
+            self._apply_threshold_mode_ui(mode)
 
     def _set_roi_from_centroid(self):
         """Calculate a centroid +/- multiplier*FWHM ROI and push it to the shared EPICS ROI PVs."""
@@ -504,7 +518,13 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             roi_widget.move_enabled_button.setChecked(False)
 
     def link_parent_widgets(self, parent) -> None:
-        """Attach the marker overlay to the parent's PyDMImageView and, if given, track its source ROI's offset."""
+        """Attach the marker to the parent's PyDMImageView, and optionally a source ROI and a second view.
+
+        `source_roi_widget` (if given) is the selector for the ROI that
+        the primary readback is relative to - see _link_source_roi_offset.
+        `secondary_image_view`/`secondary_roi_widget` (if both given) mirror
+        the marker onto a second view - see _link_secondary_view.
+        """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
         else:
@@ -518,16 +538,53 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             return
 
         self._marker.attach(self._view_box)
-        self._link_source_roi_offset(getattr(parent, "stats_roi_widget", None))
+        self._link_source_roi_offset(getattr(parent, "source_roi_widget", None))
+        self._link_secondary_view(
+            getattr(parent, "secondary_image_view", None), getattr(parent, "secondary_roi_widget", None)
+        )
 
-    def _link_source_roi_offset(self, stats_roi_widget) -> None:
-        """Seed and live-track the source ROI's offset from its selector widget's spinboxes, if given."""
-        if stats_roi_widget is None:
+    def _link_secondary_view(self, secondary_image_view, secondary_roi_widget) -> None:
+        """Mirror the marker onto a second view, offset live by secondary_roi_widget's MinX/MinY.
+
+        Independent of _link_source_roi_offset: that one corrects the raw
+        readback into an absolute value; this one re-renders that same
+        absolute value in a second view's own local frame.
+        """
+        if secondary_image_view is None or secondary_roi_widget is None:
             return
-        self._source_roi_min_x = stats_roi_widget.x_spinbox.value
-        self._source_roi_min_y = stats_roi_widget.y_spinbox.value
-        stats_roi_widget.x_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "x"))
-        stats_roi_widget.y_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "y"))
+
+        try:
+            plot_item = secondary_image_view.getView()
+            self._secondary_view_box = plot_item.getViewBox()
+        except Exception:
+            logger.error("Could not get ViewBox for secondary centroid overlay")
+            return
+
+        # x_spinbox/y_spinbox.value are None before their first camonitor
+        # update; default to 0 until _on_secondary_offset_x/y_changed fires.
+        self._secondary_offset_x = secondary_roi_widget.x_spinbox.value or 0.0
+        self._secondary_offset_y = secondary_roi_widget.y_spinbox.value or 0.0
+        self._marker.attach(self._secondary_view_box, offset=(self._secondary_offset_x, self._secondary_offset_y))
+
+        secondary_roi_widget.x_spinbox.valueChanged.connect(self._on_secondary_offset_x_changed)
+        secondary_roi_widget.y_spinbox.valueChanged.connect(self._on_secondary_offset_y_changed)
+
+    def _on_secondary_offset_x_changed(self, value: float) -> None:
+        self._secondary_offset_x = value
+        self._marker.set_offset(self._secondary_view_box, self._secondary_offset_x, self._secondary_offset_y)
+
+    def _on_secondary_offset_y_changed(self, value: float) -> None:
+        self._secondary_offset_y = value
+        self._marker.set_offset(self._secondary_view_box, self._secondary_offset_x, self._secondary_offset_y)
+
+    def _link_source_roi_offset(self, source_roi_widget) -> None:
+        """Seed and live-track the source ROI's offset from its selector widget's spinboxes, if given."""
+        if source_roi_widget is None:
+            return
+        self._source_roi_min_x = source_roi_widget.x_spinbox.value or 0.0
+        self._source_roi_min_y = source_roi_widget.y_spinbox.value or 0.0
+        source_roi_widget.x_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "x"))
+        source_roi_widget.y_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "y"))
 
     def _on_visibility_toggled(self, checked: bool):
         self._marker.set_visible(checked)
