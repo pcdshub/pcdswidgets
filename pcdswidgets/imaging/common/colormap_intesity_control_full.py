@@ -31,6 +31,9 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     normalize_check: QtWidgets.QCheckBox
     histogram_container: QtWidgets.QWidget
 
+    # Emitted whenever the user drags the histogram to set manual color-map levels
+    state_changed = QtCore.Signal()
+
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
@@ -67,8 +70,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         Called by the parent widget at adoption time. Links the histogram
         to the image item and syncs the UI state to current image settings.
 
-        If the parent also carries a `secondary_image_view` (e.g. the
-        cropped-view PyDMImageView alongside the main camera view), colormap,
+        If the parent also carries a `secondary_image_view`, colormap,
         normalization, and level changes are mirrored onto it too, so both
         views always share the same appearance. The histogram itself stays
         bound only to the primary view.
@@ -158,5 +160,17 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         if self._image_view is None:
             return
         mn, mx = hist_item.getLevels()
+        for image_view in self._linked_image_views():
+            image_view.setColorMapLimits(mn, mx)
+        self.state_changed.emit()
+
+    def get_levels(self) -> tuple[float, float]:
+        """Return the histogram's current (min, max) color-map levels, for persistence."""
+        mn, mx = self._histogram.item.getLevels()
+        return float(mn), float(mx)
+
+    def set_levels(self, mn: float, mx: float) -> None:
+        """Apply a previously-saved (min, max) level pair."""
+        self._histogram.item.setLevels(mn, mx)
         for image_view in self._linked_image_views():
             image_view.setColorMapLimits(mn, mx)
