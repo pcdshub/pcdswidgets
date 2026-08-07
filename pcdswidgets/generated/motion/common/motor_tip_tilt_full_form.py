@@ -207,6 +207,37 @@ class Ui_Form(object):
         self.step_left.setWriteWhenRelease(False)
         self.step_left.setObjectName("step_left")
         self.gridLayout.addWidget(self.step_left, 1, 0, 1, 1)
+        self.stop = PyDMPushButton(self.gridLayoutWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.stop.sizePolicy().hasHeightForWidth())
+        self.stop.setSizePolicy(sizePolicy)
+        self.stop.setMinimumSize(QtCore.QSize(31, 31))
+        self.stop.setMaximumSize(QtCore.QSize(30, 30))
+        self.stop.setToolTip("")
+        self.stop.setStyleSheet(
+            "QPushButton\n"
+            "{\n"
+            "    border: 1 px solid gray;\n"
+            "    border-radius: 5-px;\n"
+            "    outline: none;\n"
+            "}\n"
+            "QPushButton::hover\n"
+            "{\n"
+            "    background-color: rgb(240, 225, 148);\n"
+            "}\n"
+            "QPushButton::pressed\n"
+            "{\n"
+            "    background-color: rgba(187, 255, 172, 125);\n"
+            "    border: 1px solid black;\n"
+            "    border-radius: 5-px;\n"
+            "}"
+        )
+        self.stop.setIconSize(QtCore.QSize(45, 45))
+        self.stop.setPyDMIconColor(QtGui.QColor(255, 0, 0))
+        self.stop.setObjectName("stop")
+        self.gridLayout.addWidget(self.stop, 1, 1, 1, 1)
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.frame)
         self.gridLayoutWidget_2.setGeometry(QtCore.QRect(130, 10, 261, 109))
         self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
@@ -441,6 +472,8 @@ class Ui_Form(object):
         self.step_left.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.step_left.setPressValue(_translate("Form", "1"))
         self.step_left.setReleaseValue(_translate("Form", "None"))
+        self.stop.setPyDMToolTip(_translate("Form", "Stop all axis movement"))
+        self.stop.setPyDMIcon(_translate("Form", "stop-circle"))
         self.vertical_position.setText(_translate("Form", "ca://${vertical_motor}.RBV"))
         self.vertical_position.setPyDMToolTip(_translate("Form", "Current position of vertical axis"))
         self.vertical_position.setChannel(_translate("Form", "ca://${vertical_motor}.RBV"))

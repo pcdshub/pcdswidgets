@@ -43,6 +43,7 @@ class MotorTipTiltFullBase(DesignerWidget):
     step_left: "PyDMPushButton"
     step_right: "PyDMPushButton"
     step_up: "PyDMPushButton"
+    stop: "PyDMPushButton"
     vertical_expert_screen: "PyDMShellCommand"
     vertical_invert: "QtWidgets.QCheckBox"
     vertical_label: "PyDMLabel"

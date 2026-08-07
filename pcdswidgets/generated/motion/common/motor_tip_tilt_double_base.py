@@ -44,6 +44,7 @@ class MotorTipTiltDoubleBase(DesignerWidget):
     step_left: "PyDMPushButton"
     step_right: "PyDMPushButton"
     step_up: "PyDMPushButton"
+    stop: "PyDMPushButton"
     vertical_expert_screen: "PyDMShellCommand"
     vertical_frame: "QtWidgets.QFrame"
     vertical_invert: "QtWidgets.QCheckBox"
