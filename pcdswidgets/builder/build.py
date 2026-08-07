@@ -12,6 +12,25 @@ from qtpy import QtWidgets
 from qtpy.uic import compileUi  # type: ignore
 
 
+def make_deferred_function(lines: list[str], name: str) -> list[str]:
+    if not lines:
+        return []
+
+    result = []
+    # Determine indentation from the first line
+    indent = lines[0][: len(lines[0]) - len(lines[0].lstrip())]
+    result.append(f"{indent}def {name}():")
+
+    for line in lines:
+        # Keep relative indentation inside the generated function
+        result.append(f"{indent}    {line[len(indent) :]}")
+
+    result.append(f"{indent}    for macro in Form._macro_to_widget:")
+    result.append(f"{indent}        Form._updates_for_macro(macro)")
+    result.append(f"\n{indent}QTimer.singleShot(0, {name})\n")
+    return result
+
+
 def build_uic(designer_ui: str, output_dir: str = ""):
     """
     Use the standard uic parser to create a .py file with a .ui file's widget layouts.
@@ -23,17 +42,33 @@ def build_uic(designer_ui: str, output_dir: str = ""):
     compileUi(designer_ui, string_io)
 
     comment_lines = []
-    import_lines = []
+    import_lines = [
+        "from qtpy.QtCore import QTimer",
+    ]
     impl_lines = []
 
+    macro_setup_lines = []
+    macro_retranslate_lines = []
+    retranslate_seen = False
     for line in string_io.getvalue().split("\n"):
         if line.startswith("from"):
             import_lines.append(line.replace("PyQt5", "qtpy"))
             continue
         if import_lines:
-            impl_lines.append(line)
+            if line == "        self.retranslateUi(Form)":
+                retranslate_seen = True
+                impl_lines.extend(make_deferred_function(macro_setup_lines, "macro_setup"))
+            if "${" in line:
+                if retranslate_seen:
+                    macro_retranslate_lines.append(line)
+                else:
+                    macro_setup_lines.append(line)
+                impl_lines.append("")
+            else:
+                impl_lines.append(line)
         elif line:
             comment_lines.append(line)
+    impl_lines.extend(make_deferred_function(macro_retranslate_lines, "macro_retranslate"))
 
     comment_lines.append("#")
     comment_lines.append("# Augmented by pcdswidgets.builder.build")

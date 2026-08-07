@@ -6,7 +6,8 @@ base_cls = MotorStateMoverBase
 macro_names = ['MOTOR']
 
 Other long required variables:
-widget_names: list[str]
+all_widget_names: list[str]
+macro_widget_names: list[str]
 widget_name_to_class: dict[str, str]
 macro_to_widget: dict[str, str]
 widget_to_macro: dict[str, str]
@@ -28,13 +29,19 @@ except ImportError:
 
 
 class MotorStateMoverBase(DesignerWidget):
+    Form: "QtWidgets.QWidget"
     clearErrorButton: "PyDMPushButton"
     deviceLabel: "PyDMLineEdit"
+    errorLabel: "QtWidgets.QLabel"
     errorStatus: "PyDMLabel"
+    expertScreenButton: "PyDMShellCommand"
+    frame: "QtWidgets.QFrame"
     movingIndicator: "PyDMByteIndicator"
+    movingIndicatorLabel: "QtWidgets.QLabel"
     stateReadback: "PyDMLabel"
     stateSelector: "PyDMEnumComboBox"
     statusIndicator: "PyDMByteIndicator"
+    statusIndicatorLabel: "QtWidgets.QLabel"
 
     ui_form = Ui_Form
     _macro_to_widget = {
@@ -73,26 +80,26 @@ class MotorStateMoverBase(DesignerWidget):
     }
     _widget_to_pre_template = {
         "clearErrorButton": [
-            ("channel", "ca://${MOTOR}:STATE:RESET"),
+            ("channel", """ca://${MOTOR}:STATE:RESET"""),
         ],
         "deviceLabel": [
-            ("text", "${MOTOR}"),
-            ("channel", "ca://${MOTOR}:DEVICE_LABEL"),
+            ("text", """${MOTOR}"""),
+            ("channel", """ca://${MOTOR}:DEVICE_LABEL"""),
         ],
         "errorStatus": [
-            ("channel", "ca://${MOTOR}:STATE:ERRID_RBV"),
+            ("channel", """ca://${MOTOR}:STATE:ERRID_RBV"""),
         ],
         "movingIndicator": [
-            ("channel", "ca://${MOTOR}:STATE:DONE_RBV"),
+            ("channel", """ca://${MOTOR}:STATE:DONE_RBV"""),
         ],
         "stateReadback": [
-            ("channel", "ca://${MOTOR}:STATE:GET_RBV"),
+            ("channel", """ca://${MOTOR}:STATE:GET_RBV"""),
         ],
         "stateSelector": [
-            ("channel", "ca://${MOTOR}:STATE:SET"),
+            ("channel", """ca://${MOTOR}:STATE:SET"""),
         ],
         "statusIndicator": [
-            ("channel", "ca://${MOTOR}:STATE:ERR_RBV"),
+            ("channel", """ca://${MOTOR}:STATE:ERR_RBV"""),
         ],
     }
 
@@ -103,9 +110,9 @@ class MotorStateMoverBase(DesignerWidget):
         }
 
     def get_motor(self) -> str:
-        return self._get_macro("MOTOR")
+        return self.get_macro("MOTOR")
 
     def set_motor(self, value: str) -> None:
-        self._set_macro("MOTOR", value)
+        self.set_macro("MOTOR", value)
 
     motor = pyqtProperty(str, get_motor, set_motor)
