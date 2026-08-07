@@ -155,8 +155,15 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
         motor_pv = self.get_macro(f"{axis}_motor")
         display_pv = motor_pv or f"${{{axis}_motor}}"
         position_pv = self._position_pv(display_pv)
+        is_smaract = self._motor_style == MotorStyle.SMARACT
 
         position_widget = getattr(self, f"{axis}_position")
+        step_size_widget = getattr(self, f"{axis}_step_size")
+
+        # SmarAct PVs don't send PREC updates; reset to avoid stale cached values.
+        position_widget.precisionFromPV = not is_smaract
+        step_size_widget.precisionFromPV = not is_smaract
+
         position_widget.setText(f"ca://{position_pv}")
 
         if not motor_pv:
@@ -164,8 +171,6 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
             return
 
         position_widget.set_channel(f"ca://{position_pv}")
-
-        step_size_widget = getattr(self, f"{axis}_step_size")
         step_size_widget.set_channel(f"ca://{self._step_size_pv(motor_pv)}")
 
         self._invert_axis_channel(axis)
