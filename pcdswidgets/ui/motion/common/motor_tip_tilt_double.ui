@@ -31,10 +31,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>smaract_tip_tilt_qt_icon.png</normaloff>smaract_tip_tilt_qt_icon.png</iconset>
-  </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
@@ -1241,14 +1237,14 @@ color: rgb(0, 0, 0);</string>
    <header>pydm.widgets.pushbutton</header>
   </customwidget>
   <customwidget>
-   <class>PyDMShellCommand</class>
-   <extends>QPushButton</extends>
-   <header>pydm.widgets.shell_command</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMRelatedDisplayButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.related_display_button</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMShellCommand</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.shell_command</header>
   </customwidget>
   <customwidget>
    <class>PyDMSymbol</class>
