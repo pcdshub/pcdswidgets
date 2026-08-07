@@ -19,7 +19,6 @@ widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 # ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
-
 from .motor_tip_tilt_full_form import *
 
 try:
@@ -27,13 +26,13 @@ try:
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
-
 class MotorTipTiltFullBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
     frame: "QtWidgets.QFrame"
     gridLayoutWidget: "QtWidgets.QWidget"
     gridLayoutWidget_2: "QtWidgets.QWidget"
-    horizontal_expert_screen: "PyDMShellCommand"
+    horizontal_expert_screen_motor: "PyDMShellCommand"
+    horizontal_expert_screen_smaract: "PyDMRelatedDisplayButton"
     horizontal_invert: "QtWidgets.QCheckBox"
     horizontal_label: "PyDMLabel"
     horizontal_position: "PyDMLabel"
@@ -44,7 +43,8 @@ class MotorTipTiltFullBase(DesignerWidget):
     step_right: "PyDMPushButton"
     step_up: "PyDMPushButton"
     stop: "PyDMPushButton"
-    vertical_expert_screen: "PyDMShellCommand"
+    vertical_expert_screen_motor: "PyDMShellCommand"
+    vertical_expert_screen_smaract: "PyDMRelatedDisplayButton"
     vertical_invert: "QtWidgets.QCheckBox"
     vertical_label: "PyDMLabel"
     vertical_position: "PyDMLabel"
@@ -54,124 +54,90 @@ class MotorTipTiltFullBase(DesignerWidget):
     ui_form = Ui_Form
     _macro_to_widget = {
         "horizontal_motor": [
-            "step_right",
-            "step_left",
-            "horizontal_position",
-            "horizontal_step_size",
             "horizontal_label",
             "horizontal_status_led",
-            "horizontal_expert_screen",
+            "horizontal_expert_screen_motor",
+            "horizontal_expert_screen_smaract",
         ],
         "vertical_motor": [
-            "step_down",
-            "step_up",
-            "vertical_position",
             "vertical_label",
             "vertical_status_led",
-            "vertical_step_size",
-            "vertical_expert_screen",
+            "vertical_expert_screen_motor",
+            "vertical_expert_screen_smaract",
         ],
     }
     _widget_to_macro = {
-        "horizontal_expert_screen": [
+        "horizontal_expert_screen_motor": [
+            "horizontal_motor",
+        ],
+        "horizontal_expert_screen_smaract": [
             "horizontal_motor",
         ],
         "horizontal_label": [
             "horizontal_motor",
         ],
-        "horizontal_position": [
-            "horizontal_motor",
-        ],
         "horizontal_status_led": [
             "horizontal_motor",
         ],
-        "horizontal_step_size": [
-            "horizontal_motor",
-        ],
-        "step_down": [
+        "vertical_expert_screen_motor": [
             "vertical_motor",
         ],
-        "step_left": [
-            "horizontal_motor",
-        ],
-        "step_right": [
-            "horizontal_motor",
-        ],
-        "step_up": [
-            "vertical_motor",
-        ],
-        "vertical_expert_screen": [
+        "vertical_expert_screen_smaract": [
             "vertical_motor",
         ],
         "vertical_label": [
             "vertical_motor",
         ],
-        "vertical_position": [
-            "vertical_motor",
-        ],
         "vertical_status_led": [
-            "vertical_motor",
-        ],
-        "vertical_step_size": [
             "vertical_motor",
         ],
     }
     _widget_to_pre_template = {
-        "horizontal_expert_screen": [
+        "horizontal_expert_screen_motor": [
             (
                 "commands",
                 [
-                    """motor-expert-screen ${horizontal_motor}""",
-                ],
+                """motor-expert-screen ${horizontal_motor}""",
+                ]
+            ),
+        ],
+        "horizontal_expert_screen_smaract": [
+            (
+                "macros",
+                [
+                """{"motor": "${horizontal_motor}"}""",
+                ]
             ),
         ],
         "horizontal_label": [
             ("channel", """ca://${horizontal_motor}.DESC"""),
         ],
-        "horizontal_position": [
-            ("text", """ca://${horizontal_motor}.RBV"""),
-            ("channel", """ca://${horizontal_motor}.RBV"""),
-        ],
         "horizontal_status_led": [
             ("channel", """ca://${horizontal_motor}.MSTA"""),
             ("motor", """${horizontal_motor}"""),
         ],
-        "horizontal_step_size": [
-            ("channel", """ca://${horizontal_motor}.TWV"""),
-        ],
-        "step_down": [
-            ("channel", """ca://${vertical_motor}.TWR"""),
-        ],
-        "step_left": [
-            ("channel", """ca://${horizontal_motor}.TWR"""),
-        ],
-        "step_right": [
-            ("channel", """ca://${horizontal_motor}.TWF"""),
-        ],
-        "step_up": [
-            ("channel", """ca://${vertical_motor}.TWF"""),
-        ],
-        "vertical_expert_screen": [
+        "vertical_expert_screen_motor": [
             (
                 "commands",
                 [
-                    """motor-expert-screen ${vertical_motor}""",
-                ],
+                """motor-expert-screen ${vertical_motor}""",
+                ]
+            ),
+        ],
+        "vertical_expert_screen_smaract": [
+            (
+                "macros",
+                [
+                """{"motor": "${vertical_motor}"}""",
+                ]
             ),
         ],
         "vertical_label": [
             ("channel", """ca://${vertical_motor}.DESC"""),
         ],
-        "vertical_position": [
-            ("text", """ca://${vertical_motor}.RBV"""),
-            ("channel", """ca://${vertical_motor}.RBV"""),
-        ],
         "vertical_status_led": [
             ("channel", """ca://${vertical_motor}.MSTA"""),
             ("motor", """${vertical_motor}"""),
-        ],
-        "vertical_step_size": [
-            ("channel", """ca://${vertical_motor}.TWV"""),
         ],
     }
 

@@ -161,9 +161,6 @@ QPushButton::pressed
         <property name="monitorDisp">
          <bool>false</bool>
         </property>
-        <property name="channel">
-         <string>ca://${vertical_motor}.TWR</string>
-        </property>
         <property name="PyDMIcon">
          <string>arrow-alt-circle-down</string>
         </property>
@@ -261,9 +258,6 @@ QPushButton::pressed
         </property>
         <property name="monitorDisp">
          <bool>false</bool>
-        </property>
-        <property name="channel">
-         <string>ca://${horizontal_motor}.TWF</string>
         </property>
         <property name="PyDMIcon">
          <string>arrow-alt-circle-right</string>
@@ -363,9 +357,6 @@ QPushButton::pressed
         <property name="monitorDisp">
          <bool>false</bool>
         </property>
-        <property name="channel">
-         <string>ca://${vertical_motor}.TWF</string>
-        </property>
         <property name="PyDMIcon">
          <string>arrow-alt-circle-up</string>
         </property>
@@ -463,9 +454,6 @@ QPushButton::pressed
         </property>
         <property name="monitorDisp">
          <bool>false</bool>
-        </property>
-        <property name="channel">
-         <string>ca://${horizontal_motor}.TWR</string>
         </property>
         <property name="PyDMIcon">
          <string>arrow-alt-circle-left</string>
@@ -702,9 +690,6 @@ QPushButton::pressed
         <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
        </property>
-       <property name="text">
-        <string>ca://${vertical_motor}.RBV</string>
-       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -725,9 +710,6 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="PyDMToolTip">
         <string>Current position of vertical axis</string>
-       </property>
-       <property name="channel">
-        <string>ca://${vertical_motor}.RBV</string>
        </property>
        <property name="enableRichText">
         <bool>false</bool>
@@ -779,9 +761,6 @@ color: rgb(0, 0, 0);</string>
        <property name="monitorDisp">
         <bool>false</bool>
        </property>
-       <property name="channel">
-        <string>ca://${vertical_motor}.TWV</string>
-       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -800,7 +779,7 @@ color: rgb(0, 0, 0);</string>
         </widget>
        </item>
        <item>
-        <widget class="PyDMShellCommand" name="vertical_expert_screen">
+        <widget class="PyDMShellCommand" name="vertical_expert_screen_motor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -850,6 +829,68 @@ color: rgb(0, 0, 0);</string>
          </property>
          <property name="protectedPassword">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PyDMRelatedDisplayButton" name="vertical_expert_screen_smaract">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Open expert screen for the vertical axis</string>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="PyDMIcon">
+          <string>cog</string>
+         </property>
+         <property name="filenames">
+          <stringlist>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
+         </property>
+         <property name="titles">
+          <stringlist/>
+         </property>
+         <property name="showIcon">
+          <bool>true</bool>
+         </property>
+         <property name="recursiveDisplaySearch">
+          <bool>false</bool>
+         </property>
+         <property name="macros">
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${vertical_motor}&quot;}</string>
+          </stringlist>
+         </property>
+         <property name="openInNewWindow">
+          <bool>true</bool>
+         </property>
+         <property name="passwordProtected">
+          <bool>false</bool>
+         </property>
+         <property name="password">
+          <string/>
+         </property>
+         <property name="protectedPassword">
+          <string/>
+         </property>
+         <property name="followSymlinks">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -973,9 +1014,6 @@ color: rgb(0, 0, 0);</string>
         <string notr="true">background-color: rgb(0, 85, 255);
 color: rgb(255, 255, 255);</string>
        </property>
-       <property name="text">
-        <string>ca://${horizontal_motor}.RBV</string>
-       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -996,9 +1034,6 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="PyDMToolTip">
         <string>Current position of horizontal axis</string>
-       </property>
-       <property name="channel">
-        <string>ca://${horizontal_motor}.RBV</string>
        </property>
        <property name="enableRichText">
         <bool>false</bool>
@@ -1050,9 +1085,6 @@ color: rgb(0, 0, 0);</string>
        <property name="monitorDisp">
         <bool>false</bool>
        </property>
-       <property name="channel">
-        <string>ca://${horizontal_motor}.TWV</string>
-       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -1071,7 +1103,7 @@ color: rgb(0, 0, 0);</string>
         </widget>
        </item>
        <item>
-        <widget class="PyDMShellCommand" name="horizontal_expert_screen">
+        <widget class="PyDMShellCommand" name="horizontal_expert_screen_motor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1124,6 +1156,68 @@ color: rgb(0, 0, 0);</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="PyDMRelatedDisplayButton" name="horizontal_expert_screen_smaract">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="alarmSensitiveContent">
+          <bool>false</bool>
+         </property>
+         <property name="alarmSensitiveBorder">
+          <bool>true</bool>
+         </property>
+         <property name="PyDMToolTip">
+          <string>Open expert screen for horizontal axis</string>
+         </property>
+         <property name="channel">
+          <string/>
+         </property>
+         <property name="PyDMIcon">
+          <string>cog</string>
+         </property>
+         <property name="filenames">
+          <stringlist>
+           <string>pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui</string>
+          </stringlist>
+         </property>
+         <property name="titles">
+          <stringlist/>
+         </property>
+         <property name="showIcon">
+          <bool>true</bool>
+         </property>
+         <property name="recursiveDisplaySearch">
+          <bool>false</bool>
+         </property>
+         <property name="macros">
+          <stringlist>
+           <string>{&quot;motor&quot;: &quot;${horizontal_motor}&quot;}</string>
+          </stringlist>
+         </property>
+         <property name="openInNewWindow">
+          <bool>true</bool>
+         </property>
+         <property name="passwordProtected">
+          <bool>false</bool>
+         </property>
+         <property name="password">
+          <string/>
+         </property>
+         <property name="protectedPassword">
+          <string/>
+         </property>
+         <property name="followSymlinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -1150,6 +1244,11 @@ color: rgb(0, 0, 0);</string>
    <class>PyDMShellCommand</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.shell_command</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMRelatedDisplayButton</class>
+   <extends>QPushButton</extends>
+   <header>pydm.widgets.related_display_button</header>
   </customwidget>
   <customwidget>
    <class>PyDMSymbol</class>

@@ -8,13 +8,13 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+from qtpy import QtCore, QtGui, QtWidgets
+from pcdswidgets.motion.common.svg_multi_state_led import SvgMultiStateLED
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
 from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from pydm.widgets.shell_command import PyDMShellCommand
-from qtpy import QtCore, QtGui, QtWidgets
-
-from pcdswidgets.motion.common.svg_multi_state_led import SvgMultiStateLED
 
 
 class Ui_Form(object):
@@ -56,24 +56,22 @@ class Ui_Form(object):
         self.step_down.setMinimumSize(QtCore.QSize(31, 31))
         self.step_down.setMaximumSize(QtCore.QSize(30, 30))
         self.step_down.setToolTip("")
-        self.step_down.setStyleSheet(
-            "QPushButton\n"
-            "{\n"
-            "    border: 1 px solid gray;\n"
-            "    border-radius: 5-px;\n"
-            "    outline: none;\n"
-            "}\n"
-            "QPushButton::hover\n"
-            "{\n"
-            "    background-color: rgb(240, 225, 148);\n"
-            "}\n"
-            "QPushButton::pressed\n"
-            "{\n"
-            "    background-color: rgba(187, 255, 172, 125);\n"
-            "    border: 1px solid black;\n"
-            "    border-radius: 5-px;\n"
-            "}"
-        )
+        self.step_down.setStyleSheet("QPushButton\n"
+"{\n"
+"    border: 1 px solid gray;\n"
+"    border-radius: 5-px;\n"
+"    outline: none;\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(240, 225, 148);\n"
+"}\n"
+"QPushButton::pressed\n"
+"{\n"
+"    background-color: rgba(187, 255, 172, 125);\n"
+"    border: 1px solid black;\n"
+"    border-radius: 5-px;\n"
+"}")
         self.step_down.setIconSize(QtCore.QSize(45, 45))
         self.step_down.setAlarmSensitiveContent(False)
         self.step_down.setAlarmSensitiveBorder(False)
@@ -96,24 +94,22 @@ class Ui_Form(object):
         self.step_right.setMinimumSize(QtCore.QSize(31, 31))
         self.step_right.setMaximumSize(QtCore.QSize(30, 30))
         self.step_right.setToolTip("")
-        self.step_right.setStyleSheet(
-            "QPushButton\n"
-            "{\n"
-            "    border: 1 px solid gray;\n"
-            "    border-radius: 5-px;\n"
-            "    outline: none;\n"
-            "}\n"
-            "QPushButton::hover\n"
-            "{\n"
-            "    background-color: rgb(240, 225, 148);\n"
-            "}\n"
-            "QPushButton::pressed\n"
-            "{\n"
-            "    background-color: rgba(187, 255, 172, 125);\n"
-            "    border: 1px solid black;\n"
-            "    border-radius: 5-px;\n"
-            "}"
-        )
+        self.step_right.setStyleSheet("QPushButton\n"
+"{\n"
+"    border: 1 px solid gray;\n"
+"    border-radius: 5-px;\n"
+"    outline: none;\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(240, 225, 148);\n"
+"}\n"
+"QPushButton::pressed\n"
+"{\n"
+"    background-color: rgba(187, 255, 172, 125);\n"
+"    border: 1px solid black;\n"
+"    border-radius: 5-px;\n"
+"}")
         self.step_right.setIconSize(QtCore.QSize(45, 45))
         self.step_right.setAlarmSensitiveContent(False)
         self.step_right.setAlarmSensitiveBorder(False)
@@ -136,24 +132,22 @@ class Ui_Form(object):
         self.step_up.setMinimumSize(QtCore.QSize(31, 31))
         self.step_up.setMaximumSize(QtCore.QSize(30, 30))
         self.step_up.setToolTip("")
-        self.step_up.setStyleSheet(
-            "QPushButton\n"
-            "{\n"
-            "    border: 1 px solid gray;\n"
-            "    border-radius: 5-px;\n"
-            "    outline: none;\n"
-            "}\n"
-            "QPushButton::hover\n"
-            "{\n"
-            "    background-color: rgb(240, 225, 148);\n"
-            "}\n"
-            "QPushButton::pressed\n"
-            "{\n"
-            "    background-color: rgba(187, 255, 172, 125);\n"
-            "    border: 1px solid black;\n"
-            "    border-radius: 5-px;\n"
-            "}"
-        )
+        self.step_up.setStyleSheet("QPushButton\n"
+"{\n"
+"    border: 1 px solid gray;\n"
+"    border-radius: 5-px;\n"
+"    outline: none;\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(240, 225, 148);\n"
+"}\n"
+"QPushButton::pressed\n"
+"{\n"
+"    background-color: rgba(187, 255, 172, 125);\n"
+"    border: 1px solid black;\n"
+"    border-radius: 5-px;\n"
+"}")
         self.step_up.setIconSize(QtCore.QSize(45, 45))
         self.step_up.setAlarmSensitiveContent(False)
         self.step_up.setAlarmSensitiveBorder(False)
@@ -176,24 +170,22 @@ class Ui_Form(object):
         self.step_left.setMinimumSize(QtCore.QSize(31, 31))
         self.step_left.setMaximumSize(QtCore.QSize(30, 30))
         self.step_left.setToolTip("")
-        self.step_left.setStyleSheet(
-            "QPushButton\n"
-            "{\n"
-            "    border: 1 px solid gray;\n"
-            "    border-radius: 5-px;\n"
-            "    outline: none;\n"
-            "}\n"
-            "QPushButton::hover\n"
-            "{\n"
-            "    background-color: rgb(240, 225, 148);\n"
-            "}\n"
-            "QPushButton::pressed\n"
-            "{\n"
-            "    background-color: rgba(187, 255, 172, 125);\n"
-            "    border: 1px solid black;\n"
-            "    border-radius: 5-px;\n"
-            "}"
-        )
+        self.step_left.setStyleSheet("QPushButton\n"
+"{\n"
+"    border: 1 px solid gray;\n"
+"    border-radius: 5-px;\n"
+"    outline: none;\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(240, 225, 148);\n"
+"}\n"
+"QPushButton::pressed\n"
+"{\n"
+"    background-color: rgba(187, 255, 172, 125);\n"
+"    border: 1px solid black;\n"
+"    border-radius: 5-px;\n"
+"}")
         self.step_left.setIconSize(QtCore.QSize(45, 45))
         self.step_left.setAlarmSensitiveContent(False)
         self.step_left.setAlarmSensitiveBorder(False)
@@ -216,24 +208,22 @@ class Ui_Form(object):
         self.stop.setMinimumSize(QtCore.QSize(31, 31))
         self.stop.setMaximumSize(QtCore.QSize(30, 30))
         self.stop.setToolTip("")
-        self.stop.setStyleSheet(
-            "QPushButton\n"
-            "{\n"
-            "    border: 1 px solid gray;\n"
-            "    border-radius: 5-px;\n"
-            "    outline: none;\n"
-            "}\n"
-            "QPushButton::hover\n"
-            "{\n"
-            "    background-color: rgb(240, 225, 148);\n"
-            "}\n"
-            "QPushButton::pressed\n"
-            "{\n"
-            "    background-color: rgba(187, 255, 172, 125);\n"
-            "    border: 1px solid black;\n"
-            "    border-radius: 5-px;\n"
-            "}"
-        )
+        self.stop.setStyleSheet("QPushButton\n"
+"{\n"
+"    border: 1 px solid gray;\n"
+"    border-radius: 5-px;\n"
+"    outline: none;\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(240, 225, 148);\n"
+"}\n"
+"QPushButton::pressed\n"
+"{\n"
+"    background-color: rgba(187, 255, 172, 125);\n"
+"    border: 1px solid black;\n"
+"    border-radius: 5-px;\n"
+"}")
         self.stop.setIconSize(QtCore.QSize(45, 45))
         self.stop.setPyDMIconColor(QtGui.QColor(255, 0, 0))
         self.stop.setObjectName("stop")
@@ -253,7 +243,8 @@ class Ui_Form(object):
         self.vertical_position.setMinimumSize(QtCore.QSize(126, 21))
         self.vertical_position.setMaximumSize(QtCore.QSize(100, 16777215))
         self.vertical_position.setToolTip("")
-        self.vertical_position.setStyleSheet("background-color: rgb(0, 85, 255);\ncolor: rgb(255, 255, 255);")
+        self.vertical_position.setStyleSheet("background-color: rgb(0, 85, 255);\n"
+"color: rgb(255, 255, 255);")
         self.vertical_position.setAlignment(QtCore.Qt.AlignCenter)
         self.vertical_position.setPrecision(0)
         self.vertical_position.setShowUnits(False)
@@ -272,7 +263,8 @@ class Ui_Form(object):
         self.horizontal_position.setMinimumSize(QtCore.QSize(126, 21))
         self.horizontal_position.setMaximumSize(QtCore.QSize(100, 16777215))
         self.horizontal_position.setToolTip("")
-        self.horizontal_position.setStyleSheet("background-color: rgb(0, 85, 255);\ncolor: rgb(255, 255, 255);")
+        self.horizontal_position.setStyleSheet("background-color: rgb(0, 85, 255);\n"
+"color: rgb(255, 255, 255);")
         self.horizontal_position.setAlignment(QtCore.Qt.AlignCenter)
         self.horizontal_position.setPrecision(0)
         self.horizontal_position.setShowUnits(False)
@@ -286,7 +278,8 @@ class Ui_Form(object):
         self.horizontal_step_size.setMinimumSize(QtCore.QSize(127, 21))
         self.horizontal_step_size.setMaximumSize(QtCore.QSize(127, 21))
         self.horizontal_step_size.setToolTip("")
-        self.horizontal_step_size.setStyleSheet("background-color: rgb(255, 255, 255);\ncolor: rgb(0, 0, 0);")
+        self.horizontal_step_size.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);")
         self.horizontal_step_size.setAlignment(QtCore.Qt.AlignCenter)
         self.horizontal_step_size.setPrecision(0)
         self.horizontal_step_size.setShowUnits(False)
@@ -336,7 +329,8 @@ class Ui_Form(object):
         self.vertical_step_size.setMinimumSize(QtCore.QSize(126, 21))
         self.vertical_step_size.setMaximumSize(QtCore.QSize(126, 21))
         self.vertical_step_size.setToolTip("")
-        self.vertical_step_size.setStyleSheet("background-color: rgb(255, 255, 255);\ncolor: rgb(0, 0, 0);")
+        self.vertical_step_size.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);")
         self.vertical_step_size.setAlignment(QtCore.Qt.AlignCenter)
         self.vertical_step_size.setPrecision(0)
         self.vertical_step_size.setShowUnits(False)
@@ -389,26 +383,48 @@ class Ui_Form(object):
         self.vertical_invert.setSizePolicy(sizePolicy)
         self.vertical_invert.setObjectName("vertical_invert")
         self.vertical_expert_layout.addWidget(self.vertical_invert)
-        self.vertical_expert_screen = PyDMShellCommand(self.gridLayoutWidget_2)
+        self.vertical_expert_screen_motor = PyDMShellCommand(self.gridLayoutWidget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.vertical_expert_screen.sizePolicy().hasHeightForWidth())
-        self.vertical_expert_screen.setSizePolicy(sizePolicy)
-        self.vertical_expert_screen.setToolTip("")
-        self.vertical_expert_screen.setAlarmSensitiveContent(False)
-        self.vertical_expert_screen.setAlarmSensitiveBorder(True)
-        self.vertical_expert_screen.setChannel("")
-        self.vertical_expert_screen.setShowIcon(True)
-        self.vertical_expert_screen.setRedirectCommandOutput(False)
-        self.vertical_expert_screen.setAllowMultipleExecutions(False)
-        self.vertical_expert_screen.setTitles([])
-        self.vertical_expert_screen.setCommands(["motor-expert-screen ${vertical_motor}"])
-        self.vertical_expert_screen.setPasswordProtected(False)
-        self.vertical_expert_screen.setPassword("")
-        self.vertical_expert_screen.setProtectedPassword("")
-        self.vertical_expert_screen.setObjectName("vertical_expert_screen")
-        self.vertical_expert_layout.addWidget(self.vertical_expert_screen)
+        sizePolicy.setHeightForWidth(self.vertical_expert_screen_motor.sizePolicy().hasHeightForWidth())
+        self.vertical_expert_screen_motor.setSizePolicy(sizePolicy)
+        self.vertical_expert_screen_motor.setToolTip("")
+        self.vertical_expert_screen_motor.setAlarmSensitiveContent(False)
+        self.vertical_expert_screen_motor.setAlarmSensitiveBorder(True)
+        self.vertical_expert_screen_motor.setChannel("")
+        self.vertical_expert_screen_motor.setShowIcon(True)
+        self.vertical_expert_screen_motor.setRedirectCommandOutput(False)
+        self.vertical_expert_screen_motor.setAllowMultipleExecutions(False)
+        self.vertical_expert_screen_motor.setTitles([])
+        self.vertical_expert_screen_motor.setCommands(['motor-expert-screen ${vertical_motor}'])
+        self.vertical_expert_screen_motor.setPasswordProtected(False)
+        self.vertical_expert_screen_motor.setPassword("")
+        self.vertical_expert_screen_motor.setProtectedPassword("")
+        self.vertical_expert_screen_motor.setObjectName("vertical_expert_screen_motor")
+        self.vertical_expert_layout.addWidget(self.vertical_expert_screen_motor)
+        self.vertical_expert_screen_smaract = PyDMRelatedDisplayButton(self.gridLayoutWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.vertical_expert_screen_smaract.sizePolicy().hasHeightForWidth())
+        self.vertical_expert_screen_smaract.setSizePolicy(sizePolicy)
+        self.vertical_expert_screen_smaract.setToolTip("")
+        self.vertical_expert_screen_smaract.setAlarmSensitiveContent(False)
+        self.vertical_expert_screen_smaract.setAlarmSensitiveBorder(True)
+        self.vertical_expert_screen_smaract.setChannel("")
+        self.vertical_expert_screen_smaract.setFilenames(['pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui'])
+        self.vertical_expert_screen_smaract.setTitles([])
+        self.vertical_expert_screen_smaract.setShowIcon(True)
+        self.vertical_expert_screen_smaract.setRecursiveDisplaySearch(False)
+        self.vertical_expert_screen_smaract.setMacros(['{"motor": "${vertical_motor}"}'])
+        self.vertical_expert_screen_smaract.setOpenInNewWindow(True)
+        self.vertical_expert_screen_smaract.setPasswordProtected(False)
+        self.vertical_expert_screen_smaract.setPassword("")
+        self.vertical_expert_screen_smaract.setProtectedPassword("")
+        self.vertical_expert_screen_smaract.setFollowSymlinks(False)
+        self.vertical_expert_screen_smaract.setObjectName("vertical_expert_screen_smaract")
+        self.vertical_expert_layout.addWidget(self.vertical_expert_screen_smaract)
         self.gridLayout_2.addLayout(self.vertical_expert_layout, 3, 0, 1, 1)
         self.horizontal_expert_layout = QtWidgets.QHBoxLayout()
         self.horizontal_expert_layout.setObjectName("horizontal_expert_layout")
@@ -420,26 +436,48 @@ class Ui_Form(object):
         self.horizontal_invert.setSizePolicy(sizePolicy)
         self.horizontal_invert.setObjectName("horizontal_invert")
         self.horizontal_expert_layout.addWidget(self.horizontal_invert)
-        self.horizontal_expert_screen = PyDMShellCommand(self.gridLayoutWidget_2)
+        self.horizontal_expert_screen_motor = PyDMShellCommand(self.gridLayoutWidget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.horizontal_expert_screen.sizePolicy().hasHeightForWidth())
-        self.horizontal_expert_screen.setSizePolicy(sizePolicy)
-        self.horizontal_expert_screen.setToolTip("")
-        self.horizontal_expert_screen.setAlarmSensitiveContent(False)
-        self.horizontal_expert_screen.setAlarmSensitiveBorder(True)
-        self.horizontal_expert_screen.setChannel("")
-        self.horizontal_expert_screen.setShowIcon(True)
-        self.horizontal_expert_screen.setRedirectCommandOutput(False)
-        self.horizontal_expert_screen.setAllowMultipleExecutions(False)
-        self.horizontal_expert_screen.setTitles([])
-        self.horizontal_expert_screen.setCommands(["motor-expert-screen ${horizontal_motor}"])
-        self.horizontal_expert_screen.setPasswordProtected(False)
-        self.horizontal_expert_screen.setPassword("")
-        self.horizontal_expert_screen.setProtectedPassword("")
-        self.horizontal_expert_screen.setObjectName("horizontal_expert_screen")
-        self.horizontal_expert_layout.addWidget(self.horizontal_expert_screen)
+        sizePolicy.setHeightForWidth(self.horizontal_expert_screen_motor.sizePolicy().hasHeightForWidth())
+        self.horizontal_expert_screen_motor.setSizePolicy(sizePolicy)
+        self.horizontal_expert_screen_motor.setToolTip("")
+        self.horizontal_expert_screen_motor.setAlarmSensitiveContent(False)
+        self.horizontal_expert_screen_motor.setAlarmSensitiveBorder(True)
+        self.horizontal_expert_screen_motor.setChannel("")
+        self.horizontal_expert_screen_motor.setShowIcon(True)
+        self.horizontal_expert_screen_motor.setRedirectCommandOutput(False)
+        self.horizontal_expert_screen_motor.setAllowMultipleExecutions(False)
+        self.horizontal_expert_screen_motor.setTitles([])
+        self.horizontal_expert_screen_motor.setCommands(['motor-expert-screen ${horizontal_motor}'])
+        self.horizontal_expert_screen_motor.setPasswordProtected(False)
+        self.horizontal_expert_screen_motor.setPassword("")
+        self.horizontal_expert_screen_motor.setProtectedPassword("")
+        self.horizontal_expert_screen_motor.setObjectName("horizontal_expert_screen_motor")
+        self.horizontal_expert_layout.addWidget(self.horizontal_expert_screen_motor)
+        self.horizontal_expert_screen_smaract = PyDMRelatedDisplayButton(self.gridLayoutWidget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.horizontal_expert_screen_smaract.sizePolicy().hasHeightForWidth())
+        self.horizontal_expert_screen_smaract.setSizePolicy(sizePolicy)
+        self.horizontal_expert_screen_smaract.setToolTip("")
+        self.horizontal_expert_screen_smaract.setAlarmSensitiveContent(False)
+        self.horizontal_expert_screen_smaract.setAlarmSensitiveBorder(True)
+        self.horizontal_expert_screen_smaract.setChannel("")
+        self.horizontal_expert_screen_smaract.setFilenames(['pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui'])
+        self.horizontal_expert_screen_smaract.setTitles([])
+        self.horizontal_expert_screen_smaract.setShowIcon(True)
+        self.horizontal_expert_screen_smaract.setRecursiveDisplaySearch(False)
+        self.horizontal_expert_screen_smaract.setMacros(['{"motor": "${horizontal_motor}"}'])
+        self.horizontal_expert_screen_smaract.setOpenInNewWindow(True)
+        self.horizontal_expert_screen_smaract.setPasswordProtected(False)
+        self.horizontal_expert_screen_smaract.setPassword("")
+        self.horizontal_expert_screen_smaract.setProtectedPassword("")
+        self.horizontal_expert_screen_smaract.setFollowSymlinks(False)
+        self.horizontal_expert_screen_smaract.setObjectName("horizontal_expert_screen_smaract")
+        self.horizontal_expert_layout.addWidget(self.horizontal_expert_screen_smaract)
         self.gridLayout_2.addLayout(self.horizontal_expert_layout, 3, 1, 1, 1)
 
         self.retranslateUi(Form)
@@ -449,50 +487,45 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.step_down.setPyDMToolTip(_translate("Form", "Step backward on vertical axis"))
-        self.step_down.setChannel(_translate("Form", "ca://${vertical_motor}.TWR"))
         self.step_down.setPyDMIcon(_translate("Form", "arrow-alt-circle-down"))
         self.step_down.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.step_down.setPressValue(_translate("Form", "1"))
         self.step_down.setReleaseValue(_translate("Form", "None"))
         self.step_right.setPyDMToolTip(_translate("Form", "Step forward on horizontal axis"))
-        self.step_right.setChannel(_translate("Form", "ca://${horizontal_motor}.TWF"))
         self.step_right.setPyDMIcon(_translate("Form", "arrow-alt-circle-right"))
         self.step_right.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.step_right.setPressValue(_translate("Form", "1"))
         self.step_right.setReleaseValue(_translate("Form", "None"))
         self.step_up.setPyDMToolTip(_translate("Form", "Step forward on vertical axis"))
-        self.step_up.setChannel(_translate("Form", "ca://${vertical_motor}.TWF"))
         self.step_up.setPyDMIcon(_translate("Form", "arrow-alt-circle-up"))
         self.step_up.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.step_up.setPressValue(_translate("Form", "1"))
         self.step_up.setReleaseValue(_translate("Form", "None"))
         self.step_left.setPyDMToolTip(_translate("Form", "Step backwards on horizontal axis"))
-        self.step_left.setChannel(_translate("Form", "ca://${horizontal_motor}.TWR"))
         self.step_left.setPyDMIcon(_translate("Form", "arrow-alt-circle-left"))
         self.step_left.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.step_left.setPressValue(_translate("Form", "1"))
         self.step_left.setReleaseValue(_translate("Form", "None"))
         self.stop.setPyDMToolTip(_translate("Form", "Stop all axis movement"))
         self.stop.setPyDMIcon(_translate("Form", "stop-circle"))
-        self.vertical_position.setText(_translate("Form", "ca://${vertical_motor}.RBV"))
         self.vertical_position.setPyDMToolTip(_translate("Form", "Current position of vertical axis"))
-        self.vertical_position.setChannel(_translate("Form", "ca://${vertical_motor}.RBV"))
-        self.horizontal_position.setText(_translate("Form", "ca://${horizontal_motor}.RBV"))
         self.horizontal_position.setPyDMToolTip(_translate("Form", "Current position of horizontal axis"))
-        self.horizontal_position.setChannel(_translate("Form", "ca://${horizontal_motor}.RBV"))
         self.horizontal_step_size.setPyDMToolTip(_translate("Form", "Step size for horizontal axis"))
-        self.horizontal_step_size.setChannel(_translate("Form", "ca://${horizontal_motor}.TWV"))
         self.vertical_label.setChannel(_translate("Form", "ca://${vertical_motor}.DESC"))
         self.vertical_status_led.setChannel(_translate("Form", "ca://${vertical_motor}.MSTA"))
         self.vertical_status_led.setProperty("motor", _translate("Form", "${vertical_motor}"))
         self.vertical_step_size.setPyDMToolTip(_translate("Form", "Step size for vertical axis"))
-        self.vertical_step_size.setChannel(_translate("Form", "ca://${vertical_motor}.TWV"))
         self.horizontal_label.setChannel(_translate("Form", "ca://${horizontal_motor}.DESC"))
         self.horizontal_status_led.setChannel(_translate("Form", "ca://${horizontal_motor}.MSTA"))
         self.horizontal_status_led.setProperty("motor", _translate("Form", "${horizontal_motor}"))
         self.vertical_invert.setText(_translate("Form", "Invert"))
-        self.vertical_expert_screen.setPyDMToolTip(_translate("Form", "Open expert screen for the vertical axis"))
-        self.vertical_expert_screen.setPyDMIcon(_translate("Form", "cog"))
+        self.vertical_expert_screen_motor.setPyDMToolTip(_translate("Form", "Open expert screen for the vertical axis"))
+        self.vertical_expert_screen_motor.setPyDMIcon(_translate("Form", "cog"))
+        self.vertical_expert_screen_smaract.setPyDMToolTip(_translate("Form", "Open expert screen for the vertical axis"))
+        self.vertical_expert_screen_smaract.setPyDMIcon(_translate("Form", "cog"))
         self.horizontal_invert.setText(_translate("Form", "Invert"))
-        self.horizontal_expert_screen.setPyDMToolTip(_translate("Form", "Open expert screen for horizontal axis"))
-        self.horizontal_expert_screen.setPyDMIcon(_translate("Form", "cog"))
+        self.horizontal_expert_screen_motor.setPyDMToolTip(_translate("Form", "Open expert screen for horizontal axis"))
+        self.horizontal_expert_screen_motor.setPyDMIcon(_translate("Form", "cog"))
+        self.horizontal_expert_screen_smaract.setPyDMToolTip(_translate("Form", "Open expert screen for horizontal axis"))
+        self.horizontal_expert_screen_smaract.setPyDMIcon(_translate("Form", "cog"))
+

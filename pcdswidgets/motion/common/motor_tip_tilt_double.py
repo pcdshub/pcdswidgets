@@ -6,7 +6,8 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import logging
 
-from pydm.widgets import PyDMPushButton, PyDMShellCommand
+from pydm.utilities import is_qt_designer
+from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton, PyDMShellCommand
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Signal
 from qtpy.QtWidgets import QCheckBox, QWidget
@@ -14,6 +15,12 @@ from qtpy.QtWidgets import QCheckBox, QWidget
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.motion.common.motor_tip_tilt_double_base import MotorTipTiltDoubleBase
+from pcdswidgets.motion.common.motor_style import MotorStyle
+
+try:
+    from qtpy.QtCore import pyqtProperty
+except ImportError:
+    from qtpy.QtCore import Property as pyqtProperty 
 
 logger = logging.getLogger(__name__)
 
@@ -27,8 +34,10 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
     step_left: PyDMPushButton
     step_right: PyDMPushButton
     stop: PyDMPushButton
-    vertical_expert_screen: PyDMShellCommand
-    horizontal_expert_screen: PyDMShellCommand
+    vertical_expert_screen_motor: PyDMShellCommand
+    horizontal_expert_screen_motor: PyDMShellCommand
+    vertical_expert_screen_smaract: PyDMRelatedDisplayButton
+    horizontal_expert_screen_smaract: PyDMRelatedDisplayButton
 
     designer_options = DesignerOptions(
         group="ECS Motion Common",
@@ -41,6 +50,7 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
+        self._motor_style = MotorStyle.MOTOR_RECORD
         self.vertical_invert.stateChanged.connect(self._invert_vertical)
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
         self._stop_channels = {
@@ -48,28 +58,59 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
             "horizontal_motor": PyDMChannel(value_signal=self._stop_signal),
         }
         self.stop.clicked.connect(self._stop_all)
+        self._apply_expert_screen_visibility()
+        self._refresh_axis("vertical")
+        self._refresh_axis("horizontal")
 
     def channels(self) -> list[PyDMChannel]:
         """Let pydm discover and (dis)connect our manually created stop channels."""
         return list(self._stop_channels.values())
 
     def after_set_macro(self, macro_name: str, value: str) -> None:
-        """Keep each stop channel pointed at its axis's current motor."""
+        """Keep the stop channel and the style-dependent axis channels in sync with the current motor."""
         channel = self._stop_channels.get(macro_name)
-        if channel is None:
-            return
-        if channel.address:
-            channel.disconnect()
-        channel.address = f"ca://{value}.STOP"
-        channel.connect()
+        if channel is not None:
+            if channel.address:
+                channel.disconnect()
+            channel.address = f"ca://{value}.STOP"
+            channel.connect()
+
+        if macro_name in ("vertical_motor", "horizontal_motor"):
+            self._refresh_axis(macro_name.removesuffix("_motor"))
 
     def _stop_all(self) -> None:
         """Stop motion on both axes by writing 1 to each axis's .STOP field."""
         self._stop_signal.emit(1)
-    
+
+    def _apply_expert_screen_visibility(self) -> None:
+        """Show the expert-screen button that matches the current style, hide the other."""
+        is_smaract = self._motor_style == MotorStyle.SMARACT
+        self.vertical_expert_screen_motor.setVisible(not is_smaract)
+        self.horizontal_expert_screen_motor.setVisible(not is_smaract)
+        self.vertical_expert_screen_smaract.setVisible(is_smaract)
+        self.horizontal_expert_screen_smaract.setVisible(is_smaract)
+
+    def _step_suffixes(self, motor_pv: str) -> tuple[str, str]:
+        """Return the (forward, reverse) tweak PVs for motor_pv, based on the current style."""
+        if self._motor_style == MotorStyle.SMARACT:
+            return (f"{motor_pv}:STEP_FORWARD.PROC", f"{motor_pv}:STEP_REVERSE.PROC")
+        return (f"{motor_pv}.TWF", f"{motor_pv}.TWR")
+
+    def _step_size_pv(self, motor_pv: str) -> str:
+        """Return the step-size PV for motor_pv, based on the current style."""
+        if self._motor_style == MotorStyle.SMARACT:
+            return f"{motor_pv}:STEP_COUNT"
+        return f"{motor_pv}.TWV"
+
+    def _position_pv(self, motor_pv: str) -> str:
+        """Return the position/total-step PV for motor_pv, based on the current style."""
+        if self._motor_style == MotorStyle.SMARACT:
+            return f"{motor_pv}:TOTAL_STEP_COUNT"
+        return f"{motor_pv}.RBV"
+
     def _invert_axis_channel(self, axis: str) -> None:
         """
-        Invert the TWF or TWR channel connections for a particular
+        Invert the forward/reverse channel connections for a particular
         axis in the directional pad
 
         Parameters
@@ -92,15 +133,42 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
 
         checkbox = getattr(self, f"{axis}_invert")
         directions = ["up", "down"] if axis == "vertical" else ["right", "left"]
+        forward_pv, reverse_pv = self._step_suffixes(motor_pv)
 
         # didn't want to use dir/s as an iterator which is normally for directory
         for d in directions:
             if d in ["up", "right"]:
-                pv_suffix = "TWR" if checkbox.isChecked() else "TWF"
+                pv = reverse_pv if checkbox.isChecked() else forward_pv
             else:
-                pv_suffix = "TWF" if checkbox.isChecked() else "TWR"
+                pv = forward_pv if checkbox.isChecked() else reverse_pv
             widget = getattr(self, f"step_{d}")
-            widget.set_channel(f"ca://{motor_pv}.{pv_suffix}")
+            widget.set_channel(f"ca://{pv}")
+
+    def _refresh_axis(self, axis: str) -> None:
+        """
+        Recompute every PV this axis drives: position, step size, and the tweak buttons.
+
+        Before a real motor is assigned, shows the ${axis_motor}-templated PV as
+        placeholder text on the position label, matching how the old style-specific
+        .ui files looked in Designer before their macros were substituted.
+        """
+        motor_pv = self.get_macro(f"{axis}_motor")
+        display_pv = motor_pv or f"${{{axis}_motor}}"
+        position_pv = self._position_pv(display_pv)
+
+        position_widget = getattr(self, f"{axis}_position")
+        position_widget.setText(f"ca://{position_pv}")
+
+        if not motor_pv:
+            logger.debug(f"Macro for {axis}_motor does not yet exist")
+            return
+
+        position_widget.set_channel(f"ca://{position_pv}")
+
+        step_size_widget = getattr(self, f"{axis}_step_size")
+        step_size_widget.set_channel(f"ca://{self._step_size_pv(motor_pv)}")
+
+        self._invert_axis_channel(axis)
 
     def set_motors(self, horizontal_motor: str, vertical_motor: str) -> None:
         """
@@ -115,14 +183,33 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
         """
         self.set_macro("horizontal_motor", horizontal_motor)
         self.set_macro("vertical_motor", vertical_motor)
-        self._invert_axis_channel("horizontal")
-        self._invert_axis_channel("vertical")
 
     def _invert_vertical(self) -> None:
-        """Swap the TWF and TWR buttons for the vertical axis"""
+        """Swap the forward and reverse buttons for the vertical axis"""
         self._invert_axis_channel("vertical")
 
     def _invert_horizontal(self) -> None:
-        """Swap the TWF and TWR buttons for the horizontal axis"""
+        """Swap the forward and reverse buttons for the horizontal axis"""
         self._invert_axis_channel("horizontal")
-    
+
+    ## Custom properties that can be overwritten in designer.
+
+    def getMotorStyle(self) -> str:
+        """Whether this widget drives standard motor record fields or SmarAct's custom step fields."""
+        return self._motor_style.value
+
+    def setMotorStyle(self, value: str) -> None:
+        try:
+            style = MotorStyle(value)
+        except ValueError:
+            if not is_qt_designer():
+                logger.warning(f"Invalid motor_style {value!r}; expected one of {[s.value for s in MotorStyle]}")
+            return
+        if style == self._motor_style:
+            return
+        self._motor_style = style
+        self._apply_expert_screen_visibility()
+        self._refresh_axis("vertical")
+        self._refresh_axis("horizontal")
+
+    motor_style = pyqtProperty(str, getMotorStyle, setMotorStyle)
