@@ -20,7 +20,7 @@ from pcdswidgets.motion.common.motor_style import MotorStyle
 try:
     from qtpy.QtCore import pyqtProperty
 except ImportError:
-    from qtpy.QtCore import Property as pyqtProperty 
+    from qtpy.QtCore import Property as pyqtProperty
 
 logger = logging.getLogger(__name__)
 

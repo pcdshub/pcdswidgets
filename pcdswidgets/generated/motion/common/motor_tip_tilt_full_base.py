@@ -19,12 +19,14 @@ widget_to_pre_templ_lists: dict[str, list[tuple[str, list[str]]]]
 # ruff: noqa: F405
 
 from pcdswidgets.builder.designer_widget import DesignerWidget
+
 from .motor_tip_tilt_full_form import *
 
 try:
     from qtpy.QtCore import pyqtProperty
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
+
 
 class MotorTipTiltFullBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
@@ -97,16 +99,16 @@ class MotorTipTiltFullBase(DesignerWidget):
             (
                 "commands",
                 [
-                """motor-expert-screen ${horizontal_motor}""",
-                ]
+                    """motor-expert-screen ${horizontal_motor}""",
+                ],
             ),
         ],
         "horizontal_expert_screen_smaract": [
             (
                 "macros",
                 [
-                """{"motor": "${horizontal_motor}"}""",
-                ]
+                    """{"motor": "${horizontal_motor}"}""",
+                ],
             ),
         ],
         "horizontal_label": [
@@ -120,16 +122,16 @@ class MotorTipTiltFullBase(DesignerWidget):
             (
                 "commands",
                 [
-                """motor-expert-screen ${vertical_motor}""",
-                ]
+                    """motor-expert-screen ${vertical_motor}""",
+                ],
             ),
         ],
         "vertical_expert_screen_smaract": [
             (
                 "macros",
                 [
-                """{"motor": "${vertical_motor}"}""",
-                ]
+                    """{"motor": "${vertical_motor}"}""",
+                ],
             ),
         ],
         "vertical_label": [
