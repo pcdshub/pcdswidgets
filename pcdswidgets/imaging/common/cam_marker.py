@@ -4,6 +4,7 @@ import math
 from enum import IntEnum
 
 import pyqtgraph as pg
+from pyqtgraph.graphicsItems.ViewBox import ViewBox
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 
@@ -28,7 +29,8 @@ class CamMarker:
     preserve the marker position.
 
     A marker's (x, y) is a single absolute value; attaching it to more than
-    one ViewBox renders that same value in each view's own local coordinate frame via a per-attachment (offset_x, offset_y).
+    one ViewBox renders that same value in each view's own local coordinate
+    frame via a per-attachment (offset_x, offset_y).
 
     Parameters
     ----------
@@ -74,7 +76,7 @@ class CamMarker:
         # One entry per attached ViewBox: {"view_box", "offset_x", "offset_y", "items"}
         self._attachments: list[dict] = []
 
-    def attach(self, view_box, offset: tuple[float, float] = (0.0, 0.0)) -> None:
+    def attach(self, view_box: ViewBox, offset: tuple[float, float] = (0.0, 0.0)) -> None:
         """Attach this marker to a pyqtgraph ViewBox, rendered at (x - offset_x, y - offset_y).
 
         Can be called more than once with different ViewBoxes to render the
@@ -85,7 +87,7 @@ class CamMarker:
         self._attachments.append(attachment)
         self._rebuild_attachment(attachment)
 
-    def set_offset(self, view_box, offset_x: float, offset_y: float) -> None:
+    def set_offset(self, view_box: ViewBox, offset_x: float, offset_y: float) -> None:
         """Update the live offset for a previously-attached ViewBox (e.g. when its ROI moves)."""
         for attachment in self._attachments:
             if attachment["view_box"] is view_box:
@@ -94,7 +96,7 @@ class CamMarker:
                 self._update_attachment_positions(attachment)
                 return
 
-    def detach(self, view_box=None) -> None:
+    def detach(self, view_box: ViewBox | None = None) -> None:
         """Remove graphic items from one ViewBox, or every attached ViewBox if view_box is None."""
         for attachment in list(self._attachments):
             if view_box is None or attachment["view_box"] is view_box:

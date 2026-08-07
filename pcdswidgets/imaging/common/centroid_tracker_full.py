@@ -51,12 +51,7 @@ _CONNECT_RETRY_MAX_ATTEMPTS = 5
 
 
 class _PVWriter(QObject):
-    """Write-only handle to a PV via PyDM's channel plugin, with no Qt widget involved.
-
-    PyDMChannel is the plain object every PyDM widget already uses
-    internally to talk to the CA/PVA plugin; using it directly avoids
-    creating a hidden/never-shown widget purely to get a write channel.
-    """
+    """Write-only handle to a PV via PyDM's channel plugin, with no Qt widget involved."""
 
     _value_signal = Signal(float)
 
