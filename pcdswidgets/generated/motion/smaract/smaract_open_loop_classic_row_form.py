@@ -40,11 +40,6 @@ class Ui_Form(object):
         self.PyDMShellCommand.setRedirectCommandOutput(False)
         self.PyDMShellCommand.setAllowMultipleExecutions(False)
         self.PyDMShellCommand.setTitles([])
-        self.PyDMShellCommand.setCommands(
-            [
-                "edm -eolc -x -m MOTOR=${MOTOR} /reg/g/pcds/epics/ioc/common/smaract/R1.0.8/motorScreens/mcs2_openloop.edl"
-            ]
-        )
         self.PyDMShellCommand.setObjectName("PyDMShellCommand")
         self.gridLayout.addWidget(self.PyDMShellCommand, 0, 8, 1, 1)
         self.PyDMLabel_name = PyDMLabel(Form)
@@ -159,21 +154,15 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.PyDMLabel_name.setChannel(_translate("Form", "ca://${MOTOR}.DESC"))
-        self.PyDMLineEdit_setpoint.setChannel(_translate("Form", "ca://${MOTOR}:TOTAL_STEP_COUNT"))
         self.PyDMPushButton_twkR.setText(_translate("Form", ">>"))
-        self.PyDMPushButton_twkR.setChannel(_translate("Form", "ca://${MOTOR}:STEP_FORWARD.PROC"))
         self.PyDMPushButton_twkR.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.PyDMPushButton_twkR.setPressValue(_translate("Form", "1"))
         self.PyDMPushButton_twkR.setReleaseValue(_translate("Form", "None"))
-        self.PyDMLineEdit.setChannel(_translate("Form", "ca://${MOTOR}:STEP_COUNT"))
         self.PyDMPushButton_stop.setText(_translate("Form", "Stop"))
-        self.PyDMPushButton_stop.setChannel(_translate("Form", "ca://${MOTOR}.STOP"))
         self.PyDMPushButton_stop.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.PyDMPushButton_stop.setPressValue(_translate("Form", "1"))
         self.PyDMPushButton_stop.setReleaseValue(_translate("Form", "None"))
         self.PyDMPushButton_twkL.setText(_translate("Form", "<<"))
-        self.PyDMPushButton_twkL.setChannel(_translate("Form", "ca://${MOTOR}:STEP_REVERSE.PROC"))
         self.PyDMPushButton_twkL.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))
         self.PyDMPushButton_twkL.setPressValue(_translate("Form", "1"))
         self.PyDMPushButton_twkL.setReleaseValue(_translate("Form", "None"))
