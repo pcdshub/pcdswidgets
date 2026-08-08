@@ -40,7 +40,6 @@ class Ui_Form(object):
         self.one_two_shell.setShowIcon(True)
         self.one_two_shell.setAllowMultipleExecutions(False)
         self.one_two_shell.setTitles([])
-        self.one_two_shell.setCommands(["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"])
         self.one_two_shell.setPasswordProtected(False)
         self.one_two_shell.setPassword("")
         self.one_two_shell.setProtectedPassword("")
@@ -54,8 +53,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.name_label.setToolTip(_translate("Form", "${NAME}"))
-        self.name_label.setText(_translate("Form", "Name: ${NAME}"))
-        self.num_label.setText(_translate("Form", "Num: ${NUM}"))
-        self.name_num_label.setText(_translate("Form", "${NAME}:${NUM}"))
         self.one_two_shell.setConfirmMessage(_translate("Form", "Are you sure you want to proceed?"))

@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>380</width>
+    <height>120</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>370</width>
+    <height>120</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>380</width>
+    <height>133</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Centroid Tracker</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>55</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>55</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Centroid</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>X:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="centroid_x_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_centroid_x}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Y:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="centroid_y_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_centroid_y}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="ColorButton" name="centroid_color_button">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>45</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Change centroid marker color</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="centroid_style_button">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>45</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Change centroid line style and width</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="centroid_visibility_button">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>45</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle centroid marker visibility</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>55</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>55</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Sigma</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>X:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="sigma_x_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_sigma_x}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Y:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="sigma_y_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_sigma_y}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>90</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Max Intensity:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="max_value_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_max_value}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>65</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>65</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Threshold</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="threshold_mode_combo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Centroid threshold mode</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="threshold_value_edit">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Threshold value; press Enter to apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMLabel" name="threshold_rbv_label">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${cam_prefix}${stat_plugin}${suffix_centroid_threshold_rbv}</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>No. of Widths:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="roi_multiplier_spinbox"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="set_roi_button">
+       <property name="toolTip">
+        <string>Set ROI based on centroid and beam width</string>
+       </property>
+       <property name="text">
+        <string>Force Single ROI</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QPushButton</extends>
+   <header>pcdswidgets.imaging.common.colorselect_button.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -4,7 +4,7 @@ Collapsible widget wrapper for sidebar panels.
 
 import logging
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QFont
 from qtpy.QtWidgets import (
     QFrame,
@@ -27,6 +27,8 @@ class CollapsibleSection(QWidget):
     header toggles the content area between visible and hidden.
 
     """
+
+    toggled = Signal(bool)  # emits the new expanded state (True = expanded)
 
     def __init__(
         self,
@@ -104,8 +106,19 @@ class CollapsibleSection(QWidget):
 
     def toggle(self) -> None:
         """Toggle between collapsed and expanded."""
-        self._collapsed = not self._collapsed
+        self.set_collapsed(not self._collapsed)
+
+    def set_collapsed(self, collapsed: bool) -> None:
+        """Programmatically collapse or expand, emitting `toggled` if the state actually changes."""
+        if self._collapsed == collapsed:
+            return
+        self._collapsed = collapsed
         self._apply_collapsed_state()
+        self.toggled.emit(not self._collapsed)
+
+    @property
+    def is_collapsed(self) -> bool:
+        return self._collapsed
 
     def _apply_collapsed_state(self) -> None:
         expanded = not self._collapsed
