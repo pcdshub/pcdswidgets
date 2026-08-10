@@ -6,10 +6,9 @@ This file can be safely edited to change the runtime behavior of the widget.
 
 import logging
 
-from pydm.utilities import is_qt_designer
 from pydm.widgets import PyDMPushButton, PyDMRelatedDisplayButton, PyDMShellCommand
 from pydm.widgets.channel import PyDMChannel
-from qtpy.QtCore import Signal
+from qtpy.QtCore import Q_ENUMS, Signal
 from qtpy.QtWidgets import QCheckBox, QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -20,12 +19,19 @@ from pcdswidgets.motion.common.motor_style import MotorStyle
 try:
     from qtpy.QtCore import pyqtProperty
 except ImportError:
-    from qtpy.QtCore import Property as pyqtProperty
+    from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 logger = logging.getLogger(__name__)
 
 
 class MotorTipTiltFull(MotorTipTiltFullBase):
+    # Registers MotorStyle's members by name with Qt's meta-object system,
+    # which is what makes Designer show a dropdown for motor_style below.
+    Q_ENUMS(MotorStyle)
+    MotorStyle = MotorStyle
+    MotorRecord = MotorStyle.MotorRecord
+    Smaract = MotorStyle.Smaract
+
     # some type hinting
     vertical_invert: QCheckBox
     horizontal_invert: QCheckBox
@@ -50,7 +56,7 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
-        self._motor_style = MotorStyle.MOTOR_RECORD
+        self._motor_style = MotorStyle.MotorRecord
         self.vertical_invert.stateChanged.connect(self._invert_vertical)
         self.horizontal_invert.stateChanged.connect(self._invert_horizontal)
         self._stop_channels = {
@@ -84,7 +90,7 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
 
     def _apply_expert_screen_visibility(self) -> None:
         """Show the expert-screen button that matches the current style, hide the other."""
-        is_smaract = self._motor_style == MotorStyle.SMARACT
+        is_smaract = self._motor_style == MotorStyle.Smaract
         self.vertical_expert_screen_motor.setVisible(not is_smaract)
         self.horizontal_expert_screen_motor.setVisible(not is_smaract)
         self.vertical_expert_screen_smaract.setVisible(is_smaract)
@@ -92,19 +98,19 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
 
     def _step_suffixes(self, motor_pv: str) -> tuple[str, str]:
         """Return the (forward, reverse) tweak PVs for motor_pv, based on the current style."""
-        if self._motor_style == MotorStyle.SMARACT:
+        if self._motor_style == MotorStyle.Smaract:
             return (f"{motor_pv}:STEP_FORWARD.PROC", f"{motor_pv}:STEP_REVERSE.PROC")
         return (f"{motor_pv}.TWF", f"{motor_pv}.TWR")
 
     def _step_size_pv(self, motor_pv: str) -> str:
         """Return the step-size PV for motor_pv, based on the current style."""
-        if self._motor_style == MotorStyle.SMARACT:
+        if self._motor_style == MotorStyle.Smaract:
             return f"{motor_pv}:STEP_COUNT"
         return f"{motor_pv}.TWV"
 
     def _position_pv(self, motor_pv: str) -> str:
         """Return the position/total-step PV for motor_pv, based on the current style."""
-        if self._motor_style == MotorStyle.SMARACT:
+        if self._motor_style == MotorStyle.Smaract:
             return f"{motor_pv}:TOTAL_STEP_COUNT"
         return f"{motor_pv}.RBV"
 
@@ -155,12 +161,13 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
         motor_pv = self.get_macro(f"{axis}_motor")
         display_pv = motor_pv or f"${{{axis}_motor}}"
         position_pv = self._position_pv(display_pv)
-        is_smaract = self._motor_style == MotorStyle.SMARACT
+        is_smaract = self._motor_style == MotorStyle.Smaract
 
         position_widget = getattr(self, f"{axis}_position")
         step_size_widget = getattr(self, f"{axis}_step_size")
 
-        # SmarAct PVs don't send PREC updates; reset to avoid stale cached values.
+        # SmarAct's integer PVs never send their own precision update, so a stale
+        # PREC left over from a prior motor_record connection would otherwise stick.
         position_widget.precisionFromPV = not is_smaract
         step_size_widget.precisionFromPV = not is_smaract
 
@@ -199,22 +206,19 @@ class MotorTipTiltFull(MotorTipTiltFullBase):
 
     ## Custom properties that can be overwritten in designer.
 
-    def getMotorStyle(self) -> str:
+    def getMotorStyle(self) -> int:
         """Whether this widget drives standard motor record fields or SmarAct's custom step fields."""
-        return self._motor_style.value
+        return self._motor_style
 
-    def setMotorStyle(self, value: str) -> None:
-        try:
-            style = MotorStyle(value)
-        except ValueError:
-            if not is_qt_designer():
-                logger.warning(f"Invalid motor_style {value!r}; expected one of {[s.value for s in MotorStyle]}")
+    def setMotorStyle(self, value: int) -> None:
+        if value not in (MotorStyle.MotorRecord, MotorStyle.Smaract):
+            logger.warning(f"Invalid motor_style {value!r}; expected MotorRecord (0) or Smaract (1)")
             return
-        if style == self._motor_style:
+        if value == self._motor_style:
             return
-        self._motor_style = style
+        self._motor_style = value
         self._apply_expert_screen_visibility()
         self._refresh_axis("vertical")
         self._refresh_axis("horizontal")
 
-    motor_style = pyqtProperty(str, getMotorStyle, setMotorStyle)
+    motor_style = pyqtProperty(MotorStyle, getMotorStyle, setMotorStyle)
