@@ -106,8 +106,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
         # Camera ROI plugins identifying the source ROI (always read)
         # and the one feeding the secondary view, if any.
-        self._source_roi_plugin = ":ROI1:"
-        self._secondary_roi_plugin = ":ROI2:"
+        self._source_roi_plugin = "" # example ":ROI2:"
+        self._secondary_roi_plugin = "" # example ":ROI2:"
 
         # Writers for the centroid-derived ROI, pushed to the shared Camera
         # ROI plugin that EpicsRoiFull (if available) also targets.
@@ -178,27 +178,40 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
     def _rebuild_roi_channels(self):
         """Point the ROI PV writers at the current cam_prefix macro and roi_plugin property."""
-        base = f"ca://{self.get_cam_prefix()}{self.get_roi_plugin()}"
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix:
+            return
+        base = f"ca://{cam_prefix}{self.get_roi_plugin()}"
         self._roi_minx_writer.set_address(base + _ROI_MINX_SUFFIX)
         self._roi_miny_writer.set_address(base + _ROI_MINY_SUFFIX)
         self._roi_sizex_writer.set_address(base + _ROI_SIZEX_SUFFIX)
         self._roi_sizey_writer.set_address(base + _ROI_SIZEY_SUFFIX)
 
     def _rebuild_stats_channels(self):
-        """Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros."""
-        self._threshold_writer.set_address(
-            f"ca://{self.get_cam_prefix()}{self.get_stat_plugin()}{_STATS_THRESHOLD_SUFFIX}"
-        )
+        """Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros.
+
+        No-ops until cam_prefix is known - see _rebuild_source_roi_channels.
+        """
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix:
+            return
+        self._threshold_writer.set_address(f"ca://{cam_prefix}{self.get_stat_plugin()}{_STATS_THRESHOLD_SUFFIX}")
 
     def _rebuild_source_roi_channels(self):
         """Point the source ROI offset readers at the current cam_prefix macro and source_roi_plugin property."""
-        base = f"ca://{self.get_cam_prefix()}{self.source_roi_plugin}"
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix or not self.source_roi_plugin:
+            return
+        base = f"ca://{cam_prefix}{self.source_roi_plugin}"
         self._source_roi_minx_reader.set_address(base + _ROI_MINX_SUFFIX)
         self._source_roi_miny_reader.set_address(base + _ROI_MINY_SUFFIX)
 
     def _rebuild_secondary_roi_channels(self):
         """Point the secondary ROI offset readers at the current cam_prefix macro and secondary_roi_plugin property."""
-        base = f"ca://{self.get_cam_prefix()}{self.secondary_roi_plugin}"
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix or not self.secondary_roi_plugin:
+            return
+        base = f"ca://{cam_prefix}{self.secondary_roi_plugin}"
         self._secondary_roi_minx_reader.set_address(base + _ROI_MINX_SUFFIX)
         self._secondary_roi_miny_reader.set_address(base + _ROI_MINY_SUFFIX)
 
