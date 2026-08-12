@@ -279,7 +279,7 @@ class CamMarker:
                 items[3].setData([x, x], [y, y - arm])
         except RuntimeError:
             # The ViewBox this attachment belonged to was torn down
-            # elsewhere ever being called; drop it instead of raising 
+            # elsewhere ever being called; drop it instead of raising
             # on every future position update.
             self._drop_attachment(attachment)
 

@@ -106,8 +106,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
         # Camera ROI plugins identifying the source ROI (always read)
         # and the one feeding the secondary view, if any.
-        self._source_roi_plugin = "" # example ":ROI2:"
-        self._secondary_roi_plugin = "" # example ":ROI2:"
+        self._source_roi_plugin = ""  # example ":ROI2:"
+        self._secondary_roi_plugin = ""  # example ":ROI2:"
 
         # Writers for the centroid-derived ROI, pushed to the shared Camera
         # ROI plugin that EpicsRoiFull (if available) also targets.
