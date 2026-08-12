@@ -104,7 +104,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         # Camera ROI plugin that the centroid-derived ROI is pushed to.
         self._roi_plugin = ":ROI2:"
 
-        # Camera ROI plugins identifying the source ROI (always read) 
+        # Camera ROI plugins identifying the source ROI (always read)
         # and the one feeding the secondary view, if any.
         self._source_roi_plugin = ":ROI1:"
         self._secondary_roi_plugin = ":ROI2:"
@@ -125,7 +125,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         # Read-only: the source ROI's offset is always relevant (Stats
         # readbacks are inherently relative to whatever ROI feeds them), so
         # it's connected unconditionally. The secondary ROI's offset is only
-        # relevant once a secondary view is actually linked, so it's 
+        # relevant once a secondary view is actually linked, so it's
         # created here but not yet connected.
         self._source_roi_minx_reader = PVChannel(
             parent=self, value_slot=lambda v: self._on_source_roi_offset_changed(v, "x")
@@ -499,7 +499,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
         The source ROI offset (correcting the raw readback into an
         absolute value) is read directly from EPICS via cam_prefix and
-        source_roi_plugin. `secondary_image_view` (if given) mirrors the 
+        source_roi_plugin. `secondary_image_view` (if given) mirrors the
         marker onto a second view, offset the same way via secondary_roi_plugin
         """
         if hasattr(parent, "image_view"):
