@@ -303,10 +303,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
 
-    def get_is_xy_center(self) -> str:
+    def get_is_xy_center(self) -> bool:
         return self._is_xy_center
 
-    def set_is_xy_center(self, value: str) -> None:
+    def set_is_xy_center(self, value: bool) -> None:
         self._is_xy_center = value
 
-    is_xy_center = pyqtProperty(str, get_is_xy_center, set_is_xy_center)
+    is_xy_center = pyqtProperty(bool, get_is_xy_center, set_is_xy_center)

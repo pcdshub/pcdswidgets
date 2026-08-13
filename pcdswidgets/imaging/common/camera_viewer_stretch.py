@@ -8,8 +8,13 @@ import logging
 from collections import deque
 
 from pydm.widgets import PyDMImageView
-from qtpy import QtWidgets
-from qtpy.QtCore import QChildEvent, QEvent, QTimer
+from qtpy import QtGui, QtWidgets
+from qtpy.QtCore import QChildEvent, QEvent, Qt, QTimer
+
+try:
+    from qtpy.QtCore import pyqtProperty
+except ImportError:
+    from qtpy.QtCore import Property as pyqtProperty
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
@@ -27,6 +32,8 @@ class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_scroll: QtWidgets.QScrollArea
     image_view: PyDMImageView
     display_fps_label: QtWidgets.QLabel
+    main_splitter: QtWidgets.QSplitter
+    active_pv_label: QtWidgets.QLabel
 
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
@@ -40,6 +47,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         self._initializing = True
         self._adopted_widgets: list[QtWidgets.QWidget] = []
+        self._show_nickname = True
         super().__init__(parent)
 
         self._set_macro_defaults()
@@ -69,7 +77,19 @@ class CameraViewerStretch(CameraViewerStretchBase):
             pass
 
         self.sidebar_toggle.toggled.connect(self._toggle_sidebar)
+        self.nickname_label.setVisible(self._show_nickname)
+        self.active_pv_label.setCursor(Qt.PointingHandCursor)
+        self.active_pv_label.setToolTip("Click to copy")
+        self.active_pv_label.installEventFilter(self)
         self._initializing = False
+
+    def eventFilter(self, obj, event) -> bool:
+        """Copy the camera prefix to the clipboard when active_pv_label is clicked."""
+        if obj is self.active_pv_label and event.type() == QEvent.MouseButtonPress:
+            QtWidgets.QApplication.clipboard().setText(self.cam_prefix)
+            QtWidgets.QToolTip.showText(QtGui.QCursor.pos(), "Copied!", self.active_pv_label)
+            return True
+        return super().eventFilter(obj, event)
 
     def _set_macro_defaults(self):
         """Populate unset macros with sensible defaults for ROI1."""
@@ -189,5 +209,32 @@ class CameraViewerStretch(CameraViewerStretchBase):
                 "Adopted child %s'",
                 child.objectName() or type(child).__name__,
             )
+        # close the sidebar and hide the toggle button if no children exists
+        if len(candidates) == 0:
+            self.sidebar_toggle.setChecked(False)
+            self.sidebar_toggle.setVisible(False)
+            self.sidebar_scroll.setVisible(False)
+
         # add a vertical spacer to push all widgets to the top
         sidebar_layout.addStretch()
+
+    # Property for showing/hiding the nickname label.
+
+    def get_show_nickname(self) -> bool:
+        return self._show_nickname
+
+    def set_show_nickname(self, show: bool) -> None:
+        self._show_nickname = show
+        self.nickname_label.setVisible(show)
+
+    show_nickname = pyqtProperty(bool, get_show_nickname, set_show_nickname)
+
+    ## Property for the main splitter's orientation.
+
+    def get_orientation(self) -> Qt.Orientation:
+        return self.main_splitter.orientation()
+
+    def set_orientation(self, orientation: Qt.Orientation) -> None:
+        self.main_splitter.setOrientation(orientation)
+
+    orientation = pyqtProperty(Qt.Orientation, get_orientation, set_orientation)

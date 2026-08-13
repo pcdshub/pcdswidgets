@@ -8,8 +8,7 @@ import logging
 import math
 
 from pydm.widgets import PyDMImageView, PyDMLabel
-from pydm.widgets.channel import PyDMChannel
-from qtpy.QtCore import QObject, Qt, QTimer, Signal
+from qtpy.QtCore import Qt, Signal
 from qtpy.QtGui import QColor, QDoubleValidator, QIcon, QPixmap
 
 try:
@@ -19,6 +18,7 @@ except ImportError:
 
 
 from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.common.tools.pv_channel import PVChannel
 from pcdswidgets.generated.imaging.common.centroid_tracker_full_base import CentroidTrackerFullBase
 from pcdswidgets.icons.glyphs import CAM_COG, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
@@ -43,61 +43,6 @@ _THRESHOLD_MODE_RAW = 2
 
 _FWHM_TO_SIGMA = 2.355  # FWHM ≈ 2.355 x sigma for a Gaussian
 _MIN_ROI_SIZE = 10  # pixels
-
-# A brand-new PyDMChannel's first connect can silently never call
-# connection_slot, so retry a few times before giving up.
-_CONNECT_RETRY_INTERVAL_MS = 2000
-_CONNECT_RETRY_MAX_ATTEMPTS = 5
-
-
-class _PVWriter(QObject):
-    """Write-only handle to a PV via PyDM's channel plugin, with no Qt widget involved."""
-
-    _value_signal = Signal(float)
-
-    def __init__(self, parent=None, connection_slot=None):
-        super().__init__(parent)
-        self._connection_slot = connection_slot
-        self._channel: PyDMChannel | None = None
-        self._address: str | None = None
-        self._got_connection_update = False
-        self._retry_attempt = 0
-        self._retry_timer = QTimer(self)
-        self._retry_timer.setSingleShot(True)
-        self._retry_timer.timeout.connect(self._retry_if_still_silent)
-
-    def set_address(self, address: str) -> None:
-        if self._address == address:
-            return
-        if self._channel is not None:
-            self._channel.disconnect()
-        self._address = address
-        self._connect(attempt=1)
-
-    def _connect(self, attempt: int) -> None:
-        self._got_connection_update = False
-        self._retry_attempt = attempt
-        self._channel = PyDMChannel(
-            address=self._address, value_signal=self._value_signal, connection_slot=self._on_connection_changed
-        )
-        self._channel.connect()
-        if attempt < _CONNECT_RETRY_MAX_ATTEMPTS:
-            self._retry_timer.start(_CONNECT_RETRY_INTERVAL_MS)
-
-    def _retry_if_still_silent(self) -> None:
-        """Reconnect with a fresh channel if connection_slot never fired at all."""
-        if self._got_connection_update:
-            return
-        self._channel.disconnect()
-        self._connect(attempt=self._retry_attempt + 1)
-
-    def _on_connection_changed(self, connected: bool) -> None:
-        self._got_connection_update = True
-        if self._connection_slot is not None:
-            self._connection_slot(connected)
-
-    def write(self, value: float) -> None:
-        self._value_signal.emit(value)
 
 
 class CentroidTrackerFull(CentroidTrackerFullBase):
@@ -133,6 +78,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
         # A second, optional view the marker is also mirrored onto
         # (display-only), offset live by its own feeding ROI's MinX/MinY.
+        # Only actually connected once _link_secondary_view is given a view.
+        self._secondary_view_linked = False
         self._secondary_view_box = None
         self._secondary_offset_x = 0.0
         self._secondary_offset_y = 0.0
@@ -157,6 +104,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         # Camera ROI plugin that the centroid-derived ROI is pushed to.
         self._roi_plugin = ":ROI2:"
 
+        # Camera ROI plugins identifying the source ROI (always read)
+        # and the one feeding the secondary view, if any.
+        self._source_roi_plugin = ""  # example ":ROI2:"
+        self._secondary_roi_plugin = ""  # example ":ROI2:"
+
         # Writers for the centroid-derived ROI, pushed to the shared Camera
         # ROI plugin that EpicsRoiFull (if available) also targets.
         self._roi_pv_connected = {}
@@ -167,8 +119,23 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.set_roi_button.setVisible(False)
         self._rebuild_roi_channels()
 
-        self._threshold_writer = _PVWriter(parent=self)
+        self._threshold_writer = PVChannel(parent=self)
         self._rebuild_stats_channels()
+
+        # Read-only: the source ROI's offset is always relevant (Stats
+        # readbacks are inherently relative to whatever ROI feeds them), so
+        # it's connected unconditionally. The secondary ROI's offset is only
+        # relevant once a secondary view is actually linked, so it's
+        # created here but not yet connected.
+        self._source_roi_minx_reader = PVChannel(
+            parent=self, value_slot=lambda v: self._on_source_roi_offset_changed(v, "x")
+        )
+        self._source_roi_miny_reader = PVChannel(
+            parent=self, value_slot=lambda v: self._on_source_roi_offset_changed(v, "y")
+        )
+        self._rebuild_source_roi_channels()
+        self._secondary_roi_minx_reader = PVChannel(parent=self, value_slot=self._on_secondary_offset_x_changed)
+        self._secondary_roi_miny_reader = PVChannel(parent=self, value_slot=self._on_secondary_offset_y_changed)
 
         self._init_button_icons()
         self._apply_default_color()
@@ -184,6 +151,9 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._connect_value_labels()
         self._rebuild_roi_channels()
         self._rebuild_stats_channels()
+        self._rebuild_source_roi_channels()
+        if self._secondary_view_linked:
+            self._rebuild_secondary_roi_channels()
 
     def _set_macro_defaults(self):
         """Populate unset macros with sensible defaults for the Stats plugin."""
@@ -199,26 +169,51 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         for name, value in default_map.items():
             self._macro_values[name] = value
 
-    def _make_roi_writer(self, key: str) -> _PVWriter:
+    def _make_roi_writer(self, key: str) -> PVChannel:
         """Create a write-only handle for one ROI PV, tracked for the "all connected" gate on set_roi_button."""
         self._roi_pv_connected[key] = False
-        return _PVWriter(
+        return PVChannel(
             parent=self, connection_slot=lambda connected, key=key: self._on_roi_pv_connection_changed(key, connected)
         )
 
     def _rebuild_roi_channels(self):
         """Point the ROI PV writers at the current cam_prefix macro and roi_plugin property."""
-        base = f"ca://{self.get_cam_prefix()}{self.get_roi_plugin()}"
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix:
+            return
+        base = f"ca://{cam_prefix}{self.get_roi_plugin()}"
         self._roi_minx_writer.set_address(base + _ROI_MINX_SUFFIX)
         self._roi_miny_writer.set_address(base + _ROI_MINY_SUFFIX)
         self._roi_sizex_writer.set_address(base + _ROI_SIZEX_SUFFIX)
         self._roi_sizey_writer.set_address(base + _ROI_SIZEY_SUFFIX)
 
     def _rebuild_stats_channels(self):
-        """Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros."""
-        self._threshold_writer.set_address(
-            f"ca://{self.get_cam_prefix()}{self.get_stat_plugin()}{_STATS_THRESHOLD_SUFFIX}"
-        )
+        """Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros.
+
+        No-ops until cam_prefix is known - see _rebuild_source_roi_channels.
+        """
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix:
+            return
+        self._threshold_writer.set_address(f"ca://{cam_prefix}{self.get_stat_plugin()}{_STATS_THRESHOLD_SUFFIX}")
+
+    def _rebuild_source_roi_channels(self):
+        """Point the source ROI offset readers at the current cam_prefix macro and source_roi_plugin property."""
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix or not self.source_roi_plugin:
+            return
+        base = f"ca://{cam_prefix}{self.source_roi_plugin}"
+        self._source_roi_minx_reader.set_address(base + _ROI_MINX_SUFFIX)
+        self._source_roi_miny_reader.set_address(base + _ROI_MINY_SUFFIX)
+
+    def _rebuild_secondary_roi_channels(self):
+        """Point the secondary ROI offset readers at the current cam_prefix macro and secondary_roi_plugin property."""
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix or not self.secondary_roi_plugin:
+            return
+        base = f"ca://{cam_prefix}{self.secondary_roi_plugin}"
+        self._secondary_roi_minx_reader.set_address(base + _ROI_MINX_SUFFIX)
+        self._secondary_roi_miny_reader.set_address(base + _ROI_MINY_SUFFIX)
 
     def _on_roi_pv_connection_changed(self, key: str, connected: bool):
         """Only offer the "push ROI" button once all four ROI PVs are connected."""
@@ -513,12 +508,12 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             roi_widget.move_enabled_button.setChecked(False)
 
     def link_parent_widgets(self, parent) -> None:
-        """Attach the marker to the parent's PyDMImageView, and optionally a source ROI and a second view.
+        """Attach the marker to the parent's PyDMImageView and, if given, mirror it onto a second view.
 
-        `source_roi_widget` (if given) is the selector for the ROI that
-        the primary readback is relative to - see _link_source_roi_offset.
-        `secondary_image_view`/`secondary_roi_widget` (if both given) mirror
-        the marker onto a second view - see _link_secondary_view.
+        The source ROI offset (correcting the raw readback into an
+        absolute value) is read directly from EPICS via cam_prefix and
+        source_roi_plugin. `secondary_image_view` (if given) mirrors the
+        marker onto a second view, offset the same way via secondary_roi_plugin
         """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
@@ -533,19 +528,16 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             return
 
         self._marker.attach(self._view_box)
-        self._link_source_roi_offset(getattr(parent, "source_roi_widget", None))
-        self._link_secondary_view(
-            getattr(parent, "secondary_image_view", None), getattr(parent, "secondary_roi_widget", None)
-        )
+        self._link_secondary_view(getattr(parent, "secondary_image_view", None))
 
-    def _link_secondary_view(self, secondary_image_view, secondary_roi_widget) -> None:
-        """Mirror the marker onto a second view, offset live by secondary_roi_widget's MinX/MinY.
+    def _link_secondary_view(self, secondary_image_view) -> None:
+        """Mirror the marker onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
 
-        Independent of _link_source_roi_offset: that one corrects the raw
+        Independent of the source ROI offset: that one corrects the raw
         readback into an absolute value; this one re-renders that same
         absolute value in a second view's own local frame.
         """
-        if secondary_image_view is None or secondary_roi_widget is None:
+        if secondary_image_view is None:
             return
 
         try:
@@ -555,31 +547,31 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             logger.error("Could not get ViewBox for secondary centroid overlay")
             return
 
-        # x_spinbox/y_spinbox.value are None before their first camonitor
-        # update; default to 0 until _on_secondary_offset_x/y_changed fires.
-        self._secondary_offset_x = secondary_roi_widget.x_spinbox.value or 0.0
-        self._secondary_offset_y = secondary_roi_widget.y_spinbox.value or 0.0
         self._marker.attach(self._secondary_view_box, offset=(self._secondary_offset_x, self._secondary_offset_y))
-
-        secondary_roi_widget.x_spinbox.valueChanged.connect(self._on_secondary_offset_x_changed)
-        secondary_roi_widget.y_spinbox.valueChanged.connect(self._on_secondary_offset_y_changed)
+        self._secondary_view_linked = True
+        self._rebuild_secondary_roi_channels()
 
     def _on_secondary_offset_x_changed(self, value: float) -> None:
+        if value is None:
+            return
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid secondary ROI offset value received for x axis: {value}")
+            return
         self._secondary_offset_x = value
         self._marker.set_offset(self._secondary_view_box, self._secondary_offset_x, self._secondary_offset_y)
 
     def _on_secondary_offset_y_changed(self, value: float) -> None:
+        if value is None:
+            return
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid secondary ROI offset value received for y axis: {value}")
+            return
         self._secondary_offset_y = value
         self._marker.set_offset(self._secondary_view_box, self._secondary_offset_x, self._secondary_offset_y)
-
-    def _link_source_roi_offset(self, source_roi_widget) -> None:
-        """Seed and live-track the source ROI's offset from its selector widget's spinboxes, if given."""
-        if source_roi_widget is None:
-            return
-        self._source_roi_min_x = source_roi_widget.x_spinbox.value or 0.0
-        self._source_roi_min_y = source_roi_widget.y_spinbox.value or 0.0
-        source_roi_widget.x_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "x"))
-        source_roi_widget.y_spinbox.valueChanged.connect(lambda v: self._on_source_roi_offset_changed(v, "y"))
 
     def _on_visibility_toggled(self, checked: bool):
         self._marker.set_visible(checked)
@@ -682,3 +674,28 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._rebuild_roi_channels()
 
     roi_plugin = pyqtProperty(str, get_roi_plugin, set_roi_plugin)
+
+    ## Property identifying the source ROI plugin (e.g. ":ROI1:") that the
+    ## primary readback is relative to.
+
+    def get_source_roi_plugin(self) -> str:
+        return self._source_roi_plugin
+
+    def set_source_roi_plugin(self, value: str) -> None:
+        self._source_roi_plugin = value
+        self._rebuild_source_roi_channels()
+
+    source_roi_plugin = pyqtProperty(str, get_source_roi_plugin, set_source_roi_plugin)
+
+    ## Property identifying the ROI plugin feeding the secondary view, if
+    ## one is linked.
+
+    def get_secondary_roi_plugin(self) -> str:
+        return self._secondary_roi_plugin
+
+    def set_secondary_roi_plugin(self, value: str) -> None:
+        self._secondary_roi_plugin = value
+        if self._secondary_view_linked:
+            self._rebuild_secondary_roi_channels()
+
+    secondary_roi_plugin = pyqtProperty(str, get_secondary_roi_plugin, set_secondary_roi_plugin)

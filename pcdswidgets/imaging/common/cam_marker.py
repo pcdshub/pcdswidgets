@@ -222,11 +222,15 @@ class CamMarker:
             # 4 arms radiating from center for symmetric dash patterns
             items = [pg.PlotDataItem(pen=pen) for _ in range(4)]
 
-        attachment["items"] = items
-        for item in items:
-            item.setVisible(self._visible)
-            view_box.addItem(item)
+        try:
+            for item in items:
+                item.setVisible(self._visible)
+                view_box.addItem(item)
+        except RuntimeError:
+            self._drop_attachment(attachment)
+            return
 
+        attachment["items"] = items
         self._update_attachment_positions(attachment)
 
     def _remove_attachment_items(self, attachment: dict) -> None:
@@ -234,12 +238,15 @@ class CamMarker:
         view_box = attachment["view_box"]
         if view_box is not None:
             for item in attachment["items"]:
-                view_box.removeItem(item)
+                try:
+                    view_box.removeItem(item)
+                except RuntimeError:
+                    pass  # already gone along with the view_box/scene it lived in
         attachment["items"] = []
 
     def _update_positions(self) -> None:
         """Reposition items to the current center point, on every attached ViewBox."""
-        for attachment in self._attachments:
+        for attachment in list(self._attachments):
             self._update_attachment_positions(attachment)
 
     def _update_attachment_positions(self, attachment: dict) -> None:
@@ -251,24 +258,34 @@ class CamMarker:
         x = self.x - attachment["offset_x"]
         y = self.y - attachment["offset_y"]
 
-        if self._style == MarkerStyle.INFINITE_LINES:
-            items[0].setValue(y)  # horizontal
-            items[1].setValue(x)  # vertical
-        elif self._style == MarkerStyle.ELLIPSE:
-            xs, ys = self._ellipse_points(x, y)
-            items[0].setData(xs, ys)
-        elif self._style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
-            items[0].setValue(y)  # horizontal
-            items[1].setValue(x)  # vertical
-            xs, ys = self._ellipse_points(x, y)
-            items[2].setData(xs, ys)
-        else:
-            arm = float(self._arm_length)
-            # 4 arm starting from center
-            items[0].setData([x, x - arm], [y, y])
-            items[1].setData([x, x + arm], [y, y])
-            items[2].setData([x, x], [y, y + arm])
-            items[3].setData([x, x], [y, y - arm])
+        try:
+            if self._style == MarkerStyle.INFINITE_LINES:
+                items[0].setValue(y)  # horizontal
+                items[1].setValue(x)  # vertical
+            elif self._style == MarkerStyle.ELLIPSE:
+                xs, ys = self._ellipse_points(x, y)
+                items[0].setData(xs, ys)
+            elif self._style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
+                items[0].setValue(y)  # horizontal
+                items[1].setValue(x)  # vertical
+                xs, ys = self._ellipse_points(x, y)
+                items[2].setData(xs, ys)
+            else:
+                arm = float(self._arm_length)
+                # 4 arm starting from center
+                items[0].setData([x, x - arm], [y, y])
+                items[1].setData([x, x + arm], [y, y])
+                items[2].setData([x, x], [y, y + arm])
+                items[3].setData([x, x], [y, y - arm])
+        except RuntimeError:
+            # The ViewBox this attachment belonged to was torn down
+            # elsewhere ever being called; drop it instead of raising
+            # on every future position update.
+            self._drop_attachment(attachment)
+
+    def _drop_attachment(self, attachment: dict) -> None:
+        if attachment in self._attachments:
+            self._attachments.remove(attachment)
 
     def _ellipse_points(self, center_x: float, center_y: float) -> tuple[list[float], list[float]]:
         """Compute a closed polyline approximating the ellipse in data coordinates."""

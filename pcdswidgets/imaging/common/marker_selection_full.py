@@ -17,6 +17,7 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.common.tools.pv_channel import PVChannel
 from pcdswidgets.generated.imaging.common.marker_selection_full_base import MarkerSelectionFullBase
 from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
@@ -32,6 +33,10 @@ _DEFAULT_COLORS = [
     QColor("magenta"),
 ]
 NUM_MARKERS = 4
+
+# Fixed suffixes for the secondary ROI's offset, matching NDPluginROI's field names.
+_ROI_MINX_SUFFIX = "MinX"
+_ROI_MINY_SUFFIX = "MinY"
 
 
 class MarkerSelectionFull(MarkerSelectionFullBase):
@@ -63,10 +68,15 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._active_select_idx: int | None = None  # which marker is in select mode
 
         # A second, optional view the markers are also mirrored onto,
-        # offset live by its own feeding ROI's MinX/MinY.
+        # offset live by its own feeding ROI's MinX/MinY. Only actually
+        # connected once _link_secondary_view is given a view.
+        self._secondary_view_linked = False
         self._secondary_view_box = None
         self._secondary_offset_x = 0.0
         self._secondary_offset_y = 0.0
+        self._secondary_roi_plugin = ":ROI2:"
+        self._secondary_roi_minx_reader = PVChannel(parent=self, value_slot=self._on_secondary_offset_x_changed)
+        self._secondary_roi_miny_reader = PVChannel(parent=self, value_slot=self._on_secondary_offset_y_changed)
 
         # Create marker overlays
         self._markers: list[CamMarker] = []
@@ -79,6 +89,16 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._apply_default_colors()
         self._connect_buttons()
         self._connect_spinboxes()
+
+    def after_set_macro(self, macro_name, value):
+        if self._secondary_view_linked:
+            self._rebuild_secondary_roi_channels()
+
+    def _rebuild_secondary_roi_channels(self):
+        """Point the secondary ROI offset readers at the current cam_prefix macro and secondary_roi_plugin property."""
+        base = f"ca://{self.get_cam_prefix()}{self.secondary_roi_plugin}"
+        self._secondary_roi_minx_reader.set_address(base + _ROI_MINX_SUFFIX)
+        self._secondary_roi_miny_reader.set_address(base + _ROI_MINY_SUFFIX)
 
     def _set_macro_defaults(self):
         """Populate unset macros with sensible defaults."""
@@ -160,9 +180,9 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
 
         Called by the parent widget at adoption time. Attaches marker
         overlay items to the ViewBox, and - if the parent also carries a
-        `secondary_image_view` plus a `secondary_roi_widget` selecting the
-        ROI it's offset by - mirrors the same markers onto it too,
-        click-to-place included (see _link_secondary_view).
+        `secondary_image_view` - mirrors the same markers onto it too,
+        click-to-place included, offset live via secondary_roi_plugin (see
+        _link_secondary_view).
         """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
@@ -185,12 +205,10 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             lambda event: self._on_scene_clicked(event, self._view_box, (0.0, 0.0))
         )
 
-        self._link_secondary_view(
-            getattr(parent, "secondary_image_view", None), getattr(parent, "secondary_roi_widget", None)
-        )
+        self._link_secondary_view(getattr(parent, "secondary_image_view", None))
 
-    def _link_secondary_view(self, secondary_image_view, secondary_roi_widget) -> None:
-        """Mirror all markers onto a second view, offset live by secondary_roi_widget's MinX/MinY.
+    def _link_secondary_view(self, secondary_image_view) -> None:
+        """Mirror all markers onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
 
         Also lets the user click-to-place markers from that view: a click
         there gives coordinates local to it, so the offset is added back
@@ -199,7 +217,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         *currently visible* region this way; to place one outside it, use
         the primary view instead.
         """
-        if secondary_image_view is None or secondary_roi_widget is None:
+        if secondary_image_view is None:
             return
 
         try:
@@ -209,15 +227,11 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             logger.error("Could not get ViewBox for secondary marker overlays")
             return
 
-        # x_spinbox/y_spinbox.value are None before their first camonitor
-        # update; default to 0 until _on_secondary_offset_x/y_changed fires.
-        self._secondary_offset_x = secondary_roi_widget.x_spinbox.value or 0.0
-        self._secondary_offset_y = secondary_roi_widget.y_spinbox.value or 0.0
         for marker in self._markers:
             marker.attach(self._secondary_view_box, offset=(self._secondary_offset_x, self._secondary_offset_y))
 
-        secondary_roi_widget.x_spinbox.valueChanged.connect(self._on_secondary_offset_x_changed)
-        secondary_roi_widget.y_spinbox.valueChanged.connect(self._on_secondary_offset_y_changed)
+        self._secondary_view_linked = True
+        self._rebuild_secondary_roi_channels()
 
         # Live offset (not a snapshot) so a click always uses the ROI's
         # current position, not whatever it was when this connection was made.
@@ -228,10 +242,24 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         )
 
     def _on_secondary_offset_x_changed(self, value: float) -> None:
+        if value is None:
+            return
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid secondary ROI offset value received for x axis: {value}")
+            return
         self._secondary_offset_x = value
         self._apply_secondary_offset()
 
     def _on_secondary_offset_y_changed(self, value: float) -> None:
+        if value is None:
+            return
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid secondary ROI offset value received for y axis: {value}")
+            return
         self._secondary_offset_y = value
         self._apply_secondary_offset()
 
@@ -406,3 +434,16 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
+
+    ## Property identifying the ROI plugin feeding the secondary view, if
+    ## one is linked.
+
+    def get_secondary_roi_plugin(self) -> str:
+        return self._secondary_roi_plugin
+
+    def set_secondary_roi_plugin(self, value: str) -> None:
+        self._secondary_roi_plugin = value
+        if self._secondary_view_linked:
+            self._rebuild_secondary_roi_channels()
+
+    secondary_roi_plugin = pyqtProperty(str, get_secondary_roi_plugin, set_secondary_roi_plugin)
