@@ -23,7 +23,7 @@ from pcdswidgets.icons.glyphs import CAM_COG, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
 from pcdswidgets.imaging.common.centroid_marker_style_dialog import CentroidMarkerStyleDialog
 from pcdswidgets.imaging.common.epics_roi_full import EpicsRoiFull
-from pcdswidgets.imaging.common.pv_channel import PVChannel
+from pcdswidgets.common.tools.pv_channel import PVChannel
 
 logger = logging.getLogger(__name__)
 

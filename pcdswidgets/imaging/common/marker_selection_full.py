@@ -21,7 +21,7 @@ from pcdswidgets.generated.imaging.common.marker_selection_full_base import Mark
 from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
 from pcdswidgets.imaging.common.marker_style_dialog import MarkerStyleDialog
-from pcdswidgets.imaging.common.pv_channel import PVChannel
+from pcdswidgets.common.tools.pv_channel import PVChannel
 
 logger = logging.getLogger(__name__)
 
