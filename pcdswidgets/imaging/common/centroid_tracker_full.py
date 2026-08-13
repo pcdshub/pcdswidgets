@@ -18,12 +18,12 @@ except ImportError:
 
 
 from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.common.tools.pv_channel import PVChannel
 from pcdswidgets.generated.imaging.common.centroid_tracker_full_base import CentroidTrackerFullBase
 from pcdswidgets.icons.glyphs import CAM_COG, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
 from pcdswidgets.imaging.common.centroid_marker_style_dialog import CentroidMarkerStyleDialog
 from pcdswidgets.imaging.common.epics_roi_full import EpicsRoiFull
-from pcdswidgets.common.tools.pv_channel import PVChannel
 
 logger = logging.getLogger(__name__)
 

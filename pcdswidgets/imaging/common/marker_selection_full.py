@@ -17,11 +17,11 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 from pcdswidgets.builder.designer_options import DesignerOptions
+from pcdswidgets.common.tools.pv_channel import PVChannel
 from pcdswidgets.generated.imaging.common.marker_selection_full_base import MarkerSelectionFullBase
 from pcdswidgets.icons.glyphs import CAM_COG, CROSSHAIR, EYE, THICKNESS
 from pcdswidgets.imaging.common.cam_marker import CamMarker, MarkerStyle
 from pcdswidgets.imaging.common.marker_style_dialog import MarkerStyleDialog
-from pcdswidgets.common.tools.pv_channel import PVChannel
 
 logger = logging.getLogger(__name__)
 
