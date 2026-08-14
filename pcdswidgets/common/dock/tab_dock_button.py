@@ -6,13 +6,13 @@ from pydm.display import ScreenTarget, clear_compiled_ui_file_cache, load_file
 from pydm.utilities import IconFont, find_file
 from pydm.utilities.macro import parse_macro_string
 from pydm.utilities.stylesheet import merge_widget_stylesheet
-from qtpy.QtGui import QContextMenuEvent, QCursor
+from qtpy.QtGui import QContextMenuEvent, QCursor, QEnterEvent
 from qtpy.QtWidgets import (
     QPushButton,
     QWidget,
 )
 
-from .tab_dock import TabDock
+from .tab_dock import NoTabDockError, TabDock
 
 try:
     from qtpy.QtCore import Property  # type: ignore
@@ -47,17 +47,21 @@ class TabDockButton(QPushButton):
         self._filename: str = ""
         self._macro: str = ""
         self.clicked.connect(self.open_in_dock)
-        self._icon = ifont.icon("anchor")
-        self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
         self.cached_ui_text = ""
         self.cached_widget: QWidget | None = None
+        self._finalized_mouseover_icon = False
 
     def build_widget(self) -> QWidget:
         """Create or re-use the widget defined by the pydm file."""
-        fname = find_file(
-            self._filename,
-            raise_if_not_found=True,
-        )
+        try:
+            fname = find_file(
+                self._filename,
+                raise_if_not_found=True,
+            )
+        except FileNotFoundError as exc:
+            raise ValueError(
+                f"In button named {self.objectName()}, unable to find filename '{self.readFilename()}'"
+            ) from exc
         fname = cast(str, fname)
         macros = parse_macro_string(self._macro)
         with open(fname, "r") as fd:
@@ -78,11 +82,35 @@ class TabDockButton(QPushButton):
 
     def open_in_dock(self):
         """Place the widget defined by this button into the dock based on the key modifiers."""
-        TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
+        try:
+            TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
+        except NoTabDockError:
+            self.open_window_fallback()
 
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
         """On right-click, open a menu to decide where the widget should go."""
-        TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
+        try:
+            TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
+        except NoTabDockError:
+            self.open_window_fallback()
+
+    def open_window_fallback(self) -> None:
+        """If there is no tab dock, open a simple window."""
+        widget = self.build_widget()
+        TabDock.show_widget_at_cursor(widget)
+
+    def enterEvent(self, event: QEnterEvent) -> None:  # type: ignore
+        if not self._finalized_mouseover_icon:
+            try:
+                TabDock.get_instance()
+            except NoTabDockError:
+                self._icon = ifont.icon("file")
+                self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
+            else:
+                self._icon = ifont.icon("anchor")
+                self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
+            self._finalized_mouseover_icon = True
+        return super().enterEvent(event)
 
     def readFilename(self) -> str:
         return self._filename
