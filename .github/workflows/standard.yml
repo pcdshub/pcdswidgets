@@ -17,17 +17,17 @@ jobs:
   pre-commit:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@75de25e1650dc6b2fb7858862099113aa5896d79
 
   unit-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@75de25e1650dc6b2fb7858862099113aa5896d79
 
   packaging-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@75de25e1650dc6b2fb7858862099113aa5896d79
     with:
       package-name: "pcdswidgets"
 
@@ -36,12 +36,12 @@ jobs:
       id-token: write
     needs: packaging-tests
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@75de25e1650dc6b2fb7858862099113aa5896d79
 
   docs-build:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-docs-build.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-docs-build.yml@75de25e1650dc6b2fb7858862099113aa5896d79
 
 # TODO: not existing yet
 #  docs-upload:
@@ -50,4 +50,4 @@ jobs:
 #      id-token: write
 #    needs: docs-build
 #    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-docs-upload.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-docs-upload.yml@75de25e1650dc6b2fb7858862099113aa5896d79
