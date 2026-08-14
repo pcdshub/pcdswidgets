@@ -17,17 +17,17 @@ jobs:
   pre-commit:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
 
   unit-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
 
   packaging-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
     with:
       package-name: "pcdswidgets"
 
@@ -36,12 +36,12 @@ jobs:
       id-token: write
     needs: packaging-tests
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
 
   docs-build:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-docs-build.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-docs-build.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
 
 # TODO: not existing yet
 #  docs-upload:
@@ -50,4 +50,4 @@ jobs:
 #      id-token: write
 #    needs: docs-build
 #    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-docs-upload.yml@abbea1b18bc622e2f0ba0c1b3672d057d5c87a4c
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-docs-upload.yml@ca2b211586cb0aefc872de9a1f16680a733c965d
