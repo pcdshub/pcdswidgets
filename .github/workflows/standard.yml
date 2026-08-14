@@ -12,15 +12,19 @@ on:
       - created
 
 jobs:
+  pre-commit:
+    name: Pre-commit Checks
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
+
   unit-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test@955c97505fc12f3e35afd2aff66130d5e86a9775
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
 
   packaging-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build@955c97505fc12f3e35afd2aff66130d5e86a9775
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
     with:
       package-name: "pcdswidgets"
 
@@ -29,17 +33,18 @@ jobs:
       id-token: write
     needs: packaging-tests
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish@955c97505fc12f3e35afd2aff66130d5e86a9775
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
 
 # TODO: not existing yet
 #  docs-build:
 #    permissions:
 #      contents: read
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-build@955c97505fc12f3e35afd2aff66130d5e86a9775
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-build.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
 #
 #  docs-upload:
 #    permissions:
 #      pages: write
 #      id-token: write
 #    needs: docs-build
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-upload@955c97505fc12f3e35afd2aff66130d5e86a9775
+#    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-upload.yml@955c97505fc12f3e35afd2aff66130d5e86a9775
