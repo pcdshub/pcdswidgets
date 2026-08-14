@@ -6,6 +6,8 @@ name: Prototype Pixi Testing
 
 on:
   push:
+    branches:
+      - "master"
   pull_request:
   release:
     types:
