@@ -17,17 +17,17 @@ jobs:
   pre-commit:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/pre-commit.yml@899f8104a87be6e52c046ad89bebea8c231f3415
 
   unit-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test.yml@899f8104a87be6e52c046ad89bebea8c231f3415
 
   packaging-tests:
     permissions:
       contents: read
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build.yml@899f8104a87be6e52c046ad89bebea8c231f3415
     with:
       package-name: "pcdswidgets"
 
@@ -36,18 +36,18 @@ jobs:
       id-token: write
     needs: packaging-tests
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@899f8104a87be6e52c046ad89bebea8c231f3415
+
+  docs-build:
+    permissions:
+      contents: read
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-docs-build.yml@899f8104a87be6e52c046ad89bebea8c231f3415
 
 # TODO: not existing yet
-#  docs-build:
-#    permissions:
-#      contents: read
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-build.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
-#
 #  docs-upload:
 #    permissions:
 #      pages: write
 #      id-token: write
 #    needs: docs-build
 #    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-upload.yml@8ecc78c17d0da6346fa74ed3240850f3df16daee
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-docs-upload.yml@899f8104a87be6e52c046ad89bebea8c231f3415
