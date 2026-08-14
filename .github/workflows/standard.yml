@@ -1,4 +1,8 @@
-name: PCDS Standard Testing
+name: Prototype Pixi Testing
+
+# For testing: I'm looking for the best way to deploy our workflows
+# Working theory: specifying jobs is better than having a big workflow with many inputs
+# Result: we can easily separate workflows by permissions and keep most builds read-only
 
 on:
   push:
@@ -8,20 +12,34 @@ on:
       - created
 
 jobs:
-  standard:
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-standard.yml@d535ae04c63236687160bfde064e83489a5eceba
-    secrets: inherit
+  unit-tests:
+    permissions:
+      contents: read
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-pixi-test@955c97505fc12f3e35afd2aff66130d5e86a9775
+
+  packaging-tests:
+    permissions:
+      contents: read
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-build@955c97505fc12f3e35afd2aff66130d5e86a9775
     with:
-      # The workflow needs to know the package name.  This can be determined
-      # automatically if the repository name is the same as the import name.
       package-name: "pcdswidgets"
-      # Extras that will be installed for both conda/pip:
-      testing-extras: ""
-      # Extras to be installed only for conda-based testing:
-      conda-testing-extras: ""
-      # Extras to be installed only for pip-based testing:
-      pip-testing-extras: "PyQt5"
-      # Extras to be installed only for docs builds (pip)
-      docs-build-extras: "PyQt5"
-      # Set if using setuptools-scm for the conda-build workflow
-      use-setuptools-scm: true
+
+  pypi-upload:
+    permissions:
+      id-token: write
+    needs: packaging-tests
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish@955c97505fc12f3e35afd2aff66130d5e86a9775
+
+# TODO: not existing yet
+#  docs-build:
+#    permissions:
+#      contents: read
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-build@955c97505fc12f3e35afd2aff66130d5e86a9775
+#
+#  docs-upload:
+#    permissions:
+#      pages: write
+#      id-token: write
+#    needs: docs-build
+#    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-docs-upload@955c97505fc12f3e35afd2aff66130d5e86a9775
