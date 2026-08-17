@@ -161,13 +161,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "EPICS ROI selector"))
         self.label_19.setText(_translate("Form", "Height:"))
-        self.y_spinbox.setProperty("channel", _translate("Form", "ca://${cam_prefix}${roi_plugin}${suffix_Y}"))
-        self.width_spinbox.setProperty("channel", _translate("Form", "ca://${cam_prefix}${roi_plugin}${suffix_WidthX}"))
-        self.x_spinbox.setProperty("channel", _translate("Form", "ca://${cam_prefix}${roi_plugin}${suffix_X}"))
         self.label_20.setText(_translate("Form", "X:"))
-        self.height_spinbox.setProperty(
-            "channel", _translate("Form", "ca://${cam_prefix}${roi_plugin}${suffix_WidthY}")
-        )
         self.label_18.setText(_translate("Form", "Y:"))
         self.label_22.setText(_translate("Form", "Width:"))
         self.color_selection_button.setToolTip(_translate("Form", "Change ROI color"))

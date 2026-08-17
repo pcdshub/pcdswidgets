@@ -16,7 +16,7 @@ from qtpy import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(650, 550)
+        Form.resize(606, 500)
         Form.setMinimumSize(QtCore.QSize(600, 500))
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setContentsMargins(4, 4, 4, 2)
@@ -79,13 +79,13 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sidebar_scroll.sizePolicy().hasHeightForWidth())
         self.sidebar_scroll.setSizePolicy(sizePolicy)
-        self.sidebar_scroll.setMinimumSize(QtCore.QSize(410, 0))
-        self.sidebar_scroll.setMaximumSize(QtCore.QSize(1300, 16777215))
+        self.sidebar_scroll.setMinimumSize(QtCore.QSize(410, 200))
+        self.sidebar_scroll.setMaximumSize(QtCore.QSize(2560, 16777215))
         self.sidebar_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.sidebar_scroll.setWidgetResizable(True)
         self.sidebar_scroll.setObjectName("sidebar_scroll")
         self.sidebar_content = QtWidgets.QWidget()
-        self.sidebar_content.setGeometry(QtCore.QRect(0, 0, 408, 489))
+        self.sidebar_content.setGeometry(QtCore.QRect(0, 0, 408, 437))
         self.sidebar_content.setObjectName("sidebar_content")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.sidebar_content)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -141,17 +141,8 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.nickname_label.setText(_translate("Form", "${nickname}"))
         self.sidebar_toggle.setText(_translate("Form", "☰"))
-        self.image_view.setImageChannel(
-            _translate("Form", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_waveform_channel}")
-        )
-        self.image_view.setWidthChannel(
-            _translate("Form", "${img_protocol}${cam_prefix}${stream_plugin}${suffix_width_channel}")
-        )
         self.fps_label.setText(_translate("Form", "FPS:"))
         self.display_fps_label.setText(_translate("Form", "##"))
         self.fps_label2.setText(_translate("Form", " / "))
-        self.PyDMLabel.setChannel(_translate("Form", "ca://${cam_prefix}:ArrayRate_RBV"))
         self.active_pv_label.setStyleSheet(_translate("Form", "color: gray;"))
-        self.active_pv_label.setText(_translate("Form", "${cam_prefix}"))

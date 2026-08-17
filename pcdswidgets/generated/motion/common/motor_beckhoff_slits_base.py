@@ -46,6 +46,8 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     GapRBV2: "PyDMLabel"
     GapSet1: "PyDMLineEdit"
     GapSet2: "PyDMLineEdit"
+    HorizontalLabel: "QtWidgets.QLabel"
+    VerticalLabel: "QtWidgets.QLabel"
     frame: "QtWidgets.QFrame"
     layoutWidget: "QtWidgets.QWidget"
 

@@ -40,7 +40,6 @@ class Ui_Form(object):
         self.rel_disp.setTitles([])
         self.rel_disp.setShowIcon(True)
         self.rel_disp.setRecursiveDisplaySearch(False)
-        self.rel_disp.setMacros(['{"TITLE": "${REL_TITLE}"}', "", ""])
         self.rel_disp.setOpenInNewWindow(False)
         self.rel_disp.setPasswordProtected(False)
         self.rel_disp.setPassword("")
@@ -55,5 +54,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.emb_disp.setMacros(_translate("Form", '{"TITLE": "${EMB_TITLE}"}'))
         self.emb_disp.setFilename(_translate("Form", "pcdswidgets/tests/builder/subdisplay.ui"))

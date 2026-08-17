@@ -31,7 +31,10 @@ def build_uic(designer_ui: str, output_dir: str = ""):
             import_lines.append(line.replace("PyQt5", "qtpy"))
             continue
         if import_lines:
-            impl_lines.append(line)
+            if "${" not in line:
+                impl_lines.append(line)
+            elif impl_lines[-1].isspace():
+                del impl_lines[-1]
         elif line:
             comment_lines.append(line)
 
