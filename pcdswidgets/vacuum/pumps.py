@@ -317,6 +317,8 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
     NAME = "Turbo Pump"
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,

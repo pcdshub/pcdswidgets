@@ -77,6 +77,9 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     NAME = "Rough Gauge"
     EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -162,6 +165,10 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbol
     _command_suffix = ":HV_SW"
 
     NAME = "Hot Cathode Gauge"
+    EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
         super().__init__(
@@ -252,6 +259,9 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
     NAME = "Cold Cathode Gauge"
     EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GCCPLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -333,6 +343,9 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     NAME = "Cold Combo Gauge"
     EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -412,6 +425,9 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     NAME = "Hot Combo Gauge"
     EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -490,6 +506,9 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
 
     NAME = "Capacitance Monometer Gauge"
     EXPERT_OPHYD_CLASS = "pcdsdevices.gauge.GaugePLC"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/gauges"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
         super().__init__(

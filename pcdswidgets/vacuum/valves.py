@@ -104,6 +104,9 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDS
     NAME = "Pneumatic Valve"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VGC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -203,6 +206,9 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSS
     NAME = "Aperture Valve"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -299,6 +305,9 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl,
     NAME = "Fast Shutter"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VFS"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -383,6 +392,9 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     NAME = "Needle Valve"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VCN"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -466,6 +478,9 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBas
     NAME = "Proportional Valve"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -517,6 +532,9 @@ class RightAngleManualValve(PCDSSymbolBase):
         "is_container": False,
     }
     NAME = "Right Angle Manual Valve"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden
@@ -624,6 +642,8 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSy
     }
     NAME = "Control Valve with Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     _interlock_suffix = ":OPN_OK_RBV"
     _error_suffix = ":STATE_RBV"
@@ -721,6 +741,9 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     NAME = "Normally Closed Control Valve with No Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
+
     _interlock_suffix = ":OPN_OK_RBV"
     _state_suffix = ":OPN_DO_RBV"
     _command_suffix = ":OPN_SW"
@@ -814,6 +837,9 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     }
     NAME = "Normally Open Control Valve with No Readback"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     _interlock_suffix = ":CLS_OK_RBV"
     _state_suffix = ":CLS_DO_RBV"
@@ -913,6 +939,9 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PC
 
     NAME = "Pneumatic Valve NO"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VVCNO"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
         super().__init__(
@@ -1021,6 +1050,9 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     NAME = "Pneumatic Valve DA"
     EXPERT_OPHYD_CLASS = "pcdsdevices.valve.VRCDA"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/valves"
+    EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
         self._cls_interlocked = False
