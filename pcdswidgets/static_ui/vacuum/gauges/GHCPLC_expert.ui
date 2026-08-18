@@ -197,7 +197,7 @@
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:PRESS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -414,13 +414,13 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:SP_HYST_RBV</string>
+             <string>ca://${prefix}:SP_HYS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:SP_HYST_RBV</string>
+             <string>ca://${prefix}:SP_HYS_RBV</string>
             </property>
            </widget>
           </item>

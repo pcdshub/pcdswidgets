@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>382</height>
+    <width>507</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>180</height>
+       <height>220</height>
       </size>
      </property>
      <property name="font">
@@ -96,6 +96,21 @@
        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_8">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Interlock Ok&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="interlock_ok_label">
             <property name="font">
@@ -161,6 +176,22 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
+           <widget class="PyDMLabel" name="PyDMLabel_2">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:ILK_OK_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:ILK_OK_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="PyDMLabel" name="PyDMLabel">
             <property name="toolTip">
              <string/>
@@ -215,7 +246,7 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_2">
+           <widget class="PyDMLabel" name="PyDMLabel_8">
             <property name="toolTip">
              <string/>
             </property>
@@ -280,7 +311,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>80</height>
+       <height>200</height>
       </size>
      </property>
      <property name="font">
@@ -293,7 +324,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_15">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -307,7 +338,52 @@
              <string/>
             </property>
             <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;HV On&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_6">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_7">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_9">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Fault SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -316,12 +392,28 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
+           <widget class="PyDMLabel" name="PyDMLabel_6">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:HV_SW_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_SW_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="PyDMLabel" name="PyDMLabel_3">
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:PRO_SP_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -330,7 +422,51 @@
              <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:VAC_SP_RBV</string>
+             <string>ca://${prefix}:PRO_SP_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_7">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_9">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:PSTATSPRBCK_FS</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:PSTATSPRBCK_FS</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLabel::Exponential</enum>
@@ -342,6 +478,16 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
+           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:HV_SW</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="PyDMLineEdit" name="PyDMLineEdit">
             <property name="toolTip">
              <string/>
@@ -350,7 +496,39 @@
              <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:VAC_SP</string>
+             <string>ca://${prefix}:PRO_SP</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:SP_HYS</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:PSTATSPDES_FS</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLineEdit::Exponential</enum>
@@ -380,6 +558,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
   <customwidget>
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
