@@ -7,7 +7,7 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 
 from pydm.widgets import PyDMImageView
-from qtpy.QtCore import QPointF, Qt
+from qtpy.QtCore import QPointF, Qt, Signal
 from qtpy.QtGui import QColor, QIcon, QPixmap
 from qtpy.QtWidgets import QPushButton
 
@@ -40,6 +40,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
     color_selection_button: QPushButton
     move_enabled_button: QPushButton
     line_thickness_button: QPushButton
+
+    # Emitted whenever this ROI's persisted-worthy appearance changes (color,
+    # thickness, or visibility).
+    state_changed = Signal()
 
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
@@ -112,9 +116,38 @@ class EpicsRoiFull(EpicsRoiFullBase):
         self.move_enabled_button.toggled.connect(self._on_move_toggle)
 
         # link appearance control buttons to ROI
-        self.visibility_button.toggled.connect(self.roi_rect.visible)
-        self.color_selection_button.colorChanged.connect(self.roi_rect.update_color)
-        self.line_thickness_button.clicked.connect(self.roi_rect.thickness_dialog)
+        self.visibility_button.toggled.connect(self._on_visibility_toggled)
+        self.color_selection_button.colorChanged.connect(self._on_color_changed)
+        self.line_thickness_button.clicked.connect(self._on_thickness_dialog)
+
+    def _on_visibility_toggled(self, visible: bool) -> None:
+        self.roi_rect.visible(visible)
+        self.state_changed.emit()
+
+    def _on_color_changed(self, color: QColor) -> None:
+        self.roi_rect.update_color(color)
+        self.state_changed.emit()
+
+    def _on_thickness_dialog(self) -> None:
+        self.roi_rect.thickness_dialog()
+        self.state_changed.emit()
+
+    def get_style_state(self) -> dict:
+        """Return this ROI's color/thickness/visibility, for persistence."""
+        return {
+            "color": self.get_roi_color().name(),
+            "thickness": self.roi_rect.pen.width(),
+            "visible": self.visibility_button.isChecked(),
+        }
+
+    def set_style_state(self, state: dict) -> None:
+        """Apply a previously-saved style_state."""
+        if "color" in state:
+            self.set_roi_color(QColor(state["color"]))
+        if "thickness" in state:
+            self.roi_rect.change_pen(width=state["thickness"])
+        if "visible" in state:
+            self.visibility_button.setChecked(state["visible"])
 
     def link_parent_widgets(self, parent) -> None:
         """
@@ -270,10 +303,10 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
 
-    def get_is_xy_center(self) -> str:
+    def get_is_xy_center(self) -> bool:
         return self._is_xy_center
 
-    def set_is_xy_center(self, value: str) -> None:
+    def set_is_xy_center(self, value: bool) -> None:
         self._is_xy_center = value
 
-    is_xy_center = pyqtProperty(str, get_is_xy_center, set_is_xy_center)
+    is_xy_center = pyqtProperty(bool, get_is_xy_center, set_is_xy_center)

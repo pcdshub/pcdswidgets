@@ -140,15 +140,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Exposure & Timing"))
-        self.frame_rate_rbv.setChannel(_translate("Form", "ca://${cam_prefix}:GainAuto_RBV"))
-        self.acquire_time_rbv.setChannel(_translate("Form", "ca://${cam_prefix}:AcquireTime_RBV"))
-        self.gain_auto_combo.setChannel(_translate("Form", "ca://${cam_prefix}:GainAuto"))
         self.label_gain.setText(_translate("Form", "Gain:"))
-        self.acquire_period_edit.setChannel(_translate("Form", "ca://${cam_prefix}:AcquirePeriod"))
         self.label_gain_auto.setText(_translate("Form", "Gain Auto: "))
-        self.acquire_time_edit.setChannel(_translate("Form", "ca://${cam_prefix}:AcquireTime"))
-        self.acquire_period_rbv.setChannel(_translate("Form", "ca://${cam_prefix}:AcquirePeriod_RBV"))
         self.label_period.setText(_translate("Form", "Period: "))
         self.label_exposure.setText(_translate("Form", "Exposure:"))
-        self.gain_rbv.setChannel(_translate("Form", "ca://${cam_prefix}:Gain_RBV"))
-        self.gain_edit.setChannel(_translate("Form", "ca://${cam_prefix}:Gain"))

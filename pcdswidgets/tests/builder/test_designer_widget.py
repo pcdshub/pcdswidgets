@@ -94,15 +94,15 @@ def test_has_expected_macro_values(basic_test_widget: BuilderBasicTestWidget):
 
 
 def test_macro_substitution_labels(basic_test_widget: BuilderBasicTestWidget):
-    assert basic_test_widget.name_label.text() == "Name: ${NAME}"
-    assert basic_test_widget.num_label.text() == "Num: ${NUM}"
-    assert basic_test_widget.name_num_label.text() == "${NAME}:${NUM}"
+    assert basic_test_widget.name_label.text() == ""
+    assert basic_test_widget.num_label.text() == ""
+    assert basic_test_widget.name_num_label.text() == ""
 
     basic_test_widget.setProperty("name", "Jimmy")
 
     assert basic_test_widget.name_label.text() == "Name: Jimmy"
-    assert basic_test_widget.num_label.text() == "Num: ${NUM}"
-    assert basic_test_widget.name_num_label.text() == "${NAME}:${NUM}"
+    assert basic_test_widget.num_label.text() == ""
+    assert basic_test_widget.name_num_label.text() == ""
 
     basic_test_widget.setProperty("num", "02")
 
@@ -118,11 +118,11 @@ def test_macro_substitution_labels(basic_test_widget: BuilderBasicTestWidget):
 
 
 def test_macro_substitution_list_widget(basic_test_widget: BuilderBasicTestWidget):
-    assert basic_test_widget.one_two_shell.readCommands() == ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"]
+    assert basic_test_widget.one_two_shell.readCommands() == []
 
     basic_test_widget.setProperty("one", "UNO")
 
-    assert basic_test_widget.one_two_shell.readCommands() == ["echo ${ONE}", "echo ${TWO}", "echo ${ONE}:${TWO}"]
+    assert basic_test_widget.one_two_shell.readCommands() == []
 
     basic_test_widget.setProperty("two", "DOS")
 
@@ -160,13 +160,13 @@ def test_png_icon(qtbot: QtBot):
 
 
 def test_macro_substitution_subdisplays(filepath_test_widget: BuilderFilepathTestWidget):
-    assert filepath_test_widget.emb_disp.readMacros() == '{"TITLE": "${EMB_TITLE}"}'
+    assert filepath_test_widget.emb_disp.readMacros() == ""
 
     filepath_test_widget.setProperty("emb_title", "Embedded")
 
     assert filepath_test_widget.emb_disp.readMacros() == '{"TITLE": "Embedded"}'
 
-    assert filepath_test_widget.rel_disp.readMacros() == ['{"TITLE": "${REL_TITLE}"}', "", ""]
+    assert filepath_test_widget.rel_disp.readMacros() == []
 
     filepath_test_widget.setProperty("rel_title", "Related")
 

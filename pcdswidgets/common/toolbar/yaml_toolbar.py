@@ -65,11 +65,11 @@ class YamlToolbar(QtWidgets.QWidget):
         file : str
             The absolute path to the config file.
         """
+        self._config_file = file
         if not file:
             return
         if not os.path.isfile(file):
             return
-        self._config_file = file
         with open(file) as tf:
             full_config = yaml.full_load(tf)
         self._assemble_tabs(full_config)
@@ -139,6 +139,10 @@ class YamlToolbar(QtWidgets.QWidget):
             btn = PyDMRelatedDisplayButton()
             btn.showIcon = False
             btn.setText(text)
+            # Normal default is to replace the current window, but this isn't good for toolbars.
+            # It's also not how these behaved in lucid, where they always opened in a new windows
+            # because there was no PyDMMainWindow to fill.
+            btn.setOpenInNewWindow(True)
         elif tp == "dock":
             btn = TabDockButton()
             btn.setText(text)

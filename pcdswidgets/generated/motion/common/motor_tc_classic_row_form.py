@@ -99,8 +99,5 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.MotorClassicRow.setProperty("motor", _translate("Form", "${MOTOR}"))
         self.label.setText(_translate("Form", "Motor temperature: "))
-        self.temperature_label.setChannel(_translate("Form", "ca://${MOTOR}:ILOCK:TC_TEMP_RBV"))
         self.label_2.setText(_translate("Form", "Interlock:"))
-        self.interlock_indicator.setChannel(_translate("Form", "ca://${MOTOR}:ILOCK:ACTIVE_RBV"))
