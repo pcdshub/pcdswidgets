@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>556</width>
+    <width>522</width>
     <height>456</height>
    </rect>
   </property>
@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>200</height>
+       <height>160</height>
       </size>
      </property>
      <property name="font">
@@ -96,21 +96,6 @@
        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="interlock_ok_label_5">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;State&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QLabel" name="interlock_ok_label_8">
             <property name="font">
@@ -160,22 +145,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_8">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:STATE_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:STATE_RBV</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="PyDMLabel" name="PyDMLabel_13">
             <property name="toolTip">
@@ -283,13 +252,6 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="label_12">
             <property name="text">
              <string/>
@@ -328,7 +290,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>140</height>
+       <height>120</height>
       </size>
      </property>
      <property name="font">

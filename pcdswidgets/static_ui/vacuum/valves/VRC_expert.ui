@@ -211,13 +211,13 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:POSITION_RBV</string>
+             <string>ca://${prefix}:POS_STATE_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:POSITION_RBV</string>
+             <string notr="true">ca://${prefix}:POS_STATE_RBV</string>
             </property>
            </widget>
           </item>

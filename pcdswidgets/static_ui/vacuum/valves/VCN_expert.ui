@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>547</width>
+    <width>503</width>
     <height>462</height>
    </rect>
   </property>
@@ -91,7 +91,7 @@
      <property name="title">
       <string>Readback</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_14">
+     <layout class="QVBoxLayout" name="verticalLayout_8">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1">
         <item>
@@ -189,18 +189,45 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
+           <widget class="PyDMLabel" name="PyDMLabel_10">
             <property name="toolTip">
              <string/>
             </property>
-            <property name="channel">
-             <string>ca://${prefix}:OPN_OK_RBV</string>
+            <property name="text">
+             <string>ca://${prefix}:ILK_OK_RBV</string>
             </property>
-            <property name="showLabels">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="precision">
+             <number>0</number>
+            </property>
+            <property name="showUnits">
              <bool>false</bool>
             </property>
-            <property name="circles">
+            <property name="precisionFromPV">
              <bool>true</bool>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:ILK_OK_RBV</string>
+            </property>
+            <property name="enableRichText">
+             <bool>false</bool>
+            </property>
+            <property name="displayLabelText">
+             <bool>false</bool>
+            </property>
+            <property name="disconnectedText">
+             <string/>
             </property>
            </widget>
           </item>
@@ -624,11 +651,6 @@
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>

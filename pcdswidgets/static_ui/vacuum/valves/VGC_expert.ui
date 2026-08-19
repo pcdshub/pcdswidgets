@@ -877,6 +877,9 @@
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_SP</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -889,6 +892,9 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_HYS</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
             </property>
            </widget>
           </item>

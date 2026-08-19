@@ -209,7 +209,7 @@
              <string/>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:OPN_OK_RBV</string>
+             <string>ca://${prefix}:ILK_OK_RBV</string>
             </property>
             <property name="showLabels">
              <bool>false</bool>

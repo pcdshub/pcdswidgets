@@ -477,7 +477,7 @@
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:ILK_DEVICE_US_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -501,7 +501,7 @@
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:ILK_DEVICE_DS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -648,21 +648,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="interlock_ok_label_3">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="interlock_ok_label_19">
             <property name="font">
              <font>
@@ -674,6 +659,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac US SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_9">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;US SP Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -693,7 +693,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="interlock_ok_label_9">
+           <widget class="QLabel" name="interlock_ok_label_3">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -703,7 +703,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -818,45 +818,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_25">
-            <property name="toolTip">
              <string/>
             </property>
-            <property name="text">
-             <string>ca://${prefix}:AT_VAC_SP_US_RBV</string>
-            </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:AT_VAC_SP_US_RBV</string>
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_26">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:AT_VAC_SP_DS_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:AT_VAC_SP_DS_RBV</string>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -866,13 +837,81 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:AT_VAC_HYS_RBV</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_HYS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_26">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_SP_DS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_25">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="precision">
+             <number>0</number>
+            </property>
+            <property name="showUnits">
+             <bool>false</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_HYS_DS_RBV</string>
+            </property>
+            <property name="enableRichText">
+             <bool>false</bool>
+            </property>
+            <property name="displayLabelText">
+             <bool>false</bool>
+            </property>
+            <property name="disconnectedText">
+             <string/>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -941,7 +980,7 @@
              <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:AT_VAC_SP_US</string>
+             <string>ca://${prefix}:AT_VAC_HYS</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLineEdit::Exponential</enum>
@@ -973,7 +1012,7 @@
              <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:AT_VAC_HYS</string>
+             <string>ca://${prefix}:AT_VAC_HYS_DS</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLineEdit::Exponential</enum>
