@@ -89,7 +89,7 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
     NAME = "Ion Pump"
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PIPCombined"
 
-    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/pumps"
+    EXPERT_UI_DIR = "pcdswidgets/screens/vacuum"
     EXPERT_UI_ORDER = ("detailed", "expert", "controller")
 
     _controller_suffix = ":VPCNAME"

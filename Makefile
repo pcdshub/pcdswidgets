@@ -19,6 +19,7 @@ all:
 	$(MAKE) build
 	$(MAKE) inits
 	$(MAKE) pyproject.toml
+	$(MAKE) generated/path_deps.py
 	$(MAKE) pixi
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
@@ -50,6 +51,9 @@ inits:
 # Rerun if any python file is updated
 pyproject.toml: $(PY_SOURCE)
 	$(BIN)/python -m pcdswidgets.builder.entrypoint_finder
+
+generated/path_deps.py: pyproject.toml pcdswidgets/builder/* $(shell find pcdswidgets/screens -type f)
+	$(BIN)/python -m pcdswidgets.builder.screen_paths
 
 pixi:
 	pixi run install
