@@ -31,6 +31,9 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     normalize_check: QtWidgets.QCheckBox
     histogram_container: QtWidgets.QWidget
 
+    # Emitted whenever the user drags the histogram to set manual color-map levels
+    state_changed = QtCore.Signal()
+
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,
@@ -40,6 +43,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
         self._image_view: PyDMImageView | None = None
+        self._secondary_image_view: PyDMImageView | None = None
         self._image_stream_paused = False
         self._graph_press_active = False
 
@@ -65,11 +69,17 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
 
         Called by the parent widget at adoption time. Links the histogram
         to the image item and syncs the UI state to current image settings.
+
+        If the parent also carries a `secondary_image_view`, colormap,
+        normalization, and level changes are mirrored onto it too, so both
+        views always share the same appearance. The histogram itself stays
+        bound only to the primary view.
         """
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
         else:
             return
+        self._secondary_image_view = getattr(parent, "secondary_image_view", None)
 
         # Link histogram to the image's ImageItem for live level control
         self._histogram.setImageItem(self._image_view.getImageItem())
@@ -123,25 +133,44 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         colormap = ColorMap(pos, cm_colors)
         self._histogram.item.gradient.setColorMap(colormap)
 
+    def _linked_image_views(self):
+        """The primary image view plus the secondary one, if linked."""
+        return [v for v in (self._image_view, self._secondary_image_view) if v is not None]
+
     def _on_colormap_changed(self, index: int) -> None:
         if self._image_view is None:
             return
         cmap_enum = self.colormap_combo.itemData(index)
         if cmap_enum is None:
             return
-        self._image_view._setColorMap(cmap_enum)
+        for image_view in self._linked_image_views():
+            image_view._setColorMap(cmap_enum)
         self._sync_histogram_gradient(cmap_enum)
 
     def _on_normalize_toggled(self, checked: bool) -> None:
         if self._image_view is None:
             return
-        self._image_view.setNormalizeData(checked)
-        self._image_view.needs_redraw = True
-        self._image_view.redrawImage()
+        for image_view in self._linked_image_views():
+            image_view.setNormalizeData(checked)
+            image_view.needs_redraw = True
+            image_view.redrawImage()
 
     def _on_levels_changed(self, hist_item) -> None:
         """Update image view min/max when the user drags histogram levels."""
         if self._image_view is None:
             return
         mn, mx = hist_item.getLevels()
-        self._image_view.setColorMapLimits(mn, mx)
+        for image_view in self._linked_image_views():
+            image_view.setColorMapLimits(mn, mx)
+        self.state_changed.emit()
+
+    def get_levels(self) -> tuple[float, float]:
+        """Return the histogram's current (min, max) color-map levels, for persistence."""
+        mn, mx = self._histogram.item.getLevels()
+        return float(mn), float(mx)
+
+    def set_levels(self, mn: float, mx: float) -> None:
+        """Apply a previously-saved (min, max) level pair."""
+        self._histogram.item.setLevels(mn, mx)
+        for image_view in self._linked_image_views():
+            image_view.setColorMapLimits(mn, mx)

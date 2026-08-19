@@ -1,4 +1,4 @@
-"""Dialog for selecting marker display style, line thickness, hatch pattern, arm length, and radius."""
+"""Dialog for configuring the centroid tracker's marker style, thickness, hatch pattern, and radius source."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (
@@ -16,30 +16,33 @@ from qtpy.QtWidgets import (
 )
 
 from pcdswidgets.imaging.common.cam_marker import MarkerStyle
-
-HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
-    ("Solid", Qt.SolidLine),
-    ("Dotted", Qt.DotLine),
-    ("Dashed", Qt.DashLine),
-    ("DashDot", Qt.DashDotLine),
-]
+from pcdswidgets.imaging.common.marker_style_dialog import HATCH_OPTIONS
 
 
-class MarkerStyleDialog(QDialog):
-    """Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
+class CentroidMarkerStyleDialog(QDialog):
+    """Popup dialog for configuring the centroid tracker's marker.
+
+    Unlike ``MarkerStyleDialog``, this only offers the symbol types relevant
+    to a centroid tracker (infinite lines, an ellipse sized from the beam
+    width, or both together), and lets the user choose whether the ellipse
+    radius should track the live sigma readback or use a fixed default
+    instead. There is also no "apply to all" option, since the centroid
+    tracker only ever has a single marker.
 
     Parameters
     ----------
     current_style : MarkerStyle
         The currently active marker style (pre-selected in the dialog).
+        Expected to be ``MarkerStyle.INFINITE_LINES``, ``MarkerStyle.ELLIPSE``,
+        or ``MarkerStyle.INFINITE_LINES_AND_ELLIPSE``.
     current_width : int
         The current pen thickness in pixels.
-    current_arm_length : int
-        The current crosshair arm length in pixels.
-    current_radius : int
-        The current ellipse radius in pixels.
     current_hatch_pattern : Qt.PenStyle
         The current line hatch pattern.
+    current_use_sigma_radius : bool
+        Whether the ellipse radius currently tracks the live sigma readback.
+    current_default_radius : int
+        The fixed radius (applied to both axes) used when not tracking sigma.
     parent : QWidget, optional
         Parent widget.
     """
@@ -48,20 +51,20 @@ class MarkerStyleDialog(QDialog):
         self,
         current_style: MarkerStyle,
         current_width: int,
-        current_arm_length: int = 20,
-        current_radius: int = 20,
         current_hatch_pattern: Qt.PenStyle = Qt.SolidLine,
+        current_use_sigma_radius: bool = True,
+        current_default_radius: int = 20,
         parent=None,
     ):
         super().__init__(parent)
-        self.setWindowTitle("Marker Style")
+        self.setWindowTitle("Centroid Marker Style")
         self.setMinimumWidth(280)
 
         self._selected_style = current_style
         self._selected_width = current_width
-        self._selected_arm_length = current_arm_length
-        self._selected_radius = current_radius
         self._selected_hatch_pattern = current_hatch_pattern
+        self._selected_use_sigma_radius = current_use_sigma_radius
+        self._selected_default_radius = current_default_radius
 
         layout = QVBoxLayout(self)
 
@@ -70,51 +73,43 @@ class MarkerStyleDialog(QDialog):
         style_layout = QVBoxLayout(style_group)
 
         self._style_buttons = QButtonGroup(self)
-        self._radio_length = QRadioButton("Crosshair (configurable length)")
         self._radio_infinite = QRadioButton("Infinite lines")
         self._radio_ellipse = QRadioButton("Ellipse")
         self._radio_infinite_ellipse = QRadioButton("Infinite lines + Ellipse")
-        self._style_buttons.addButton(self._radio_length, MarkerStyle.CROSSHAIR_LENGTH.value)
         self._style_buttons.addButton(self._radio_infinite, MarkerStyle.INFINITE_LINES.value)
         self._style_buttons.addButton(self._radio_ellipse, MarkerStyle.ELLIPSE.value)
         self._style_buttons.addButton(self._radio_infinite_ellipse, MarkerStyle.INFINITE_LINES_AND_ELLIPSE.value)
 
         if current_style == MarkerStyle.INFINITE_LINES:
             self._radio_infinite.setChecked(True)
-        elif current_style == MarkerStyle.ELLIPSE:
-            self._radio_ellipse.setChecked(True)
         elif current_style == MarkerStyle.INFINITE_LINES_AND_ELLIPSE:
             self._radio_infinite_ellipse.setChecked(True)
         else:
-            self._radio_length.setChecked(True)
+            self._radio_ellipse.setChecked(True)
 
-        style_layout.addWidget(self._radio_length)
         style_layout.addWidget(self._radio_infinite)
         style_layout.addWidget(self._radio_ellipse)
         style_layout.addWidget(self._radio_infinite_ellipse)
 
-        self._arm_length_row = QHBoxLayout()
-        self._arm_length_label = QLabel("Arm length (px):")
-        self._arm_length_spin = QSpinBox()
-        self._arm_length_spin.setRange(5, 500)
-        self._arm_length_spin.setValue(current_arm_length)
-        self._arm_length_row.addWidget(self._arm_length_label)
-        self._arm_length_row.addWidget(self._arm_length_spin)
-        style_layout.addLayout(self._arm_length_row)
+        # ── Ellipse radius source ────────────────────────────────────────
+        self._use_sigma_checkbox = QCheckBox("Use sigma for radius")
+        self._use_sigma_checkbox.setChecked(current_use_sigma_radius)
+        style_layout.addWidget(self._use_sigma_checkbox)
 
-        self._radius_row = QHBoxLayout()
-        self._radius_label = QLabel("Radius (px):")
-        self._radius_spin = QSpinBox()
-        self._radius_spin.setRange(5, 500)
-        self._radius_spin.setValue(current_radius)
-        self._radius_row.addWidget(self._radius_label)
-        self._radius_row.addWidget(self._radius_spin)
-        style_layout.addLayout(self._radius_row)
+        self._default_radius_row = QHBoxLayout()
+        self._default_radius_label = QLabel("Default radius (px):")
+        self._default_radius_spin = QSpinBox()
+        self._default_radius_spin.setRange(1, 500)
+        self._default_radius_spin.setValue(current_default_radius)
+        self._default_radius_row.addWidget(self._default_radius_label)
+        self._default_radius_row.addWidget(self._default_radius_spin)
+        style_layout.addLayout(self._default_radius_row)
 
         layout.addWidget(style_group)
 
-        self._style_buttons.idToggled.connect(self._on_style_toggled)
-        self._update_size_controls_visibility()
+        self._style_buttons.idToggled.connect(self._update_controls_visibility)
+        self._use_sigma_checkbox.toggled.connect(self._update_controls_visibility)
+        self._update_controls_visibility()
 
         hatch_group = QGroupBox("Line Hatch Pattern")
         hatch_layout = QHBoxLayout(hatch_group)
@@ -141,9 +136,6 @@ class MarkerStyleDialog(QDialog):
 
         layout.addWidget(thickness_group)
 
-        self._apply_all_checkbox = QCheckBox("Apply to all markers")
-        layout.addWidget(self._apply_all_checkbox)
-
         btn_row = QHBoxLayout()
         ok_btn = QPushButton("OK")
         cancel_btn = QPushButton("Cancel")
@@ -155,27 +147,23 @@ class MarkerStyleDialog(QDialog):
         ok_btn.clicked.connect(self._accept)
         cancel_btn.clicked.connect(self.reject)
 
-    def _on_style_toggled(self, _id: int, _checked: bool) -> None:
-        self._update_size_controls_visibility()
+    def _update_controls_visibility(self, *_args) -> None:
+        has_ellipse = self._radio_ellipse.isChecked() or self._radio_infinite_ellipse.isChecked()
+        self._use_sigma_checkbox.setVisible(has_ellipse)
 
-    def _update_size_controls_visibility(self) -> None:
-        arm_length_visible = self._radio_length.isChecked()
-        self._arm_length_label.setVisible(arm_length_visible)
-        self._arm_length_spin.setVisible(arm_length_visible)
-
-        radius_visible = self._radio_ellipse.isChecked() or self._radio_infinite_ellipse.isChecked()
-        self._radius_label.setVisible(radius_visible)
-        self._radius_spin.setVisible(radius_visible)
+        show_default_radius = has_ellipse and not self._use_sigma_checkbox.isChecked()
+        self._default_radius_label.setVisible(show_default_radius)
+        self._default_radius_spin.setVisible(show_default_radius)
 
     def _accept(self):
         checked_id = self._style_buttons.checkedId()
         if checked_id >= 0:
             self._selected_style = MarkerStyle(checked_id)
         self._selected_width = self._thickness_spin.value()
-        self._selected_arm_length = self._arm_length_spin.value()
-        self._selected_radius = self._radius_spin.value()
         hatch_idx = self._hatch_combo.currentIndex()
         self._selected_hatch_pattern = HATCH_OPTIONS[hatch_idx][1]
+        self._selected_use_sigma_radius = self._use_sigma_checkbox.isChecked()
+        self._selected_default_radius = self._default_radius_spin.value()
         self.accept()
 
     @property
@@ -187,17 +175,13 @@ class MarkerStyleDialog(QDialog):
         return self._selected_width
 
     @property
-    def selected_arm_length(self) -> int:
-        return self._selected_arm_length
-
-    @property
-    def selected_radius(self) -> int:
-        return self._selected_radius
-
-    @property
     def selected_hatch_pattern(self) -> Qt.PenStyle:
         return self._selected_hatch_pattern
 
     @property
-    def apply_to_all(self) -> bool:
-        return self._apply_all_checkbox.isChecked()
+    def use_sigma_radius(self) -> bool:
+        return self._selected_use_sigma_radius
+
+    @property
+    def selected_default_radius(self) -> int:
+        return self._selected_default_radius

@@ -46,24 +46,26 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     GapRBV2: "PyDMLabel"
     GapSet1: "PyDMLineEdit"
     GapSet2: "PyDMLineEdit"
+    HorizontalLabel: "QtWidgets.QLabel"
+    VerticalLabel: "QtWidgets.QLabel"
     frame: "QtWidgets.QFrame"
     layoutWidget: "QtWidgets.QWidget"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "prefix": [
-            "CenterRBV2",
-            "CenterRBV1",
-            "ByteIndicatorGap1Move",
-            "ByteIndicatorCenter1Move",
-            "CenterSet1",
-            "ByteIndicatorCenter2Move",
-            "GapSet2",
-            "GapRBV2",
-            "GapRBV1",
-            "GapSet1",
-            "CenterSet2",
             "ByteIndicatorGap2Move",
+            "ByteIndicatorCenter1Move",
+            "GapSet2",
+            "CenterRBV2",
+            "CenterSet1",
+            "CenterRBV1",
+            "GapSet1",
+            "ByteIndicatorGap1Move",
+            "GapRBV1",
+            "ByteIndicatorCenter2Move",
+            "GapRBV2",
+            "CenterSet2",
         ],
     }
     _widget_to_macro = {
