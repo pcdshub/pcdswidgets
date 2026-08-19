@@ -317,6 +317,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
     NAME = "Turbo Pump"
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PTMPLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/pumps"
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
@@ -410,6 +411,8 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
     NAME = "Scroll Pump"
     EXPERT_OPHYD_CLASS = "pcdsdevices.pump.PROPLC"
 
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/pumps"
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             parent=parent,
@@ -461,6 +464,8 @@ class GetterPump(PCDSSymbolBase):
         "is_container": False,
     }
     NAME = "Getter Pump"
+
+    EXPERT_UI_DIR = "pcdswidgets/static_ui/vacuum/pumps"
 
     def __init__(self, parent=None, **kwargs):
         self._controls_location = ContentLocation.Hidden

@@ -256,13 +256,13 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:POSITION_RBV</string>
+             <string>ca://${prefix}:POS_STATE_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:POSITION_RBV</string>
+             <string>ca://${prefix}:POS_STATE_RBV</string>
             </property>
            </widget>
           </item>
@@ -407,6 +407,9 @@
             <property name="channel">
              <string>ca://${prefix}:VETO_DEVICE_RBV</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -428,6 +431,9 @@
             <property name="channel">
              <string>ca://${prefix}:GFS_RBV</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -447,7 +453,7 @@
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:VETO_DEVICE_RBV</string>
+             <string>ca://${prefix}:TRIG_RBV</string>
             </property>
            </widget>
           </item>

@@ -408,13 +408,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:VETO_DEVICE_RBV</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:VETO_DEVICE_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
             </property>
            </widget>
           </item>
@@ -429,13 +432,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:GFS_RBV</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:GFS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
             </property>
            </widget>
           </item>

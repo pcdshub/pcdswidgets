@@ -627,7 +627,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
         class_name = expert_key.rsplit(".", 1)[-1]
         prefix = class_name + "_"
-        matches = sorted(f for f in os.listdir(ui_dir) if f.startswith(prefix) and f.endswith(".ui"))
+        matches = sorted(f for f in os.listdir(ui_dir) if f.rsplit("_", 1)[0] == class_name and f.endswith(".ui"))
         if not matches:
             logger.warning(f"No expert UI files found for {expert_key} with prefix {prefix} in {ui_dir}")
             return []
