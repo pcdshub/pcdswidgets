@@ -20,7 +20,7 @@ SCREEN_PATHS = {
     "PIPCombined_expert": "screens/vacuum/pumps/PIPCombined_expert.ui",
     "PIPPLC_detailed": "screens/vacuum/pumps/PIPPLC_detailed.ui",
     "PIPPLC_expert": "screens/vacuum/pumps/PIPPLC_expert.ui",
-    "PROPLC_detialed": "screens/vacuum/pumps/PROPLC_detialed.ui",
+    "PROPLC_detailed": "screens/vacuum/pumps/PROPLC_detailed.ui",
     "PTMPLC_detailed": "screens/vacuum/pumps/PTMPLC_detailed.ui",
     "PTMPLC_expert": "screens/vacuum/pumps/PTMPLC_expert.ui",
     "VCN_VAT590_detailed": "screens/vacuum/valves/VCN_VAT590_detailed.ui",
