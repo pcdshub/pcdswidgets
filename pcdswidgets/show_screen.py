@@ -231,8 +231,7 @@ def open_screen_or_widget(screen: str, args: Namespace) -> int:
     if screen in SCREEN_PATHS:
         return open_screen(screen=screen, args=args)
     if screen in WIDGET_PATHS:
-        open_widget(widget=screen, args=args)
-        return 0
+        return open_widget(widget=screen, args=args)
 
     print(f"Screen {screen} not found in pcdswidgets, exiting.")
     return 1
@@ -248,7 +247,7 @@ def open_screen(screen: str, args: Namespace) -> int:
     return proc.returncode
 
 
-def open_widget(widget: str, args: Namespace):
+def open_widget(widget: str, args: Namespace) -> int:
     """Open a widget defined in pcdswidgets as a screen by creating a mini QApplication."""
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
@@ -258,7 +257,7 @@ def open_widget(widget: str, args: Namespace):
             widget_obj.setProperty(prop, value)
     widget_obj.move(QCursor.pos())
     widget_obj.show()
-    app.exec_()
+    return app.exec_()
 
 
 if __name__ == "__main__":
