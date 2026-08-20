@@ -71,8 +71,8 @@ def main(args: list[str] | None = None) -> int:
         return 0
 
     if screen is None:
-        # Unclear if we can get here, but just in case
-        print("No screen selected, exiting", file=sys.stderr)
+        print("No screen selected, showing help and exiting", file=sys.stderr)
+        parser.print_help()
         return 1
 
     return open_screen_or_widget(screen=screen, args=parsed_args)
@@ -111,7 +111,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     parser.add_argument("--options", action="store_true", help="show all screen and widget options and exit")
 
     # Add only the highlighted subparsers! The others will be added later, when needed.
-    subparsers = parser.add_subparsers(title="highlighted screens", required=True)
+    subparsers = parser.add_subparsers(title="highlighted screens", required=False)
 
     # State mover expert screen is distributed in pcdswidgets and is useful standalone
     # The macros are not naively discoverable, but they are documented and implemented here.
