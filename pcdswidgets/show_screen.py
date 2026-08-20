@@ -24,7 +24,7 @@ from argparse import SUPPRESS, ArgumentParser, Namespace
 from collections import defaultdict
 from itertools import chain
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QApplication, QWidget
@@ -38,11 +38,6 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 MODULE_PATH = Path(__file__).parent
-
-HIGHLIGHTED_SCREENS = (
-    "motor_state_mover_expert",
-    "FeatureFinder",
-)
 
 
 def main(args: list[str] | None = None) -> int:
@@ -58,7 +53,7 @@ def main(args: list[str] | None = None) -> int:
     for arg_text in args:
         if arg_text in chain(SCREEN_PATHS, WIDGET_PATHS):
             screen = arg_text
-            if arg_text not in HIGHLIGHTED_SCREENS:
+            if arg_text not in subparsers.choices:
                 # We picked a valid screen that needs a generated subparser
                 generate_subparser_on_demand(subparsers=subparsers, screen=arg_text)
             # There ought to only be one screen, take the first one
@@ -83,6 +78,9 @@ class SubparserAction(Protocol):
 
     def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser: ...
 
+    @property
+    def choices(self) -> dict[str, Any]: ...
+
 
 def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     """
@@ -96,7 +94,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
 
     Returns
     -------
-    parser, subparsers : ArgumentParser, SubparserAction
+    parser, subparsers, highlighted : ArgumentParser, SubparserAction, list[str]
         A tuple where the first element is the main parser,
         and the second element is the subparser action
         that we can use to add more subparsers later.
