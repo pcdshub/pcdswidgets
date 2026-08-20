@@ -52,7 +52,7 @@ inits:
 pyproject.toml: $(PY_SOURCE)
 	$(BIN)/python -m pcdswidgets.builder.entrypoint_finder
 
-generated/path_deps.py: pyproject.toml pcdswidgets/builder/* $(shell find pcdswidgets/screens -type f)
+generated/path_deps.py: pyproject.toml $(shell find pcdswidgets/builder -type f) $(shell find pcdswidgets/screens -type f)
 	$(BIN)/python -m pcdswidgets.builder.screen_paths
 
 pixi:
