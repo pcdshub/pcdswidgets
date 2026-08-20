@@ -1,10 +1,18 @@
 """
-CLI entrypoint for opening expert screens and other widgets as standalone windows.
+Defines the behavior for the pcdswidgets-show command.
+
+This is a CLI entrypoint that opens screens and widgets as standalone windows.
+It exists because it can be difficult to find the full paths to pydm screens included
+in this repo once the library is installed in a python environment, rather than just cloned.
 
 Every designer-enabled widget and everything in the "screens" directory are valid targets.
+There are named based on their filenames (without the file extension).
 
-These are included in an automated way, but some screens and widgets are chosen
-to be highlighted in the --help text with hand-written instructions.
+For all screens, the arguments map 1:1 to the "macro" names, including casing.
+For all widgets, the arguments map 1:1 to the "property" names, including casing.
+
+Most of the help text is generated at runtime, but some screens
+and widgets are chosen to be highlighted with hand-written instructions.
 """
 
 import importlib
@@ -38,6 +46,7 @@ HIGHLIGHTED_SCREENS = (
 
 
 def main(args: list[str] | None = None) -> int:
+    """Entrypoint for pcdswidgets-show."""
     parser, subparsers = get_parser()
 
     if args is None:
@@ -57,8 +66,8 @@ def main(args: list[str] | None = None) -> int:
 
     parsed_args = parser.parse_args(args=args)
 
-    if parsed_args.show_all_screens:
-        show_all_screens()
+    if parsed_args.options:
+        show_all_screen_options()
         return 0
 
     if screen is None:
@@ -70,6 +79,8 @@ def main(args: list[str] | None = None) -> int:
 
 
 class SubparserAction(Protocol):
+    """Helper to type hint the _SubparserAction private type returned by ArgumentParser.add_subparsers()."""
+
     def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser: ...
 
 
@@ -82,6 +93,13 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
 
     If the user picks a non-highlighted widget or screen, the chosen subparser
     will be generated as needed.
+
+    Returns
+    -------
+    parser, subparsers : ArgumentParser, SubparserAction
+        A tuple where the first element is the main parser,
+        and the second element is the subparser action
+        that we can use to add more subparsers later.
     """
     parser = ArgumentParser(
         prog="pcdswidgets-show",
@@ -90,11 +108,13 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
             "Pass --help to individual widget types for specific options."
         ),
     )
-    parser.add_argument("--show-all-screens", action="store_true", help="show all screen and widget options and exit")
-
-    subparsers = parser.add_subparsers(title="highlighted screens", required=True)
+    parser.add_argument("--options", action="store_true", help="show all screen and widget options and exit")
 
     # Add only the highlighted subparsers! The others will be added later, when needed.
+    subparsers = parser.add_subparsers(title="highlighted screens", required=True)
+
+    # State mover expert screen is distributed in pcdswidgets and is useful standalone
+    # The macros are not naively discoverable, but they are documented and implemented here.
     motor_state_mover_expert = subparsers.add_parser("motor_state_mover_expert", help="Expert screen for state movers")
     motor_state_mover_expert.add_argument("--DEVICE", action="store", required=True, help="Base prefix, e.g. TST:D3")
     motor_state_mover_expert.add_argument(
@@ -105,6 +125,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
         "--DEVICE_TOKENS", action="store", help="comma-separated per-device tokens, e.g. D1M1,D2M1,D3M1"
     )
 
+    # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
     feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
     feature_finder.add_argument("--detector", action="store", required=True, help="PV value to plot on the y-axis.")
     feature_finder.add_argument(
@@ -115,6 +136,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
 
 
 def generate_subparser_on_demand(subparsers: SubparserAction, screen: str):
+    """Add a subparser with generated help text for a screen or widget."""
     if screen in SCREEN_PATHS:
         return generate_subparser_from_screen(subparsers=subparsers, screen=screen)
     if screen in WIDGET_PATHS:
@@ -123,8 +145,12 @@ def generate_subparser_on_demand(subparsers: SubparserAction, screen: str):
 
 
 def generate_subparser_from_screen(subparsers: SubparserAction, screen: str):
+    """
+    Add a subparser with generated help text for a screen.
+
+    Each macro discoverable in the screen file is exposed as a same-named cli argument.
+    """
     parser = subparsers.add_parser(name=screen, help=f"Opens the {screen} screen")
-    # parser.set_defaults(pcdswidgets_screen_variable=screen)
     ui_info = get_ui_info(str(MODULE_PATH / SCREEN_PATHS[screen]))
     jinja_info = process_widget_macros(ui_info=ui_info)
     for macro in sorted(jinja_info.macro_set):
@@ -132,6 +158,11 @@ def generate_subparser_from_screen(subparsers: SubparserAction, screen: str):
 
 
 def generate_subparser_from_widget(subparsers: SubparserAction, widget: str):
+    """
+    Add a subparser with generated help text for a widget.
+
+    Each property created using pyqt is exposed as a same-named cli argument.
+    """
     module_name, widget_import_name = WIDGET_PATHS[widget].split(":")
     WidgetType = getattr(importlib.import_module(module_name), widget_import_name)
     widget_doc = inspect.getdoc(WidgetType)
@@ -140,7 +171,6 @@ def generate_subparser_from_widget(subparsers: SubparserAction, widget: str):
     else:
         widget_doc = ""
     parser = subparsers.add_parser(name=widget, help=widget_doc)
-    # parser.set_defaults(pcdswidgets_screen_variable=widget)
     for name, val in inspect.getmembers(WidgetType):
         if name == "rules":
             # pydm rules don't make sense here, skip to avoid confusion
@@ -153,11 +183,21 @@ def generate_subparser_from_widget(subparsers: SubparserAction, widget: str):
 
 
 def get_widget_type(widget: str) -> type[QWidget]:
+    """Return the actual class (type) associated with a widget name."""
     module_name, widget_import_name = WIDGET_PATHS[widget].split(":")
     return getattr(importlib.import_module(module_name), widget_import_name)
 
 
-def show_all_screens():
+def show_all_screen_options():
+    """
+    Show the user all of the possible screens that they could open using pcdswidgets-show.
+
+    At first, only the highlighted screens and widgets are shown in the help text.
+    This keeps the help text focused to the most useful screens without overwhelming the user.
+
+    If the user invokes the --options argument, this function will be called to
+    show every single possibility, split into category by filepath and import path.
+    """
     screen_categories: dict[str, list[str]] = defaultdict(list)
     for screen_name, screen_path in SCREEN_PATHS.items():
         category = str(Path(screen_path).parent)
@@ -187,6 +227,7 @@ def show_all_screens():
 
 
 def open_screen_or_widget(screen: str, args: Namespace) -> int:
+    """Open a named screen or widget with the given parsed aruguments."""
     if screen in SCREEN_PATHS:
         return open_screen(screen=screen, args=args)
     if screen in WIDGET_PATHS:
@@ -198,6 +239,7 @@ def open_screen_or_widget(screen: str, args: Namespace) -> int:
 
 
 def open_screen(screen: str, args: Namespace) -> int:
+    """Open a screen stored in pcdswidgets using pydm."""
     macros = json.dumps(vars(args))
     full_screen_path = str(MODULE_PATH / SCREEN_PATHS[screen])
     proc = subprocess.run(
@@ -207,6 +249,7 @@ def open_screen(screen: str, args: Namespace) -> int:
 
 
 def open_widget(widget: str, args: Namespace):
+    """Open a widget defined in pcdswidgets as a screen by creating a mini QApplication."""
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
     for prop, value in vars(args).items():
