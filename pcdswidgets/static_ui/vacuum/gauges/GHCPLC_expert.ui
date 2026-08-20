@@ -398,13 +398,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:PRO_SP_RBV</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:PRO_SP_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -414,13 +417,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:SP_HYS_RBV</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:SP_HYS_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>

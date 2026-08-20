@@ -471,6 +471,9 @@
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_SP</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -485,6 +488,9 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:SP_HYS</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>

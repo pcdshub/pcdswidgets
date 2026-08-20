@@ -251,82 +251,92 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_4">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ILK_OK_RBV</string>
             </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_2">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_5">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ALARM_RBV</string>
             </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_4">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_10">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:WARN_RBV</string>
             </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_3">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_6">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:FAULT_RBV</string>
             </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_5">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_7">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:RUN_DO_RBV</string>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -349,34 +359,38 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_6">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_8">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:ACCEL_RBV</string>
             </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_7">
-            <property name="toolTip">
-             <string/>
+           <widget class="PyDMLabel" name="pump_state_readback_9">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
              <string>ca://${prefix}:AT_SPD_RBV</string>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -391,13 +405,19 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:STATE_RBV</string>
+             <string>ca://${prefix}:SPEED_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
-             <string>ca://${prefix}:STATE_RBV</string>
+             <string>ca://${prefix}:SPEED_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Default</enum>
             </property>
            </widget>
           </item>
@@ -417,8 +437,14 @@
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
-             <string>ca://${prefix}:STATE_RBV</string>
+             <string>ca://${prefix}:CURR_MON_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Default</enum>
             </property>
            </widget>
           </item>
@@ -677,7 +703,7 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:RST_SW_RBV</string>
+             <string>ca://${prefix}:RUN_SW_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -704,6 +730,9 @@
             <property name="channel">
              <string>ca://${prefix}:BP_SP</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -718,6 +747,9 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:IP_SP</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -789,11 +821,6 @@
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
