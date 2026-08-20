@@ -19,11 +19,14 @@ MODULE_ROOT = Path(__file__).parent.parent
 
 
 def main():
+    """Entrypoint for pcdswidgets.builder.screen_paths."""
     print("Loading screen paths")
     screen_paths = get_screen_paths()
 
     print("Loading widget imports")
     table = get_current_widget_table()[0]
+    # This is a mapping from widget name to fully qualified import name
+    # e.g. WidgetName: pcdswidgets.common.something.long_name:WidgetName
     widget_imports = dict(table)
 
     print("Writing out generated/path_deps.py file")
@@ -31,6 +34,7 @@ def main():
 
 
 def get_screen_paths() -> dict[str, str]:
+    """Return a dict mapping from screen name to relative path."""
     screen_tups: list[tuple[str, str]] = []
     for ext in ("py", "ui"):
         for filepath in (MODULE_ROOT / "screens").rglob(f"*.{ext}"):
@@ -42,6 +46,7 @@ def get_screen_paths() -> dict[str, str]:
 
 
 def write_path_defs(screen_paths: dict[str, str], widget_imports: dict[str, str]):
+    """Write out the generated/path_defs.py file given the input mappings."""
     jinja_template = "path_defs.py.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
     template = env.get_template(jinja_template)
