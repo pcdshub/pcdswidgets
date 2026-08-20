@@ -29,7 +29,7 @@ from typing import Any, Protocol
 from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QApplication, QWidget
 
-from .builder.build import get_ui_info, process_widget_macros
+from .builder.read_ui import get_ui_info, process_widget_macros
 from .generated.path_defs import SCREEN_PATHS, WIDGET_PATHS
 
 try:
