@@ -19,7 +19,7 @@ all:
 	$(MAKE) build
 	$(MAKE) inits
 	$(MAKE) pyproject.toml
-	$(MAKE) generated/path_deps.py
+	$(MAKE) generated/path_defs.py
 	$(MAKE) pixi
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)

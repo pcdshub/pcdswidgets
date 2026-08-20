@@ -29,7 +29,7 @@ def main():
     # e.g. WidgetName: pcdswidgets.common.something.long_name:WidgetName
     widget_imports = dict(table)
 
-    print("Writing out generated/path_deps.py file")
+    print("Writing out generated/path_defs.py file")
     write_path_defs(screen_paths=screen_paths, widget_imports=widget_imports)
 
 
