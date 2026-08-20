@@ -11,7 +11,8 @@ import importlib
 import inspect
 import json
 import subprocess
-from argparse import SUPPRESS, ArgumentError, ArgumentParser, ArgumentTypeError, Namespace
+import sys
+from argparse import SUPPRESS, ArgumentParser, Namespace
 from collections import defaultdict
 from itertools import chain
 from pathlib import Path
@@ -32,47 +33,47 @@ MODULE_PATH = Path(__file__).parent
 
 HIGHLIGHTED_SCREENS = (
     "motor_state_mover_expert",
-    # "FeatureFinder",
-    # "MotorBeckhoffSlits",
+    "FeatureFinder",
 )
 
 
 def main(args: list[str] | None = None) -> int:
-    pre_parser = get_pre_parser()
-    base_parser, subparsers = get_base_parser()
-    try:
-        pre_args = pre_parser.parse_args(args=args)
-    except (ArgumentError, ArgumentTypeError) as exc:
-        base_parser.parse_args(args=args)
-        # Backup error in case something has gone very wrong
-        raise RuntimeError("Issue in argument setup") from exc
-    if pre_args.show_all_screens:
+    parser, subparsers = get_parser()
+
+    if args is None:
+        args = sys.argv[1:]
+
+    # Pre-parsing for screen, widget names
+    # Required because loading all subparsers is too slow
+    screen = None
+    for arg_text in args:
+        if arg_text in chain(SCREEN_PATHS, WIDGET_PATHS):
+            screen = arg_text
+            if arg_text not in HIGHLIGHTED_SCREENS:
+                # We picked a valid screen that needs a generated subparser
+                generate_subparser_on_demand(subparsers=subparsers, screen=arg_text)
+            # There ought to only be one screen, take the first one
+            break
+
+    parsed_args = parser.parse_args(args=args)
+
+    if parsed_args.show_all_screens:
         show_all_screens()
         return 0
-    screen = None
-    if pre_args.pos_inputs:
-        screen = pre_args.pos_inputs[0]
-        if screen not in HIGHLIGHTED_SCREENS:
-            if screen in chain(SCREEN_PATHS, WIDGET_PATHS):
-                generate_subparser_on_demand(subparsers=subparsers, screen=pre_args.pos_inputs[0])
-            else:
-                base_parser.parse_args(args=args)
-                # Backup error in case something has gone very wrong
-                raise RuntimeError("Invalid screen type {screen}")
-    base_args = base_parser.parse_args(args=args)
 
     if screen is None:
-        # Unclear if we can get here
-        print("No screen selected, exiting")
+        # Unclear if we can get here, but just in case
+        print("No screen selected, exiting", file=sys.stderr)
         return 1
-    return open_screen_or_widget(screen=screen, args=base_args)
+
+    return open_screen_or_widget(screen=screen, args=parsed_args)
 
 
 class SubparserAction(Protocol):
     def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser: ...
 
 
-def get_base_parser() -> tuple[ArgumentParser, SubparserAction]:
+def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     """
     The top-level parser without filling in any automatic subparser details.
 
@@ -103,20 +104,14 @@ def get_base_parser() -> tuple[ArgumentParser, SubparserAction]:
     motor_state_mover_expert.add_argument(
         "--DEVICE_TOKENS", action="store", help="comma-separated per-device tokens, e.g. D1M1,D2M1,D3M1"
     )
-    # TODO fill these in? trying to figure out other parts of this first
-    # feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
-    # motor_beckhoff_slits = subparsers.add_parser("MotorBeckhoffSlits", help="Expert screen for beckhoff slits.")
+
+    feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
+    feature_finder.add_argument("--detector", action="store", required=True, help="PV value to plot on the y-axis.")
+    feature_finder.add_argument(
+        "--motor", action="store", required=True, help="Base PV for motor to move and to plot on the x-axis."
+    )
 
     return parser, subparsers
-
-
-def get_pre_parser() -> ArgumentParser:
-    """Parser to determine if any subparsers need to be generated."""
-    parser = ArgumentParser(prog="pcdswidgets-show", add_help=False)
-    parser.add_argument("--show-all-screens", action="store_true")
-    parser.add_argument("--help", action="store_true")
-    parser.add_argument("pos_inputs", nargs="*")
-    return parser
 
 
 def generate_subparser_on_demand(subparsers: SubparserAction, screen: str):
@@ -224,4 +219,4 @@ def open_widget(widget: str, args: Namespace):
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
