@@ -118,7 +118,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     motor_state_mover_expert = subparsers.add_parser("motor_state_mover_expert", help="Expert screen for state movers")
     motor_state_mover_expert.add_argument("--DEVICE", action="store", required=True, help="Base prefix, e.g. TST:D3")
     motor_state_mover_expert.add_argument(
-        "--PMPS", action="store_true", required=False, help="Select PMPS-enabled variant"
+        "--PMPS", action="store_const", const="1", required=False, help="Select PMPS-enabled variant"
     )
     motor_state_mover_expert.add_argument("--STATE_COUNT", action="store", type=int, help="Number states, e.g. 4")
     motor_state_mover_expert.add_argument(
