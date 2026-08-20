@@ -227,7 +227,7 @@ def show_all_screen_options():
 
 
 def open_screen_or_widget(screen: str, args: Namespace) -> int:
-    """Open a named screen or widget with the given parsed aruguments."""
+    """Open a named screen or widget with the given parsed arguments."""
     if screen in SCREEN_PATHS:
         return open_screen(screen=screen, args=args)
     if screen in WIDGET_PATHS:
