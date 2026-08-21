@@ -20,7 +20,7 @@ import inspect
 import json
 import subprocess
 import sys
-from argparse import SUPPRESS, ArgumentParser, Namespace
+from argparse import SUPPRESS, ArgumentParser
 from collections import defaultdict
 from itertools import chain
 from pathlib import Path
@@ -38,6 +38,7 @@ except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
 MODULE_PATH = Path(__file__).parent
+SUBPARSER_PREFIX = "subparser_"
 
 
 def main(args: list[str] | None = None) -> int:
@@ -70,7 +71,12 @@ def main(args: list[str] | None = None) -> int:
         parser.print_help()
         return 1
 
-    return open_screen_or_widget(screen=screen, args=parsed_args)
+    subparser_args = {
+        key.removeprefix(SUBPARSER_PREFIX): value
+        for key, value in vars(parsed_args).items()
+        if key.startswith(SUBPARSER_PREFIX)
+    }
+    return open_screen_or_widget(screen=screen, subparser_args=subparser_args)
 
 
 class SubparserAction(Protocol):
@@ -113,24 +119,40 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
 
     # State mover expert screen is distributed in pcdswidgets and is useful standalone
     # The macros are not naively discoverable, but they are documented and implemented here.
-    motor_state_mover_expert = subparsers.add_parser("motor_state_mover_expert", help="Expert screen for state movers")
-    motor_state_mover_expert.add_argument("--DEVICE", action="store", required=True, help="Base prefix, e.g. TST:D3")
-    motor_state_mover_expert.add_argument(
-        "--PMPS", action="store_const", const="1", required=False, help="Select PMPS-enabled variant"
+    state_expert = subparsers.add_parser("motor_state_mover_expert", help="Expert screen for state movers")
+    _add_subp_arg(state_expert, "DEVICE", action="store", required=True, help="Base prefix, e.g. TST:D3")
+    _add_subp_arg(
+        state_expert, "PMPS", action="store_const", const="1", required=False, help="Select PMPS-enabled variant"
     )
-    motor_state_mover_expert.add_argument("--STATE_COUNT", action="store", type=int, help="Number states, e.g. 4")
-    motor_state_mover_expert.add_argument(
-        "--DEVICE_TOKENS", action="store", help="comma-separated per-device tokens, e.g. D1M1,D2M1,D3M1"
+    _add_subp_arg(state_expert, "STATE_COUNT", action="store", type=int, help="Number states, e.g. 4")
+    _add_subp_arg(
+        state_expert, "DEVICE_TOKENS", action="store", help="comma-separated per-device tokens, e.g. D1M1,D2M1,D3M1"
     )
 
     # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
     feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
-    feature_finder.add_argument("--detector", action="store", required=True, help="PV value to plot on the y-axis.")
-    feature_finder.add_argument(
-        "--motor", action="store", required=True, help="Base PV for motor to move and to plot on the x-axis."
+    _add_subp_arg(feature_finder, "detector", action="store", required=True, help="PV value to plot on the y-axis.")
+    _add_subp_arg(
+        feature_finder,
+        "motor",
+        action="store",
+        required=True,
+        help="Base PV for motor to move and to plot on the x-axis.",
     )
 
     return parser, subparsers
+
+
+def _add_subp_arg(parser: ArgumentParser, name: str, **kwargs):
+    """
+    Consistently redirect the "dest" for subparser arguments, apply the leading "--", and set the metavar.
+
+    Setting "dest" keeps the subparser options completely separate from the main parser arguments when we
+    inspect the parse results later, while being transparent to the user.
+
+    Setting "metavar" makes the help text not include the subparser prefix.
+    """
+    parser.add_argument(f"--{name}", dest=f"{SUBPARSER_PREFIX}{name}", metavar=name, **kwargs)
 
 
 def generate_subparser_on_demand(subparsers: SubparserAction, screen: str):
@@ -152,7 +174,7 @@ def generate_subparser_from_screen(subparsers: SubparserAction, screen: str):
     ui_info = get_ui_info(str(MODULE_PATH / SCREEN_PATHS[screen]))
     jinja_info = process_widget_macros(ui_info=ui_info)
     for macro in sorted(jinja_info.macro_set):
-        parser.add_argument(f"--{macro}")
+        _add_subp_arg(parser, macro, default=SUPPRESS)
 
 
 def generate_subparser_from_widget(subparsers: SubparserAction, widget: str):
@@ -177,7 +199,7 @@ def generate_subparser_from_widget(subparsers: SubparserAction, widget: str):
             prop_doc = inspect.getdoc(val.fget)
             if isinstance(prop_doc, str):
                 prop_doc = prop_doc.split("\n")[0]
-            parser.add_argument(f"--{name}", default=SUPPRESS, help=prop_doc)
+            _add_subp_arg(parser, name, default=SUPPRESS, help=prop_doc)
 
 
 def get_widget_type(widget: str) -> type[QWidget]:
@@ -224,20 +246,24 @@ def show_all_screen_options():
             print(widget_name)
 
 
-def open_screen_or_widget(screen: str, args: Namespace) -> int:
+def open_screen_or_widget(screen: str, subparser_args: dict[str, str]) -> int:
     """Open a named screen or widget with the given parsed arguments."""
     if screen in SCREEN_PATHS:
-        return open_screen(screen=screen, args=args)
+        return open_screen(screen=screen, subparser_args=subparser_args)
     if screen in WIDGET_PATHS:
-        return open_widget(widget=screen, args=args)
+        return open_widget(widget=screen, subparser_args=subparser_args)
 
     print(f"Screen {screen} not found in pcdswidgets, exiting.")
     return 1
 
 
-def open_screen(screen: str, args: Namespace) -> int:
-    """Open a screen stored in pcdswidgets using pydm."""
-    macros = json.dumps(vars(args))
+def open_screen(screen: str, subparser_args: dict[str, str]) -> int:
+    """
+    Open a screen stored in pcdswidgets using pydm.
+
+    The subparser_args should be a mapping from pydm macro to string value.
+    """
+    macros = json.dumps(subparser_args)
     full_screen_path = str(MODULE_PATH / SCREEN_PATHS[screen])
     proc = subprocess.run(
         ["pydm", "--hide-nav-bar", "--hide-menu-bar", "--hide-status-bar", "-m", macros, full_screen_path]
@@ -245,11 +271,17 @@ def open_screen(screen: str, args: Namespace) -> int:
     return proc.returncode
 
 
-def open_widget(widget: str, args: Namespace) -> int:
-    """Open a widget defined in pcdswidgets as a screen by creating a mini QApplication."""
+def open_widget(widget: str, subparser_args: dict[str, str]) -> int:
+    """
+    Open a widget defined in pcdswidgets as a screen by creating a mini QApplication.
+
+    The subparser_args should be a mapping from property name to string value.
+    This means that the widgets need to be able to accept string arguments and cast them
+    to the correct types internally.
+    """
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
-    for prop, value in vars(args).items():
+    for prop, value in subparser_args.items():
         if prop != "widget":
             # Note: assuming that everything is settable as a string- may not be true!
             widget_obj.setProperty(prop, value)
