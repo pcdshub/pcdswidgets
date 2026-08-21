@@ -1,6 +1,6 @@
 .PHONY: all build inits venv
 
-UI_SOURCE := $(wildcard pcdswidgets/ui/*/*/*.ui)
+UI_SOURCE := $(shell find pcdswidgets/ui -name "*.ui")
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
 
 PY_FORM := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_form.py)
