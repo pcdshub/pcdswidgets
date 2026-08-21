@@ -6,6 +6,9 @@ When `pcdswidgets` is installed in a `python` environment, it will provide:
 
 - Additional widgets in designer via `pydm`'s widget entrypoint.
 - The same additional widgets at runtime for use in `pydm` and `PyQt` displays.
+- A cli interface, `pcdswidgets-show`, for showing standalone windows with screens and widgets sourced from the module.
+  (For example: to open an expert screen standalone that would otherwise be embedded within a widget).
+  See `pcdswidgets-show` for more details, include help and usage.
 
 At `LCLS`, this is currently distributed as part of the `ctrlenv` environments:
 
@@ -368,3 +371,19 @@ Note:
   - If you would like to make a non-vacuum widget in this style, you should first refactor to pull out the base icon and symbol code, then edit the readme here to remove this note.
 - The colors of all the existing vacuum symbol widgets is based on stylesheet rules. We keep the latest version of the stylesheet in use at LCLS in another module: see [lcls-twincat-vacuum](https://github.com/pcdshub/lcls-pydm-vacuum/blob/master/styleSheet/masterStyleSheet.qss).
   - You are not required to continue the stylesheet pattern if you add new symbol widgets.
+
+
+## Adding a "Highlighted Scrrens" to pcdswidgets-show
+By default, `pcdswidgets-show` only shows a small subset of the screen and widget options as part of the top-level `--help` text.
+These are internally referred to as "highlighted" screens/widgets.
+
+These are specified by the subparsers created manually in `pcdswidgets.show_screen:get_parser`. All other subparsers are generated at runtime.
+
+To add a new highlighted screen and/or widget:
+
+1. Check the automatically generated help text
+2. Edit `get_parser` to have a new entry, following the examples and matching the generated help text's arguments as closely as possible. The code that launches the screen will be expecting these to be consistent with the generated options.
+3. Note: it's important to add arguments using the `_add_subp_arg` function for consistency/
+4. Add useful help text
+
+Make sure you test that all the options work as you expect and that the help text is useful.
