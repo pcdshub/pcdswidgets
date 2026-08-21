@@ -169,8 +169,26 @@ def generate_subparser_from_screen(subparsers: SubparserAction, screen: str):
 
     Each macro discoverable in the screen file is exposed as a same-named cli argument.
     """
+    filepath_str = SCREEN_PATHS[screen]
+    filepath_path = Path(filepath_str)
+    if filepath_path.suffix == ".ui":
+        ui_to_parse = filepath_str
+    elif filepath_path.suffix == ".py":
+        # .py don't usually have raw macros in them, check for an associated .ui file
+        ui_filepath_path = filepath_path.parent / (filepath_path.stem + ".ui")
+        if ui_filepath_path.exists():
+            ui_to_parse = filepath_str
+        else:
+            # skip
+            ui_to_parse = None
+    else:
+        raise ValueError(f"Screen {filepath_str} is not a .py or .ui file, cannot be a pydm screen.")
+
     parser = subparsers.add_parser(name=screen, help=f"Opens the {screen} screen")
-    ui_info = get_ui_info(str(MODULE_PATH / SCREEN_PATHS[screen]))
+    if ui_to_parse is None:
+        # no meaningful parsing to do, just move on
+        return
+    ui_info = get_ui_info(str(MODULE_PATH / ui_to_parse))
     jinja_info = process_widget_macros(ui_info=ui_info)
     for macro in sorted(jinja_info.macro_set):
         _add_subp_arg(parser, macro, default=SUPPRESS)

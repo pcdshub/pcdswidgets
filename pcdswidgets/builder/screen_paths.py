@@ -36,9 +36,15 @@ def main():
 def get_screen_paths() -> dict[str, str]:
     """Return a dict mapping from screen name to relative path."""
     screen_tups: list[tuple[str, str]] = []
+    names_used = set()
     for ext in ("py", "ui"):
         for filepath in (MODULE_ROOT / "screens").rglob(f"*.{ext}"):
-            screen_tups.append((filepath.stem, str(filepath.relative_to(MODULE_ROOT))))
+            name = filepath.stem
+            if name in names_used:
+                # .py gets priority over .ui due to ext order
+                continue
+            names_used.add(name)
+            screen_tups.append((name, str(filepath.relative_to(MODULE_ROOT))))
     screen_paths: dict[str, str] = {}
     for name, pathstr in sorted(screen_tups):
         screen_paths[name] = pathstr
