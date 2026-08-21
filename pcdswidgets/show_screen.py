@@ -84,8 +84,7 @@ class SubparserAction(Protocol):
 
     def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser: ...
 
-    @property
-    def choices(self) -> dict[str, Any]: ...
+    choices: dict[str, Any]
 
 
 def get_parser() -> tuple[ArgumentParser, SubparserAction]:
