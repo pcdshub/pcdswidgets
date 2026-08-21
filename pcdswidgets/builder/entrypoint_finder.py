@@ -73,6 +73,7 @@ def iter_submodules(package: str = "pcdswidgets") -> Iterator[ModuleType]:
             if "__main__" not in modname:
                 yield from iter_submodules(modname)
     except AttributeError:
+        # Not a module, skip
         ...
 
 
