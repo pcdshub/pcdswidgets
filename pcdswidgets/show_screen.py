@@ -282,9 +282,8 @@ def open_widget(widget: str, subparser_args: dict[str, str]) -> int:
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
     for prop, value in subparser_args.items():
-        if prop != "widget":
-            # Note: assuming that everything is settable as a string- may not be true!
-            widget_obj.setProperty(prop, value)
+        # Note: assuming that everything is settable as a string- may not be true!
+        widget_obj.setProperty(prop, value)
     widget_obj.move(QCursor.pos())
     widget_obj.show()
     return app.exec_()
