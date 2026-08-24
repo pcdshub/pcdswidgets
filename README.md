@@ -8,7 +8,7 @@ When `pcdswidgets` is installed in a `python` environment, it will provide:
 - The same additional widgets at runtime for use in `pydm` and `PyQt` displays.
 - A cli interface, `pcdswidgets-show`, for showing standalone windows with screens and widgets sourced from the module.
   (For example: to open an expert screen standalone that would otherwise be embedded within a widget).
-  See `pcdswidgets-show` for more details, include help and usage.
+  See `pcdswidgets-show` for more details, including help and usage.
 
 At `LCLS`, this is currently distributed as part of the `ctrlenv` environments:
 
@@ -373,7 +373,7 @@ Note:
   - You are not required to continue the stylesheet pattern if you add new symbol widgets.
 
 
-## Adding a "Highlighted Scrrens" to pcdswidgets-show
+## Adding a "Highlighted Screens" to pcdswidgets-show
 By default, `pcdswidgets-show` only shows a small subset of the screen and widget options as part of the top-level `--help` text.
 These are internally referred to as "highlighted" screens/widgets.
 
