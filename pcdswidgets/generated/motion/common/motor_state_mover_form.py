@@ -146,7 +146,7 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.expertScreenButton.setFont(font)
-        self.expertScreenButton.setFilenames(["pcdswidgets/motion/common/motor_state_mover_expert.py"])
+        self.expertScreenButton.setFilenames(["pcdswidgets/screens/motion/motor_state_mover_expert.py"])
         self.expertScreenButton.setShowIcon(False)
         self.expertScreenButton.setOpenInNewWindow(True)
         self.expertScreenButton.setObjectName("expertScreenButton")

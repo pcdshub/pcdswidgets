@@ -1,6 +1,6 @@
 .PHONY: all build inits venv
 
-UI_SOURCE := $(wildcard pcdswidgets/ui/*/*/*.ui)
+UI_SOURCE := $(shell find pcdswidgets/ui -name "*.ui")
 PY_SOURCE := $(filter-out pcdswidgets/builder/ui/%.py, $(filter-out pcdswidgets/_version.py, $(shell find pcdswidgets -name "*.py")))
 
 PY_FORM := $(UI_SOURCE:pcdswidgets/ui/%.ui=pcdswidgets/generated/%_form.py)
@@ -19,6 +19,7 @@ all:
 	$(MAKE) build
 	$(MAKE) inits
 	$(MAKE) pyproject.toml
+	$(MAKE) generated/path_defs.py
 	$(MAKE) pixi
 
 build: $(PY_FORM) $(PY_BASE) $(PY_MAIN)
@@ -50,6 +51,9 @@ inits:
 # Rerun if any python file is updated
 pyproject.toml: $(PY_SOURCE)
 	$(BIN)/python -m pcdswidgets.builder.entrypoint_finder
+
+generated/path_defs.py: pyproject.toml $(shell find pcdswidgets/builder -type f) $(shell find pcdswidgets/screens -type f)
+	$(BIN)/python -m pcdswidgets.builder.screen_paths
 
 pixi:
 	pixi run install
