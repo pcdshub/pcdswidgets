@@ -139,12 +139,12 @@ class TabDock(QWidget):
         self.apply_settings_button = QPushButton("Apply")
 
     @classmethod
-    def _get_instance(cls) -> "TabDock":
+    def get_instance(cls) -> "TabDock":
         """Return the TabDock instance or raise if there is not one."""
         try:
             return cls._instance
         except AttributeError as exc:
-            raise RuntimeError("No TabDock widget exists! Cannot do any dock actions!") from exc
+            raise NoTabDockError("No TabDock widget exists! Cannot do any dock actions!") from exc
 
     @classmethod
     def set_fixed_tab_width(cls, width: int):
@@ -159,7 +159,7 @@ class TabDock(QWidget):
         width : int
             The width of the tab areas in pixels.
         """
-        self = cls._get_instance()
+        self = cls.get_instance()
         self.fixed_tab_width = width
         for tab_row in self.tab_widgets:
             for tab_inst in tab_row:
@@ -320,7 +320,7 @@ class TabDock(QWidget):
             The title of the tab and/or window.
             If omitted we'll use the widget's windowTitle
         """
-        if shift_pressed() or not cls._get_instance().isVisible():
+        if shift_pressed() or not cls.get_instance().isVisible():
             cls.open_in_new_window(widget=widget, title=title)
         else:
             new_tab = ctrl_pressed()
@@ -356,7 +356,7 @@ class TabDock(QWidget):
         -------
         menu : QMenu
         """
-        self = cls._get_instance()
+        self = cls.get_instance()
         if menu is None:
             menu = QMenu()
         self.clean_detached_widgets()
@@ -407,7 +407,7 @@ class TabDock(QWidget):
         -------
         menu : QMenu
         """
-        self = cls._get_instance()
+        self = cls.get_instance()
         if menu is None:
             menu = QMenu()
         self.clean_detached_widgets()
@@ -445,7 +445,7 @@ class TabDock(QWidget):
             Otherwise, we'll find the first open dock, or default to the first dock if all are
             occupied.
         """
-        self = cls._get_instance()
+        self = cls.get_instance()
         if tab_widget is None:
             tab_widget = self.get_open_tab_widget()
         idx = None
@@ -533,7 +533,7 @@ class TabDock(QWidget):
             The title of the tab and/or window.
             If omitted we'll use the widget's windowTitle.
         """
-        self = cls._get_instance()
+        self = cls.get_instance()
         self.clean_detached_widgets()
 
         widget, title = unpack_deferred_widget(widget=widget, title=title)
@@ -542,12 +542,17 @@ class TabDock(QWidget):
         widget.setParent(self)
         widget.setParent(None)  # type: ignore
         widget.setWindowTitle(title)
+        self.show_widget_at_cursor(widget)
+        self.update_attach_enabled()
+
+    @staticmethod
+    def show_widget_at_cursor(widget: QWidget) -> None:
+        """Re-usable internals of open_in_new_window. Provided separately for cases where there is no dock."""
         cursor_pos = QCursor().pos()
         left_of_cursor = QPoint(cursor_pos.x() - 10, cursor_pos.y())
         widget.move(left_of_cursor)
         widget.show()
         widget.activateWindow()
-        self.update_attach_enabled()
 
     @classmethod
     def open_in_new_window_many(cls, widget_list: DeferredWidgetList, title_list: DeferredTitleList | None = None):
@@ -639,6 +644,12 @@ class TabDock(QWidget):
     def close_tab(self, tab_widget: QTabWidget):
         """Remove the currently opened tab."""
         tab_widget.removeTab(tab_widget.currentIndex())
+
+
+class NoTabDockError(RuntimeError):
+    """Exception raised when we try to open something in the dock, but there is no dock."""
+
+    ...
 
 
 def unpack_deferred_widget(widget: DeferredWidget, title: str = "") -> tuple[QWidget, str]:
