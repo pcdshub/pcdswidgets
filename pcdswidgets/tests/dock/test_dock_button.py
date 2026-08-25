@@ -3,10 +3,12 @@ Unit tests for TabDock and TabDockButton.
 """
 
 from pathlib import Path
+from unittest.mock import Mock
 
 import pytest
 from pytestqt.qtbot import QtBot
 
+from pcdswidgets.common.dock.tab_dock import NoTabDockError, TabDock
 from pcdswidgets.common.dock.tab_dock_button import TabDockButton
 
 TESTS_DIR = Path(__file__).parent.resolve()
@@ -14,9 +16,23 @@ TESTS_DIR = Path(__file__).parent.resolve()
 
 @pytest.fixture(scope="function")
 def dock_button(qtbot: QtBot) -> TabDockButton:
+    """Loads a TabDockButton"""
     button = TabDockButton()
     qtbot.addWidget(button)
     return button
+
+
+@pytest.fixture(scope="function")
+def tab_dock_mocks(monkeypatch: pytest.MonkeyPatch) -> dict[str, Mock]:
+    """Applies mocks to TabDock"""
+    mocks = {
+        "add_to_dock_user_keybinds": Mock(),
+        "show_widget_at_cursor": Mock(),
+    }
+    for name, mk in mocks.items():
+        monkeypatch.setattr(TabDock, name, mk)
+        monkeypatch.setattr(TabDock, name, mk)
+    return mocks
 
 
 def test_build_widget(dock_button: TabDockButton):
@@ -49,3 +65,20 @@ def test_build_widget_ui_edited(dock_button: TabDockButton, tmp_path: Path):
     widget2 = dock_button.build_widget()
     assert widget1 is not widget2
     assert widget2.windowTitle() == "NEW_EDIT"
+
+
+def test_opens_in_dock_if_dock(dock_button: TabDockButton, tab_dock_mocks: dict[str, Mock]):
+    dock_button.setFilename(str(TESTS_DIR / "dock1.ui"))
+    tab_dock_mocks["add_to_dock_user_keybinds"].assert_not_called()
+    tab_dock_mocks["show_widget_at_cursor"].assert_not_called()
+    dock_button.open_in_dock()
+    tab_dock_mocks["add_to_dock_user_keybinds"].assert_called_once()
+    tab_dock_mocks["show_widget_at_cursor"].assert_not_called()
+
+
+def test_opens_in_winow_if_no_dock(dock_button: TabDockButton, tab_dock_mocks: dict[str, Mock]):
+    dock_button.setFilename(str(TESTS_DIR / "dock1.ui"))
+    tab_dock_mocks["add_to_dock_user_keybinds"].side_effect = NoTabDockError
+    tab_dock_mocks["show_widget_at_cursor"].assert_not_called()
+    dock_button.open_in_dock()
+    tab_dock_mocks["show_widget_at_cursor"].assert_called_once()
