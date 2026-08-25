@@ -119,6 +119,7 @@ class TabDockButton(QPushButton):
             props = parse_macro_string(self._macro)
             for key, value in props.items():
                 widget.setProperty(key, value)
+            self.cached_ui_text = ui_text
             self.cached_widget = widget
         else:
             widget = self.cached_widget
