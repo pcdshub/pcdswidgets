@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from pytestqt.qtbot import QtBot
 
-from pcdswidgets.common.dock.tab_dock_button import TabDockButton
+from pcdswidgets.common.dock.tab_dock_button import ScreenSource, TabDockButton
 
 TESTS_DIR = Path(__file__).parent.resolve()
 
@@ -49,3 +49,22 @@ def test_build_widget_ui_edited(dock_button: TabDockButton, tmp_path: Path):
     widget2 = dock_button.build_widget()
     assert widget1 is not widget2
     assert widget2.windowTitle() == "NEW_EDIT"
+
+
+def test_build_widget_screen_name(dock_button: TabDockButton):
+    dock_button.setSource(ScreenSource.SCREEN_NAME)
+    dock_button.setFilename("VVC_expert")
+    widget1 = dock_button.build_widget()
+    widget2 = dock_button.build_widget()
+    assert widget2 is widget1
+
+
+def test_build_widget_widget_name(dock_button: TabDockButton):
+    dock_button.setSource(ScreenSource.WIDGET_NAME)
+    dock_button.setFilename("FeatureFinder")
+    dock_button.setMacro('{"detector": "test_det", "motor": "test_mot"}')
+    widget1 = dock_button.build_widget()
+    assert widget1.property("detector") == "test_det"
+    assert widget1.property("motor") == "test_mot"
+    widget2 = dock_button.build_widget()
+    assert widget2 is widget1
