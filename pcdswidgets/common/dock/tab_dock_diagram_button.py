@@ -28,6 +28,7 @@ class DiagramOption(IntEnum):
     - Add a new png to pcdswidgets/icons/beamline
     - Add corresponding entry to pcdswidgets/icons/beamline/__init__.py
     - Update setDiagram appropriately
+    - Update the test suite appropriately
     """
 
     BLANK = auto()
