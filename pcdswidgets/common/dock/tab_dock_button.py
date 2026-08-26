@@ -7,7 +7,6 @@ from pydm.display import ScreenTarget, clear_compiled_ui_file_cache, load_file
 from pydm.utilities import IconFont, find_file
 from pydm.utilities.macro import parse_macro_string
 from pydm.utilities.stylesheet import merge_widget_stylesheet
-
 from qtpy.QtCore import Q_ENUMS
 from qtpy.QtGui import QContextMenuEvent, QCursor, QEnterEvent
 from qtpy.QtWidgets import (

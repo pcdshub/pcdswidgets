@@ -66,7 +66,7 @@ def test_build_widget_ui_edited(dock_button: TabDockButton, tmp_path: Path):
     assert widget1 is not widget2
     assert widget2.windowTitle() == "NEW_EDIT"
 
-    
+
 def test_build_widget_screen_name(dock_button: TabDockButton):
     dock_button.setSource(ScreenSource.SCREEN_NAME)
     dock_button.setFilename("VVC_expert")
