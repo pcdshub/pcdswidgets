@@ -94,6 +94,7 @@ WIDGET_PATHS = {
     "SvgMultiStateLED": "pcdswidgets.motion.common.svg_multi_state_led:SvgMultiStateLED",
     "TabDock": "pcdswidgets.common.dock.tab_dock:TabDock",
     "TabDockButton": "pcdswidgets.common.dock.tab_dock_button:TabDockButton",
+    "TabDockDiagramButton": "pcdswidgets.common.dock.tab_dock_diagram_button:TabDockDiagramButton",
     "TurboPump": "pcdswidgets.vacuum.pumps:TurboPump",
     "YamlToolbar": "pcdswidgets.common.toolbar.yaml_toolbar:YamlToolbar",
 }
