@@ -102,6 +102,7 @@ class TabDockDiagramButton(TabDockButton):
         self.repaint()
 
     def paintEvent(self, a0: QPaintEvent) -> None:
+        self.setFlat(True)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, True)
         # Draw the image first
@@ -161,3 +162,7 @@ class TabDockDiagramButton(TabDockButton):
         if self._lightpath_channel_obj is not None:
             self._lightpath_channel_obj.disconnect()
         return super().closeEvent(a0)
+
+    def setFlat(self, a0: bool) -> None:
+        """Prevent flat = False which interferes with our rendering."""
+        super().setFlat(True)
