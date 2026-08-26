@@ -7,7 +7,7 @@ from pydm.display import ScreenTarget, clear_compiled_ui_file_cache, load_file
 from pydm.utilities import IconFont, find_file
 from pydm.utilities.macro import parse_macro_string
 from pydm.utilities.stylesheet import merge_widget_stylesheet
-from qtpy.QtCore import Q_ENUMS
+from qtpy.QtCore import Q_ENUMS, QPoint
 from qtpy.QtGui import QContextMenuEvent, QCursor, QEnterEvent
 from qtpy.QtWidgets import (
     QPushButton,
@@ -16,7 +16,7 @@ from qtpy.QtWidgets import (
 
 from pcdswidgets.show_screen import get_screen_path, get_widget_type
 
-from .tab_dock import NoTabDockError, TabDock
+from .tab_dock import TabDock
 
 try:
     from qtpy.QtCore import Property  # type: ignore
@@ -64,7 +64,7 @@ class TabDockButton(QPushButton):
         super().__init__(parent)
         self._filename: str = ""
         self._macro: str = ""
-        self.clicked.connect(self.open_in_dock)
+        self.clicked.connect(self.open_widget)
         self.cached_ui_text = ""
         self.cached_widget: QWidget | None = None
         self._source = ScreenSource.FILE_PATH
@@ -130,34 +130,40 @@ class TabDockButton(QPushButton):
             widget = self.cached_widget
         return widget
 
+    def open_widget(self):
+        """Pick open method based on whether or not the dock exists."""
+        if TabDock.dock_exists():
+            self.open_in_dock()
+        else:
+            self.open_in_window()
+
     def open_in_dock(self):
         """Place the widget defined by this button into the dock based on the key modifiers."""
-        try:
-            TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
-        except NoTabDockError:
-            self.open_window_fallback()
+        TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
 
-    def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
-        """On right-click, open a menu to decide where the widget should go."""
-        try:
-            TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
-        except NoTabDockError:
-            self.open_window_fallback()
-
-    def open_window_fallback(self) -> None:
-        """If there is no tab dock, open a simple window."""
+    def open_in_window(self) -> None:
+        """Open our widget in a simple window."""
         widget = self.build_widget()
         TabDock.show_widget_at_cursor(widget)
 
+    def open_menu(self, pos: QPoint):
+        """Open a menu to decide whether to open the widget in the dock or not."""
+        TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=pos)
+
+    def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
+        """On right-click, open a menu to decide where the widget should go."""
+        if TabDock.dock_exists():
+            self.open_menu(pos=event.globalPos())
+        else:
+            self.open_in_window()
+
     def enterEvent(self, event: QEnterEvent) -> None:  # type: ignore
         if not self._finalized_mouseover_icon:
-            try:
-                TabDock.get_instance()
-            except NoTabDockError:
-                self._icon = ifont.icon("file")
+            if TabDock.dock_exists():
+                self._icon = ifont.icon("anchor")
                 self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
             else:
-                self._icon = ifont.icon("anchor")
+                self._icon = ifont.icon("file")
                 self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
             self._finalized_mouseover_icon = True
         return super().enterEvent(event)

@@ -139,12 +139,25 @@ class TabDock(QWidget):
         self.apply_settings_button = QPushButton("Apply")
 
     @classmethod
+    def dock_exists(cls) -> bool:
+        """Return True if a tab dock exists."""
+        return hasattr(cls, "_instance")
+
+    @classmethod
     def get_instance(cls) -> "TabDock":
         """Return the TabDock instance or raise if there is not one."""
         try:
             return cls._instance
         except AttributeError as exc:
             raise NoTabDockError("No TabDock widget exists! Cannot do any dock actions!") from exc
+
+    @classmethod
+    def clear_instance(cls):
+        """Forget about any existing TabDock instance."""
+        try:
+            del cls._instance
+        except AttributeError:
+            ...
 
     @classmethod
     def set_fixed_tab_width(cls, width: int):

@@ -11,7 +11,7 @@ from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QWidget
 
 import pcdswidgets.common.dock.tab_dock as dock_module
-from pcdswidgets.common.dock.tab_dock import TabDock
+from pcdswidgets.common.dock.tab_dock import NoTabDockError, TabDock
 
 TESTS_DIR = Path(__file__).parent.resolve()
 
@@ -269,3 +269,22 @@ def test_multidock(tab_dock: TabDock, qtbot: QtBot):
     tab_dock.reattach_to_dock(widgets[1], tab_dock.tab_widgets[1][1])
     assert widgets[1] not in tab_dock.detached_widgets
     assert tab_dock.tab_widgets[1][1].currentWidget() is widgets[1]
+
+
+def test_dock_exists(tab_dock: TabDock):
+    assert TabDock.dock_exists()
+
+
+def test_dock_does_not_exist():
+    TabDock.clear_instance()
+    assert not TabDock.dock_exists()
+
+
+def test_get_instance(tab_dock: TabDock):
+    assert tab_dock is TabDock.get_instance()
+
+
+def test_no_get_instance():
+    TabDock.clear_instance()
+    with pytest.raises(NoTabDockError):
+        TabDock.get_instance()
