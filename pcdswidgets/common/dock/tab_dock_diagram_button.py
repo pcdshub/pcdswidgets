@@ -2,8 +2,9 @@
 
 from enum import IntEnum
 
-from qtpy.QtCore import Q_ENUMS, QRect
-from qtpy.QtGui import QPainter, QPaintEvent, QPixmap
+from pydm.widgets.channel import PyDMChannel
+from qtpy.QtCore import Q_ENUMS, QRect, Qt
+from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPen, QPixmap
 from qtpy.QtWidgets import QSizePolicy, QWidget
 
 from pcdswidgets.icons.beamline import ATTENUATOR_PATH, IMAGER_PATH, REFLASER_PATH, SLITS_PATH
@@ -48,6 +49,7 @@ class TabDockDiagramButton(TabDockButton):
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.setFlat(True)
         self.setDiagram(DiagramOption.BLANK)
+        self.setLightpathChannel("")
 
     def readDiagram(self) -> DiagramOption:
         return self._diagram
@@ -72,11 +74,39 @@ class TabDockDiagramButton(TabDockButton):
 
     diagram = Property(DiagramOption, readDiagram, setDiagram)
 
+    def readLightpathChannel(self) -> str:
+        return self._lightpath_channel_text
+
+    def setLightpathChannel(self, ch: str) -> None:
+        if not ch:
+            self._lightpath_channel_text = ch
+            self._lightpath_channel_obj = None
+            self._lightpath_status = None
+            return
+        if ch == self._lightpath_channel_text:
+            return
+        self._lightpath_channel_text = ch
+        self._lightpath_status = False
+        if self._lightpath_channel_obj is not None:
+            self._lightpath_channel_obj.disconnect()
+        self._lightpath_channel_obj = PyDMChannel(
+            address=self._lightpath_channel_text, value_slot=self.new_lightpath_state
+        )
+        self._lightpath_channel_obj.connect()
+        self.repaint()
+
+    lightpath_channel = Property(str, readLightpathChannel, setLightpathChannel)
+
+    def new_lightpath_state(self, value: bool):
+        self._lightpath_status = value
+        self.repaint()
+
     def paintEvent(self, a0: QPaintEvent) -> None:
         # Draw the button first
         rval = super().paintEvent(a0)
         # Draw the image on top of the button
         painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing, True)
         if self._image_pixmap is not None:
             # Align image with bottom horizontal center and scale as big as will fit
             try:
@@ -97,8 +127,21 @@ class TabDockDiagramButton(TabDockButton):
                 self._image_pixmap,
             )
         # Draw the lightpath indicator on top of the image
-        # TODO connect to a PV, figure out how to fill them
+        if self._lightpath_status is None:
+            return
         indicator_size = int(min(self.width(), self.height()) / 5)
-        if indicator_size:
-            painter.drawEllipse(0, 0, indicator_size, indicator_size)
+        if not indicator_size:
+            return
+        pen = QPen()
+        pen_width = max(1, int(indicator_size * 0.10))
+        pen.setWidth(pen_width)
+        painter.setPen(pen)
+        if self._lightpath_status:
+            painter.setBrush(Qt.cyan)
+        painter.drawEllipse(pen_width, pen_width, indicator_size, indicator_size)
         return rval
+
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        if self._lightpath_channel_obj is not None:
+            self._lightpath_channel_obj.disconnect()
+        return super().closeEvent(a0)
