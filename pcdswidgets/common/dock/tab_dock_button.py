@@ -7,8 +7,8 @@ from pydm.display import ScreenTarget, clear_compiled_ui_file_cache, load_file
 from pydm.utilities import IconFont, find_file
 from pydm.utilities.macro import parse_macro_string
 from pydm.utilities.stylesheet import merge_widget_stylesheet
-from qtpy.QtCore import Q_ENUMS
-from qtpy.QtGui import QContextMenuEvent, QCursor
+from qtpy.QtCore import Q_ENUMS, QPoint
+from qtpy.QtGui import QContextMenuEvent, QCursor, QEnterEvent
 from qtpy.QtWidgets import (
     QPushButton,
     QWidget,
@@ -64,12 +64,11 @@ class TabDockButton(QPushButton):
         super().__init__(parent)
         self._filename: str = ""
         self._macro: str = ""
-        self.clicked.connect(self.open_in_dock)
-        self._icon = ifont.icon("anchor")
-        self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
+        self.clicked.connect(self.open_widget)
         self.cached_ui_text = ""
         self.cached_widget: QWidget | None = None
         self._source = ScreenSource.FILE_PATH
+        self._finalized_mouseover_icon = False
 
     def build_widget(self) -> QWidget:
         """Create the widget and return it, or re-use an existing widget if possible."""
@@ -86,11 +85,17 @@ class TabDockButton(QPushButton):
         if is_screen_name:
             fname = get_screen_path(self._filename)
         else:
-            fname = find_file(
-                self._filename,
-                raise_if_not_found=True,
-            )
+            try:
+                fname = find_file(
+                    self._filename,
+                    raise_if_not_found=True,
+                )
+            except FileNotFoundError as exc:
+                raise ValueError(
+                    f"In button named {self.objectName()}, unable to find filename '{self.readFilename()}'"
+                ) from exc
             fname = cast(str, fname)
+
         macros = parse_macro_string(self._macro)
         with open(fname, "r") as fd:
             ui_text = fd.read()
@@ -125,13 +130,43 @@ class TabDockButton(QPushButton):
             widget = self.cached_widget
         return widget
 
+    def open_widget(self):
+        """Pick open method based on whether or not the dock exists."""
+        if TabDock.dock_exists():
+            self.open_in_dock()
+        else:
+            self.open_in_window()
+
     def open_in_dock(self):
         """Place the widget defined by this button into the dock based on the key modifiers."""
         TabDock.add_to_dock_user_keybinds(widget=self.build_widget)
 
+    def open_in_window(self) -> None:
+        """Open our widget in a simple window."""
+        widget = self.build_widget()
+        TabDock.show_widget_at_cursor(widget)
+
+    def open_menu(self, pos: QPoint):
+        """Open a menu to decide whether to open the widget in the dock or not."""
+        TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=pos)
+
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # type: ignore
         """On right-click, open a menu to decide where the widget should go."""
-        TabDock.add_to_dock_user_menu(widget=self.build_widget, pos=event.globalPos())
+        if TabDock.dock_exists():
+            self.open_menu(pos=event.globalPos())
+        else:
+            self.open_in_window()
+
+    def enterEvent(self, event: QEnterEvent) -> None:  # type: ignore
+        if not self._finalized_mouseover_icon:
+            if TabDock.dock_exists():
+                self._icon = ifont.icon("anchor")
+                self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
+            else:
+                self._icon = ifont.icon("file")
+                self.setCursor(QCursor(self._icon.pixmap(16, 16)))  # type: ignore
+            self._finalized_mouseover_icon = True
+        return super().enterEvent(event)
 
     def readFilename(self) -> str:
         return self._filename
