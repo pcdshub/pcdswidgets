@@ -281,11 +281,16 @@ def open_screen(screen: str, subparser_args: dict[str, str]) -> int:
     The subparser_args should be a mapping from pydm macro to string value.
     """
     macros = json.dumps(subparser_args)
-    full_screen_path = str(MODULE_PATH / SCREEN_PATHS[screen])
+    full_screen_path = get_screen_path(screen=screen)
     proc = subprocess.run(
         ["pydm", "--hide-nav-bar", "--hide-menu-bar", "--hide-status-bar", "-m", macros, full_screen_path]
     )
     return proc.returncode
+
+
+def get_screen_path(screen: str):
+    """Return the full filepath to a screen with a given name."""
+    return str(MODULE_PATH / SCREEN_PATHS[screen])
 
 
 def open_widget(widget: str, subparser_args: dict[str, str]) -> int:
