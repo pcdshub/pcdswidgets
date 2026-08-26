@@ -4,7 +4,7 @@ from enum import IntEnum
 
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, QRect, Qt
-from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPen, QPixmap
+from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPalette, QPen, QPixmap
 from qtpy.QtWidgets import QSizePolicy, QWidget
 
 from pcdswidgets.icons.beamline import ATTENUATOR_PATH, IMAGER_PATH, REFLASER_PATH, SLITS_PATH
@@ -102,31 +102,47 @@ class TabDockDiagramButton(TabDockButton):
         self.repaint()
 
     def paintEvent(self, a0: QPaintEvent) -> None:
-        # Draw the button first
-        rval = super().paintEvent(a0)
-        # Draw the image on top of the button
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, True)
-        if self._image_pixmap is not None:
-            # Align image with bottom horizontal center and scale as big as will fit
-            try:
-                image_ratio = self._image_pixmap.height() / self._image_pixmap.width()
-            except ZeroDivisionError:
-                return rval
-            if image_ratio == 0:
-                return rval
-            height_if_full_width = self.width() * image_ratio
-            if height_if_full_width <= self.height():
-                draw_width = self.width()
-                draw_height = int(height_if_full_width)
-            else:
-                draw_width = int(self.height() / image_ratio)
-                draw_height = self.height()
-            painter.drawPixmap(
-                QRect((self.width() - draw_width) // 2, self.height() - draw_height, draw_width, draw_height),
-                self._image_pixmap,
-            )
+        # Draw the image first
+        self.draw_image(painter=painter)
         # Draw the lightpath indicator on top of the image
+        self.draw_lightpath_indicator(painter=painter)
+        # Draw the text on top of the image too
+        return super().paintEvent(a0)
+
+    def draw_image(self, painter: QPainter):
+        if self._image_pixmap is None:
+            return
+        # Align image with bottom horizontal center and scale as big as will fit
+        try:
+            image_ratio = self._image_pixmap.height() / self._image_pixmap.width()
+        except ZeroDivisionError:
+            return
+        if image_ratio == 0:
+            return
+        height_if_full_width = self.width() * image_ratio
+        if height_if_full_width <= self.height():
+            draw_width = self.width()
+            draw_height = int(height_if_full_width)
+        else:
+            draw_width = int(self.height() / image_ratio)
+            draw_height = self.height()
+        # Draw the background color in the lower square
+        # This usually is unset and ends up being grey
+        painter.save()
+        bg_color = self.palette().color(QPalette.Background)
+        painter.setBrush(bg_color)
+        sq_side = min(draw_height, draw_width)
+        painter.drawRect(QRect((self.width() - sq_side) // 2, self.height() - sq_side, sq_side, sq_side))
+        painter.restore()
+        painter.drawPixmap(
+            QRect((self.width() - draw_width) // 2, self.height() - draw_height, draw_width, draw_height),
+            self._image_pixmap,
+        )
+
+    def draw_lightpath_indicator(self, painter: QPainter):
+        painter.save()
         if self._lightpath_status is None:
             return
         indicator_size = int(min(self.width(), self.height()) / 5)
@@ -139,7 +155,7 @@ class TabDockDiagramButton(TabDockButton):
         if self._lightpath_status:
             painter.setBrush(Qt.cyan)
         painter.drawEllipse(pen_width, pen_width, indicator_size, indicator_size)
-        return rval
+        painter.restore()
 
     def closeEvent(self, a0: QCloseEvent) -> None:
         if self._lightpath_channel_obj is not None:
