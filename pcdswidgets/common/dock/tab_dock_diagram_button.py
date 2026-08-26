@@ -1,6 +1,6 @@
 """A dock button with a standard beamline device symbol rendered"""
 
-from enum import IntEnum
+from enum import IntEnum, auto
 
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, QRect, Qt
@@ -18,16 +18,28 @@ except ImportError:
 
 
 class DiagramOption(IntEnum):
-    BLANK = 0
-    ATTENUATOR = 1
-    IMAGER = 2
-    REFLASER = 3
-    SLITS = 4
+    """
+    Options for which diagram to show on the widget.
+
+    If you want to add a new option:
+    - Add an entry here, note that order/count don't affect anything and won't break old screens.
+      (Old screens need the old enum name to exist and nothing more)
+    - Copy the new entry into the enums specified at the top of the class body below
+    - Add a new png to pcdswidgets/icons/beamline
+    - Add corresponding entry to pcdswidgets/icons/beamline/__init__.py
+    - Update setDiagram appropriately
+    """
+
+    BLANK = auto()
+    ATTENUATOR = auto()
+    IMAGER = auto()
+    REFLASER = auto()
+    SLITS = auto()
 
 
 class TabDockDiagramButton(TabDockButton):
     """
-    Behaves identically to TabDockButton, but renders a standard symbol.
+    Behaves identically to TabDockButton, but renders a standard symbol and lightpath info.
     """
 
     Q_ENUMS(DiagramOption)
@@ -52,9 +64,11 @@ class TabDockDiagramButton(TabDockButton):
         self.setLightpathChannel("")
 
     def readDiagram(self) -> DiagramOption:
+        """Returns the enum of the diagram that is currently in-use."""
         return self._diagram
 
     def setDiagram(self, diagram: DiagramOption) -> None:
+        """Sets the enum of the diagram to use."""
         match diagram:
             case DiagramOption.BLANK:
                 self._image_pixmap = None
@@ -71,13 +85,16 @@ class TabDockDiagramButton(TabDockButton):
                     f"Invalid diagram option {diagram}, options are: {','.join(item for item in DiagramOption)}"
                 )
         self._diagram = diagram
+        self.repaint()
 
     diagram = Property(DiagramOption, readDiagram, setDiagram)
 
     def readLightpathChannel(self) -> str:
+        """Returns the channel used to determine if beam is reaching this widget."""
         return self._lightpath_channel_text
 
     def setLightpathChannel(self, ch: str) -> None:
+        """Selects the channel used to determine if beam is reaching this widget."""
         if not ch:
             self._lightpath_channel_text = ch
             self._lightpath_channel_obj = None
@@ -98,10 +115,12 @@ class TabDockDiagramButton(TabDockButton):
     lightpath_channel = Property(str, readLightpathChannel, setLightpathChannel)
 
     def new_lightpath_state(self, value: bool):
+        """Callback to update the visuals of the lightpath indicator when the channel value changes."""
         self._lightpath_status = value
         self.repaint()
 
     def paintEvent(self, a0: QPaintEvent) -> None:
+        """Render the image and the lightpath indicator when it's time to paint this widget."""
         self.setFlat(True)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, True)
@@ -113,6 +132,13 @@ class TabDockDiagramButton(TabDockButton):
         return super().paintEvent(a0)
 
     def draw_image(self, painter: QPainter):
+        """
+        Render the selected diagram widget.
+
+        This will be a QPixmap at the bottom-center of the widget bounds,
+        and it will also include the widget background-color rendered
+        behind the "square" portion of the diagram.
+        """
         if self._image_pixmap is None:
             return
         # Align image with bottom horizontal center and scale as big as will fit
@@ -143,6 +169,12 @@ class TabDockDiagramButton(TabDockButton):
         )
 
     def draw_lightpath_indicator(self, painter: QPainter):
+        """
+        Render the lightpath state.
+
+        This will be an ellipse at the top-left of the widget bounds,
+        filled with cyan if the lightpath channel is "true".
+        """
         painter.save()
         if self._lightpath_status is None:
             return
@@ -159,6 +191,7 @@ class TabDockDiagramButton(TabDockButton):
         painter.restore()
 
     def closeEvent(self, a0: QCloseEvent) -> None:
+        """On close, clean up the pydm channel."""
         if self._lightpath_channel_obj is not None:
             self._lightpath_channel_obj.disconnect()
         return super().closeEvent(a0)
