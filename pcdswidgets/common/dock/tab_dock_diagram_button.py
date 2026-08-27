@@ -98,6 +98,8 @@ class TabDockDiagramButton(TabDockButton):
         """Selects the channel used to determine if beam is reaching this widget."""
         if not ch:
             self._lightpath_channel_text = ch
+            if self._lightpath_channel_obj is not None:
+                self._lightpath_channel_obj.disconnect()
             self._lightpath_channel_obj = None
             self._lightpath_status = None
             return
