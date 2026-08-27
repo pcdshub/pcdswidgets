@@ -43,12 +43,37 @@ jobs:
       package-name: "pcdswidgets"
 
   # On tag, uploads the files from pypi-build to pypi. Requires trusted publishing to be set up.
+  # This cannot include the central workflow like the others, it unfortunately needs to be copied into the file here.
+  # This is because of how pypi trusted publishing from github is set up: only a local workflow has the permissions.
   pypi-upload:
     permissions:
       id-token: write
     needs: pypi-build
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    uses: pcdshub/pcds-ci-helpers/.github/workflows/python-uv-publish.yml@fb51a19475580d9970705184240d161e0fdbafeb
+
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+      with:
+        # Lock version to what we use in prod
+        version: "0.11.18"
+
+    - name: Download distributions artifact
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+      with:
+        name: dist
+        path: dist/
+
+    - name: Publish
+      run: uv publish
 
   # Builds the documentation html files that should be uploaded to github pages. Configure by editing the result of "make html" in the docs folder.
   docs-build:
