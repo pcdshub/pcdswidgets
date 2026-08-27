@@ -180,7 +180,7 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
             ("channel", """ca://${MOTOR}:nErrorId_RBV"""),
         ],
         "highLimitEnable_rbv": [
-            ("channel", """ca://${MOTOR}:SoftPosMaxOn:NC:Val_RBV"""),
+            ("channel", """ca://${MOTOR}:NC:SoftPosMaxOn:Val_RBV"""),
         ],
         "highLimitTravel_set": [
             ("channel", """ca://${MOTOR}:NC:MaxPos:Val_RBV"""),
@@ -195,7 +195,7 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
             ("channel", """ca://${MOTOR}:fHomePosition_RBV"""),
         ],
         "lowLimitEnable_rbv": [
-            ("channel", """ca://${MOTOR}:SoftPosMinOn:NC:Val_RBV"""),
+            ("channel", """ca://${MOTOR}:NC:SoftPosMinOn:Val_RBV"""),
         ],
         "lowLimitTravel_set": [
             ("channel", """ca://${MOTOR}:NC:MinPos:Val_RBV"""),
