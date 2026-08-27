@@ -18,7 +18,7 @@ except ImportError:
     from qtpy.QtCore import pyqtProperty as Property  # type: ignore
 
 
-IMAGE_FOLDER = Path(pcdswidgets.__file__).parent / "icons" / "beamline"  # type: ignore
+IMAGE_FOLDER = Path(pcdswidgets.__file__).parent / "icons" / "diagram"  # type: ignore
 
 
 class DiagramOption(IntEnum):

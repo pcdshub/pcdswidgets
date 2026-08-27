@@ -6,6 +6,7 @@ exclude-newer = "7d"
 [tasks]
 test = "pytest"
 install = "./pixi_scripts/install.sh"
+process-diagram-png = "python -m pcdswidgets.icons.process_diagram_png"
 
 [activation]
 scripts = ["./pixi_scripts/env_setup.sh"]
