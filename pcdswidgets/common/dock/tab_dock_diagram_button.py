@@ -62,6 +62,7 @@ class TabDockDiagramButton(TabDockButton):
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.setFlat(True)
         self.setDiagram(DiagramOption.BLANK)
+        self._lightpath_channel_obj = None
         self.setLightpathChannel("")
 
     def readDiagram(self) -> DiagramOption:
