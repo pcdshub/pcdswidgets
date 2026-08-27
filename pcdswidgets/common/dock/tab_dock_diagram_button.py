@@ -1,13 +1,14 @@
 """A dock button with a standard beamline device symbol rendered"""
 
 from enum import IntEnum, auto
+from pathlib import Path
 
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Q_ENUMS, QRect, Qt
 from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPalette, QPen, QPixmap
 from qtpy.QtWidgets import QSizePolicy, QWidget
 
-from pcdswidgets.icons.beamline import ATTENUATOR_PATH, IMAGER_PATH, REFLASER_PATH, SLITS_PATH
+import pcdswidgets
 
 from .tab_dock_button import TabDockButton
 
@@ -15,6 +16,9 @@ try:
     from qtpy.QtCore import Property  # type: ignore
 except ImportError:
     from qtpy.QtCore import pyqtProperty as Property  # type: ignore
+
+
+IMAGE_FOLDER = Path(pcdswidgets.__file__).parent / "icons" / "beamline"  # type: ignore
 
 
 class DiagramOption(IntEnum):
@@ -25,10 +29,9 @@ class DiagramOption(IntEnum):
     - Add an entry here, note that order/count don't affect anything and won't break old screens.
       (Old screens need the old enum name to exist and nothing more)
     - Copy the new entry into the enums specified at the top of the class body below
-    - Add a new png to pcdswidgets/icons/beamline
-    - Add corresponding entry to pcdswidgets/icons/beamline/__init__.py
-    - Update setDiagram appropriately
-    - Update the test suite appropriately
+      (This makes the enums work up properly in designer)
+    - Add a new png to pcdswidgets/icons/beamline whose name matches the entry
+      (If the new enum is "NAME", the file should be "name.png")
     """
 
     BLANK = auto()
@@ -36,6 +39,16 @@ class DiagramOption(IntEnum):
     IMAGER = auto()
     REFLASER = auto()
     SLITS = auto()
+
+    def get_image_path(self) -> Path:
+        """Return a Path object pointing to the image we should use."""
+        if self == DiagramOption.BLANK:
+            raise ValueError("No image for blank diagram")
+        return IMAGE_FOLDER / f"{self.name.lower()}.png"
+
+    def get_pixmap(self) -> QPixmap:
+        """Return the pixmap to display for this enum."""
+        return QPixmap(str(self.get_image_path()))
 
 
 class TabDockDiagramButton(TabDockButton):
@@ -74,14 +87,8 @@ class TabDockDiagramButton(TabDockButton):
         match diagram:
             case DiagramOption.BLANK:
                 self._image_pixmap = None
-            case DiagramOption.ATTENUATOR:
-                self._image_pixmap = QPixmap(ATTENUATOR_PATH)
-            case DiagramOption.IMAGER:
-                self._image_pixmap = QPixmap(IMAGER_PATH)
-            case DiagramOption.REFLASER:
-                self._image_pixmap = QPixmap(REFLASER_PATH)
-            case DiagramOption.SLITS:
-                self._image_pixmap = QPixmap(SLITS_PATH)
+            case DiagramOption():
+                self._image_pixmap = diagram.get_pixmap()
             case _:
                 raise ValueError(
                     f"Invalid diagram option {diagram}, options are: {', '.join(item for item in DiagramOption)}"

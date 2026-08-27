@@ -5,15 +5,12 @@ Most of the "functionality" is visual, but there are a few simple things
 that we'd like to make sure don't break.
 """
 
-from pathlib import Path
-
 import pytest
 from pydm.widgets.channel import PyDMChannel
 from pytestqt.qtbot import QtBot
 from qtpy.QtCore import QObject
 
 from pcdswidgets.common.dock.tab_dock_diagram_button import DiagramOption, TabDockDiagramButton
-from pcdswidgets.icons.beamline import ATTENUATOR_PATH, IMAGER_PATH, REFLASER_PATH, SLITS_PATH
 
 try:
     from qtpy.QtCore import pyqtSignal as Signal
@@ -29,10 +26,14 @@ def diagram_button(qtbot: QtBot) -> TabDockDiagramButton:
     return button
 
 
-@pytest.mark.parametrize("image_path", (ATTENUATOR_PATH, IMAGER_PATH, REFLASER_PATH, SLITS_PATH))
-def test_image_exists(image_path: str):
+@pytest.mark.parametrize("diagram_option", list(DiagramOption))
+def test_image_exists(diagram_option: DiagramOption):
     """Make sure we didn't lose the pngs"""
-    assert Path(image_path).is_file()
+    if diagram_option == DiagramOption.BLANK:
+        with pytest.raises(ValueError):
+            diagram_option.get_image_path()
+    else:
+        assert diagram_option.get_image_path().is_file()
 
 
 @pytest.mark.parametrize("diagram_option", list(DiagramOption))
