@@ -84,7 +84,7 @@ class TabDockDiagramButton(TabDockButton):
                 self._image_pixmap = QPixmap(SLITS_PATH)
             case _:
                 raise ValueError(
-                    f"Invalid diagram option {diagram}, options are: {','.join(item for item in DiagramOption)}"
+                    f"Invalid diagram option {diagram}, options are: {', '.join(item for item in DiagramOption)}"
                 )
         self._diagram = diagram
         self.repaint()
