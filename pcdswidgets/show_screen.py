@@ -304,8 +304,18 @@ def open_widget(widget: str, subparser_args: dict[str, str]) -> int:
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
     for prop, value in subparser_args.items():
-        # Note: assuming that everything is settable as a string- may not be true!
-        widget_obj.setProperty(prop, value)
+        # CLI args arrive as strings. Qt accepts strings for str properties but
+        # rejects them for enum/int/bool/float properties, so fall back to coercion.
+        if not widget_obj.setProperty(prop, value):
+            for cast in (int, float):
+                try:
+                    casted = cast(value)
+                except (TypeError, ValueError):
+                    continue
+                if widget_obj.setProperty(prop, casted):
+                    break
+            else:
+                print(f"Warning: could not set property {prop!r} to {value!r}", file=sys.stderr)
     widget_obj.move(QCursor.pos())
     widget_obj.show()
     return app.exec_()

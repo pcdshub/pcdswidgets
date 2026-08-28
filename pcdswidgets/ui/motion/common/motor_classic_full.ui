@@ -850,10 +850,58 @@ color: rgb(255, 255, 255);</string>
            <string notr="true">color: rgb(43,43,43);
 background-color: rgb(250, 250, 250);</string>
           </property>
+          <property name="alarmSensitiveContent">
+           <bool>false</bool>
+          </property>
+          <property name="alarmSensitiveBorder">
+           <bool>true</bool>
+          </property>
+          <property name="PyDMToolTip">
+           <string/>
+          </property>
+          <property name="channel">
+           <string/>
+          </property>
+          <property name="PyDMIcon">
+           <string/>
+          </property>
+          <property name="showConfirmDialog">
+           <bool>false</bool>
+          </property>
+          <property name="runCommandsInFullShell">
+           <bool>false</bool>
+          </property>
+          <property name="confirmMessage">
+           <string>Are you sure you want to proceed?</string>
+          </property>
+          <property name="environmentVariables">
+           <string/>
+          </property>
+          <property name="showIcon">
+           <bool>true</bool>
+          </property>
+          <property name="allowMultipleExecutions">
+           <bool>false</bool>
+          </property>
+          <property name="titles">
+           <stringlist/>
+          </property>
           <property name="commands">
            <stringlist>
-            <string>motor-expert-screen ${MOTOR}</string>
+            <string>pixi run pcdswidgets-show MotorExpertScreen --motor ${MOTOR}</string>
            </stringlist>
+          </property>
+          <property name="passwordProtected">
+           <bool>false</bool>
+          </property>
+          <property name="password">
+           <string/>
+          </property>
+          <property name="protectedPassword">
+           <string/>
+          </property>
+          <property name="showCurrentlyRunningIndication">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -882,16 +930,6 @@ background-color: rgb(250, 250, 250);</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
@@ -905,6 +943,16 @@ background-color: rgb(250, 250, 250);</string>
    <class>PyDMShellCommand</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.shell_command</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
   </customwidget>
  </customwidgets>
  <resources/>

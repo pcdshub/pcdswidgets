@@ -138,7 +138,7 @@ class MotorClassicFullBase(DesignerWidget):
             (
                 "commands",
                 [
-                    """motor-expert-screen ${MOTOR}""",
+                    """pixi run pcdswidgets-show MotorExpertScreen --motor ${MOTOR}""",
                 ],
             ),
         ],
