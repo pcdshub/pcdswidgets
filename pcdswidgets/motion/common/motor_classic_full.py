@@ -114,13 +114,13 @@ class MotorClassicFull(MotorClassicFullBase):
                 self.new_clear_error_suffix(":bReset")
                 self.PyDMPushButton_clear_error.setPressValue(1)
                 self.PyDMPushButton_clear_error.show()
-                self.new_expert_command_template("pixi run pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
                 self.PyDMShellCommand_expert.show()
             case MotorTypes.BECKHOFF_LEGACY:
                 self.new_clear_error_suffix(":PLC:bReset")
                 self.PyDMPushButton_clear_error.setPressValue(1)
                 self.PyDMPushButton_clear_error.show()
-                self.new_expert_command_template("pixi run pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
                 self.PyDMShellCommand_expert.show()
             case _:
                 self.PyDMPushButton_clear_error.hide()
