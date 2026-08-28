@@ -304,8 +304,9 @@ def open_widget(widget: str, subparser_args: dict[str, str]) -> int:
     app = QApplication([])
     widget_obj = get_widget_type(widget=widget)()
     for prop, value in subparser_args.items():
-        # CLI args arrive as strings. Qt accepts strings for str properties but
-        # rejects them for enum/int/bool/float properties, so fall back to coercion.
+        # CLI args arrive as strings. Qt converts strings for built-in scalar
+        # properties (int/float/bool/str), but not for enum properties, so fall
+        # back to int/float coercion when the string assignment is rejected.
         if not widget_obj.setProperty(prop, value):
             for cast in (int, float):
                 try:

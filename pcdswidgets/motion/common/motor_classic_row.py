@@ -4,7 +4,6 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
-from pydm.utilities import ACTIVE_QT_WRAPPER, QtWrapperTypes
 from qtpy.QtWidgets import QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -16,32 +15,14 @@ try:
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
-# Note: for forward compat, setting up enum properties is completely different
-# depending on if we use pyqt5 or pyside6.
-# I'm following the examples in PyDM here.
-if ACTIVE_QT_WRAPPER == QtWrapperTypes.PYSIDE6:
-    from enum import Enum
 
-    from PySide6.QtCore import QEnum  # type: ignore
+class MotorTypes:
+    """Options for motor type to select the expert screen command."""
 
-    @QEnum
-    class MotorTypes(Enum):  # type: ignore
-        """Options for motor type to select the expert screen command."""
-
-        GENERIC = 0
-        IMS = 1
-        BECKHOFF = 2
-        BECKHOFF_LEGACY = 3
-
-else:
-    # pyqt5 can't use real python enums for this, unfortunately
-    class MotorTypes:  # type: ignore
-        """Options for motor type to select the expert screen command."""
-
-        GENERIC = 0
-        IMS = 1
-        BECKHOFF = 2
-        BECKHOFF_LEGACY = 3
+    GENERIC = 0
+    IMS = 1
+    BECKHOFF = 2
+    BECKHOFF_LEGACY = 3
 
 
 class MotorClassicRow(MotorClassicRowBase):
@@ -74,10 +55,9 @@ class MotorClassicRow(MotorClassicRowBase):
         "motor_type": {"GENERIC": 0, "IMS": 1, "BECKHOFF": 2, "BECKHOFF_LEGACY": 3},
     }
     # Boilerplate to make the enum property work
-    if ACTIVE_QT_WRAPPER == QtWrapperTypes.PYQT5:
-        from PyQt5.QtCore import Q_ENUM
+    from PyQt5.QtCore import Q_ENUM
 
-        Q_ENUM(MotorTypes)
+    Q_ENUM(MotorTypes)
     MotorTypes = MotorTypes
     GENERIC = MotorTypes.GENERIC
     IMS = MotorTypes.IMS
@@ -105,10 +85,10 @@ class MotorClassicRow(MotorClassicRowBase):
                 self.new_expert_command_template("motor-expert-screen {motor}")
                 self.PyDMShellCommand.show()
             case MotorTypes.BECKHOFF:
-                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreenBeckhoff --motor {motor}")
                 self.PyDMShellCommand.show()
             case MotorTypes.BECKHOFF_LEGACY:
-                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreenBeckhoff --motor {motor}")
                 self.PyDMShellCommand.show()
             case _:
                 self.PyDMShellCommand.hide()

@@ -138,7 +138,7 @@ class MotorClassicFullBase(DesignerWidget):
             (
                 "commands",
                 [
-                    """pixi run pcdswidgets-show MotorExpertScreen --motor ${MOTOR}""",
+                    """pcdswidgets-show MotorExpertScreenBeckhoff --motor ${MOTOR}""",
                 ],
             ),
         ],

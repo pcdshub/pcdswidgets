@@ -888,7 +888,7 @@ background-color: rgb(250, 250, 250);</string>
           </property>
           <property name="commands">
            <stringlist>
-            <string>pcdswidgets-show MotorExpertScreen --motor ${MOTOR}</string>
+            <string>pcdswidgets-show MotorExpertScreenBeckhoff --motor ${MOTOR}</string>
            </stringlist>
           </property>
           <property name="passwordProtected">
