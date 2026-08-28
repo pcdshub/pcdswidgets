@@ -105,10 +105,10 @@ class MotorClassicVert(MotorClassicVertBase):
                 self.new_expert_command_template("motor-expert-screen {motor}")
                 self.PyDMShellCommand_expert.show()
             case MotorTypes.BECKHOFF:
-                self.new_expert_command_template("pixi run pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
                 self.PyDMShellCommand_expert.show()
             case MotorTypes.BECKHOFF_LEGACY:
-                self.new_expert_command_template("pixi run pcdswidgets-show MotorExpertScreen --motor {motor}")
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreen --motor {motor}")
                 self.PyDMShellCommand_expert.show()
             case _:
                 self.PyDMShellCommand_expert.hide()
