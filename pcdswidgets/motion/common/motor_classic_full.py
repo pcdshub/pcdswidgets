@@ -69,6 +69,10 @@ class MotorClassicFull(MotorClassicFullBase):
         is_container=False,
         icon=IconOptions.NONE,
     )
+    # Expose motor_type as a dropdown in the Core Settings editor
+    editable_choice_properties = {
+        "motor_type": {"GENERIC": 0, "IMS": 1, "BECKHOFF": 2, "BECKHOFF_LEGACY": 3},
+    }
     # Boilerplate to make the enum property work
     if ACTIVE_QT_WRAPPER == QtWrapperTypes.PYQT5:
         from PyQt5.QtCore import Q_ENUM
