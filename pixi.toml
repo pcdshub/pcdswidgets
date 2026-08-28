@@ -4,7 +4,7 @@ platforms = ["linux-64"]
 exclude-newer = "7d"
 
 [tasks]
-test = "pytest"
+test = "./pixi_scripts/test.sh"
 install = "./pixi_scripts/install.sh"
 process-diagram-png = "python -m pcdswidgets.icons.process_diagram_png"
 
