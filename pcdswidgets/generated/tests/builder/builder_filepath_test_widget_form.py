@@ -32,7 +32,6 @@ class Ui_Form(object):
         self.rel_disp.setAlarmSensitiveContent(False)
         self.rel_disp.setAlarmSensitiveBorder(True)
         self.rel_disp.setPyDMToolTip("")
-        self.rel_disp.setChannel("")
         self.rel_disp.setPyDMIcon("")
         self.rel_disp.setFilenames(
             ["pcdswidgets/tests/builder/subdisplay.ui", "some/other/rel/path.ui", "/wow/abs/path.ui"]
