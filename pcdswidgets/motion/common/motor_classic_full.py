@@ -4,7 +4,6 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
-from pydm.utilities import ACTIVE_QT_WRAPPER, QtWrapperTypes
 from qtpy.QtWidgets import QWidget
 
 from pcdswidgets.builder.designer_options import DesignerOptions
@@ -16,32 +15,14 @@ try:
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
 
-# Note: for forward compat, setting up enum properties is completely different
-# depending on if we use pyqt5 or pyside6.
-# I'm following the examples in PyDM here.
-if ACTIVE_QT_WRAPPER == QtWrapperTypes.PYSIDE6:
-    from enum import Enum
 
-    from PySide6.QtCore import QEnum  # type: ignore
+class MotorTypes:
+    """Options for motor type to select error reset PV."""
 
-    @QEnum
-    class MotorTypes(Enum):  # type: ignore
-        """Options for motor type to select error reset PV."""
-
-        GENERIC = 0
-        IMS = 1
-        BECKHOFF = 2
-        BECKHOFF_LEGACY = 3
-
-else:
-    # pyqt5 can't use real python enums for this, unfortunately
-    class MotorTypes:  # type: ignore
-        """Options for motor type to select error reset PV."""
-
-        GENERIC = 0
-        IMS = 1
-        BECKHOFF = 2
-        BECKHOFF_LEGACY = 3
+    GENERIC = 0
+    IMS = 1
+    BECKHOFF = 2
+    BECKHOFF_LEGACY = 3
 
 
 class MotorClassicFull(MotorClassicFullBase):
@@ -69,11 +50,14 @@ class MotorClassicFull(MotorClassicFullBase):
         is_container=False,
         icon=IconOptions.NONE,
     )
+    # Expose motor_type as a dropdown in the Core Settings editor
+    editable_choice_properties = {
+        "motor_type": {"GENERIC": 0, "IMS": 1, "BECKHOFF": 2, "BECKHOFF_LEGACY": 3},
+    }
     # Boilerplate to make the enum property work
-    if ACTIVE_QT_WRAPPER == QtWrapperTypes.PYQT5:
-        from PyQt5.QtCore import Q_ENUM
+    from PyQt5.QtCore import Q_ENUM
 
-        Q_ENUM(MotorTypes)
+    Q_ENUM(MotorTypes)
     MotorTypes = MotorTypes
     GENERIC = MotorTypes.GENERIC
     IMS = MotorTypes.IMS
@@ -84,12 +68,15 @@ class MotorClassicFull(MotorClassicFullBase):
         super().__init__(parent)
         self._motor_type = MotorTypes.GENERIC
         self._clear_error_suffix = ""
+        self._expert_command = "motor-expert-screen {motor}"
         self.PyDMPushButton_clear_error.hide()
+        self.PyDMShellCommand_expert.hide()
 
     def after_set_macro(self, macro_name: str, value: str):
-        """Puts motor prefix into error reset PV."""
+        """Puts motor prefix into error reset PV and expert screen command."""
         if macro_name == "MOTOR":
             self.new_clear_error_motor(value)
+            self.new_expert_command_motor(value)
 
     def get_motor_type(self) -> MotorTypes | int:
         return self._motor_type
@@ -101,16 +88,23 @@ class MotorClassicFull(MotorClassicFullBase):
                 self.new_clear_error_suffix(":SEQ_SELN")
                 self.PyDMPushButton_clear_error.setPressValue(48)
                 self.PyDMPushButton_clear_error.show()
+                self.new_expert_command_template("motor-expert-screen {motor}")
+                self.PyDMShellCommand_expert.show()
             case MotorTypes.BECKHOFF:
                 self.new_clear_error_suffix(":bReset")
                 self.PyDMPushButton_clear_error.setPressValue(1)
                 self.PyDMPushButton_clear_error.show()
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreenBeckhoff --motor {motor}")
+                self.PyDMShellCommand_expert.show()
             case MotorTypes.BECKHOFF_LEGACY:
                 self.new_clear_error_suffix(":PLC:bReset")
                 self.PyDMPushButton_clear_error.setPressValue(1)
                 self.PyDMPushButton_clear_error.show()
+                self.new_expert_command_template("pcdswidgets-show MotorExpertScreenBeckhoff --motor {motor}")
+                self.PyDMShellCommand_expert.show()
             case _:
                 self.PyDMPushButton_clear_error.hide()
+                self.PyDMShellCommand_expert.hide()
 
     motor_type = pyqtProperty(MotorTypes, get_motor_type, set_motor_type)
 
@@ -122,3 +116,11 @@ class MotorClassicFull(MotorClassicFullBase):
     def new_clear_error_motor(self, motor: str):
         if self._clear_error_suffix:
             self.PyDMPushButton_clear_error.set_channel(f"ca://{motor}{self._clear_error_suffix}")
+
+    def new_expert_command_template(self, template: str):
+        self._expert_command = template
+        if motor := self.get_macro("MOTOR"):
+            self.new_expert_command_motor(motor)
+
+    def new_expert_command_motor(self, motor: str):
+        self.PyDMShellCommand_expert.commands = [self._expert_command.format(motor=motor)]

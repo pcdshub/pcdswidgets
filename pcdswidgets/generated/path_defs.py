@@ -74,6 +74,7 @@ WIDGET_PATHS = {
     "MotorClassicFull": "pcdswidgets.motion.common.motor_classic_full:MotorClassicFull",
     "MotorClassicRow": "pcdswidgets.motion.common.motor_classic_row:MotorClassicRow",
     "MotorClassicVert": "pcdswidgets.motion.common.motor_classic_vert:MotorClassicVert",
+    "MotorExpertScreenBeckhoff": "pcdswidgets.motion.expert.motor_expert_screen_beckhoff:MotorExpertScreenBeckhoff",
     "MotorStateMover": "pcdswidgets.motion.common.motor_state_mover:MotorStateMover",
     "MotorStateMoverExpanded": "pcdswidgets.motion.common.motor_state_mover_expanded:MotorStateMoverExpanded",
     "MotorStateMoverExpandedPMPS": "pcdswidgets.motion.common.motor_state_mover_expanded:MotorStateMoverExpandedPMPS",
