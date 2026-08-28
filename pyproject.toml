@@ -80,12 +80,14 @@ SmaractOpenLoopContextDouble = "pcdswidgets.motion.smaract.smaract_open_loop_con
 SvgMultiStateLED = "pcdswidgets.motion.common.svg_multi_state_led:SvgMultiStateLED"
 TabDock = "pcdswidgets.common.dock.tab_dock:TabDock"
 TabDockButton = "pcdswidgets.common.dock.tab_dock_button:TabDockButton"
+TabDockDiagramButton = "pcdswidgets.common.dock.tab_dock_diagram_button:TabDockDiagramButton"
 TurboPump = "pcdswidgets.vacuum.pumps:TurboPump"
 YamlToolbar = "pcdswidgets.common.toolbar.yaml_toolbar:YamlToolbar"
 
 [project.optional-dependencies]
 dev = [
     "jinja2>=3",
+    "pillow>=12.3.0",
     "ruff>=0.15.8",
     "tomlkit>=0.14.0",
 ]
