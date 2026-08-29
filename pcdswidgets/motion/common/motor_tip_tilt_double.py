@@ -15,6 +15,7 @@ from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.motion.common.motor_tip_tilt_double_base import MotorTipTiltDoubleBase
 from pcdswidgets.motion.common.motor_style import MotorStyle
+from pcdswidgets.motion.common.svg_multi_state_led import SvgMultiStateLED
 
 try:
     from qtpy.QtCore import pyqtProperty
@@ -40,6 +41,8 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
     step_left: PyDMPushButton
     step_right: PyDMPushButton
     stop: PyDMPushButton
+    vertical_status_led: SvgMultiStateLED
+    horizontal_status_led: SvgMultiStateLED
     vertical_expert_screen_motor: PyDMShellCommand
     horizontal_expert_screen_motor: PyDMShellCommand
     vertical_expert_screen_smaract: PyDMRelatedDisplayButton
@@ -64,6 +67,10 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
             "horizontal_motor": PyDMChannel(value_signal=self._stop_signal),
         }
         self.stop.clicked.connect(self._stop_all)
+        self.step_up.clicked.connect(lambda: self.vertical_status_led.set_move_direction("up"))
+        self.step_down.clicked.connect(lambda: self.vertical_status_led.set_move_direction("down"))
+        self.step_left.clicked.connect(lambda: self.horizontal_status_led.set_move_direction("left"))
+        self.step_right.clicked.connect(lambda: self.horizontal_status_led.set_move_direction("right"))
         self._apply_expert_screen_visibility()
         self._refresh_axis("vertical")
         self._refresh_axis("horizontal")
