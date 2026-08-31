@@ -110,8 +110,17 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
             self._painter.scale(scale[0], scale[1])
             self._painter.drawPixmap(event.rect().x(), event.rect().y(), image_to_draw)
         elif isinstance(image_to_draw, QSvgRenderer):
+            is_moving = self._current_key == self._state_dict["MOVING"]
+            angle = _MOVE_DIRECTION_ANGLES[self._move_direction] if is_moving else 0
+
+            # 90/270 rotation swaps axes on screen, so fit against a
+            # transposed target to avoid clipping the landscape icon.
+            fit_target = QSizeF(event.rect().size())
+            if angle in (90, 270):
+                fit_target.transpose()
+
             draw_size = QSizeF(image_to_draw.defaultSize())
-            draw_size.scale(QSizeF(event.rect().size()), self._aspect_ratio_mode)
+            draw_size.scale(fit_target, self._aspect_ratio_mode)
 
             # CENTER THE SVG, so annoying this had to be done.
             x = (event.rect().width() - draw_size.width()) / 2.0
@@ -122,8 +131,6 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
             )
             draw_rect = QRectF(x, y, draw_size.width(), draw_size.height())
 
-            is_moving = self._current_key == self._state_dict["MOVING"]
-            angle = _MOVE_DIRECTION_ANGLES[self._move_direction] if is_moving else 0
             if angle:
                 self._painter.save()
                 self._painter.translate(draw_rect.center())
