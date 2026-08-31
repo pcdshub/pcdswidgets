@@ -67,17 +67,18 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
             "horizontal_motor": PyDMChannel(value_signal=self._stop_signal),
         }
         self.stop.clicked.connect(self._stop_all)
-        self.step_up.clicked.connect(lambda: self.vertical_status_led.set_move_direction("up"))
-        self.step_down.clicked.connect(lambda: self.vertical_status_led.set_move_direction("down"))
-        self.step_left.clicked.connect(lambda: self.horizontal_status_led.set_move_direction("left"))
-        self.step_right.clicked.connect(lambda: self.horizontal_status_led.set_move_direction("right"))
+        self._last_position: dict[str, float | None] = {"vertical": None, "horizontal": None}
+        self._direction_channels = {
+            "vertical": PyDMChannel(value_slot=lambda v: self._on_position_changed("vertical", v)),
+            "horizontal": PyDMChannel(value_slot=lambda v: self._on_position_changed("horizontal", v)),
+        }
         self._apply_expert_screen_visibility()
         self._refresh_axis("vertical")
         self._refresh_axis("horizontal")
 
     def channels(self) -> list[PyDMChannel]:
-        """Let pydm discover and (dis)connect our manually created stop channels."""
-        return list(self._stop_channels.values())
+        """Let pydm discover and (dis)connect our manually created stop/direction channels."""
+        return list(self._stop_channels.values()) + list(self._direction_channels.values())
 
     def after_set_macro(self, macro_name: str, value: str) -> None:
         """Keep the stop channel and the style-dependent axis channels in sync with the current motor."""
@@ -187,6 +188,13 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
         position_widget.set_channel(f"ca://{position_pv}")
         step_size_widget.set_channel(f"ca://{self._step_size_pv(motor_pv)}")
 
+        direction_channel = self._direction_channels[axis]
+        if direction_channel.address:
+            direction_channel.disconnect()
+        self._last_position[axis] = None
+        direction_channel.address = f"ca://{position_pv}"
+        direction_channel.connect()
+
         self._invert_axis_channel(axis)
 
     def set_motors(self, horizontal_motor: str, vertical_motor: str) -> None:
@@ -202,6 +210,37 @@ class MotorTipTiltDouble(MotorTipTiltDoubleBase):
         """
         self.set_macro("horizontal_motor", horizontal_motor)
         self.set_macro("vertical_motor", vertical_motor)
+
+    def _on_position_changed(self, axis: str, value: float) -> None:
+        """
+        Derive jog direction from consecutive position readbacks. Neither
+        .TDIR nor MSTA's DIRECTION bit update on the SmarAct setup this was
+        tested against, so the position delta is used instead.
+        """
+        last = self._last_position[axis]
+        self._last_position[axis] = value
+
+        if last is None or value == last:
+            return
+
+        self._apply_led_direction(axis, positive=value > last)
+
+    def _apply_led_direction(self, axis: str, positive: bool) -> None:
+        """
+        Translate a position-readback delta into this axis's on-screen
+        up/down or left/right arrow, respecting the invert checkbox.
+
+        positive=True means the readback increased since the last update.
+        """
+        inverted = getattr(self, f"{axis}_invert").isChecked()
+        show_positive_side = positive != inverted
+
+        if axis == "vertical":
+            direction = "up" if show_positive_side else "down"
+        else:
+            direction = "right" if show_positive_side else "left"
+
+        getattr(self, f"{axis}_status_led").set_move_direction(direction)
 
     def _invert_vertical(self) -> None:
         """Swap the forward and reverse buttons for the vertical axis"""
