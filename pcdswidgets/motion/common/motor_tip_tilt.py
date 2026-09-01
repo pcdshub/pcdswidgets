@@ -25,10 +25,6 @@ logger = logging.getLogger(__name__)
 
 
 class MotorTipTiltMixin:
-    MotorStyle = MotorStyle
-    MotorRecord = MotorStyle.MotorRecord
-    Smaract = MotorStyle.Smaract
-
     # some type hinting
     vertical_invert: QCheckBox
     horizontal_invert: QCheckBox

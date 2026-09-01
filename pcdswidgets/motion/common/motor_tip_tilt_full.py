@@ -26,6 +26,9 @@ class MotorTipTiltFull(MotorTipTiltMixin, MotorTipTiltFullBase):
     # Q_ENUMS and the motor_style property must be declared directly on this
     # QObject-derived class: PyQt5 doesn't reliably carry them through a plain mixin
     Q_ENUMS(MotorStyle)
+    MotorStyle = MotorStyle
+    MotorRecord = MotorStyle.MotorRecord
+    Smaract = MotorStyle.Smaract
 
     def getMotorStyle(self) -> int:
         """Whether this widget drives standard motor record fields or SmarAct's custom step fields."""
