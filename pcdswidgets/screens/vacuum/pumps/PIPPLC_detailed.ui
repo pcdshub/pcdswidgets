@@ -400,6 +400,9 @@
             <property name="channel">
              <string>ca://${prefix}:AT_VAC_SP</string>
             </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -414,6 +417,9 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:SP_HYS</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -630,16 +636,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMByteIndicator</class>
-   <extends>QWidget</extends>
-   <header>pydm.widgets.byte</header>
-  </customwidget>
-  <customwidget>
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
@@ -648,6 +644,16 @@
    <class>PyDMLineEdit</class>
    <extends>QLineEdit</extends>
    <header>pydm.widgets.line_edit</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMByteIndicator</class>
+   <extends>QWidget</extends>
+   <header>pydm.widgets.byte</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
   </customwidget>
  </customwidgets>
  <resources/>

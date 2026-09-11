@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
-    <height>767</height>
+    <width>618</width>
+    <height>829</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>430</height>
+       <height>490</height>
       </size>
      </property>
      <property name="font">
@@ -91,9 +91,9 @@
      <property name="title">
       <string>Readback</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_14">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -108,6 +108,51 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Position&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_12">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Interlock Ok&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_19">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ext. ILK OK&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_14">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Open DO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -157,6 +202,21 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="interlock_ok_label_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="interlock_ok_label">
             <property name="font">
              <font>
@@ -167,7 +227,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Fault OK&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Error&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -187,7 +247,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="interlock_ok_label_12">
+           <widget class="QLabel" name="interlock_ok_label_4">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -197,12 +257,12 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Veto Device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;ILK Device US&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="interlock_ok_label_8">
+           <widget class="QLabel" name="interlock_ok_label_6">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -212,22 +272,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GFS Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="interlock_ok_label_14">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GFS Trigger&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;ILK Device DS&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -243,6 +288,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_21">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Countdown&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -262,7 +322,109 @@
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:POS_STATE_RBV</string>
+             <string notr="true">ca://${prefix}:POS_STATE_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_17">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:OPN_OK_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OPN_OK_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_25">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:EXT_ILK_OK_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="precision">
+             <number>0</number>
+            </property>
+            <property name="showUnits">
+             <bool>false</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:EXT_ILK_OK_RBV</string>
+            </property>
+            <property name="enableRichText">
+             <bool>false</bool>
+            </property>
+            <property name="displayLabelText">
+             <bool>false</bool>
+            </property>
+            <property name="disconnectedText">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_20">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:OPN_DO_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="precision">
+             <number>0</number>
+            </property>
+            <property name="showUnits">
+             <bool>false</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OPN_DO_RBV</string>
+            </property>
+            <property name="enableRichText">
+             <bool>false</bool>
+            </property>
+            <property name="displayLabelText">
+             <bool>false</bool>
+            </property>
+            <property name="disconnectedText">
+             <string/>
             </property>
            </widget>
           </item>
@@ -325,45 +487,34 @@
            </widget>
           </item>
           <item>
+           <widget class="PyDMLabel" name="PyDMLabel_14">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:AT_VAC_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="PyDMLabel" name="PyDMLabel_15">
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:VAC_FAULT_OK_RBV</string>
+             <string>ca://${prefix}:ERROR_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
-            <property name="precision">
-             <number>0</number>
-            </property>
-            <property name="showUnits">
-             <bool>false</bool>
-            </property>
-            <property name="precisionFromPV">
-             <bool>true</bool>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>false</bool>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>true</bool>
-            </property>
-            <property name="PyDMToolTip">
-             <string/>
-            </property>
             <property name="channel">
-             <string>ca://${prefix}:VAC_FAULT_OK_RBV</string>
-            </property>
-            <property name="enableRichText">
-             <bool>false</bool>
-            </property>
-            <property name="displayLabelText">
-             <bool>false</bool>
-            </property>
-            <property name="disconnectedText">
-             <string/>
+             <string>ca://${prefix}:ERROR_RBV</string>
             </property>
            </widget>
           </item>
@@ -389,7 +540,7 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_14">
+           <widget class="PyDMLabel" name="PyDMLabel_9">
             <property name="font">
              <font>
               <pointsize>9</pointsize>
@@ -399,13 +550,13 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:VETO_DEVICE_RBV</string>
+             <string>ca://${prefix}:ILK_DEVICE_US_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:VETO_DEVICE_RBV</string>
+             <string>ca://${prefix}:ILK_DEVICE_US_RBV</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLabel::String</enum>
@@ -413,7 +564,7 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_13">
+           <widget class="PyDMLabel" name="PyDMLabel_10">
             <property name="font">
              <font>
               <pointsize>9</pointsize>
@@ -423,37 +574,16 @@
              <string/>
             </property>
             <property name="text">
-             <string>ca://${prefix}:GFS_RBV</string>
+             <string>ca://${prefix}:ILK_DEVICE_DS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="channel">
-             <string>ca://${prefix}:GFS_RBV</string>
+             <string>ca://${prefix}:ILK_DEVICE_DS_RBV</string>
             </property>
             <property name="displayFormat">
              <enum>PyDMLabel::String</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_17">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:TRIG_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:TRIG_RBV</string>
             </property>
            </widget>
           </item>
@@ -473,10 +603,36 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_27">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string notr="true">ca://${prefix}:OVRD_Countdown_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_Countdown_RBV</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
@@ -485,7 +641,42 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_16">
             <property name="text">
              <string/>
             </property>
@@ -530,6 +721,13 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -544,7 +742,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>230</height>
+       <height>240</height>
       </size>
      </property>
      <property name="font">
@@ -555,9 +753,9 @@
      <property name="title">
       <string>Control</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -572,21 +770,6 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Open CMD&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="interlock_ok_label_19">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string/>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Close CMD&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -606,7 +789,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="interlock_ok_label_20">
+           <widget class="QLabel" name="interlock_ok_label_3">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -616,7 +799,22 @@
              <string/>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Mode&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;At Vac SP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_9">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hysteresis&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -632,6 +830,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Force Override&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_20">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Duration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -670,49 +883,6 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:OPN_SW_RBV</string>
-            </property>
-            <property name="enableRichText">
-             <bool>false</bool>
-            </property>
-            <property name="displayLabelText">
-             <bool>false</bool>
-            </property>
-            <property name="disconnectedText">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="PyDMLabel" name="PyDMLabel_25">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>ca://${prefix}:CLS_SW_RBV</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="precision">
-             <number>0</number>
-            </property>
-            <property name="showUnits">
-             <bool>false</bool>
-            </property>
-            <property name="precisionFromPV">
-             <bool>true</bool>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>false</bool>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>true</bool>
-            </property>
-            <property name="PyDMToolTip">
-             <string/>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:CLS_SW_RBV</string>
             </property>
             <property name="enableRichText">
              <bool>false</bool>
@@ -769,18 +939,46 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMLabel" name="PyDMLabel_26">
+           <widget class="PyDMLabel" name="PyDMLabel_6">
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string notr="true">ca://${prefix}:OVRD_ON_RBV</string>
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
-             <string>ca://${prefix}:OVRD_ON_RBV</string>
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_7">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_SP_RBV</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -800,6 +998,25 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_26">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string notr="true">ca://${prefix}:OVRD_DURATION_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_DURATION_RBV</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -815,16 +1032,6 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_4">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="channel">
-             <string>ca://${prefix}:CLS_SW</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_2">
             <property name="toolTip">
              <string/>
@@ -835,12 +1042,34 @@
            </widget>
           </item>
           <item>
-           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_5">
+           <widget class="PyDMLineEdit" name="PyDMLineEdit">
             <property name="toolTip">
              <string/>
             </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
             <property name="channel">
-             <string>ca://${prefix}:OVRD_ON</string>
+             <string>ca://${prefix}:AT_VAC_SP</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:AT_VAC_HYS</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Exponential</enum>
             </property>
            </widget>
           </item>
@@ -851,6 +1080,22 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:FORCE_OPN</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_DURATION</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Default</enum>
             </property>
            </widget>
           </item>
@@ -881,6 +1126,11 @@
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>

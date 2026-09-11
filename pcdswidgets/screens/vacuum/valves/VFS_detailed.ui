@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
+    <width>418</width>
     <height>517</height>
    </rect>
   </property>
@@ -93,7 +93,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_14">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2">
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -408,7 +408,7 @@
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:VETO_DEVICE_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -432,7 +432,7 @@
              <string/>
             </property>
             <property name="text">
-             <string/>
+             <string>ca://${prefix}:GFS_RBV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
