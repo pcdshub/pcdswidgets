@@ -35,8 +35,8 @@ def discover_widgets(root: QWidget) -> list[str]:
         name = w.objectName()
         if not name:
             continue
-        class_name = str(type(w))
-        if class_name in WIDGET_REGISTRY.keys():
+        class_name = type(w).__name__
+        if class_name in WIDGET_REGISTRY:
             names.append(name)
     return sorted(names)
 
@@ -54,8 +54,11 @@ def resolve_widget(
         logger.error(f"Failed to resolve widget {widget_name}")
         return None
     resolved_props = {}
-    class_name = str(type(widget))
-    props = WIDGET_REGISTRY[class_name]
+    class_name = type(widget).__name__
+    props = WIDGET_REGISTRY.get(class_name)
+    if props is None:
+        logger.error(f"No registered properties for {class_name}")
+        return None
     for prop_name, (getter, setter ) in props.items():
         resolved_props[prop_name] = getattr(widget, getter, None), getattr(widget, setter, None)
     return resolved_props
