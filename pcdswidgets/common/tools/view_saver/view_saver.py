@@ -11,9 +11,9 @@ from pydm.utilities import is_qt_designer
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
-from qtpy.QtCore import Property, QSettings, QSize, Qt, QTimer
+from qtpy.QtCore import Property, QEvent, QSettings, QSize, Qt, QTimer
 from qtpy.QtGui import QColor, QFont, QIcon, QMouseEvent, QPainter, QPen
-from qtpy.QtWidgets import QSizePolicy, QWidget
+from qtpy.QtWidgets import QApplication, QSizePolicy, QWidget
 
 from .edit_bindings_extension import EditWidgetListExtension
 from .registry import discover_widgets, resolve_widget
@@ -21,7 +21,7 @@ from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
 
-POLL_INTERVAL_MS = 10_000
+POLL_INTERVAL_MS = 30_000
 
 
 class ViewSaver(QWidget, PyDMPrimitiveWidget):
@@ -80,7 +80,7 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         # Poll timer — started in _initial_load
         self._poll_timer = QTimer(self)
         self._poll_timer.setInterval(POLL_INTERVAL_MS)
-        self._poll_timer.timeout.connect(self._poll)
+        self._poll_timer.timeout.connect(self._save_settings)
 
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
@@ -142,11 +142,30 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         self._loaded = True
         self._poll_timer.start()
 
-    def _poll(self) -> None:
+        app = QApplication.instance()
+        if app is not None:
+            # Backstop for quit paths that tear the display down without ever
+            # firing closeEvent (e.g. PyDMMainWindow's File > Quit calling
+            # app.quit() directly), so the last poll interval isn't lost.
+            app.aboutToQuit.connect(self._flush_on_quit)
+
+        # closeEvent is only delivered to the top-level window, never to this
+        # hidden child widget, so watch the container window instead to catch
+        # the user closing just this screen while the app keeps running.
+        window = self.window()
+        if window is not None:
+            window.installEventFilter(self)
+
+    def _flush_on_quit(self) -> None:
+        """Write current widget state before the application exits."""
+        if not self._loaded:
+            return
+        logger.debug("aboutToQuit fired, saving view to file.")
+        self._save_settings()
+
+    def _save_settings(self) -> None:
         settings = self._build_settings()
         if settings is None:
-            return
-        if not self._loaded:
             return
         for widget_name, prop_list in self._tracked_widgets.items():
             if prop_list is None:
@@ -185,10 +204,12 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
                 self, "widget_names", list(self._tracked_widgets.keys())
             )
 
-    def closeEvent(self, event) -> None:  # noqa: N802
-        if not is_qt_designer():
-            self._poll()
-        super().closeEvent(event)
+    def eventFilter(self, obj, event) -> bool:  # noqa: N802
+        """Save when the watched container window is closing."""
+        if event.type() == QEvent.Close and self._loaded:
+            logger.debug("Window close event fired, saving view to file.")
+            self._save_settings()
+        return super().eventFilter(obj, event)
 
     # ------------------------------------------------------------------
     # UI
