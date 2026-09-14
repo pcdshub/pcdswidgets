@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>517</height>
+    <width>469</width>
+    <height>586</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>420</height>
+       <height>440</height>
       </size>
      </property>
      <property name="font">
@@ -91,7 +91,7 @@
      <property name="title">
       <string>Readback</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_14">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2">
         <item>
@@ -123,6 +123,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Interlock Ok&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_15">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ext. ILK Ok&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -326,6 +341,22 @@
           </item>
           <item>
            <widget class="PyDMByteIndicator" name="PyDMByteIndicator_7">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:EXT_ILK_OK_RBV</string>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMByteIndicator" name="PyDMByteIndicator_8">
             <property name="toolTip">
              <string/>
             </property>
