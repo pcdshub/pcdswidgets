@@ -130,13 +130,15 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
             if prop_list is None:
                 continue
             # restore any saved settings
-            for prop_name, (_getter, setter) in prop_list.items():
+            for prop_name, (_getter, setter, converter) in prop_list.items():
                 saved_val = settings.value(f"{widget_name}/{prop_name}")
-                try:
-                    if saved_val is not None:
-                        setter(saved_val)
-                except Exception:
-                    logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
+                if saved_val is not None:
+                    logger.debug(f"Saved setting {saved_val} read from {widget_name}.{prop_name}")
+                    try:
+                        # coerce type here
+                        setter(converter(saved_val))
+                    except Exception:
+                        logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
         self._loaded = True
         self._poll_timer.start()
 
@@ -144,12 +146,16 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         settings = self._build_settings()
         if settings is None:
             return
+        if not self._loaded:
+            return
         for widget_name, prop_list in self._tracked_widgets.items():
             if prop_list is None:
                 continue
-            for prop_name, (getter, _setter) in prop_list.items():
+            for prop_name, (getter, _setter, _converter) in prop_list.items():
                 try:
-                    settings.setValue(f"{widget_name}/{prop_name}", getter())
+                    val = getter()
+                    logger.debug(f"Saved {widget_name}.{prop_name} current value ({val}) to file")
+                    settings.setValue(f"{widget_name}/{prop_name}", val)
                 except Exception:
                     logger.exception(f"ViewSaver: failed to save {widget_name}/{prop_name}")
 

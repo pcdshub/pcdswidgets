@@ -7,19 +7,30 @@ from qtpy.QtWidgets import QWidget
 
 logger = logging.getLogger(__name__)
 
+
+def _to_bool(value: object) -> bool:
+    """Coerce a QSettings value (often the string ``"true"``/``"false"``) to bool."""
+    if isinstance(value, str):
+        return value.strip().lower() in ("true", "1", "yes", "on")
+    return bool(value)
+
+
 # dict of properties that should have persistance given a ClassName
 #
 # Format is:
-# Qt class name -> { propKey: (getter_method_name, setter_method_name) }
+# Qt class name -> { propKey: (getter_method_name, setter_method_name, converter) }
 #
+# ``converter`` is a callable applied to the raw value read from QSettings
+# (which is stored as a string in IniFormat) to coerce it back to the type the
+# setter expects.  Use ``lambda v: v`` when no conversion is required.
 
-WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str]]] = {
+WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str, Callable]]] = {
     # QT BASE
-    "QTabWidget": {"currentIndex": ("currentIndex", "setCurrentIndex")},
-    "QComboBox": {"currentIndex": ("currentIndex", "setCurrentIndex")},
-    "QGroupBox": {"checked": ("isChecked", "setChecked")},
-    "QCheckBox": {"checked": ("isChecked", "setChecked")},
-    "QSplitter": {"state": ("saveState", "restoreState")},
+    "QTabWidget": {"currentIndex": ("currentIndex", "setCurrentIndex", int)},
+    "QComboBox": {"currentIndex": ("currentIndex", "setCurrentIndex", int)},
+    "QGroupBox": {"checked": ("isChecked", "setChecked", _to_bool)},
+    "QCheckBox": {"checked": ("isChecked", "setChecked", _to_bool)},
+    "QSplitter": {"state": ("saveState", "restoreState", lambda v: v)},
     # Imaging
     # Motion
 }
@@ -43,11 +54,12 @@ def discover_widgets(root: QWidget) -> list[str]:
 
 def resolve_widget(
     root: QWidget, widget_name: str
-) -> dict[str, tuple[Callable, Callable]] | None:
+) -> dict[str, tuple[Callable, Callable, Callable]] | None:
     """Resolve bound getter/setter callables for each persisted property.
 
-    Returns a mapping ``{propKey: (getter, setter)}`` for *widget_name*, or
-    ``None`` if the widget cannot be found or has no registered properties.
+    Returns a mapping ``{propKey: (getter, setter, converter)}`` for
+    *widget_name*, or ``None`` if the widget cannot be found or has no
+    registered properties.
     """
     widget = root.findChild(QWidget, widget_name)
     if widget is None:
@@ -59,6 +71,10 @@ def resolve_widget(
     if props is None:
         logger.error(f"No registered properties for {class_name}")
         return None
-    for prop_name, (getter, setter ) in props.items():
-        resolved_props[prop_name] = getattr(widget, getter, None), getattr(widget, setter, None)
+    for prop_name, (getter, setter, converter) in props.items():
+        resolved_props[prop_name] = (
+            getattr(widget, getter, None),
+            getattr(widget, setter, None),
+            converter,
+        )
     return resolved_props
