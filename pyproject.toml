@@ -69,6 +69,7 @@ MotorTipTiltDouble = "pcdswidgets.motion.common.motor_tip_tilt_double:MotorTipTi
 MotorTipTiltFull = "pcdswidgets.motion.common.motor_tip_tilt_full:MotorTipTiltFull"
 NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
+PneumaticValveNew = "pcdswidgets.vacuum.valves:PneumaticValveNew"
 PneumaticValveDA = "pcdswidgets.vacuum.valves:PneumaticValveDA"
 PneumaticValveNO = "pcdswidgets.vacuum.valves:PneumaticValveNO"
 ProportionalValve = "pcdswidgets.vacuum.valves:ProportionalValve"

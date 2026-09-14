@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>618</width>
-    <height>785</height>
+    <height>829</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>470</height>
+       <height>490</height>
       </size>
      </property>
      <property name="font">
@@ -288,6 +288,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_21">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Countdown&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -588,6 +603,25 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_27">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string notr="true">ca://${prefix}:OVRD_Countdown_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_Countdown_RBV</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -708,7 +742,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>200</height>
+       <height>240</height>
       </size>
      </property>
      <property name="font">
@@ -719,7 +753,7 @@
      <property name="title">
       <string>Control</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_15">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1">
         <item>
@@ -796,6 +830,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Force Override&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_20">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Duration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -949,6 +998,25 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="PyDMLabel" name="PyDMLabel_26">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string notr="true">ca://${prefix}:OVRD_DURATION_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_DURATION_RBV</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -1012,6 +1080,22 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:FORCE_OPN</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_DURATION</string>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLineEdit::Default</enum>
             </property>
            </widget>
           </item>
