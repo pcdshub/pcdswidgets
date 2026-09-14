@@ -16,15 +16,18 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
+
 class ViewSaverDialog(QDialog):
     """Editor dialog for all ViewSaver settings.
 
-    Provides fields for the save directory, file name, and widget bindings.
+    Provides fields for the save directory, file name, and the list of
+    tracked widgets. Every registered property of a tracked widget is
+    persisted, so the dialog operates on widget objectNames only.
     """
 
     def __init__(
         self,
-        widget_specs: list[tuple[str, list[str]]],
+        available_widgets: list[str],
         existing_widgets: list[str],
         dir_name: str,
         file_name: str,
@@ -34,7 +37,7 @@ class ViewSaverDialog(QDialog):
         self.setWindowTitle("Edit ViewSaver Settings")
         self.setMinimumWidth(450)
 
-        self._widget_specs: dict[str, list[str]] = {name: props for name, props in widget_specs}
+        self._available_widgets: list[str] = list(available_widgets)
 
         layout = QVBoxLayout(self)
 
@@ -60,50 +63,49 @@ class ViewSaverDialog(QDialog):
         # Filename
         name_row = QHBoxLayout()
         name_label = QLabel("File name:")
-        tool_tip =(
+        tool_tip = (
             "Name of the .ini file (without extension).\n"
             "Supports PyDM ${MACRO} expansion.\n"
             "Auto-generated if left empty."
         )
         name_label.setToolTip(tool_tip)
         self._name_edit = QLineEdit(file_name)
-        self._name_edit.setToolTip(tool_tip )
+        self._name_edit.setToolTip(tool_tip)
         name_row.addWidget(name_label)
         name_row.addWidget(self._name_edit, stretch=1)
         file_layout.addLayout(name_row)
 
         layout.addWidget(file_group)
 
-        # --- Bindings group ---
+        # --- Tracked widgets group ---
         widget_list_group = QGroupBox("Tracked Widgets")
         bind_layout = QVBoxLayout(widget_list_group)
 
         self._list = QListWidget()
-        for b in existing_widgets:
-            self._list.addItem(b)
+        self._list.setSelectionMode(QListWidget.ExtendedSelection)
+        for name in existing_widgets:
+            self._list.addItem(name)
         bind_layout.addWidget(self._list)
 
-        # Widget / property combos
+        # Widget selector combo
         combo_row = QHBoxLayout()
         self._widget_combo = QComboBox()
         self._widget_combo.setEditable(True)
         self._widget_combo.setInsertPolicy(QComboBox.NoInsert)
         self._widget_combo.setToolTip("Select a widget by its objectName.")
-        self._widget_combo.addItems(sorted(self._widget_specs.keys()))
-        self._widget_combo.currentTextChanged.connect(self._on_widget_changed)
-
-        self._prop_combo = QComboBox()
-        self._prop_combo.setEditable(True)
-        self._prop_combo.setInsertPolicy(QComboBox.NoInsert)
-        self._prop_combo.setToolTip("Select a savable property for the chosen widget.")
-        self._on_widget_changed(self._widget_combo.currentText())
+        self._widget_combo.addItems(self._available_widgets)
 
         add_btn = QPushButton("&Add")
-        add_btn.clicked.connect(self._add_binding)
+        add_btn.setToolTip("Track the selected widget.")
+        add_btn.clicked.connect(self._add_widget)
 
-        combo_row.addWidget(self._widget_combo, stretch=2)
-        combo_row.addWidget(self._prop_combo, stretch=1)
+        add_all_btn = QPushButton("Add A&ll")
+        add_all_btn.setToolTip("Track every discovered savable widget.")
+        add_all_btn.clicked.connect(self._add_all)
+
+        combo_row.addWidget(self._widget_combo, stretch=1)
         combo_row.addWidget(add_btn)
+        combo_row.addWidget(add_all_btn)
         bind_layout.addLayout(combo_row)
 
         remove_btn = QPushButton("&Remove Selected")
@@ -127,33 +129,35 @@ class ViewSaverDialog(QDialog):
     # ------------------------------------------------------------------
 
     def _browse_dir(self) -> None:
-        path = QFileDialog.getExistingDirectory(self, "Select Save Directory", self._dir_edit.text())
+        path = QFileDialog.getExistingDirectory(
+            self, "Select Save Directory", self._dir_edit.text()
+        )
         if path:
             self._dir_edit.setText(path)
 
-    def _on_widget_changed(self, name: str) -> None:
-        self._prop_combo.clear()
-        props = self._widget_specs.get(name, [])
-        self._prop_combo.addItems(props)
+    def _tracked_names(self) -> list[str]:
+        return [self._list.item(i).text() for i in range(self._list.count())]
 
-    def _add_binding(self) -> None:
-        obj = self._widget_combo.currentText().strip()
-        prop = self._prop_combo.currentText().strip()
-        if not obj or not prop:
+    def _add_name(self, name: str) -> None:
+        if not name or name in self._tracked_names():
             return
-        entry = f"{obj}::{prop}"
-        for i in range(self._list.count()):
-            if self._list.item(i).text() == entry:
-                return
-        self._list.addItem(entry)
+        self._list.addItem(name)
+
+    def _add_widget(self) -> None:
+        self._add_name(self._widget_combo.currentText().strip())
+
+    def _add_all(self) -> None:
+        for name in self._available_widgets:
+            self._add_name(name)
 
     def _remove_selected(self) -> None:
         for item in self._list.selectedItems():
             self._list.takeItem(self._list.row(item))
 
-    def results(self) -> str:
+    def results(self) -> tuple[str, str, list[str]]:
+        """Return ``(dir_name, file_name, tracked_widget_names)``."""
         return (
             self._dir_edit.text(),
             self._name_edit.text(),
-            self._list
+            self._tracked_names(),
         )

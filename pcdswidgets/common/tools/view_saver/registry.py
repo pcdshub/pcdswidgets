@@ -1,7 +1,7 @@
 """Registry of savable widget properties for ViewSaver."""
 
 import logging
-from typing import Any
+from typing import Callable
 
 from qtpy.QtWidgets import QWidget
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # dict of properties that should have persistance given a ClassName
 #
 # Format is:
-# Qt type name -> [{ propKey: (getter_method_name, setter_method_name) }]
+# Qt class name -> { propKey: (getter_method_name, setter_method_name) }
 #
 
 WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str]]] = {
@@ -22,19 +22,40 @@ WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str]]] = {
     "QSplitter": {"state": ("saveState", "restoreState")},
     # Imaging
     # Motion
-
 }
 
-def resolve_widget(window, widget_name):
-    """Resolves all the "persisted" attribute names for a given widget name.
+def discover_widgets(root: QWidget) -> list[str]:
+    """Return sorted objectNames of *root*'s children ViewSaver can persist.
+
+    Widgets without an objectName or without any registered properties are
+    skipped.
     """
-    resolved = {}
-    widget = getattr(window, widget_name, None)
+    names: list[str] = []
+    for w in root.findChildren(QWidget):
+        name = w.objectName()
+        if not name:
+            continue
+        class_name = str(type(w))
+        if class_name in WIDGET_REGISTRY.keys():
+            names.append(name)
+    return sorted(names)
+
+
+def resolve_widget(
+    root: QWidget, widget_name: str
+) -> dict[str, tuple[Callable, Callable]] | None:
+    """Resolve bound getter/setter callables for each persisted property.
+
+    Returns a mapping ``{propKey: (getter, setter)}`` for *widget_name*, or
+    ``None`` if the widget cannot be found or has no registered properties.
+    """
+    widget = root.findChild(QWidget, widget_name)
     if widget is None:
         logger.error(f"Failed to resolve widget {widget_name}")
         return None
+    resolved_props = {}
     class_name = str(type(widget))
     props = WIDGET_REGISTRY[class_name]
     for prop_name, (getter, setter ) in props.items():
-        resolved[prop_name] = getattr(widget, getter, None), getattr(widget, setter, None)
-    return resolved
+        resolved_props[prop_name] = getattr(widget, getter, None), getattr(widget, setter, None)
+    return resolved_props

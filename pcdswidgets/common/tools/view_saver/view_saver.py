@@ -15,12 +15,9 @@ from qtpy.QtCore import Property, QSettings, QSize, Qt, QTimer
 from qtpy.QtGui import QColor, QFont, QIcon, QMouseEvent, QPainter, QPen
 from qtpy.QtWidgets import QSizePolicy, QWidget
 
-
-from .edit_bindings_extension import EditBindingsExtension
-from .registry import WIDGET_REGISTRY, resolve_widget
-from pydm.widgets.designer_settings import update_property_for_widget
-
-from .bindings_dialog import ViewSaverDialog, discover_bindable_widgets
+from .edit_bindings_extension import EditWidgetListExtension
+from .registry import discover_widgets, resolve_widget
+from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +59,7 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
     _qt_designer_ = {
         "group": "ECS Common Tools",
         "is_container": False,
-        "extensions": [EditBindingsExtension],
+        "extensions": [EditWidgetListExtension],
     }
 
     _HINT_TEXT = "ViewSaver\nDouble-click to edit\n(hidden at runtime)"
@@ -115,7 +112,7 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         """Build a QSettings object in IniFormat, or None macros are not expanded."""
         name = self._file_name
         if not name or "${" in name:
-            logger.error(f"View save path not initialized.")
+            logger.error("View save path not initialized.")
             return None
         dir_path = Path(os.path.expanduser(os.path.expandvars(self._dir_name)))
         ini_path = str(dir_path / f"{name}.ini")
@@ -124,28 +121,33 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
     def _initial_load(self) -> None:
         self.hide()
         settings = self._build_settings()
-        if settings is not None:
-            for widget_name in self._tracked_widgets.keys():
-                #resolve widget attributes
-                prop_list =  resolve_widget(self.window(), widget_name)
-                self._tracked_widgets[widget_name] = prop_list
-                # restore any saved settings
-                for prop_name, (getter, setter) in prop_list.items():
-                    saved_val = settings.value(f"{widget_name}/{prop_name}")
-                    try:
-                        if saved_val is not None:
-                            setter(saved_val)
-                    except Exception:
-                        logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
-            self._loaded = True
-            self._poll_timer.start()
+        if settings is None:
+            return
+        for widget_name in list(self._tracked_widgets.keys()):
+            # resolve widget attributes
+            prop_list = resolve_widget(self.window(), widget_name)
+            self._tracked_widgets[widget_name] = prop_list
+            if prop_list is None:
+                continue
+            # restore any saved settings
+            for prop_name, (_getter, setter) in prop_list.items():
+                saved_val = settings.value(f"{widget_name}/{prop_name}")
+                try:
+                    if saved_val is not None:
+                        setter(saved_val)
+                except Exception:
+                    logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
+        self._loaded = True
+        self._poll_timer.start()
 
     def _poll(self) -> None:
-
         settings = self._build_settings()
-
+        if settings is None:
+            return
         for widget_name, prop_list in self._tracked_widgets.items():
-            for prop_name, (getter, setter) in prop_list.items():
+            if prop_list is None:
+                continue
+            for prop_name, (getter, _setter) in prop_list.items():
                 try:
                     settings.setValue(f"{widget_name}/{prop_name}", getter())
                 except Exception:
@@ -157,43 +159,30 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
 
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:  # noqa: N802
         """Open the settings editor on double-click."""
-        all_bindable_widgets = self._discover_widgets(self.window())
         dialog = ViewSaverDialog(
-            widget_specs=all_bindable_widgets,
-            existing_bindings=list(self.widget_names),
+            available_widgets=discover_widgets(self.window()),
+            existing_widgets=list(self._tracked_widgets.keys()),
             dir_name=self._dir_name,
             file_name=self._file_name,
             parent=self,
         )
         if dialog.exec_():
-            #set properties based on result
-            self.dirName, self.fileName, self.widget_names = dialog.results()
-            # informs designer the property has changed for saves to ui file.
+            # set properties based on result
+            dir_name, file_name, widget_names = dialog.results()
+            self.dirName = dir_name
+            self.fileName = file_name
+            self.widget_names = widget_names
+            # informs designer the properties have changed for saves to ui file.
+            update_property_for_widget(self, "dirName", self._dir_name)
             update_property_for_widget(self, "fileName", self._file_name)
-            update_property_for_widget(self, "dirName", self._file_name)
-            update_property_for_widget(self, "widget_names", self._file_name)
+            update_property_for_widget(
+                self, "widget_names", list(self._tracked_widgets.keys())
+            )
 
     def closeEvent(self, event) -> None:  # noqa: N802
         if not is_qt_designer():
             self._poll()
         super().closeEvent(event)
-
-    def _discover_widgets(self) -> list[tuple[str, list[str]]]:
-        """Scan *root* for child widgets that have registry-supported properties.
-
-        Returns a sorted list of ``(objectName, [propKey, …])`` tuples.
-        Widgets without an objectName or without any registered properties are skipped.
-        """
-        root = self.window()
-        all_widgets =  []
-        for w in root.findChildren(QWidget):
-            name = w.objectName()
-            if not name or name in self.widget_names:
-                continue
-            class_name = str(type(w))
-            if class_name in WIDGET_REGISTRY:
-                all_widgets.append(name)
-        return all_widgets
 
     # ------------------------------------------------------------------
     # UI
@@ -244,13 +233,10 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
     fileName = Property("QString", _get_file_name, _set_file_name)
 
     def _get_widget_names(self) -> list[str]:
-        return self._tracked_widgets.keys()
+        return list(self._tracked_widgets.keys())
 
     def _set_widget_names(self, value: list[str]) -> None:
-        self._tracked_widgets = {}
-        for name in value:
-            # defer resolving attr names
-            self._tracked_widgets[name] = None
-        self._widget_names = list(value)
+        # defer resolving attr names until runtime load
+        self._tracked_widgets = dict.fromkeys(value)
 
     widget_names = Property("QStringList", _get_widget_names, _set_widget_names)
