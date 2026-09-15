@@ -116,6 +116,10 @@ class CollapsibleSection(QWidget):
         self._apply_collapsed_state()
         self.toggled.emit(not self._collapsed)
 
+    def get_collapsed(self) -> bool:
+        """Getter method for the collapsed state needed for ViewSaver"""
+        return self._collapsed
+
     @property
     def is_collapsed(self) -> bool:
         return self._collapsed

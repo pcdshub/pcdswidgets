@@ -235,6 +235,11 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     # ------------------------------------------------------------------
     # UI
     # ------------------------------------------------------------------
+
+        """Default size when first dropped in Designer."""
+    def sizeHint(self) -> QSize:  # noqa: N802
+        return QSize(200, 200)
+
     def paintEvent(self, event) -> None:  # noqa: N802
         """Draw a dashed outline and corner label, but only in Qt Designer.
 

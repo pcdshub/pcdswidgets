@@ -95,6 +95,9 @@ WIDGET_REGISTRY: dict[
     "QPushButton": {"checked": ("isChecked", "setChecked", _to_bool, str)},
     "QSplitter": {"state": ("saveState", "restoreState", _identity, _identity)},
     # Imaging
+    "PyDMImageView": {
+        "view": ("view.vb.getState", "view.vb.setState", json.loads, json.dumps),
+    },
     "EpicsRoiFull": {
         "style": ("get_style_state", "set_style_state", json.loads, json.dumps),
     },
@@ -142,7 +145,7 @@ WIDGET_REGISTRY: dict[
         "levels": ("get_levels", "set_levels", _json_tuple, json.dumps),
     },
     "CollapsibleSection": {
-        "collapsed": ("is_collapsed", "set_collapsed", _to_bool, str),
+        "collapsed": ("get_collapsed", "set_collapsed", _to_bool, str),
     },
     # Motion
     "MotorTipTiltFull": {
@@ -161,6 +164,14 @@ WIDGET_REGISTRY: dict[
     },
 }
 
+# Registered classes that are also containers of other savable widgets.
+CONTAINER_REGISTRY_CLASSES: set[str] = {
+    "QSplitter",
+    "QTabWidget",
+    "QGroupBox",
+    "CollapsibleSection",
+}
+
 
 def iter_savable_widgets(root: QWidget) -> list[QWidget]:
     """Return every registered-savable descendant of *root*.
@@ -168,7 +179,9 @@ def iter_savable_widgets(root: QWidget) -> list[QWidget]:
     The child tree is walked manually so it stops as soon as a
     widget's class matches WIDGET_REGISTRY
 
-    Non-registered containers are descended
+    Non-registered containers are descended. Registered classes listed in
+    CONTAINER_REGISTRY_CLASSES are recorded but also descended into, since
+    they can hold further savable widgets.
     """
     found: list[QWidget] = []
 
@@ -178,7 +191,10 @@ def iter_savable_widgets(root: QWidget) -> list[QWidget]:
                 continue
             if type(child).__name__ in WIDGET_REGISTRY:
                 found.append(child)
-                # registered widget = one savable unit; do not descend into it
+                # A registered container still holds nested savables; keep
+                # descending. A registered leaf is one savable unit; stop.
+                if type(child).__name__ in CONTAINER_REGISTRY_CLASSES:
+                    _walk(child)
             else:
                 _walk(child)
 
