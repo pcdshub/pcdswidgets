@@ -152,16 +152,25 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         if settings is None:
             return
         self._tracked_widgets = self._discover_tracked()
+        logger.debug(
+            f"ViewSaver: loading from {settings.fileName()} "
+            f"({len(self._tracked_widgets)} tracked widgets)"
+        )
+        restored = 0
         for widget_name, prop_list in self._tracked_widgets.items():
             # restore any saved settings
             for prop_name, (_getter, setter) in prop_list.items():
                 saved_val = settings.value(f"{widget_name}/{prop_name}")
-                if saved_val is not None:
-                    logger.debug(f"Saved setting {saved_val} read from {widget_name}.{prop_name}")
-                    try:
-                        setter(saved_val)
-                    except Exception:
-                        logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
+                if saved_val is None:
+                    logger.debug(f"No saved value for {widget_name}/{prop_name}")
+                    continue
+                try:
+                    setter(saved_val)
+                    restored += 1
+                    logger.debug(f"Restored {widget_name}/{prop_name} = {saved_val!r}")
+                except Exception:
+                    logger.exception(f"Failed to restore {widget_name}/{prop_name}")
+        logger.debug(f"Restored {restored} value(s)")
         self._loaded = True
         self._poll_timer.start()
 
@@ -190,16 +199,19 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         settings = self._build_settings()
         if settings is None:
             return
+        saved = 0
         for widget_name, prop_list in self._tracked_widgets.items():
             if prop_list is None:
                 continue
             for prop_name, (getter, _setter) in prop_list.items():
                 try:
                     val = getter()
-                    logger.debug(f"Saved {widget_name}.{prop_name} current value ({val}) to file")
                     settings.setValue(f"{widget_name}/{prop_name}", val)
+                    saved += 1
+                    logger.debug(f"Saved {widget_name}/{prop_name} = {val!r}")
                 except Exception:
-                    logger.exception(f"ViewSaver: failed to save {widget_name}/{prop_name}")
+                    logger.exception(f"Failed to save {widget_name}/{prop_name}")
+        logger.debug(f"Wrote {saved} value(s) to {settings.fileName()}")
 
     # ------------------------------------------------------------------
     # Events
