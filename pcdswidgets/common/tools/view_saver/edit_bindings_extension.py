@@ -1,7 +1,5 @@
 """Designer task-menu extension for editing ViewSaver settings."""
 
-from __future__ import annotations
-
 from qtpy.QtWidgets import QAction
 
 from .registry import discover_widgets
@@ -12,9 +10,7 @@ class EditWidgetListExtension:
     """Adds an 'Edit ViewSaver…' action to the Designer right-click menu.
 
     Follows the same pattern as ``MacroEditExtension`` in
-    ``pcdswidgets.builder.designer_widget``.  PyDM instantiates this class
-    with the widget and calls :meth:`actions` for the task-menu entries.
-    The first action is also mapped to double-click.
+    ``pcdswidgets.builder.designer_widget``.
     """
 
     def __init__(self, widget):

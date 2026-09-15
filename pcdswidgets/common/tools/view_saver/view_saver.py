@@ -21,7 +21,7 @@ from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
 
-POLL_INTERVAL_MS = 30_000
+POLL_INTERVAL_MS = 60_000
 
 
 class ViewSaver(QFrame, PyDMPrimitiveWidget):
@@ -147,6 +147,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         return tracked
 
     def _initial_load(self) -> None:
+        """non-designer init that happens after all widgets load"""
         settings = self._build_settings()
         if settings is None:
             return
@@ -240,13 +241,12 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
             self._save_settings()
         return super().eventFilter(obj, event)
 
-        # ------------------------------------------------------------------
-        # UI
-        # ------------------------------------------------------------------
-
-        """Default size when first dropped in Designer."""
+    # ------------------------------------------------------------------
+    # UI
+    # ------------------------------------------------------------------
 
     def sizeHint(self) -> QSize:  # noqa: N802
+        """Default size when first dropped in Designer."""
         return QSize(200, 200)
 
     def paintEvent(self, event) -> None:  # noqa: N802

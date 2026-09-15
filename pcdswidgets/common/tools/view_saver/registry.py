@@ -53,19 +53,18 @@ def _json_dumps(value: object) -> str:
 
 
 def _make_getter(widget: object, path: str, save_fn: Callable) -> Callable:
-    """Bind a getter path into a zero-arg callable that returns the encoded value.
+    """wrap the widget property getter to return the encoded value.
 
-    ``save_fn`` turns the widget's value into what QSettings stores, so the
-    caller writes ``getter()`` with no serialization knowledge.
+    ``save_fn`` turns value to what QSettings stores (usually string)
     """
     method = _rgetattr(widget, path)
     return lambda: save_fn(method())
 
 
 def _make_setter(widget: object, path: str, load_fn: Callable) -> Callable:
-    """Bind a setter path into a one-arg callable that decodes then applies a value.
+    """wrap the widget property setter to first decode then apply a value.
 
-    ``load_fn`` decodes the raw QSettings value;
+    ``load_fn`` decodes the raw QSettings value -> expected type;
 
     Special case:  tuples are splatted into positional args for
     multi-argument setters (e.g. ``set_levels(mn, mx)``)
@@ -92,11 +91,10 @@ def _make_setter(widget: object, path: str, load_fn: Callable) -> Callable:
 #
 # ``load_fn`` decodes the raw value read from QSettings (IniFormat stores
 # everything as a string) back to the type the setter expects.
+#
 # ``save_fn`` encodes the getter's return value into what is written to
 # QSettings, and must yield a string: use ``str`` for scalars and
-# ``json.dumps`` for nested dicts/lists. ``_identity`` is used only when the
-# value is already a str, or for a ``QByteArray`` (``QSplitter.saveState``),
-# which QSettings round-trips natively and must not be stringified.
+
 
 WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str, Callable, Callable]]] = {
     # QT BASE
@@ -191,9 +189,8 @@ def iter_savable_widgets(root: QWidget) -> list[QWidget]:
     The child tree is walked manually so it stops as soon as a
     widget's class matches WIDGET_REGISTRY
 
-    Non-registered containers are descended. Registered classes listed in
-    CONTAINER_REGISTRY_CLASSES are recorded but also descended into, since
-    they can hold further savable widgets.
+    Non-registered containers and those in CONTAINER_REGISTRY_CLASSES
+    are descended into recursively.
     """
     found: list[QWidget] = []
 

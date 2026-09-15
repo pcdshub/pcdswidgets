@@ -1,7 +1,5 @@
 """Dialog for editing ViewSaver settings in Qt Designer."""
 
-from __future__ import annotations
-
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (
     QDialog,
