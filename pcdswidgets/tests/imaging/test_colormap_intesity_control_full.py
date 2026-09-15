@@ -32,6 +32,15 @@ def control(qtbot: QtBot) -> ColormapIntesityControlFull:
         pass
     yield widget
 
+    # teardown: tear down while wrappers are still alive
+    widget.hide()
+    parent.hide()
+    parent.close()
+    parent.deleteLater()
+    qtbot.wait(10)            # let deleteLater + queued singleShot(0) drain
+    import gc
+    gc.collect()             # clear pyqtgraph's WeakValueDictionary entries now
+
 
 def _feed_frame(control: ColormapIntesityControlFull, mini: float, maxi: float) -> None:
     """
