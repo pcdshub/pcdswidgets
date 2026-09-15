@@ -80,7 +80,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>450</height>
+       <height>430</height>
       </size>
      </property>
      <property name="font">
@@ -93,7 +93,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_14">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -544,7 +544,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>200</height>
+       <height>230</height>
       </size>
      </property>
      <property name="font">
@@ -555,9 +555,9 @@
      <property name="title">
       <string>Control</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_15">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,1">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -602,6 +602,21 @@
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Error Reset&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="interlock_ok_label_20">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string/>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Override Mode&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -754,6 +769,22 @@
            </widget>
           </item>
           <item>
+           <widget class="PyDMLabel" name="PyDMLabel_26">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string notr="true">ca://${prefix}:OVRD_ON_RBV</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_ON_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="PyDMLabel" name="PyDMLabel_24">
             <property name="toolTip">
              <string/>
@@ -800,6 +831,16 @@
             </property>
             <property name="channel">
              <string>ca://${prefix}:ALM_RST</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_5">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${prefix}:OVRD_ON</string>
             </property>
            </widget>
           </item>
