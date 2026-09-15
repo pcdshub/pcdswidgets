@@ -38,6 +38,23 @@ def _json_tuple(raw: str) -> tuple:
     return tuple(json.loads(raw))
 
 
+def _json_default(obj: object) -> object:
+    """Fallback encoder for values ``json.dumps`` can't handle natively.
+
+    ``ViewBox.getState()`` embeds numpy arrays; convert to lists.
+    """
+    if hasattr(obj, "tolist"):
+        return obj.tolist()
+    raise TypeError(
+        f"Object of type {obj.__class__.__name__} is not JSON serializable"
+    )
+
+
+def _json_dumps(value: object) -> str:
+    """``json.dumps`` that tolerates numpy arrays/scalars via ``_json_default``."""
+    return json.dumps(value, default=_json_default)
+
+
 def _make_getter(widget: object, path: str, save_fn: Callable) -> Callable:
     """Bind a getter path into a zero-arg callable that returns the encoded value.
 
@@ -96,7 +113,7 @@ WIDGET_REGISTRY: dict[
     "QSplitter": {"state": ("saveState", "restoreState", _identity, _identity)},
     # Imaging
     "PyDMImageView": {
-        "view": ("view.vb.getState", "view.vb.setState", json.loads, json.dumps),
+        "view": ("view.vb.getState", "view.vb.setState", json.loads, _json_dumps),
     },
     "EpicsRoiFull": {
         "style": ("get_style_state", "set_style_state", json.loads, json.dumps),
