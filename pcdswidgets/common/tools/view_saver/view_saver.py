@@ -130,13 +130,12 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
             if prop_list is None:
                 continue
             # restore any saved settings
-            for prop_name, (_getter, setter, converter) in prop_list.items():
+            for prop_name, (_getter, setter) in prop_list.items():
                 saved_val = settings.value(f"{widget_name}/{prop_name}")
                 if saved_val is not None:
                     logger.debug(f"Saved setting {saved_val} read from {widget_name}.{prop_name}")
                     try:
-                        # coerce type here
-                        setter(converter(saved_val))
+                        setter(saved_val)
                     except Exception:
                         logger.exception(f"ViewSaver: failed to restore {widget_name}/{prop_name}")
         self._loaded = True
@@ -170,7 +169,7 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         for widget_name, prop_list in self._tracked_widgets.items():
             if prop_list is None:
                 continue
-            for prop_name, (getter, _setter, _converter) in prop_list.items():
+            for prop_name, (getter, _setter) in prop_list.items():
                 try:
                     val = getter()
                     logger.debug(f"Saved {widget_name}.{prop_name} current value ({val}) to file")
