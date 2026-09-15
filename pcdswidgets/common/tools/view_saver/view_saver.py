@@ -69,7 +69,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     def __init__(self, parent: QWidget | None = None, **kwargs: Any):
         super().__init__(parent=parent, **kwargs)
 
-        self._dir_name: str = os.path.join("~",".config", "pcds_view_saves")
+        self._dir_name: str = os.path.join("~", ".config", "pcds_view_saves")
         self._file_name: str = ""
         self._excluded: list[str] = []
         # objectName -> {propKey: (getter, setter)} resolved at runtime load
@@ -104,8 +104,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
             self._initial_load()
 
     def _ensure_default_file_name(self) -> None:
-        """Assign a semi-unique default fileName if none was loaded from the .ui
-        """
+        """Assign a semi-unique default fileName if none was loaded from the .ui"""
         if self._file_name:
             return
 
@@ -118,7 +117,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         """Build a QSettings object in IniFormat, or None macros are not expanded."""
         name = self._file_name
         if not name or "${" in name:
-            logger.error("View save path not initialized.")
+            logger.error(f"View save path ''{self._file_name}'' not initialized.")
             return None
         dir_path = Path(os.path.expanduser(os.path.expandvars(self._dir_name)))
         ini_path = str(dir_path / f"{name}.ini")
@@ -152,10 +151,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         if settings is None:
             return
         self._tracked_widgets = self._discover_tracked()
-        logger.debug(
-            f"ViewSaver: loading from {settings.fileName()} "
-            f"({len(self._tracked_widgets)} tracked widgets)"
-        )
+        logger.debug(f"ViewSaver: loading from {settings.fileName()} ({len(self._tracked_widgets)} tracked widgets)")
         restored = 0
         for widget_name, prop_list in self._tracked_widgets.items():
             # restore any saved settings
@@ -244,11 +240,12 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
             self._save_settings()
         return super().eventFilter(obj, event)
 
-    # ------------------------------------------------------------------
-    # UI
-    # ------------------------------------------------------------------
+        # ------------------------------------------------------------------
+        # UI
+        # ------------------------------------------------------------------
 
         """Default size when first dropped in Designer."""
+
     def sizeHint(self) -> QSize:  # noqa: N802
         return QSize(200, 200)
 
@@ -311,6 +308,4 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     def _set_excluded_widgets(self, value: list[str]) -> None:
         self._excluded = list(value)
 
-    excludedWidgets = Property(
-        "QStringList", _get_excluded_widgets, _set_excluded_widgets
-    )
+    excludedWidgets = Property("QStringList", _get_excluded_widgets, _set_excluded_widgets)

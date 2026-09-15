@@ -33,8 +33,7 @@ def _rgetattr(obj: object, path: str) -> object:
 
 
 def _json_tuple(raw: str) -> tuple:
-    """Casts a JSON array to a tuple, so the setter is called with positional args.
-    """
+    """Casts a JSON array to a tuple, so the setter is called with positional args."""
     return tuple(json.loads(raw))
 
 
@@ -45,9 +44,7 @@ def _json_default(obj: object) -> object:
     """
     if hasattr(obj, "tolist"):
         return obj.tolist()
-    raise TypeError(
-        f"Object of type {obj.__class__.__name__} is not JSON serializable"
-    )
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
 
 
 def _json_dumps(value: object) -> str:
@@ -101,9 +98,7 @@ def _make_setter(widget: object, path: str, load_fn: Callable) -> Callable:
 # value is already a str, or for a ``QByteArray`` (``QSplitter.saveState``),
 # which QSettings round-trips natively and must not be stringified.
 
-WIDGET_REGISTRY: dict[
-    str, dict[str, tuple[str, str, Callable, Callable]]
-] = {
+WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str, Callable, Callable]]] = {
     # QT BASE
     "QTabWidget": {"currentIndex": ("currentIndex", "setCurrentIndex", int, str)},
     "QComboBox": {"currentIndex": ("currentIndex", "setCurrentIndex", int, str)},
@@ -250,7 +245,5 @@ def resolve_widget_props(
                 _make_setter(widget, setter, load_fn),
             )
         except AttributeError:
-            logger.exception(
-                f"ViewSaver: could not resolve {class_name}.{prop_name}, skipping"
-            )
+            logger.exception(f"ViewSaver: could not resolve {class_name}.{prop_name}, skipping")
     return resolved_props

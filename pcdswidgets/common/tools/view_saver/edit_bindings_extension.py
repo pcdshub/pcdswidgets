@@ -43,6 +43,4 @@ class EditWidgetListExtension:
             widget.excludedWidgets = excluded
             update_property_for_widget(widget, "dirName", widget._dir_name)
             update_property_for_widget(widget, "fileName", widget._file_name)
-            update_property_for_widget(
-                widget, "excludedWidgets", list(widget._excluded)
-            )
+            update_property_for_widget(widget, "excludedWidgets", list(widget._excluded))

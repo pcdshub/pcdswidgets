@@ -82,12 +82,7 @@ class ViewSaverDialog(QDialog):
         # --- Saved widgets group ---
         widget_list_group = QGroupBox("Saved Widgets")
         bind_layout = QVBoxLayout(widget_list_group)
-        bind_layout.addWidget(
-            QLabel(
-                "Widgets found inside this container. Uncheck any you do not "
-                "want to persist."
-            )
-        )
+        bind_layout.addWidget(QLabel("Widgets found inside this container. Uncheck any you do not want to persist."))
 
         self._list = QListWidget()
         excluded = set(excluded_widgets)
@@ -128,9 +123,7 @@ class ViewSaverDialog(QDialog):
     # ------------------------------------------------------------------
 
     def _browse_dir(self) -> None:
-        path = QFileDialog.getExistingDirectory(
-            self, "Select Save Directory", self._dir_edit.text()
-        )
+        path = QFileDialog.getExistingDirectory(self, "Select Save Directory", self._dir_edit.text())
         if path:
             self._dir_edit.setText(path)
 
