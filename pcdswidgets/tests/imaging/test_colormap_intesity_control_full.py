@@ -1,6 +1,5 @@
-############
-# Standard #
-############
+import gc
+
 import numpy as np
 import pytest
 from pydm.widgets import PyDMImageView
@@ -31,6 +30,15 @@ def control(qtbot: QtBot) -> ColormapIntesityControlFull:
     with qtbot.waitExposed(widget):
         pass
     yield widget
+
+    # teardown: tear down while wrappers are still alive
+    # this is required when you're using PyDMImageView/pyqtgraph's view boxes and image items
+    parent.close()
+    parent.deleteLater()
+    # let deleteLater + queued singleShot(0) drain
+    qtbot.wait(10)
+    # clear pyqtgraph's WeakValueDictionary entries now
+    gc.collect()
 
 
 def _feed_frame(control: ColormapIntesityControlFull, mini: float, maxi: float) -> None:
