@@ -30,19 +30,19 @@ class EditWidgetListExtension:
 
         widget = self.widget
         dialog = ViewSaverDialog(
-            available_widgets=discover_widgets(widget.window()),
-            existing_widgets=list(widget._tracked_widgets.keys()),
+            available_widgets=discover_widgets(widget),
+            excluded_widgets=list(widget._excluded),
             dir_name=widget._dir_name,
             file_name=widget._file_name,
             parent=widget,
         )
         if dialog.exec_():
-            dir_name, file_name, widget_names = dialog.results()
+            dir_name, file_name, excluded = dialog.results()
             widget.dirName = dir_name
             widget.fileName = file_name
-            widget.widget_names = widget_names
+            widget.excludedWidgets = excluded
             update_property_for_widget(widget, "dirName", widget._dir_name)
             update_property_for_widget(widget, "fileName", widget._file_name)
             update_property_for_widget(
-                widget, "widget_names", list(widget._tracked_widgets.keys())
+                widget, "excludedWidgets", list(widget._excluded)
             )

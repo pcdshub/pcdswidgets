@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (
-    QComboBox,
     QDialog,
     QFileDialog,
     QGroupBox,
@@ -11,6 +11,7 @@ from qtpy.QtWidgets import (
     QLabel,
     QLineEdit,
     QListWidget,
+    QListWidgetItem,
     QPushButton,
     QVBoxLayout,
     QWidget,
@@ -20,15 +21,16 @@ from qtpy.QtWidgets import (
 class ViewSaverDialog(QDialog):
     """Editor dialog for all ViewSaver settings.
 
-    Provides fields for the save directory, file name, and the list of
-    tracked widgets. Every registered property of a tracked widget is
-    persisted, so the dialog operates on widget objectNames only.
+    Provides fields for the save directory and file name, plus a checklist of
+    the savable widgets discovered inside the container.  Every discovered
+    widget is saved by default; unchecking one adds it to the excluded list so
+    it is skipped.
     """
 
     def __init__(
         self,
         available_widgets: list[str],
-        existing_widgets: list[str],
+        excluded_widgets: list[str],
         dir_name: str,
         file_name: str,
         parent: QWidget | None = None,
@@ -77,40 +79,37 @@ class ViewSaverDialog(QDialog):
 
         layout.addWidget(file_group)
 
-        # --- Tracked widgets group ---
-        widget_list_group = QGroupBox("Tracked Widgets")
+        # --- Saved widgets group ---
+        widget_list_group = QGroupBox("Saved Widgets")
         bind_layout = QVBoxLayout(widget_list_group)
+        bind_layout.addWidget(
+            QLabel(
+                "Widgets found inside this container. Uncheck any you do not "
+                "want to persist."
+            )
+        )
 
         self._list = QListWidget()
-        self._list.setSelectionMode(QListWidget.ExtendedSelection)
-        for name in existing_widgets:
-            self._list.addItem(name)
+        excluded = set(excluded_widgets)
+        for name in self._available_widgets:
+            item = QListWidgetItem(name)
+            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+            item.setCheckState(Qt.Unchecked if name in excluded else Qt.Checked)
+            self._list.addItem(item)
         bind_layout.addWidget(self._list)
 
-        # Widget selector combo
-        combo_row = QHBoxLayout()
-        self._widget_combo = QComboBox()
-        self._widget_combo.setEditable(True)
-        self._widget_combo.setInsertPolicy(QComboBox.NoInsert)
-        self._widget_combo.setToolTip("Select a widget by its objectName.")
-        self._widget_combo.addItems(self._available_widgets)
-
-        add_btn = QPushButton("&Add")
-        add_btn.setToolTip("Track the selected widget.")
-        add_btn.clicked.connect(self._add_widget)
-
-        add_all_btn = QPushButton("Add A&ll")
-        add_all_btn.setToolTip("Track every discovered savable widget.")
-        add_all_btn.clicked.connect(self._add_all)
-
-        combo_row.addWidget(self._widget_combo, stretch=1)
-        combo_row.addWidget(add_btn)
-        combo_row.addWidget(add_all_btn)
-        bind_layout.addLayout(combo_row)
-
-        remove_btn = QPushButton("&Remove Selected")
-        remove_btn.clicked.connect(self._remove_selected)
-        bind_layout.addWidget(remove_btn)
+        # Check-all / uncheck-all convenience buttons.
+        select_row = QHBoxLayout()
+        check_all_btn = QPushButton("Save A&ll")
+        check_all_btn.setToolTip("Persist every discovered widget.")
+        check_all_btn.clicked.connect(lambda: self._set_all(Qt.Checked))
+        uncheck_all_btn = QPushButton("Save &None")
+        uncheck_all_btn.setToolTip("Exclude every discovered widget.")
+        uncheck_all_btn.clicked.connect(lambda: self._set_all(Qt.Unchecked))
+        select_row.addStretch()
+        select_row.addWidget(check_all_btn)
+        select_row.addWidget(uncheck_all_btn)
+        bind_layout.addLayout(select_row)
 
         layout.addWidget(widget_list_group)
 
@@ -135,29 +134,21 @@ class ViewSaverDialog(QDialog):
         if path:
             self._dir_edit.setText(path)
 
-    def _tracked_names(self) -> list[str]:
-        return [self._list.item(i).text() for i in range(self._list.count())]
+    def _set_all(self, state: Qt.CheckState) -> None:
+        for i in range(self._list.count()):
+            self._list.item(i).setCheckState(state)
 
-    def _add_name(self, name: str) -> None:
-        if not name or name in self._tracked_names():
-            return
-        self._list.addItem(name)
-
-    def _add_widget(self) -> None:
-        self._add_name(self._widget_combo.currentText().strip())
-
-    def _add_all(self) -> None:
-        for name in self._available_widgets:
-            self._add_name(name)
-
-    def _remove_selected(self) -> None:
-        for item in self._list.selectedItems():
-            self._list.takeItem(self._list.row(item))
+    def _excluded_names(self) -> list[str]:
+        return [
+            self._list.item(i).text()
+            for i in range(self._list.count())
+            if self._list.item(i).checkState() == Qt.Unchecked
+        ]
 
     def results(self) -> tuple[str, str, list[str]]:
-        """Return ``(dir_name, file_name, tracked_widget_names)``."""
+        """Return ``(dir_name, file_name, excluded_widget_names)``."""
         return (
             self._dir_edit.text(),
             self._name_edit.text(),
-            self._tracked_names(),
+            self._excluded_names(),
         )

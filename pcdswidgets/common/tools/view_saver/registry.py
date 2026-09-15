@@ -162,40 +162,54 @@ WIDGET_REGISTRY: dict[
 }
 
 
-def discover_widgets(root: QWidget) -> list[str]:
-    """Return sorted objectNames of *root*'s children ViewSaver can persist.
+def iter_savable_widgets(root: QWidget) -> list[QWidget]:
+    """Return every registered-savable descendant of *root*.
 
-    Widgets without an objectName or without any registered properties are
-    skipped.
+    The child tree is walked manually so it stops as soon as a
+    widget's class matches WIDGET_REGISTRY
+
+    Non-registered containers are descended
     """
-    names: list[str] = []
-    for w in root.findChildren(QWidget):
-        name = w.objectName()
-        if not name:
-            continue
-        class_name = type(w).__name__
-        if class_name in WIDGET_REGISTRY:
-            names.append(name)
+    found: list[QWidget] = []
+
+    def _walk(widget: QWidget) -> None:
+        for child in widget.children():
+            if not isinstance(child, QWidget):
+                continue
+            if type(child).__name__ in WIDGET_REGISTRY:
+                found.append(child)
+                # registered widget = one savable unit; do not descend into it
+            else:
+                _walk(child)
+
+    _walk(root)
+    return found
+
+
+def discover_widgets(root: QWidget) -> list[str]:
+    """Return sorted objectNames of *root*'s savable descendants.
+
+    Widgets without an objectName are skipped (they cannot be keyed in the
+    settings file).
+    """
+    names = [w.objectName() for w in iter_savable_widgets(root) if w.objectName()]
     return sorted(names)
 
 
-def resolve_widget(
-    root: QWidget, widget_name: str
+def resolve_widget_props(
+    widget: QWidget,
 ) -> dict[str, tuple[Callable, Callable]] | None:
-    """Resolve getter/setter callables for each persisted property.
+    """Resolve getter/setter callables for each persisted property of *widget*.
 
-    Returns a mapping ``{propKey: (getter, setter)}`` for *widget_name*
+    Returns a mapping ``{propKey: (getter, setter)}`` for the given widget
+    instance, or ``None`` if its class has no registered properties.
     """
-    widget = root.findChild(QWidget, widget_name)
-    if widget is None:
-        logger.error(f"Failed to resolve widget {widget_name}")
-        return None
-    resolved_props = {}
     class_name = type(widget).__name__
     props = WIDGET_REGISTRY.get(class_name)
     if props is None:
         logger.error(f"No registered properties for {class_name}")
         return None
+    resolved_props: dict[str, tuple[Callable, Callable]] = {}
     for prop_name, (getter, setter, load_fn, save_fn) in props.items():
         try:
             resolved_props[prop_name] = (

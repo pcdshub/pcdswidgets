@@ -11,12 +11,12 @@ from pydm.utilities import is_qt_designer
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
-from qtpy.QtCore import Property, QEvent, QSettings, QSize, Qt, QTimer
+from qtpy.QtCore import Property, QEvent, QRect, QSettings, QSize, Qt, QTimer
 from qtpy.QtGui import QColor, QFont, QIcon, QMouseEvent, QPainter, QPen
-from qtpy.QtWidgets import QApplication, QSizePolicy, QWidget
+from qtpy.QtWidgets import QApplication, QFrame, QSizePolicy, QWidget
 
 from .edit_bindings_extension import EditWidgetListExtension
-from .registry import discover_widgets, resolve_widget
+from .registry import discover_widgets, iter_savable_widgets, resolve_widget_props
 from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
@@ -24,23 +24,21 @@ logger = logging.getLogger(__name__)
 POLL_INTERVAL_MS = 30_000
 
 
-class ViewSaver(QWidget, PyDMPrimitiveWidget):
+class ViewSaver(QFrame, PyDMPrimitiveWidget):
     """
-    Adds automated save and restore to sibling widget's
-    view-state properties using QSettings.
+    An invisible container that auto-saves and restores the view-state of the
+    widgets placed inside it, using QSettings.
 
-    In QtDesigner this widget is visible as a small box.
+    Drop this widget onto a screen and place the widgets you want persisted
+    inside it.  Any child whose class is registered in ``registry.WIDGET_REGISTRY``
+    is tracked automatically. Optional ``excludedWidgets`` list can opt
+    children out.
 
-    In designer, double clicking opens a dialog to select widget names
-    to be saved. (allows users to select only widgets that need persistance)
+    In QtDesigner the container draws a dashed border and a small corner label
+    so it can be located and edited (double-click, or the right-click task
+    menu, opens the settings dialog).  At runtime it is fully transparent with
+    no border or margins, so only its child widgets are visible.
 
-    At runtime it hides itself but polls watched widgets, writing
-    changed values to disk.
-
-    At the first UI restores previous saved state.
-
-    registry.REGISTRY dict maps properties that
-    should be persisted given a widget class.
 
     Designer properties
     -------------------
@@ -52,17 +50,17 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         ``${MACRO}`` expansion and this is recommended in situations the same UI
         screen is used for different devices
         Auto-generated rand on first load
-    _widget_list : list[str]
-        List of target sibling widgets to persist
+    excludedWidgets : list[str]
+        objectNames of savable child widgets to skip.
     """
 
     _qt_designer_ = {
         "group": "ECS Common Tools",
-        "is_container": False,
+        "is_container": True,
         "extensions": [EditWidgetListExtension],
     }
 
-    _HINT_TEXT = "ViewSaver\nDouble-click to edit\n(hidden at runtime)"
+    _HINT_TEXT = "ViewSaver \u2022 Double-click to edit"
 
     @classmethod
     def get_designer_icon(cls) -> QIcon:
@@ -73,16 +71,24 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
 
         self._dir_name: str = os.path.join("~",".config", "pcds_view_saves")
         self._file_name: str = ""
-        self._tracked_widgets = {}
+        self._excluded: list[str] = []
+        # objectName -> {propKey: (getter, setter)} resolved at runtime load
+        self._tracked_widgets: dict[str, dict[str, Any]] = {}
         self._loaded: bool = False
         self._last_snapshot: dict[str, Any] = {}
+
+        # Invisible passthrough container: no frame, no margins, transparent.
+        self.setFrameShape(QFrame.NoFrame)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.setAutoFillBackground(False)
 
         # Poll timer — started in _initial_load
         self._poll_timer = QTimer(self)
         self._poll_timer.setInterval(POLL_INTERVAL_MS)
         self._poll_timer.timeout.connect(self._save_settings)
 
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
         # Defer setup to the next event-loop cycle.
         # ensures fileName loaded from .ui file and sibling widgets exist
@@ -118,17 +124,35 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
         ini_path = str(dir_path / f"{name}.ini")
         return QSettings(ini_path, QSettings.IniFormat)
 
+    def _discover_tracked(self) -> dict[str, dict[str, Any]]:
+        """Resolve savable child widgets into ``{objectName: {prop: (get, set)}}``.
+
+        Walks the child tree (stopping at registered widgets), skips any
+        excluded objectNames, and warns for savable widgets that lack an
+        objectName since they cannot be keyed in the settings file.
+        """
+        tracked: dict[str, dict[str, Any]] = {}
+        for widget in iter_savable_widgets(self):
+            name = widget.objectName()
+            if not name:
+                logger.warning(
+                    "ViewSaver: skipping savable %s with no objectName",
+                    type(widget).__name__,
+                )
+                continue
+            if name in self._excluded:
+                continue
+            prop_list = resolve_widget_props(widget)
+            if prop_list:
+                tracked[name] = prop_list
+        return tracked
+
     def _initial_load(self) -> None:
-        self.hide()
         settings = self._build_settings()
         if settings is None:
             return
-        for widget_name in list(self._tracked_widgets.keys()):
-            # resolve widget attributes
-            prop_list = resolve_widget(self.window(), widget_name)
-            self._tracked_widgets[widget_name] = prop_list
-            if prop_list is None:
-                continue
+        self._tracked_widgets = self._discover_tracked()
+        for widget_name, prop_list in self._tracked_widgets.items():
             # restore any saved settings
             for prop_name, (_getter, setter) in prop_list.items():
                 saved_val = settings.value(f"{widget_name}/{prop_name}")
@@ -184,24 +208,22 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:  # noqa: N802
         """Open the settings editor on double-click."""
         dialog = ViewSaverDialog(
-            available_widgets=discover_widgets(self.window()),
-            existing_widgets=list(self._tracked_widgets.keys()),
+            available_widgets=discover_widgets(self),
+            excluded_widgets=list(self._excluded),
             dir_name=self._dir_name,
             file_name=self._file_name,
             parent=self,
         )
         if dialog.exec_():
             # set properties based on result
-            dir_name, file_name, widget_names = dialog.results()
+            dir_name, file_name, excluded = dialog.results()
             self.dirName = dir_name
             self.fileName = file_name
-            self.widget_names = widget_names
+            self.excludedWidgets = excluded
             # informs designer the properties have changed for saves to ui file.
             update_property_for_widget(self, "dirName", self._dir_name)
             update_property_for_widget(self, "fileName", self._file_name)
-            update_property_for_widget(
-                self, "widget_names", list(self._tracked_widgets.keys())
-            )
+            update_property_for_widget(self, "excludedWidgets", list(self._excluded))
 
     def eventFilter(self, obj, event) -> bool:  # noqa: N802
         """Save when the watched container window is closing."""
@@ -213,29 +235,37 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
     # ------------------------------------------------------------------
     # UI
     # ------------------------------------------------------------------
-
-    def sizeHint(self) -> QSize:  # noqa: N802
-        return QSize(120, 48)
-
-    def minimumSizeHint(self) -> QSize:  # noqa: N802
-        return QSize(120, 48)
-
     def paintEvent(self, event) -> None:  # noqa: N802
-        """Draw a simple label for interacting with this widget in designer."""
+        """Draw a dashed outline and corner label, but only in Qt Designer.
+
+        At runtime nothing is painted so the container is fully transparent and
+        only its child widgets are visible.
+        """
+        if not is_qt_designer():
+            return
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        # Background
-        painter.setPen(QPen(QColor(80, 80, 80)))
-        painter.setBrush(QColor(230, 240, 255))
-        painter.drawRoundedRect(self.rect().adjusted(1, 1, -1, -1), 6, 6)
+        # Dashed border to mark the container bounds.
+        pen = QPen(QColor(90, 130, 200))
+        pen.setStyle(Qt.DashLine)
+        painter.setPen(pen)
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRoundedRect(self.rect().adjusted(1, 1, -2, -2), 4, 4)
 
-        # Text
+        # Small corner label chip (kept out of the center so it never sits on
+        # top of child widgets).
         font = QFont()
-        font.setPointSize(8)
+        font.setPointSize(7)
         painter.setFont(font)
-        painter.setPen(QColor(40, 40, 40))
-        painter.drawText(self.rect(), Qt.AlignCenter, self._HINT_TEXT)
+        metrics = painter.fontMetrics()
+        text = self._HINT_TEXT
+        chip = QRect(2, 2, metrics.horizontalAdvance(text) + 8, metrics.height() + 2)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(QColor(90, 130, 200, 210))
+        painter.drawRoundedRect(chip, 3, 3)
+        painter.setPen(QColor(255, 255, 255))
+        painter.drawText(chip, Qt.AlignCenter, text)
         painter.end()
 
     # ------------------------------------------------------------------
@@ -258,11 +288,12 @@ class ViewSaver(QWidget, PyDMPrimitiveWidget):
 
     fileName = Property("QString", _get_file_name, _set_file_name)
 
-    def _get_widget_names(self) -> list[str]:
-        return list(self._tracked_widgets.keys())
+    def _get_excluded_widgets(self) -> list[str]:
+        return list(self._excluded)
 
-    def _set_widget_names(self, value: list[str]) -> None:
-        # defer resolving attr names until runtime load
-        self._tracked_widgets = dict.fromkeys(value)
+    def _set_excluded_widgets(self, value: list[str]) -> None:
+        self._excluded = list(value)
 
-    widget_names = Property("QStringList", _get_widget_names, _set_widget_names)
+    excludedWidgets = Property(
+        "QStringList", _get_excluded_widgets, _set_excluded_widgets
+    )
