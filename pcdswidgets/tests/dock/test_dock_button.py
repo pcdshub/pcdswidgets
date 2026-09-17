@@ -66,16 +66,18 @@ def test_build_widget_ui_edited(dock_button: TabDockButton, tmp_path: Path):
     assert widget2.windowTitle() == "NEW_EDIT"
 
 
-def test_build_widget_screen_name(dock_button: TabDockButton):
+def test_build_widget_screen_name(dock_button: TabDockButton, qtbot: QtBot):
     """We should also be able to build widgets from internal pcdswidget screen names."""
     dock_button.setSource(ScreenSource.SCREEN_NAME)
     dock_button.setFilename("VVC_expert")
     widget1 = dock_button.build_widget()
     widget2 = dock_button.build_widget()
+    qtbot.add_widget(widget1)
+    qtbot.add_widget(widget2)
     assert widget2 is widget1
 
 
-def test_build_widget_widget_name(dock_button: TabDockButton):
+def test_build_widget_widget_name(dock_button: TabDockButton, qtbot: QtBot):
     """We should also be able to build widgets from internal pcdswidget widget types."""
     dock_button.setSource(ScreenSource.WIDGET_NAME)
     dock_button.setFilename("FeatureFinder")
@@ -84,6 +86,8 @@ def test_build_widget_widget_name(dock_button: TabDockButton):
     assert widget1.property("detector") == "test_det"
     assert widget1.property("motor") == "test_mot"
     widget2 = dock_button.build_widget()
+    qtbot.add_widget(widget1)
+    qtbot.add_widget(widget2)
     assert widget2 is widget1
 
 
