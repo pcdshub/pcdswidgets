@@ -108,6 +108,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
     }
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
+        """Build the plain state mover plus Normal/Configuration tabs."""
         super().__init__(parent)
         self._device = ""
         self._state_count = 0
@@ -169,9 +170,11 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
     # props
     def get_device(self) -> str:
+        """Return the device prefix macro value."""
         return self._device
 
     def set_device(self, value: str) -> None:
+        """Set the device prefix macro and rebuild the tabs."""
         self._device = value
         self.plainMover.setProperty("device", value)
         self._rebuild_normal()
@@ -180,27 +183,33 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
     device = pyqtProperty(str, get_device, set_device)
 
     def get_state_count(self) -> int:
+        """Return the number of state rows in the configuration grid."""
         return self._state_count
 
     def set_state_count(self, value: int) -> None:
+        """Set the number of state rows in the configuration grid."""
         self._state_count = max(0, int(value))
         self._rebuild_grid()
 
     stateCount = pyqtProperty(int, get_state_count, set_state_count)
 
     def get_state_start(self) -> int:
+        """Return the starting state index for the configuration grid."""
         return self._state_start
 
     def set_state_start(self, value: int) -> None:
+        """Set the starting state index for the configuration grid."""
         self._state_start = int(value)
         self._rebuild_grid()
 
     stateStartIndex = pyqtProperty(int, get_state_start, set_state_start)
 
     def get_device_tokens(self) -> str:
+        """Return the comma-separated device tokens string."""
         return self._device_tokens
 
     def set_device_tokens(self, value: str) -> None:
+        """Set the comma-separated device tokens string."""
         self._device_tokens = value
         self._rebuild_grid()
 
@@ -262,7 +271,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._normal_layout.addStretch(1)
 
     def _config_provided(self) -> bool:
-        """The Configuration tab only exists when the caller supplies both."""
+        """Return True only when the caller supplied both state_count and tokens."""
         return self._state_count > 0 and bool(self._tokens)
 
     def _sync_config_tab(self) -> None:
@@ -274,8 +283,11 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
 
     def _build_state_grid(self) -> QtWidgets.QWidget | None:
-        """Per-state grid (state name | Motor k (Setpoint, Velo) x N), or None
-        when no state count / tokens were supplied. Motors are numbered 1..n."""
+        """Return the per-state grid widget, or ``None`` if state count or tokens are absent.
+
+        The grid layout is (state name | Motor k (Setpoint, Velo) x N) with
+        motors numbered 1..n.
+        """
         tokens = self._tokens
         if not (self._state_count > 0 and tokens):
             return None
@@ -328,10 +340,12 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
 
 class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
-    """PMPS variant: the Configuration tab holds the PMPS controls (arb_enable,
-    maint_mode) -- each a value readback plus a setpoint selector, sharing the
-    ${DEVICE} prefix -- with the per-state motor grid shown below them (when
-    state count / tokens are supplied)."""
+    """PMPS variant with a Configuration tab holding the PMPS controls.
+
+    The tab shows arb_enable and maint_mode -- each a value readback plus a
+    setpoint selector, sharing the ``${DEVICE}`` prefix -- with the per-state
+    motor grid shown below them (when state count / tokens are supplied).
+    """
 
     def _config_provided(self) -> bool:
         # the PMPS controls only need the device prefix (no state count / tokens)
@@ -435,7 +449,9 @@ def _signal_value(channel: str) -> PyDMLabel:
 
 class _BoolBar(PyDMLabel):
     """Full-width rounded bar (Typhos-style) with the value shown as text.
-    Background is ``on_color`` when the value is set, ``off_color`` when clear."""
+
+    Background is ``on_color`` when the value is set, ``off_color`` when clear.
+    """
 
     def __init__(
         self,
@@ -461,13 +477,17 @@ class _BoolBar(PyDMLabel):
         )
 
     def value_changed(self, new_value) -> None:
+        """Render the value text and repaint the bar per the boolean value."""
         super().value_changed(new_value)  # renders the value text
         self._paint(bool(new_value))
 
 
 class _ErrorMessage(PyDMLabel):
-    """Decoded error-message string (char waveform). Highlights red only while
-    the separate error flag (``error_channel``) is set, plain otherwise."""
+    """Decoded error-message string (char waveform).
+
+    Highlights red only while the separate error flag (``error_channel``) is
+    set, plain otherwise.
+    """
 
     def __init__(self, error_channel: str, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)

@@ -1,4 +1,4 @@
-"""Read/write handle to a single PV via PyDM's channel plugin"""
+"""Read/write handle to a single PV via PyDM's channel plugin."""
 
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import QObject, QTimer, Signal
@@ -32,6 +32,7 @@ class PVChannel(QObject):
         self._retry_timer.timeout.connect(self._retry_if_still_silent)
 
     def set_address(self, address: str) -> None:
+        """Set the target PV address and (re)start the connection attempt."""
         if self._address == address:
             return
         if self._channel is not None:
@@ -76,4 +77,5 @@ class PVChannel(QObject):
         self._value_slot(value)
 
     def write(self, value: float) -> None:
+        """Write ``value`` to the underlying PV."""
         self._value_signal.emit(value)

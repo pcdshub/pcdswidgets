@@ -158,6 +158,7 @@ class TabDockButton(QPushButton):
             self.open_in_window()
 
     def enterEvent(self, event: QEnterEvent) -> None:  # type: ignore
+        """Update the cursor icon on first hover based on dock availability."""
         if not self._finalized_mouseover_icon:
             if TabDock.dock_exists():
                 self._icon = ifont.icon("anchor")
@@ -169,25 +170,31 @@ class TabDockButton(QPushButton):
         return super().enterEvent(event)
 
     def readFilename(self) -> str:
+        """Return the target screen filename."""
         return self._filename
 
     def setFilename(self, val: str) -> None:
+        """Set the target screen filename."""
         self._filename = val
 
     filename = Property("QString", readFilename, setFilename)
 
     def readMacro(self) -> str:
+        """Return the macros string passed to the screen."""
         return self._macro
 
     def setMacro(self, new_macro: str) -> None:
+        """Set the macros string passed to the screen."""
         self._macro = new_macro
 
     macros = Property("QString", readMacro, setMacro)
 
     def readSource(self) -> ScreenSource:
+        """Return the screen source enum (file vs. embedded)."""
         return self._source
 
     def setSource(self, source: ScreenSource) -> None:
+        """Set the screen source enum (file vs. embedded)."""
         self._source = source
 
     source = Property(ScreenSource, readSource, setSource)

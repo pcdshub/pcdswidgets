@@ -168,20 +168,25 @@ class CentroidMarkerStyleDialog(QDialog):
 
     @property
     def selected_style(self) -> MarkerStyle:
+        """Return the marker style chosen in the dialog."""
         return self._selected_style
 
     @property
     def selected_width(self) -> int:
+        """Return the marker pen width chosen in the dialog."""
         return self._selected_width
 
     @property
     def selected_hatch_pattern(self) -> Qt.PenStyle:
+        """Return the hatch (dash) pattern chosen in the dialog."""
         return self._selected_hatch_pattern
 
     @property
     def use_sigma_radius(self) -> bool:
+        """Return True when the user asked to size the radius from sigma."""
         return self._selected_use_sigma_radius
 
     @property
     def selected_default_radius(self) -> int:
+        """Return the default radius chosen in the dialog."""
         return self._selected_default_radius

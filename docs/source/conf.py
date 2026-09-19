@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Sphinx configuration for the pcdswidgets documentation build."""
 #
 # Typhon documentation build configuration file, created by
 # sphinx-quickstart on Sat Nov 11 09:41:36 2017.

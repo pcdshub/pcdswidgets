@@ -1,3 +1,5 @@
+"""Tests for the builder-generated widget classes and their imports."""
+
 import importlib
 import inspect
 from pathlib import Path
@@ -15,9 +17,7 @@ TEST_UI = str(Path(__file__).parent / "pytest.ui")
 
 @pytest.mark.parametrize("ui_source", UI_SOURCES)
 def test_it_was_built(ui_source: Path):
-    """
-    Check if .py files have been built from all the source .ui files.
-    """
+    """Check if .py files have been built from all the source .ui files."""
     subsystem, device = get_subsystem_and_device(ui_source=ui_source)
 
     gen_dir = MODULE_ROOT / "generated" / subsystem / device
@@ -32,6 +32,7 @@ def test_it_was_built(ui_source: Path):
 
 
 def get_subsystem_and_device(ui_source: Path) -> tuple[str, str]:
+    """Return (subsystem, device) parsed from a UI source path."""
     subsystem = None
     device = None
 
@@ -54,9 +55,7 @@ def get_subsystem_and_device(ui_source: Path) -> tuple[str, str]:
 
 @pytest.mark.parametrize("ui_source", UI_SOURCES)
 def test_built_is_importable(ui_source: Path):
-    """
-    Check if the .py files have somewhat proper importable classes.
-    """
+    """Check if the .py files have somewhat proper importable classes."""
     subsystem, device = get_subsystem_and_device(ui_source=ui_source)
 
     form_module_name = f"pcdswidgets.generated.{subsystem}.{device}.{ui_source.stem}_form"

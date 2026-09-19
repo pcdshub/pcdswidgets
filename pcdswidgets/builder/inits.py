@@ -1,20 +1,18 @@
+"""Backfill blank __init__.py files across generated pcdswidgets subpackages."""
+
 from pathlib import Path
 
 import pcdswidgets
 
 
 def main():
-    """
-    Backfill generated directories with __init__.py to make them python modules.
-    """
+    """Backfill generated directories with __init__.py to make them python modules."""
     for base_dir in get_generated_top_dirs():
         build_inits(base_dir=base_dir)
 
 
 def get_generated_top_dirs() -> list[Path]:
-    """
-    Returns the top-level directories that were originally generated.
-    """
+    """Return the top-level directories that were originally generated."""
     module_dir = Path(pcdswidgets.__file__).parent
     top_dirs = [module_dir / "generated"]
     # Other generated directories are those that mirror the ui folder filetree
@@ -28,7 +26,7 @@ def get_generated_top_dirs() -> list[Path]:
 
 def build_inits(base_dir: Path):
     """
-    Creates blank __init__.py files wherever they are needed in generated directories.
+    Create blank __init__.py files wherever they are needed in generated directories.
 
     This makes Python treat these directories as Python modules.
 
@@ -42,8 +40,9 @@ def build_inits(base_dir: Path):
         if "__pycache__" not in path.parts:
             candidates.add(path.with_name("__init__.py"))
     for cand_path in candidates:
-        if not cand_path.exists():
-            cand_path.touch()
+        if not cand_path.exists() or cand_path.read_text() == "":
+            subpkg = cand_path.parent.name
+            cand_path.write_text(f'"""Auto-generated {subpkg} subpackage."""\n')
 
 
 if __name__ == "__main__":

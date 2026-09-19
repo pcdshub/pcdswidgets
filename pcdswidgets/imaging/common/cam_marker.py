@@ -63,6 +63,7 @@ class CamMarker:
         radius_y: int = 20,
         hatch_pattern: Qt.PenStyle = Qt.SolidLine,
     ):
+        """Store initial style parameters; the marker has no attached view yet."""
         self._color = QColor(color)
         self._width = width
         self._style = style
@@ -104,27 +105,33 @@ class CamMarker:
                 self._attachments.remove(attachment)
 
     def set_visible(self, visible: bool) -> None:
+        """Show or hide the marker items across every attached ViewBox."""
         self._visible = visible
         for attachment in self._attachments:
             for item in attachment["items"]:
                 item.setVisible(visible)
 
     def is_visible(self) -> bool:
+        """Return the current visibility flag for the marker."""
         return self._visible
 
     def set_color(self, color: QColor) -> None:
+        """Set the pen color and refresh existing items."""
         self._color = QColor(color)
         self._update_pens()
 
     def set_width(self, width: int) -> None:
+        """Set the pen width and refresh existing items."""
         self._width = width
         self._update_pens()
 
     def set_style(self, style: MarkerStyle) -> None:
+        """Change the marker display style and rebuild the items."""
         self._style = style
         self._rebuild()
 
     def set_arm_length(self, length: int) -> None:
+        """Set the crosshair arm length in data coordinates."""
         self._arm_length = length
         self._update_positions()
 
@@ -135,49 +142,60 @@ class CamMarker:
         self._update_positions()
 
     def set_radius_x(self, radius: int) -> None:
+        """Set the ellipse radius along x in data coordinates."""
         self._radius_x = radius
         self._update_positions()
 
     def set_radius_y(self, radius: int) -> None:
+        """Set the ellipse radius along y in data coordinates."""
         self._radius_y = radius
         self._update_positions()
 
     def set_hatch_pattern(self, pattern: Qt.PenStyle) -> None:
+        """Set the pen hatch pattern (dash style) and refresh existing items."""
         self._hatch_pattern = pattern
         self._update_pens()
 
     @property
     def x(self) -> float:
+        """Return the marker's x coordinate."""
         return self._x
 
     @x.setter
     def x(self, value: float):
+        """Set the marker's x coordinate and reposition items."""
         self._x = value
         self._update_positions()
 
     @property
     def y(self) -> float:
+        """Return the marker's y coordinate."""
         return self._y
 
     @y.setter
     def y(self, value: float):
+        """Set the marker's y coordinate and reposition items."""
         self._y = value
         self._update_positions()
 
     @property
     def style(self) -> MarkerStyle:
+        """Return the current marker display style."""
         return self._style
 
     @property
     def color(self) -> QColor:
+        """Return a copy of the pen color."""
         return QColor(self._color)
 
     @property
     def width(self) -> int:
+        """Return the pen width in pixels."""
         return self._width
 
     @property
     def arm_length(self) -> int:
+        """Return the crosshair arm length in data coordinates."""
         return self._arm_length
 
     @property
@@ -187,14 +205,17 @@ class CamMarker:
 
     @property
     def radius_x(self) -> int:
+        """Return the ellipse radius along x."""
         return self._radius_x
 
     @property
     def radius_y(self) -> int:
+        """Return the ellipse radius along y."""
         return self._radius_y
 
     @property
     def hatch_pattern(self) -> Qt.PenStyle:
+        """Return the pen hatch (dash) pattern."""
         return self._hatch_pattern
 
     def _rebuild(self) -> None:

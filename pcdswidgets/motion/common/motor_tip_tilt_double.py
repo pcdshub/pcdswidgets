@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -35,6 +35,7 @@ class MotorTipTiltDouble(MotorTipTiltMixin, MotorTipTiltDoubleBase):
         return self._motor_style
 
     def setMotorStyle(self, value: int) -> None:
+        """Set the motor style enum, validating the incoming value."""
         if value not in (MotorStyle.MotorRecord, MotorStyle.Smaract):
             logger.warning(f"Invalid motor_style {value!r}; expected MotorRecord (0) or Smaract (1)")
             return

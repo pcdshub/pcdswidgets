@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -46,6 +46,8 @@ _MIN_ROI_SIZE = 10  # pixels
 
 
 class CentroidTrackerFull(CentroidTrackerFullBase):
+    """Interactive centroid tracker overlay for EPICS area-detector cameras."""
+
     # Emitted when the marker's persisted visual state changes (color,
     # style, sigma-radius toggle, visibility) - not for live position/radius updates.
     state_changed = Signal()
@@ -148,6 +150,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.roi_multiplier_spinbox.setSingleStep(0.5)
 
     def after_set_macro(self, macro_name, value):
+        """Reconnect derived channels after a macro value changes."""
         self._connect_value_labels()
         self._rebuild_roi_channels()
         self._rebuild_stats_channels()
@@ -241,7 +244,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.set_roi_button.clicked.connect(self._set_roi_from_centroid)
 
     def _connect_value_labels(self):
-        """Hook the centroid/sigma/threshold PyDMLabels to track their live values (wired up once)."""
+        """Wire up the centroid/sigma/threshold PyDMLabels to track live values (once)."""
         if self._labels_connected:
             return
 
@@ -649,17 +652,21 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## Property for marker color that can be overwritten in designer.
 
     def get_marker_color(self) -> QColor:
+        """Return the color assigned to the centroid marker."""
         return self._get_marker_color()
 
     def set_marker_color(self, color: QColor) -> None:
+        """Set the color assigned to the centroid marker."""
         self._set_marker_color(color)
 
     marker_color = pyqtProperty(QColor, get_marker_color, set_marker_color)
 
     def get_nickname(self) -> str:
+        """Return the widget nickname string."""
         return self._nickname
 
     def set_nickname(self, value: str) -> None:
+        """Set the widget nickname string."""
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
@@ -667,9 +674,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## Property for the shared Camera ROI plugin (e.g. ":ROI2:")
 
     def get_roi_plugin(self) -> str:
+        """Return the shared Camera ROI plugin suffix (e.g. ``:ROI2:``)."""
         return self._roi_plugin
 
     def set_roi_plugin(self, value: str) -> None:
+        """Set the shared Camera ROI plugin suffix (e.g. ``:ROI2:``)."""
         self._roi_plugin = value
         self._rebuild_roi_channels()
 
@@ -679,9 +688,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## primary readback is relative to.
 
     def get_source_roi_plugin(self) -> str:
+        """Return the source ROI plugin suffix (e.g. ``:ROI1:``)."""
         return self._source_roi_plugin
 
     def set_source_roi_plugin(self, value: str) -> None:
+        """Set the source ROI plugin suffix (e.g. ``:ROI1:``)."""
         self._source_roi_plugin = value
         self._rebuild_source_roi_channels()
 
@@ -691,9 +702,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## one is linked.
 
     def get_secondary_roi_plugin(self) -> str:
+        """Return the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         return self._secondary_roi_plugin
 
     def set_secondary_roi_plugin(self, value: str) -> None:
+        """Set the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         self._secondary_roi_plugin = value
         if self._secondary_view_linked:
             self._rebuild_secondary_roi_channels()

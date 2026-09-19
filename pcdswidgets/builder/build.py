@@ -40,11 +40,14 @@ def build_uic(designer_ui: str, output_dir: str = ""):
     comment_lines.append("#")
     comment_lines.append("# Augmented by pcdswidgets.builder.build")
     comment_lines.append("# ruff: noqa: E501")
+    comment_lines.append("# ruff: noqa: D101, D102")
+    docstring_line = f'"""Form implementation generated from {os.path.basename(designer_ui)}."""'
 
     output_dir_path = get_output_path(designer_ui=designer_ui, default_base="generated", output_dir=output_dir)
     output_dir_path.mkdir(parents=True, exist_ok=True)
     output_file = output_dir_path / os.path.basename(designer_ui).replace(".ui", "_form.py")
     with open(output_file, "w") as fd:
+        fd.write(docstring_line + "\n")
         fd.writelines(cl + "\n" for cl in comment_lines)
         fd.writelines(il + "\n" for il in import_lines)
         fd.writelines(impl + "\n" for impl in impl_lines)
@@ -141,6 +144,7 @@ def build_main_widget(designer_ui: str, output_dir: str = ""):
 
 
 def get_output_path(designer_ui: str | Path, default_base: str, output_dir: str | Path = "") -> Path:
+    """Return the directory where generated files for ``designer_ui`` should be written."""
     if output_dir:
         return Path(output_dir)
     else:
@@ -157,10 +161,12 @@ def get_output_path(designer_ui: str | Path, default_base: str, output_dir: str 
 
 
 def get_base_class_name(designer_ui: str) -> str:
+    """Return the generated base class name for ``designer_ui`` (e.g. ``FooBase``)."""
     return get_main_class_name(designer_ui=designer_ui) + "Base"
 
 
 def get_main_class_name(designer_ui: str):
+    """Return the main class name derived from the ``designer_ui`` filename."""
     ui_name = os.path.basename(designer_ui)
     ui_parts = ui_name.removesuffix(".ui").split("_")
     return "".join(part.title() for part in ui_parts)

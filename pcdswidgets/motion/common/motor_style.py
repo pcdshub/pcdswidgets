@@ -11,9 +11,11 @@ from enum import IntEnum
 
 class MotorStyle(IntEnum):
     """
-    Designer-visible enum for motor_style. PyQt5-only: each widget class
-    registers this via Q_ENUMS for a Designer dropdown; PySide6 needs a real
-    enum.Enum decorated with @QEnum instead, so this exact pattern isn't portable.
+    Designer-visible enum for motor_style.
+
+    PyQt5-only: each widget class registers this via Q_ENUMS for a Designer
+    dropdown; PySide6 needs a real enum.Enum decorated with @QEnum instead,
+    so this exact pattern isn't portable.
     """
 
     MotorRecord = 0

@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -10,6 +10,8 @@ from pcdswidgets.generated.motion.expert.motor_expert_screen_beckhoff_base impor
 
 
 class MotorExpertScreenBeckhoff(MotorExpertScreenBeckhoffBase):
+    """User-editable subclass of the generated Motor Expert Screen base widget."""
+
     designer_options = DesignerOptions(
         group="ECS Motion Expert",
         is_container=False,

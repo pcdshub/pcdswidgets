@@ -1,3 +1,5 @@
+"""Mixin classes that add EPICS channel behavior to vacuum symbol widgets."""
+
 import logging
 import os
 from functools import partial
@@ -14,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 class InterlockMixin:
     """
-    The InterlockMixin class adds the interlock channel and `interlocked`
-    property to the widget.
+    Add an interlock channel and ``interlocked`` property to the widget.
 
     The interlocked property can be used at stylesheet in the following manner:
 
@@ -34,6 +35,7 @@ class InterlockMixin:
     """
 
     def __init__(self, interlock_suffix, **kwargs):
+        """Store the interlock suffix and initialize the interlock state."""
         self._interlock_suffix = interlock_suffix
         self._interlocked = False
         self._interlock_connected = False
@@ -43,7 +45,7 @@ class InterlockMixin:
     @Property(bool, designable=False)
     def interlocked(self):
         """
-        Property used to query interlock state.
+        Query the interlock state.
 
         Returns
         -------
@@ -53,9 +55,9 @@ class InterlockMixin:
 
     def create_channels(self):
         """
-        This method invokes `create_channels` from the super classes and adds
-        the `interlock_channel` to the widget along with a reset for the
-        interlocked and interlock_connected variables.
+        Add the interlock channel on top of the super class channels.
+
+        Also resets the interlocked and interlock_connected variables.
         """
         super().create_channels()
         if not self._interlock_suffix:
@@ -73,8 +75,7 @@ class InterlockMixin:
 
     def status_tooltip(self):
         """
-        This method adds the contribution of the interlock mixin into the
-        general status tooltip.
+        Add the interlock mixin's contribution to the status tooltip.
 
         Returns
         -------
@@ -88,8 +89,7 @@ class InterlockMixin:
 
     def interlock_connection_changed(self, conn):
         """
-        Callback invoked when the connection status changes for the Interlock
-        Channel.
+        Handle a connection status change on the Interlock Channel.
 
         Parameters
         ----------
@@ -100,7 +100,7 @@ class InterlockMixin:
 
     def interlock_value_changed(self, value):
         """
-        Callback invoked when the value changes for the Interlock Channel.
+        Handle a value change on the Interlock Channel.
 
         Parameters
         ----------
@@ -116,8 +116,7 @@ class InterlockMixin:
 
 class ErrorMixin:
     """
-    The ErrorMixin class adds the error channel and `error`
-    property to the widget.
+    Add an error channel and ``error`` property to the widget.
 
     The error property can be used at stylesheet in the following manner:
 
@@ -135,6 +134,7 @@ class ErrorMixin:
     """
 
     def __init__(self, error_suffix, **kwargs):
+        """Store the error suffix and initialize the error state."""
         self._error_suffix = error_suffix
         self._error = ""
         self._error_value = None
@@ -146,7 +146,7 @@ class ErrorMixin:
     @Property(str, designable=False)
     def error(self):
         """
-        Property used to query the error state.
+        Query the error state.
 
         Returns
         -------
@@ -156,9 +156,9 @@ class ErrorMixin:
 
     def create_channels(self):
         """
-        This method invokes `create_channels` from the super classes and adds
-        the `error_channel` to the widget along with a reset for the error and
-        error_connected variables.
+        Add the error channel on top of the super class channels.
+
+        Also resets the error and error_connected variables.
         """
         super().create_channels()
         if not self._error_suffix:
@@ -177,8 +177,7 @@ class ErrorMixin:
 
     def status_tooltip(self):
         """
-        This method adds the contribution of the error mixin into the general
-        status tooltip.
+        Add the error mixin's contribution to the status tooltip.
 
         Returns
         -------
@@ -191,8 +190,7 @@ class ErrorMixin:
 
     def error_connection_changed(self, conn):
         """
-        Callback invoked when the connection status changes for the Error
-        Channel.
+        Handle a connection status change on the Error Channel.
 
         Parameters
         ----------
@@ -203,8 +201,8 @@ class ErrorMixin:
 
     def error_enum_changed(self, items):
         """
-        Callback invoked when the enumeration strings change for the Error
-        Channel.
+        Handle an enum-strings change on the Error Channel.
+
         This callback triggers the update of the error message and also a
         repaint of the widget with the new stylesheet guidelines for the
         current error value.
@@ -221,7 +219,8 @@ class ErrorMixin:
 
     def error_value_changed(self, value):
         """
-        Callback invoked when the value change for the Error Channel.
+        Handle a value change on the Error Channel.
+
         This callback triggers the update of the error message and also a
         repaint of the widget with the new stylesheet guidelines for the
         current error value.
@@ -236,10 +235,7 @@ class ErrorMixin:
         self._update_error_msg()
 
     def _update_error_msg(self):
-        """
-        Internal method that updates the error property and triggers an update
-        on the stylesheet and tooltip.
-        """
+        """Update the error property and refresh the stylesheet and tooltip."""
         if self._error_value is None:
             return
         if len(self._error_enum) > 0:
@@ -255,8 +251,7 @@ class ErrorMixin:
 
 class StateMixin:
     """
-    The StateMixin class adds the state channel and `state` property to the
-    widget.
+    Add a state channel and ``state`` property to the widget.
 
     The state property can be used at stylesheet in the following manner:
 
@@ -274,6 +269,7 @@ class StateMixin:
     """
 
     def __init__(self, state_suffix, **kwargs):
+        """Store the state suffix and initialize the state."""
         self._state_suffix = state_suffix
         self._state = ""
         self._state_value = None
@@ -285,7 +281,7 @@ class StateMixin:
     @Property(str, designable=False)
     def state(self):
         """
-        Property used to query the state of the widget.
+        Query the state of the widget.
 
         Returns
         -------
@@ -295,9 +291,9 @@ class StateMixin:
 
     def create_channels(self):
         """
-        This method invokes `create_channels` from the super classes and adds
-        the `state_channel` to the widget along with a reset for the
-        state and state_connected variables.
+        Add the state channel on top of the super class channels.
+
+        Also resets the state and state_connected variables.
         """
         super().create_channels()
         if not self._state_suffix:
@@ -316,8 +312,7 @@ class StateMixin:
 
     def status_tooltip(self):
         """
-        This method adds the contribution of the state mixin into the general
-        status tooltip.
+        Add the state mixin's contribution to the status tooltip.
 
         Returns
         -------
@@ -331,8 +326,7 @@ class StateMixin:
 
     def state_connection_changed(self, conn):
         """
-        Callback invoked when the connection status changes for the State
-        Channel.
+        Handle a connection status change on the State Channel.
 
         Parameters
         ----------
@@ -343,8 +337,8 @@ class StateMixin:
 
     def state_enum_changed(self, items):
         """
-        Callback invoked when the enumeration strings change for the State
-        Channel.
+        Handle an enum-strings change on the State Channel.
+
         This callback triggers the update of the state message and also a
         repaint of the widget with the new stylesheet guidelines for the
         current state value.
@@ -361,7 +355,8 @@ class StateMixin:
 
     def state_value_changed(self, value):
         """
-        Callback invoked when the value change for the State Channel.
+        Handle a value change on the State Channel.
+
         This callback triggers the update of the state message and also a
         repaint of the widget with the new stylesheet guidelines for the
         current state value.
@@ -376,10 +371,7 @@ class StateMixin:
         self._update_state_msg()
 
     def _update_state_msg(self):
-        """
-        Internal method that updates the state property and triggers an update
-        on the stylesheet and tooltip.
-        """
+        """Update the state property and refresh the stylesheet and tooltip."""
         if self._state_value is None:
             return
         if len(self._state_enum) > 0:
@@ -395,9 +387,7 @@ class StateMixin:
 
 class OpenCloseStateMixin:
     """
-    The OpenCloseStateMixin class adds two channels (Open and Close State) and
-    a `state` property based on a combination of the two channels to the
-    widget.
+    Add open/close channels and a combined ``state`` property to the widget.
 
     The state property can be used at stylesheet in the following manner:
 
@@ -418,6 +408,7 @@ class OpenCloseStateMixin:
     """
 
     def __init__(self, open_suffix, close_suffix, **kwargs):
+        """Store the open/close suffixes and initialize channel state."""
         self._open_suffix = open_suffix
         self._close_suffix = close_suffix
 
@@ -434,7 +425,7 @@ class OpenCloseStateMixin:
     @Property(str, designable=False)
     def state(self):
         """
-        Property used to query the state of the widget.
+        Query the combined open/close state of the widget.
 
         Returns
         -------
@@ -451,9 +442,9 @@ class OpenCloseStateMixin:
 
     def create_channels(self):
         """
-        This method invokes `create_channels` from the super classes and adds
-        the `state_open_channel` and `state_close_channel` to the widget along
-        with a reset for the state and interlock_connected variables.
+        Add the open and close state channels on top of the super class channels.
+
+        Also resets the state and interlock_connected variables.
         """
         super().create_channels()
         if not self._open_suffix or not self._close_suffix:
@@ -481,8 +472,7 @@ class OpenCloseStateMixin:
 
     def status_tooltip(self):
         """
-        This method adds the contribution of the open close state mixin into
-        the general status tooltip.
+        Add the open/close state mixin's contribution to the status tooltip.
 
         Returns
         -------
@@ -496,8 +486,7 @@ class OpenCloseStateMixin:
 
     def state_connection_changed(self, which, conn):
         """
-        Callback invoked when the connection status changes for one of the
-        channels in this mixin.
+        Handle a connection status change on the open or close channel.
 
         Parameters
         ----------
@@ -514,8 +503,7 @@ class OpenCloseStateMixin:
 
     def state_value_changed(self, which, value):
         """
-        Callback invoked when the value changes for one of the channels in this
-        mixin.
+        Handle a value change on the open or close channel.
 
         Parameters
         ----------
@@ -537,7 +525,7 @@ class OpenCloseStateMixin:
 
 class ButtonControl:
     """
-    The ButtonControl class adds a PyDMEnumButton to the widget for controls.
+    Add a PyDMEnumButton to the widget for controls.
 
     Parameters
     ----------
@@ -547,6 +535,7 @@ class ButtonControl:
     """
 
     def __init__(self, command_suffix, **kwargs):
+        """Store the command suffix and build the control button layout."""
         self._command_suffix = command_suffix
         self._orientation = Qt.Horizontal
         self.control_btn = PyDMEnumButton()
@@ -561,10 +550,12 @@ class ButtonControl:
 
     @Property(bool)
     def controlButtonHorizontal(self):
+        """Return whether the control button is laid out horizontally."""
         return self._orientation == Qt.Horizontal
 
     @controlButtonHorizontal.setter
     def controlButtonHorizontal(self, checked):
+        """Set the control button orientation to horizontal when ``checked``."""
         if checked:
             self._orientation = Qt.Horizontal
             self.control_btn.setMinimumSize(100, 40)
@@ -576,8 +567,8 @@ class ButtonControl:
 
     def create_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        created.
+        Create the widget's channels and wire up the control button.
+
         This method also sets the channel address for the control button.
         """
         super().create_channels()
@@ -586,8 +577,8 @@ class ButtonControl:
 
     def destroy_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
+        Destroy the widget's channels and clear the control button.
+
         This method also clears the channel address for the control button.
         """
         super().destroy_channels()
@@ -596,7 +587,7 @@ class ButtonControl:
 
 class LabelControl:
     """
-    The LabelControl class adds a PyDMLabel to the widget for controls.
+    Add a PyDMLabel to the widget for controls.
 
     Parameters
     ----------
@@ -609,6 +600,7 @@ class LabelControl:
     """
 
     def __init__(self, readback_suffix, readback_name, **kwargs):
+        """Store the readback suffix and build the readback label layout."""
         self._readback_suffix = readback_suffix
         self.readback_label = PyDMLabel()
         if readback_name:
@@ -623,8 +615,8 @@ class LabelControl:
 
     def create_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        created.
+        Create the widget's channels and wire up the readback label.
+
         This method also sets the channel address for the control button.
         """
         super().create_channels()
@@ -633,8 +625,8 @@ class LabelControl:
 
     def destroy_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
+        Destroy the widget's channels and clear the readback label.
+
         This method also clears the channel address for the control button.
         """
         super().destroy_channels()
@@ -643,8 +635,7 @@ class LabelControl:
 
 class ButtonLabelControl(ButtonControl):
     """
-    The ButtonLabelControl class adds a PyDMEnumButton and a PyDMLabel to the
-    widget for controls.
+    Add a PyDMEnumButton and a PyDMLabel to the widget for controls.
 
     Parameters
     ----------
@@ -660,6 +651,7 @@ class ButtonLabelControl(ButtonControl):
     """
 
     def __init__(self, command_suffix, readback_suffix, readback_name, **kwargs):
+        """Store the command and readback suffixes and build the controls."""
         self._readback_suffix = readback_suffix
 
         self.readback_label = PyDMLabel()
@@ -670,8 +662,8 @@ class ButtonLabelControl(ButtonControl):
 
     def create_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        created.
+        Create the widget's channels and wire up the readback label.
+
         This method also sets the channel address for the control button.
         """
         super().create_channels()
@@ -680,8 +672,8 @@ class ButtonLabelControl(ButtonControl):
 
     def destroy_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
+        Destroy the widget's channels and clear the readback label.
+
         This method also clears the channel address for the control button.
         """
         super().destroy_channels()
@@ -690,8 +682,7 @@ class ButtonLabelControl(ButtonControl):
 
 class MultipleButtonControl:
     """
-    The MultipleButtonControl class adds multiple PyDMPushButton instances to
-    the widget for controls.
+    Add multiple PyDMPushButton instances to the widget for controls.
 
     Parameters
     ----------
@@ -709,6 +700,7 @@ class MultipleButtonControl:
     """
 
     def __init__(self, *, commands, **kwargs):
+        """Store the button configs and build the button grid layout."""
         self._command_buttons_config = commands
         self._orientation = Qt.Horizontal
         self.buttons = []
@@ -720,10 +712,12 @@ class MultipleButtonControl:
 
     @Property(bool)
     def controlButtonHorizontal(self):
+        """Return whether the control buttons are laid out horizontally."""
         return self._orientation == Qt.Horizontal
 
     @controlButtonHorizontal.setter
     def controlButtonHorizontal(self, checked):
+        """Rebuild the layout with horizontal orientation when ``checked``."""
         self.clear_control_layout()
 
         self._orientation = Qt.Vertical
@@ -740,9 +734,7 @@ class MultipleButtonControl:
                 layout.addWidget(btn, 0, i)
 
     def clear_control_layout(self):
-        """
-        Remove all inner widgets from the control layout
-        """
+        """Remove all inner widgets from the control layout."""
         layout = self.controls_frame.layout()
         if not isinstance(layout, QGridLayout):
             return
@@ -755,6 +747,7 @@ class MultipleButtonControl:
                         layout.removeWidget(w)
 
     def create_buttons(self):
+        """Create PyDMPushButton widgets from the stored button configs."""
         for btn in self._command_buttons_config:
             try:
                 text = btn["text"]
@@ -766,8 +759,8 @@ class MultipleButtonControl:
 
     def create_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        created.
+        Create the widget's channels and wire up each command button.
+
         This method also sets the channel address for the control button.
         """
         super().create_channels()
@@ -778,8 +771,8 @@ class MultipleButtonControl:
 
     def destroy_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
+        Destroy the widget's channels and clear each command button.
+
         This method also clears the channel address for the control button.
         """
         super().destroy_channels()

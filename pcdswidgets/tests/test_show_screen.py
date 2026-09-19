@@ -10,6 +10,7 @@ from pcdswidgets.show_screen import main
 
 
 def test_help(capsys: pytest.CaptureFixture):
+    """Test help."""
     capsys.readouterr()
     with pytest.raises(SystemExit):
         main(["--help"])
@@ -19,6 +20,7 @@ def test_help(capsys: pytest.CaptureFixture):
 
 
 def test_options(capsys: pytest.CaptureFixture):
+    """Test options."""
     capsys.readouterr()
     rval = main(["--options"])
     assert rval == 0
@@ -28,6 +30,7 @@ def test_options(capsys: pytest.CaptureFixture):
 
 
 def test_no_args_help(capsys: pytest.CaptureFixture):
+    """Test no args help."""
     capsys.readouterr()
     rval = main([])
     assert rval == 1
@@ -37,6 +40,7 @@ def test_no_args_help(capsys: pytest.CaptureFixture):
 
 
 def test_standard_help(capsys: pytest.CaptureFixture):
+    """Test standard help."""
     capsys.readouterr()
     with pytest.raises(SystemExit):
         main(["FeatureFinder", "--help"])
@@ -47,6 +51,7 @@ def test_standard_help(capsys: pytest.CaptureFixture):
 
 
 def test_generated_widget_help(capsys: pytest.CaptureFixture):
+    """Test generated widget help."""
     capsys.readouterr()
     with pytest.raises(SystemExit):
         main(["ApertureValve", "--help"])
@@ -57,6 +62,7 @@ def test_generated_widget_help(capsys: pytest.CaptureFixture):
 
 
 def test_generated_screen_help(capsys: pytest.CaptureFixture):
+    """Test generated screen help."""
     capsys.readouterr()
     with pytest.raises(SystemExit):
         main(["GCCPLC_detailed", "--help"])

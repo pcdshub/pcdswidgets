@@ -1,3 +1,5 @@
+"""Symbol icons for vacuum valves and shutters."""
+
 import math
 
 from qtpy.QtCore import Property, QLineF, QPointF, QRectF, Qt
@@ -17,20 +19,24 @@ class PneumaticValveSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the pneumatic valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -53,20 +59,24 @@ class FastShutterSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a transparent arrow brush."""
         super().__init__(parent, **kwargs)
         self._arrow_brush = QBrush(QColor("transparent"), Qt.SolidPattern)
 
     @Property(QBrush)
     def arrowBrush(self):
+        """Return the brush used to fill the arrow shape."""
         return self._arrow_brush
 
     @arrowBrush.setter
     def arrowBrush(self, new_brush):
+        """Set the brush used to fill the arrow shape."""
         if new_brush != self._arrow_brush:
             self._arrow_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the fast shutter symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -105,6 +115,7 @@ class RightAngleManualValveSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the right angle manual valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0))
         path.lineTo(1, 1)
         path.lineTo(0.005, 1)
@@ -126,20 +137,24 @@ class ApertureValveSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the aperture valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -163,20 +178,24 @@ class NeedleValveSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the needle valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -222,20 +241,24 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the proportional valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -282,9 +305,10 @@ class ProportionalValveSymbolIcon(BaseSymbolIcon):
 
 
 class ControlValveSymbolIcon(PneumaticValveSymbolIcon):
-    """Icon for a Control Valve with readback"""
+    """Icon for a Control Valve with readback."""
 
     def draw_icon(self, painter):
+        """Paint the control valve symbol into ``painter``."""
         pen = painter.pen()
         pen.setWidthF(pen.width() * 2)
         pen.setCapStyle(Qt.FlatCap)
@@ -306,9 +330,10 @@ class ControlValveSymbolIcon(PneumaticValveSymbolIcon):
 
 
 class ControlOnlyValveSymbolIcon(BaseSymbolIcon):
-    """Icon for a Control Valve with no readback"""
+    """Icon for a Control Valve with no readback."""
 
     def draw_icon(self, painter):
+        """Paint the control-only valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -328,20 +353,24 @@ class PneumaticValveNOSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the normally-open pneumatic valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)
@@ -373,20 +402,24 @@ class PneumaticValveDASymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the icon with a default green interlock brush."""
         super().__init__(parent, **kwargs)
         self._interlock_brush = QBrush(QColor(0, 255, 0), Qt.SolidPattern)
 
     @Property(QBrush)
     def interlockBrush(self):
+        """Return the brush used to fill the interlock indicator."""
         return self._interlock_brush
 
     @interlockBrush.setter
     def interlockBrush(self, new_brush):
+        """Set the brush used to fill the interlock indicator."""
         if new_brush != self._interlock_brush:
             self._interlock_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the dual-acting pneumatic valve symbol into ``painter``."""
         path = QPainterPath(QPointF(0, 0.3))
         path.lineTo(0, 0.9)
         path.lineTo(1, 0.3)

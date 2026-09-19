@@ -32,11 +32,13 @@ class CamROI(pg.ROI):
     # ── Qt geometry overrides ────────────────────────────────────────────
 
     def boundingRect(self) -> QRectF:
+        """Return a bounding rectangle padded by the current pen width."""
         pw = self.currentPen.width() if self.currentPen else 1
         margin = pw / 2.0 + 1
         return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(-margin, -margin, margin, margin)
 
     def stateChanged(self, finish=True):
+        """Invalidate the padded rect before the parent repaints, then chain up."""
         # Invalidate old padded rect before the parent repaints.
         self.prepareGeometryChange()
         super().stateChanged(finish)
@@ -98,16 +100,17 @@ class CamROI(pg.ROI):
 
     @Slot(bool)
     def visible(self, state: bool):
+        """Show or hide the ROI graphic item."""
         self.setVisible(state)
 
     @Slot(QColor)
     def update_color(self, color: QColor):
-        """a slot for setting the color"""
+        """Set the ROI pen color."""
         self.change_pen(color=color)
 
     def change_pen(self, color=None, width=None):
         """
-        Similar to setPen but with key differences
+        Similar to setPen but with key differences.
 
         - defaults to previous width or color if ommited
         - adds updates hoverpen too with inverted color

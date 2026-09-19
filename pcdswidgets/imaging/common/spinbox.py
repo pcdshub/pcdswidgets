@@ -1,14 +1,16 @@
-"""override default signal/slot behavior of the spinbox"""
+"""override default signal/slot behavior of the spinbox."""
 
 from pydm.widgets import PyDMSpinbox
 from qtpy.QtCore import Qt
 
 
 class PyDMSpinboxEnter(PyDMSpinbox):
-    """Overrides for PyDMSpinbox for handling editing events"""
+    """Overrides for PyDMSpinbox for handling editing events."""
 
     def keyPressEvent(self, ev):
         """
+        Validate the text on Enter/Return before propagating to the base class.
+
         The default <Enter> press event does not validate text if
         keyboardTracking is off causing a stale value to be sent.
 

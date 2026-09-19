@@ -1,3 +1,5 @@
+"""Tests for the DesignerWidget base class behavior."""
+
 import inspect
 from pathlib import Path
 
@@ -17,6 +19,7 @@ from .builder_filepath_test_widget import BuilderFilepathTestWidget
 
 @pytest.fixture(scope="function")
 def basic_test_widget(qtbot: QtBot) -> BuilderBasicTestWidget:
+    """Provide a BuilderBasicTestWidget instance for the test."""
     widget = BuilderBasicTestWidget()
     qtbot.add_widget(widget)
     return widget
@@ -24,12 +27,14 @@ def basic_test_widget(qtbot: QtBot) -> BuilderBasicTestWidget:
 
 @pytest.fixture(scope="function")
 def filepath_test_widget(qtbot: QtBot) -> BuilderFilepathTestWidget:
+    """Provide a BuilderFilepathTestWidget instance for the test."""
     widget = BuilderFilepathTestWidget()
     qtbot.add_widget(widget)
     return widget
 
 
 def test_has_expected_hints():
+    """Test has expected hints."""
     hints = inspect.get_annotations(BuilderBasicTestWidgetBase)
 
     assert hints["Form"] == "QtWidgets.QWidget"
@@ -39,6 +44,7 @@ def test_has_expected_hints():
 
 
 def test_has_expected_widgets(basic_test_widget: BuilderBasicTestWidget):
+    """Test has expected widgets."""
     assert isinstance(basic_test_widget.name_label, QLabel)
     assert isinstance(basic_test_widget.num_label, QLabel)
     assert isinstance(basic_test_widget.name_num_label, QLabel)
@@ -46,6 +52,7 @@ def test_has_expected_widgets(basic_test_widget: BuilderBasicTestWidget):
 
 
 def test_has_expected_macro_to_widget(basic_test_widget: BuilderBasicTestWidget):
+    """Test has expected macro to widget."""
     assert set(basic_test_widget._macro_to_widget.keys()) == {"NAME", "NUM", "ONE", "TWO"}
     assert set(basic_test_widget._macro_to_widget["NAME"]) == {"name_label", "name_num_label"}
     assert set(basic_test_widget._macro_to_widget["NUM"]) == {"num_label", "name_num_label"}
@@ -54,6 +61,7 @@ def test_has_expected_macro_to_widget(basic_test_widget: BuilderBasicTestWidget)
 
 
 def test_has_expected_widget_to_macro(basic_test_widget: BuilderBasicTestWidget):
+    """Test has expected widget to macro."""
     assert set(basic_test_widget._widget_to_macro.keys()) == {
         "name_label",
         "num_label",
@@ -67,6 +75,7 @@ def test_has_expected_widget_to_macro(basic_test_widget: BuilderBasicTestWidget)
 
 
 def test_has_expected_widget_to_pre_template(basic_test_widget: BuilderBasicTestWidget):
+    """Test has expected widget to pre template."""
     assert set(basic_test_widget._widget_to_pre_template.keys()) == {
         "name_label",
         "num_label",
@@ -85,6 +94,7 @@ def test_has_expected_widget_to_pre_template(basic_test_widget: BuilderBasicTest
 
 
 def test_has_expected_macro_values(basic_test_widget: BuilderBasicTestWidget):
+    """Test has expected macro values."""
     assert basic_test_widget._macro_values == {
         "NAME": "",
         "NUM": "",
@@ -94,6 +104,7 @@ def test_has_expected_macro_values(basic_test_widget: BuilderBasicTestWidget):
 
 
 def test_macro_substitution_labels(basic_test_widget: BuilderBasicTestWidget):
+    """Test macro substitution labels."""
     assert basic_test_widget.name_label.text() == ""
     assert basic_test_widget.num_label.text() == ""
     assert basic_test_widget.name_num_label.text() == ""
@@ -118,6 +129,7 @@ def test_macro_substitution_labels(basic_test_widget: BuilderBasicTestWidget):
 
 
 def test_macro_substitution_list_widget(basic_test_widget: BuilderBasicTestWidget):
+    """Test macro substitution list widget."""
     assert basic_test_widget.one_two_shell.readCommands() == []
 
     basic_test_widget.setProperty("one", "UNO")
@@ -134,10 +146,13 @@ def test_macro_substitution_list_widget(basic_test_widget: BuilderBasicTestWidge
 
 
 def test_no_icon(qtbot: QtBot):
+    """Test no icon."""
     assert BuilderBasicTestWidget.get_designer_icon() is None
 
 
 def test_iconfont_icon(qtbot: QtBot):
+    """Test iconfont icon."""
+
     class TestCls(BuilderBasicTestWidget):
         designer_options = DesignerOptions(
             group="ECS Tests Builder",
@@ -149,6 +164,8 @@ def test_iconfont_icon(qtbot: QtBot):
 
 
 def test_png_icon(qtbot: QtBot):
+    """Test png icon."""
+
     class TestCls(BuilderBasicTestWidget):
         designer_options = DesignerOptions(
             group="ECS Tests Builder",
@@ -160,6 +177,7 @@ def test_png_icon(qtbot: QtBot):
 
 
 def test_macro_substitution_subdisplays(filepath_test_widget: BuilderFilepathTestWidget):
+    """Test macro substitution subdisplays."""
     assert filepath_test_widget.emb_disp.readMacros() == ""
 
     filepath_test_widget.setProperty("emb_title", "Embedded")
@@ -174,6 +192,7 @@ def test_macro_substitution_subdisplays(filepath_test_widget: BuilderFilepathTes
 
 
 def test_filepath_subdisplays(filepath_test_widget: BuilderFilepathTestWidget):
+    """Test filepath subdisplays."""
     canonical_path = Path(__file__).parent.resolve() / "subdisplay.ui"
     assert canonical_path.exists()
     assert filepath_test_widget.emb_disp.readFilename() == str(canonical_path)

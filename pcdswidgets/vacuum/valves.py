@@ -1,3 +1,5 @@
+"""PyDM symbol widgets for vacuum valves and shutters."""
+
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy.QtCore import Property, QSize, Qt
@@ -21,8 +23,7 @@ from .mixins import ButtonControl, ErrorMixin, InterlockMixin, MultipleButtonCon
 
 class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Pneumatic Valve with the proper icon and
-    controls.
+    A Symbol Widget representing a Pneumatic Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -108,6 +109,7 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDS
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the PneumaticValve widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -119,13 +121,13 @@ class PneumaticValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDS
         self.icon = PneumaticValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing an Aperture Valve with the proper icon and
-    controls.
+    A Symbol Widget representing an Aperture Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -210,6 +212,7 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSS
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ApertureValve widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -221,13 +224,13 @@ class ApertureValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSS
         self.icon = ApertureValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Fast Shutter with the proper icon and
-    controls.
+    A Symbol Widget representing a Fast Shutter with the proper icon and controls.
 
     Parameters
     ----------
@@ -309,6 +312,7 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl,
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the FastShutter widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -320,13 +324,13 @@ class FastShutter(InterlockMixin, ErrorMixin, StateMixin, MultipleButtonControl,
         self.icon = FastShutterSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Needle Valve with the proper icon and
-    controls.
+    A Symbol Widget representing a Needle Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -396,6 +400,7 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the NeedleValve widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -406,13 +411,13 @@ class NeedleValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
         self.icon = NeedleValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Proportional Valve with the proper icon and
-    controls.
+    A Symbol Widget representing a Proportional Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -482,6 +487,7 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBas
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ProportionalValve widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -492,13 +498,13 @@ class ProportionalValve(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBas
         self.icon = ProportionalValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class RightAngleManualValve(PCDSSymbolBase):
     """
-    A Symbol Widget representing a Right Angle Manual Valve with the proper
-    icon.
+    A Symbol Widget representing a Right Angle Manual Valve with the proper icon.
 
     Parameters
     ----------
@@ -537,13 +543,14 @@ class RightAngleManualValve(PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the RightAngleManualValve widget and its icon."""
         self._controls_location = ContentLocation.Hidden
         super().__init__(parent=parent, **kwargs)
         self.icon = RightAngleManualValveSymbolIcon(parent=self)
 
     def sizeHint(self):
         """
-        Suggested initial size for the widget.
+        Return the suggested initial size for the widget.
 
         Returns
         -------
@@ -553,21 +560,23 @@ class RightAngleManualValve(PCDSSymbolBase):
 
     @Property(str, designable=False)
     def channelsPrefix(self):
+        """Return the (non-designable) channels prefix inherited from the base."""
         return super().channelsPrefix
 
     @Property(bool, designable=False)
     def showIcon(self):
+        """Return the (non-designable) showIcon value inherited from the base."""
         return super().showIcon
 
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
+        """Return the (non-designable) controlsLocation inherited from the base."""
         return super().controlsLocation
 
 
 class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Control Valve with the proper icon and
-    controls.
+    A Symbol Widget representing a Control Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -651,6 +660,7 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSy
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ControlValve widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -662,13 +672,13 @@ class ControlValve(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSy
         self.icon = ControlValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Normally Closed Control Valve with the
-    proper icon and controls.
+    A Symbol Widget representing a Normally Closed Control Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -749,6 +759,7 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     _command_suffix = ":OPN_SW"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ControlOnlyValveNC widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -759,13 +770,13 @@ class ControlOnlyValveNC(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
         self.icon = ControlOnlyValveSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Normally Open Control Valve with the
-    proper icon and controls.
+    A Symbol Widget representing a Normally Open Control Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -846,6 +857,7 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
     _command_suffix = ":CLS_SW"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ControlOnlyValveNO widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -858,8 +870,7 @@ class ControlOnlyValveNO(InterlockMixin, StateMixin, ButtonControl, PCDSSymbolBa
 
 class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Normally Open Pneumatic Valve with the
-    proper icon and controls.
+    A Symbol Widget representing a Normally Open Pneumatic Valve with the proper icon and controls.
 
     Parameters
     ----------
@@ -944,6 +955,7 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PC
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the PneumaticValveNO widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -955,13 +967,13 @@ class PneumaticValveNO(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PC
         self.icon = PneumaticValveNOSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)
 
 
 class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     """
-    A Symbol Widget representing a dual-acting Pneumatic Valve with
-    the proper icon and controls.
+    A Symbol Widget representing a dual-acting Pneumatic Valve with the proper icon and controls.
 
     This needs to modify the normal interlock logic because it has
     two interlock PVs instead of one.
@@ -1055,6 +1067,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the PneumaticValveDA widget with independent open/close buttons."""
         self._cls_interlocked = False
         self._cls_interlock_connected = False
         self.cls_interlock_channel = None
@@ -1086,7 +1099,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
     @Property(bool, designable=False)
     def interlocked(self):
         """
-        Property used to query interlock state.
+        Query the combined interlock state (open or close side interlocked).
 
         Returns
         -------
@@ -1096,10 +1109,12 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     @Property(bool)
     def controlButtonHorizontal(self):
+        """Return whether the open/close buttons are laid out horizontally."""
         return self._orientation == Qt.Horizontal
 
     @controlButtonHorizontal.setter
     def controlButtonHorizontal(self, checked):
+        """Set the open/close button orientation to horizontal when ``checked``."""
         if checked:
             self._orientation = Qt.Horizontal
         else:
@@ -1108,6 +1123,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
         self.rearrange_button_layout()
 
     def rearrange_button_layout(self):
+        """Re-place the open/close buttons in the grid layout for the current orientation."""
         if self._orientation == Qt.Horizontal:
             self.controls_frame.layout().addWidget(self.open_btn, 0, 1)
             self.controls_frame.layout().addWidget(self.cls_btn, 0, 0)
@@ -1147,8 +1163,8 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     def destroy_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
+        Destroy the widget's channels including the close interlock.
+
         This method also clears the channel address for the control buttons
         and close interlock.
         """
@@ -1160,8 +1176,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     def cls_interlock_connection_changed(self, conn):
         """
-        Callback invoked when the connection status changes for the Interlock
-        Channel.
+        Handle a connection status change on the close Interlock Channel.
 
         Neither this nor the open interlock connection state are currently
         used, but this was included for completeness.
@@ -1175,7 +1190,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     def interlock_value_changed(self, value):
         """
-        Callback invoked when the value changes for the Interlock Channel.
+        Handle a value change on the open Interlock Channel.
 
         Parameters
         ----------
@@ -1189,7 +1204,7 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
 
     def cls_interlock_value_changed(self, value):
         """
-        Callback invoked when the value changes for the Interlock Channel.
+        Handle a value change on the close Interlock Channel.
 
         Parameters
         ----------
@@ -1202,11 +1217,10 @@ class PneumaticValveDA(InterlockMixin, ErrorMixin, StateMixin, PCDSSymbolBase):
         self.update_da_interlock()
 
     def update_da_interlock(self):
-        """
-        Update the double-acting interlock state when either pv changes.
-        """
+        """Update the double-acting interlock state when either pv changes."""
         self.update_stylesheet()
         self.update_status_tooltip()
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 70)

@@ -25,6 +25,8 @@ logger = logging.getLogger(__name__)
 
 
 class MotorTipTiltMixin:
+    """Mixin providing shared step-button widgets for motor tip/tilt widgets."""
+
     # some type hinting
     vertical_invert: QCheckBox
     horizontal_invert: QCheckBox
@@ -116,8 +118,7 @@ class MotorTipTiltMixin:
 
     def _invert_axis_channel(self, axis: str) -> None:
         """
-        Invert the forward/reverse channel connections for a particular
-        axis in the directional pad
+        Invert the forward/reverse channels for one axis of the directional pad.
 
         Parameters
         ----------
@@ -205,9 +206,10 @@ class MotorTipTiltMixin:
 
     def _on_position_changed(self, axis: str, value: float) -> None:
         """
-        Derive jog direction from consecutive position readbacks. Neither
-        .TDIR nor MSTA's DIRECTION bit update on the SmarAct setup this was
-        tested against, so the position delta is used instead.
+        Derive jog direction from consecutive position readbacks.
+
+        Neither .TDIR nor MSTA's DIRECTION bit update on the SmarAct setup
+        this was tested against, so the position delta is used instead.
         """
         last = self._last_position[axis]
         self._last_position[axis] = value
@@ -219,8 +221,10 @@ class MotorTipTiltMixin:
 
     def _apply_led_direction(self, axis: str, positive: bool) -> None:
         """
-        Translate a position-readback delta into this axis's on-screen
-        up/down or left/right arrow, respecting the invert checkbox.
+        Update the axis's on-screen arrow from a position-readback delta.
+
+        Translates the delta into this axis's up/down or left/right arrow,
+        respecting the invert checkbox.
 
         positive=True means the readback increased since the last update.
         """
@@ -235,9 +239,9 @@ class MotorTipTiltMixin:
         getattr(self, f"{axis}_status_led").set_move_direction(direction)
 
     def _invert_vertical(self) -> None:
-        """Swap the forward and reverse buttons for the vertical axis"""
+        """Swap the forward and reverse buttons for the vertical axis."""
         self._invert_axis_channel("vertical")
 
     def _invert_horizontal(self) -> None:
-        """Swap the forward and reverse buttons for the horizontal axis"""
+        """Swap the forward and reverse buttons for the horizontal axis."""
         self._invert_axis_channel("horizontal")

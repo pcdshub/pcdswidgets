@@ -32,6 +32,7 @@ SKIP_REASON = "Test requires ophyd, not installed."
 
 @pytest.fixture(scope="function")
 def cell(qtbot: QtBot) -> IndicatorCell:
+    """Provide a fresh IndicatorCell for the test."""
     cell = IndicatorCell()
     qtbot.addWidget(cell)
     return cell
@@ -39,6 +40,7 @@ def cell(qtbot: QtBot) -> IndicatorCell:
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_base_device_button_menu(cell, tab_dock):
+    """Test base device button menu."""
     device_count = 12
     for i in range(device_count):
         motor = SynAxis(name=f"motor_{i}")
@@ -50,6 +52,7 @@ def test_base_device_button_menu(cell, tab_dock):
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_base_device_button_show_device(cell):
+    """Test base device button show device."""
     display = cell.show_device(motor)
     assert display.devices[0] == motor
     assert motor.name in cell._device_displays
@@ -57,6 +60,7 @@ def test_base_device_button_show_device(cell):
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_base_device_button_show_device_repeated(cell, qtbot):
+    """Test base device button show device repeated."""
     widget = QWidget()
     qtbot.addWidget(widget)
     cell._device_displays[motor.name] = widget
@@ -66,6 +70,7 @@ def test_base_device_button_show_device_repeated(cell, qtbot):
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_base_device_button_show_all(cell):
+    """Test base device button show all."""
     cell.devices = [motor]
     screens = cell.show_all()
     assert [sc.devices[0] for sc in screens] == [motor]
@@ -73,6 +78,7 @@ def test_base_device_button_show_all(cell):
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_base_device_button_show_all_repeated(cell):
+    """Test base device button show all repeated."""
     cell.devices = [motor]
     screens1 = cell.show_all()
     screens2 = cell.show_all()
@@ -82,6 +88,7 @@ def test_base_device_button_show_all_repeated(cell):
 
 @pytest.mark.skipif(no_ophyd, reason=SKIP_REASON)
 def test_indicator_cell_add_device(cell):
+    """Test indicator cell add device."""
     device_count = 12
     for i in range(device_count):
         motor = SynAxis(name=f"motor_{i}")

@@ -1,13 +1,14 @@
-"""
-Define the IconOptions enum, which helps us keep track of which string icon names are valid.
+"""Define the IconOptions enum of valid designer icon names.
 
-This is a file generated from icon_options.j2
+This is a file generated from icon_options.j2.
 """
 
 from enum import StrEnum
 
 
 class IconOptions(StrEnum):
+    """Valid string names for designer icon options."""
+
     NONE = ""
     ad = "ad"
     address_book = "address-book"

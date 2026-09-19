@@ -1,8 +1,6 @@
-"""
-Helper module for creating the [project.entry-points."pydm.widget"]
-section in pyproject.toml
+"""Rebuild the ``[project.entry-points."pydm.widget"]`` table in pyproject.toml.
 
-python -m pcdswidgets.builder.entrypoint_finder
+Invoke via ``python -m pcdswidgets.builder.entrypoint_finder``.
 """
 
 import importlib
@@ -28,6 +26,7 @@ SKIP_MODULES = [
 
 
 def main():
+    """Rebuild the pydm.widget entry points table in pyproject.toml."""
     key_val = get_widget_entrypoint_data()
     widget_table, toml_doc = get_current_widget_table()
     update_widget_table(widget_table, key_val)
@@ -35,6 +34,7 @@ def main():
 
 
 def get_widget_entrypoint_data() -> list[tuple[str, str]]:
+    """Return a sorted list of (name, ``module:name``) entry point tuples."""
     key_val_set: set[tuple[str, str]] = set()
     for name, WidgetCls in iter_all_widgets():
         key_val_set.add((name, f"{WidgetCls.__module__}:{name}"))
@@ -78,10 +78,12 @@ def iter_submodules(package: str = "pcdswidgets") -> Iterator[ModuleType]:
 
 
 def get_pyproj_path() -> Path:
+    """Return the absolute path to the repository's pyproject.toml."""
     return Path(pcdswidgets.__file__).parent.parent / "pyproject.toml"
 
 
 def get_current_widget_table() -> tuple[tki.Table, tk.TOMLDocument]:
+    """Return the current pydm.widget entry table and the full toml document."""
     pyproj = get_pyproj_path()
     if not pyproj.exists():
         raise RuntimeError(f"Project file {pyproj} missing?")
@@ -96,12 +98,14 @@ def get_current_widget_table() -> tuple[tki.Table, tk.TOMLDocument]:
 
 
 def update_widget_table(widget_table: tki.Table, key_val: list[tuple[str, str]]):
+    """Replace the widget table entries with the provided ``key_val`` pairs."""
     widget_table.clear()
     for key, value in key_val:
         widget_table[key] = value
 
 
 def write_pyproj(toml_doc: tk.TOMLDocument):
+    """Serialize ``toml_doc`` back to pyproject.toml on disk."""
     pyproj = get_pyproj_path()
     with open(pyproj, "w") as fd:
         tk.dump(toml_doc, fd)

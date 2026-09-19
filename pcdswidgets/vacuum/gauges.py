@@ -1,3 +1,5 @@
+"""PyDM symbol widgets for vacuum pressure gauges."""
+
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import QSize
 
@@ -15,8 +17,7 @@ from .mixins import ButtonLabelControl, InterlockMixin, LabelControl, StateMixin
 
 class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Rough Gauge with the proper icon and
-    controls.
+    A Symbol Widget representing a Rough Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -81,6 +82,7 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the RoughGauge widget and its icon."""
         super().__init__(
             parent=parent,
             state_suffix=self._state_suffix,
@@ -92,13 +94,13 @@ class RoughGauge(StateMixin, LabelControl, PCDSSymbolBase):
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(70, 60)
 
 
 class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Hot Cathode Gauge with the proper icon
-    and controls.
+    A Symbol Widget representing a Hot Cathode Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -171,6 +173,7 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbol
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the HotCathodeGauge widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -184,13 +187,13 @@ class HotCathodeGauge(ButtonLabelControl, InterlockMixin, StateMixin, PCDSSymbol
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 80)
 
 
 class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Cold Cathode Gauge with the proper icon and
-    controls.
+    A Symbol Widget representing a Cold Cathode Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -263,6 +266,7 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ColdCathodeGauge widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -276,13 +280,13 @@ class ColdCathodeGauge(InterlockMixin, StateMixin, ButtonLabelControl, PCDSSymbo
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 80)
 
 
 class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and
-    controls.
+    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -347,6 +351,7 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ColdCathodeComboGauge widget and its icon."""
         super().__init__(
             parent=parent,
             state_suffix=self._state_suffix,
@@ -358,13 +363,13 @@ class ColdCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(70, 70)
 
 
 class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and
-    controls.
+    A Symbol Widget representing a Combo Cold Cathode and Pirani Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -429,6 +434,7 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the HotCathodeComboGauge widget and its icon."""
         super().__init__(
             parent=parent,
             state_suffix=self._state_suffix,
@@ -440,13 +446,13 @@ class HotCathodeComboGauge(StateMixin, LabelControl, PCDSSymbolBase):
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(70, 70)
 
 
 class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Rough Gauge with the proper icon and
-    controls.
+    A Symbol Widget representing a Rough Gauge with the proper icon and controls.
 
     Parameters
     ----------
@@ -511,6 +517,7 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the CapacitanceManometerGauge widget and its icon."""
         super().__init__(
             parent=parent,
             state_suffix=self._state_suffix,
@@ -522,4 +529,5 @@ class CapacitanceManometerGauge(StateMixin, LabelControl, PCDSSymbolBase):
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(70, 70)

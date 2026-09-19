@@ -1,6 +1,4 @@
-"""
-Collapsible widget wrapper for sidebar panels.
-"""
+"""Collapsible widget wrapper for sidebar panels."""
 
 import logging
 
@@ -118,6 +116,7 @@ class CollapsibleSection(QWidget):
 
     @property
     def is_collapsed(self) -> bool:
+        """Return True when the section is currently collapsed."""
         return self._collapsed
 
     def _apply_collapsed_state(self) -> None:

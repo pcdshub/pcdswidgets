@@ -1,6 +1,4 @@
-"""
-Unit tests for TabDock and TabDockButton.
-"""
+"""Unit tests for TabDock and TabDockButton."""
 
 from pathlib import Path
 from types import SimpleNamespace
@@ -17,7 +15,7 @@ TESTS_DIR = Path(__file__).parent.resolve()
 
 @pytest.fixture(scope="function")
 def dock_button(qtbot: QtBot) -> TabDockButton:
-    """Loads a TabDockButton"""
+    """Provide a fresh TabDockButton for the test."""
     button = TabDockButton()
     qtbot.addWidget(button)
     return button
@@ -25,7 +23,7 @@ def dock_button(qtbot: QtBot) -> TabDockButton:
 
 @pytest.fixture(scope="function")
 def tab_button_mocks(dock_button: TabDockButton, monkeypatch: pytest.MonkeyPatch) -> dict[str, Mock]:
-    """Applies mocks to TabDock"""
+    """Apply mocks to TabDock for the test."""
     mocks = {"open_in_dock": Mock(), "open_in_window": Mock(), "open_menu": Mock()}
     for name, mk in mocks.items():
         monkeypatch.setattr(dock_button, name, mk)

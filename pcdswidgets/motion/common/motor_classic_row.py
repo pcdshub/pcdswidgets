@@ -1,6 +1,6 @@
-"""
-Originally generated from jinja template ui_main_widget.j2
+"""User-editable widget subclass for MotorClassicRow.
 
+Originally generated from jinja template ui_main_widget.j2.
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
@@ -65,20 +65,23 @@ class MotorClassicRow(MotorClassicRowBase):
     BECKHOFF_LEGACY = MotorTypes.BECKHOFF_LEGACY
 
     def __init__(self, parent: QWidget | None = None):
+        """Build the widget with the expert shell command button hidden."""
         super().__init__(parent)
         self._motor_type = MotorTypes.GENERIC
         self._expert_command = "motor-expert-screen {motor}"
         self.PyDMShellCommand.hide()
 
     def after_set_macro(self, macro_name: str, value: str):
-        """Puts motor prefix into expert screen command."""
+        """Rebuild the expert screen command when the MOTOR macro changes."""
         if macro_name == "MOTOR":
             self.new_expert_command_motor(value)
 
     def get_motor_type(self) -> MotorTypes | int:
+        """Return the currently selected motor type."""
         return self._motor_type
 
     def set_motor_type(self, value: MotorTypes | int) -> None:
+        """Set the motor type and reconfigure the expert command button."""
         self._motor_type = value
         match value:
             case MotorTypes.IMS:
@@ -96,9 +99,11 @@ class MotorClassicRow(MotorClassicRowBase):
     motor_type = pyqtProperty(MotorTypes, get_motor_type, set_motor_type)
 
     def new_expert_command_template(self, template: str):
+        """Set the expert-command template string and refresh the button."""
         self._expert_command = template
         if motor := self.get_macro("MOTOR"):
             self.new_expert_command_motor(motor)
 
     def new_expert_command_motor(self, motor: str):
+        """Rebuild the expert PyDMShellCommand for ``motor``."""
         self.PyDMShellCommand.commands = [self._expert_command.format(motor=motor)]

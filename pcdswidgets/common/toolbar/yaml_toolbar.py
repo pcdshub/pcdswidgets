@@ -186,7 +186,7 @@ class YamlTabLayout(QGridLayout):
         self.direction = direction
 
     def addWidget(self, widget: QWidget):  # type: ignore
-        """Add a QWidget to the layout"""
+        """Add a QWidget to the layout."""
         # Number of widgets already existing
         position = self.count()
         # Desired position based on current count

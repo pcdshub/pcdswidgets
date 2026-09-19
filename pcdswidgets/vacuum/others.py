@@ -1,3 +1,5 @@
+"""Miscellaneous vacuum symbol widgets (e.g. residual gas analyzer)."""
+
 from qtpy.QtCore import Property, QSize
 
 from ..symbols.others import RGASymbolIcon
@@ -58,12 +60,15 @@ class RGA(PCDSSymbolBase):
 
     @Property(str, designable=False)
     def channelsPrefix(self):
+        """Return the (non-designable) channels prefix inherited from the base."""
         return super().channelsPrefix
 
     @Property(bool, designable=False)
     def showIcon(self):
+        """Return the (non-designable) showIcon value inherited from the base."""
         return super().showIcon
 
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
+        """Return the (non-designable) controlsLocation inherited from the base."""
         return super().controlsLocation

@@ -1,3 +1,5 @@
+"""Dataclass describing per-widget Qt Designer registration options."""
+
 from dataclasses import dataclass
 
 from .icon_options import IconOptions

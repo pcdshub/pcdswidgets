@@ -1,3 +1,5 @@
+"""Base classes for pcdswidgets vacuum symbol widgets."""
+
 import logging
 import os
 from itertools import zip_longest
@@ -27,10 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class ContentLocation:
-    """
-    Enum Class to be used by the widgets to configure the Controls Content
-    Location.
-    """
+    """Enum values used by widgets to configure the Controls Content Location."""
 
     Hidden = 0
     Top = 1
@@ -63,6 +62,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     ContentLocation = ContentLocation
 
     def __init__(self, parent=None, **kwargs):
+        """Set up the icon, controls frame, and default state for the widget."""
         super().__init__(parent=parent, **kwargs)
         self._expert_display = None
         self.interlock = None
@@ -131,7 +131,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(ContentLocation)
     def controlsLocation(self):
         """
-        Property controlling where the controls frame will be displayed.
+        Return the location where the controls frame will be displayed.
 
         Returns
         -------
@@ -142,7 +142,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @controlsLocation.setter
     def controlsLocation(self, location):
         """
-        Property controlling where the controls frame will be displayed.
+        Set the location where the controls frame will be displayed.
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(ContentLocation)
     def textLocation(self):
         """
-        Property controlling where the PV name is displayed relative to the icon
+        Return the location of the PV name relative to the icon.
 
         Returns
         -------
@@ -166,7 +166,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @textLocation.setter
     def textLocation(self, location):
         """
-        Property controlling where the PV name is displayed relative to the icon
+        Set the location of the PV name relative to the icon.
 
         Parameters
         ----------
@@ -179,8 +179,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(str)
     def channelsPrefix(self):
         """
-        The prefix to be used when composing the channels for each of the
-        elements of the symbol widget.
+        Return the prefix used when composing the channels for the widget.
 
         The prefix must include the protocol as well. E.g.: ca://VALVE
 
@@ -193,8 +192,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @channelsPrefix.setter
     def channelsPrefix(self, prefix):
         """
-        The prefix to be used when composing the channels for each of the
-        elements of the symbol widget.
+        Set the prefix used when composing the channels for the widget.
 
         The prefix must include the protocol as well. E.g.: ca://VALVE
 
@@ -203,7 +201,6 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         prefix : str
             The prefix to be used for the channels.
         """
-
         if prefix != self._channels_prefix:
             self._channels_prefix = prefix
             self.destroy_channels()
@@ -212,10 +209,12 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     @property
     def icon(self):
+        """Return the current icon widget instance."""
         return self._icon
 
     @icon.setter
     def icon(self, icon):
+        """Assign a new icon widget and refresh the layout."""
         if self._icon != icon:
             self._icon = icon
             self.setup_icon()
@@ -225,7 +224,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(bool)
     def showIcon(self):
         """
-        Whether or not to show the symbol icon when rendering the widget.
+        Return whether the symbol icon is shown when rendering the widget.
 
         Returns
         -------
@@ -236,7 +235,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @showIcon.setter
     def showIcon(self, value):
         """
-        Whether or not to show the symbol icon when rendering the widget.
+        Set whether the symbol icon is shown when rendering the widget.
 
         Parameters
         ----------
@@ -252,7 +251,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(bool)
     def showName(self):
         """
-        Whether or not to show the name when rendering the widget.
+        Return whether the name is shown when rendering the widget.
 
         Returns
         -------
@@ -263,7 +262,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @showName.setter
     def showName(self, value):
         """
-        Whether or not to show the name when rendering the widget.
+        Set whether the name is shown when rendering the widget.
 
         Returns
         -------
@@ -277,7 +276,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(bool)
     def overrideName(self):
         """
-        Override the textbox auto-generated from the channel prefix
+        Return whether the textbox override of the auto-generated name is active.
 
         Returns
         -------
@@ -288,7 +287,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @overrideName.setter
     def overrideName(self, value):
         """
-        Override the textbox auto-generated from the channel prefix
+        Enable or disable overriding the textbox auto-generated from the channel prefix.
 
         Returns
         -------
@@ -304,7 +303,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(str)
     def setOverrideName(self):
         """
-        Set the name when it is overriden
+        Return the name text used when the override is active.
 
         Returns
         -------
@@ -315,7 +314,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @setOverrideName.setter
     def setOverrideName(self, value):
         """
-        Set the name when it is overriden
+        Set the name text used when the override is active.
 
         Returns
         -------
@@ -331,7 +330,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(int)
     def fontSize(self):
         """
-        Set the font size for the name when rendering the widget.
+        Return the font size used for the widget's name label.
 
         Returns
         -------
@@ -342,7 +341,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @fontSize.setter
     def fontSize(self, value):
         """
-        Set the font size for the name when rendering the widget.
+        Set the font size for the widget's name label.
 
         Returns
         -------
@@ -355,8 +354,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(bool)
     def showStatusTooltip(self):
         """
-        Whether or not to show a detailed status tooltip including the state
-        of the widget components such as Interlock, Error, State and more.
+        Return whether a detailed status tooltip is shown.
+
+        The tooltip includes the state of the widget components such as
+        Interlock, Error, State and more.
 
         Returns
         -------
@@ -367,8 +368,10 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @showStatusTooltip.setter
     def showStatusTooltip(self, value):
         """
-        Whether or not to show a detailed status tooltip including the state
-        of the widget components such as Interlock, Error, State and more.
+        Set whether a detailed status tooltip is shown.
+
+        The tooltip includes the state of the widget components such as
+        Interlock, Error, State and more.
 
         Parameters
         ----------
@@ -382,7 +385,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(int)
     def iconSize(self):
         """
-        The size of the icon in pixels.
+        Return the size of the icon in pixels.
 
         Returns
         -------
@@ -393,7 +396,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @iconSize.setter
     def iconSize(self, size):
         """
-        The size of the icon in pixels.
+        Set the size of the icon in pixels.
 
         Parameters
         ----------
@@ -424,7 +427,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(bool)
     def rotateIcon(self):
         """
-        Rotate the icon 90 degrees clockwise
+        Rotate the icon 90 degrees clockwise.
 
         Returns
         -------
@@ -435,7 +438,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @rotateIcon.setter
     def rotateIcon(self, rotate):
         """
-        Rotate the icon 90 degrees clockwise
+        Rotate the icon 90 degrees clockwise.
 
         Parameters
         ----------
@@ -449,8 +452,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @Property(str)
     def expertOphydClass(self):
         """
-        The full qualified name of the Ophyd class to be used for the Expert
-        screen to be generated using Typhos.
+        Return the qualified name of the Ophyd class for the Typhos expert screen.
 
         Returns
         -------
@@ -464,8 +466,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
     @expertOphydClass.setter
     def expertOphydClass(self, klass):
         """
-        The full qualified name of the Ophyd class to be used for the Expert
-        screen to be generated using Typhos.
+        Set the qualified name of the Ophyd class for the Typhos expert screen.
 
         Parameters
         ----------
@@ -476,11 +477,11 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     def paintEvent(self, evt):
         """
+        Handle paint events by delegating drawing to the stylesheet's style.
+
         Paint events are sent to widgets that need to update themselves,
         for instance when part of a widget is exposed because a covering
         widget was moved.
-
-        This method handles the painting with parameters from the stylesheet.
 
         Parameters
         ----------
@@ -494,9 +495,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         super().paintEvent(evt)
 
     def clear(self):
-        """
-        Remove all inner widgets from the interlock frame layout.
-        """
+        """Remove all inner widgets from the interlock frame layout."""
         if not self.interlock:
             return
         layout = self.interlock.layout()
@@ -512,11 +511,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         QWidget().setLayout(self.interlock.layout())
 
     def assemble_layout(self):  # noqa: C901
-        """
-        Assembles the widget's inner layout depending on the ContentLocation
-        and other configurations set.
-
-        """
+        """Assemble the widget's inner layout based on ContentLocation and other settings."""
         if not self.interlock:
             return
         self.clear()
@@ -646,7 +641,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     def get_expert_macros(self, prefix):
         """
-        Hook for widgets to provide dynamic macros for expert screens.
+        Build the dynamic macros passed to the expert screen for this widget.
 
         Parameters
         ----------
@@ -698,6 +693,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         ]
 
     def setup_icon(self):
+        """Configure the symbol icon size, visibility, and click handler."""
         if not self.icon:
             return
         self.icon.setMinimumSize(16, 16)
@@ -778,28 +774,34 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     @Property("QStringList")
     def ui_paths(self):
+        """Return the paths of the extra expert UI files to embed."""
         return self.ui_file_paths
 
     @ui_paths.setter
     def ui_paths(self, path):
+        """Set the paths of the extra expert UI files to embed."""
         if path != self.ui_file_paths:
             self.ui_file_paths = path
 
     @Property("QStringList")
     def ui_macros(self):
+        """Return the macro strings paired with the extra expert UI files."""
         return self.ui_file_macros
 
     @ui_macros.setter
     def ui_macros(self, macros):
+        """Set the macro strings paired with the extra expert UI files."""
         if macros != self.ui_macros:
             self.ui_file_macros = macros
 
     @Property("QStringList")
     def ui_titles(self):
+        """Return the tab titles paired with the extra expert UI files."""
         return self.ui_file_titles
 
     @ui_titles.setter
     def ui_titles(self, titles):
+        """Set the tab titles paired with the extra expert UI files."""
         if titles != self.ui_file_titles:
             self.ui_file_titles = titles
 
@@ -808,7 +810,7 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
 
     def status_tooltip(self):
         """
-        Assemble and returns the status tooltip for the symbol.
+        Assemble and return the status tooltip for the symbol.
 
         Returns
         -------
@@ -823,40 +825,30 @@ class PCDSSymbolBase(QWidget, PyDMPrimitiveWidget, ContentLocation):
         return status
 
     def destroy_channels(self):
-        """
-        Method invoked when the channels associated with the widget must be
-        destroyed.
-        """
+        """Disconnect every PyDMChannel attribute on this widget."""
         for v in self.__dict__.values():
             if isinstance(v, PyDMChannel):
                 v.disconnect()
 
     def create_channels(self):
         """
-        Method invoked when the channels associated with the widget must be
-        created.
+        Create the channels associated with the widget.
+
         This method must be implemented on the subclasses and mixins as needed.
         By default this method does nothing.
         """
         pass
 
     def update_stylesheet(self):
-        """
-        Invoke the stylesheet update process on the widget and child widgets to
-        reflect changes on the properties.
-        """
+        """Refresh the widget's stylesheet on itself and its children."""
         refresh_style(self)
 
     def update_status_tooltip(self):
-        """
-        Set the tooltip on the symbol to the content of status_tooltip.
-        """
+        """Set the tooltip on the symbol to the content of status_tooltip."""
         self.setToolTip(self.status_tooltip())
 
     def format_name(self):
-        """
-        Set the name textbox
-        """
+        """Set the name textbox."""
         prefix = self._channels_prefix
         # Verify prefix is formatted correctly (trusting user to not produce an edge case)
         if prefix.find("://") != -1:

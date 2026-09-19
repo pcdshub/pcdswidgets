@@ -1,3 +1,5 @@
+"""Tests for the ColormapIntesityControlFull imaging widget."""
+
 import gc
 
 import numpy as np
@@ -21,6 +23,7 @@ class _ImageParent(QtWidgets.QWidget):
 def control(qtbot: QtBot) -> ColormapIntesityControlFull:
     # qtbot only weak-references what it tracks, so the parent has to be held
     # for the duration of the test or Qt tears the image item down with it
+    """Provide a fresh ColormapIntesityControlFull for the test."""
     parent = _ImageParent()
     qtbot.addWidget(parent)
     widget = ColormapIntesityControlFull(parent)

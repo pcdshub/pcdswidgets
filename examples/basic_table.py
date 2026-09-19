@@ -1,10 +1,15 @@
+"""Example script that launches a simple FilterSortWidgetTable."""
+
 import os.path
 
 from pydm import Display
 
 
 class BasicTable(Display):
+    """Example PyDM Display that wraps the FilterSortWidgetTable."""
+
     def __init__(self, *args, **kwargs):
+        """Populate the example table with a demo filter."""
         super().__init__(*args, **kwargs)
         self.ui.example_table.add_filter(
             "Hide Negative Values",
@@ -23,13 +28,17 @@ class BasicTable(Display):
         )
 
     def neg_filter(self, value_dict):
+        """Filter out rows whose readback is negative."""
         return value_dict["readback"] >= 0
 
     def even_filter(self, value_dict):
+        """Filter out rows whose readback is even."""
         return value_dict["readback"] % 2
 
     def four_filter(self, value_dict):
+        """Filter out rows whose row_name is exactly four characters."""
         return len(value_dict["row_name"]) != 4
 
     def ui_filename(self):
+        """Return the .ui filename backing this Display."""
         return os.path.join(os.path.dirname(__file__), "basic_table.ui")

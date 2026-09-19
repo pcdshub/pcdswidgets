@@ -1,6 +1,6 @@
-"""
-Originally generated from jinja template ui_main_widget.j2
+"""User-editable widget subclass for BuilderBasicTestWidget.
 
+Originally generated from jinja template ui_main_widget.j2.
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
@@ -10,6 +10,8 @@ from pcdswidgets.generated.tests.builder.builder_basic_test_widget_base import B
 
 
 class BuilderBasicTestWidget(BuilderBasicTestWidgetBase):
+    """User-editable subclass of the generated BuilderBasicTestWidget base widget."""
+
     designer_options = DesignerOptions(
         group="ECS Tests Builder",
         is_container=False,

@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -28,6 +28,8 @@ logger = logging.getLogger(__name__)
 
 
 class CameraViewerStretch(CameraViewerStretchBase):
+    """User-editable subclass of the generated CameraViewerStretch widget."""
+
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
     image_view: PyDMImageView
@@ -152,7 +154,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
             return False
 
     def showEvent(self, event) -> None:
-        """Hooks into the first show event to adopt child widgets added in designer"""
+        """Hooks into the first show event to adopt child widgets added in designer."""
         super().showEvent(event)
         if self._initializing:
             return
@@ -221,9 +223,11 @@ class CameraViewerStretch(CameraViewerStretchBase):
     # Property for showing/hiding the nickname label.
 
     def get_show_nickname(self) -> bool:
+        """Return whether the nickname label is visible."""
         return self._show_nickname
 
     def set_show_nickname(self, show: bool) -> None:
+        """Set whether the nickname label is visible."""
         self._show_nickname = show
         self.nickname_label.setVisible(show)
 
@@ -232,9 +236,11 @@ class CameraViewerStretch(CameraViewerStretchBase):
     ## Property for the main splitter's orientation.
 
     def get_orientation(self) -> Qt.Orientation:
+        """Return the orientation of the main splitter."""
         return self.main_splitter.orientation()
 
     def set_orientation(self, orientation: Qt.Orientation) -> None:
+        """Set the orientation of the main splitter."""
         self.main_splitter.setOrientation(orientation)
 
     orientation = pyqtProperty(Qt.Orientation, get_orientation, set_orientation)

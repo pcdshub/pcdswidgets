@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class SmaractOpenLoopContextDouble(SmaractOpenLoopContextDoubleBase):
+    """User-editable subclass of the generated Smaract open-loop context double widget."""
+
     clear_step_count: PyDMPushButton
 
     designer_options = DesignerOptions(

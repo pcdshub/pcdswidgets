@@ -1,3 +1,5 @@
+"""SVG-backed multi-state LED indicator widget."""
+
 import json
 import logging
 
@@ -24,6 +26,8 @@ _MOVE_DIRECTION_ANGLES = {"right": 0, "down": 90, "left": 180, "up": 270}
 
 
 class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
+    """SVG-backed PyDM symbol widget that renders one of several LED states."""
+
     # Designer Widget handlers
     _macro_to_widget = {}
     _widget_to_macro = {}
@@ -70,7 +74,8 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
     def paintEvent(self, event):
         """
-        Override to center the SVG rendering.
+        Center the SVG rendering during the paint event.
+
         Minimal modification of PyDMSymbol's paintEvent.
         Annoying, but had to be done for aesthetics.
         """
@@ -145,10 +150,11 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
     # Define methods for motor property
     def get_motor(self) -> str:
-        """Get the motor macro"""
+        """Get the motor macro."""
         return self._motor
 
     def set_motor(self, value: str) -> None:
+        """Set the motor macro and wire the channel to its ``.MSTA`` PV."""
         self._motor = value
         self.set_channel(f"ca://{self._motor}.MSTA")
 
@@ -180,10 +186,10 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
     def check_enable_state(self) -> None:
         """
-        Override to force disconnected icon when not connected.
+        Force the disconnected icon when the motor is not connected.
+
         This is called by PyDMWidget regularly.
         """
-
         # Check parent's connection state
         if not self._connected:
             if self._current_key != self._state_dict["DISCONNECTED"]:
@@ -241,8 +247,10 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
 
     def value_changed(self, new_val) -> None:
         """
-        Override the value_changed method to do bitmask checks on MSTA,
-        then update the state of the widget.
+        Update the widget state from an MSTA bitmask readback.
+
+        This override does bitmask checks on MSTA before updating the state
+        of the widget.
         """
         if not self._main_channel_connected:
             self._state = self._state_dict["DISCONNECTED"]

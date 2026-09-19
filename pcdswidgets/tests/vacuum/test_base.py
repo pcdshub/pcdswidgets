@@ -1,3 +1,5 @@
+"""Tests for the vacuum symbol widget base classes."""
+
 import pytest
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -6,7 +8,7 @@ from pcdswidgets.vacuum.base import ContentLocation, PCDSSymbolBase
 
 
 class BaseSymbol(PCDSSymbolBase):
-    """Test Symbol for base class tests"""
+    """Test Symbol for base class tests."""
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -15,21 +17,25 @@ class BaseSymbol(PCDSSymbolBase):
 
 @pytest.fixture(scope="function")
 def symbol(qtbot):
+    """Provide a fresh BaseSymbol widget for the test."""
     symbol = BaseSymbol()
     qtbot.addWidget(symbol)
     return symbol
 
 
 def test_show_icon(symbol):
+    """Test show icon."""
     symbol.showIcon = False
     assert not symbol.icon.isVisible()
 
 
 def test_symbol_paintEvent_smoke(symbol):
+    """Test symbol paintEvent smoke."""
     symbol.show()
 
 
 def test_no_controls_content(symbol):
+    """Test no controls content."""
     symbol.controlsLocation = ContentLocation.Hidden
     widget_layout = symbol.interlock.layout().itemAt(0).layout().itemAt(0).widget().layout()
     widget = widget_layout.itemAt(1).widget()
@@ -47,6 +53,7 @@ def test_no_controls_content(symbol):
     ids=["Top", "Bottom", "Left", "Right"],
 )
 def test_controls_content_location(symbol, location, layout, position):
+    """Test controls content location."""
     symbol.controlsLocation = location
     assert isinstance(symbol.interlock.layout(), layout)
     widget_layout = symbol.interlock.layout().itemAt(position).layout()
@@ -55,6 +62,7 @@ def test_controls_content_location(symbol, location, layout, position):
 
 
 def test_icon_fixed_size(symbol):
+    """Test icon fixed size."""
     size = 30
     symbol.iconSize = size
     assert symbol.icon.width() == size
@@ -63,6 +71,7 @@ def test_icon_fixed_size(symbol):
 
 @pytest.mark.parametrize("rotate", (False, True), ids=("Standard", "Rotated"))
 def test_icon_rotation(symbol, rotate):
+    """Test icon rotation."""
     symbol.rotateIcon = rotate
     assert symbol.icon.rotation == 90 * int(rotate)
 
@@ -78,6 +87,7 @@ def test_icon_rotation(symbol, rotate):
     ids=["Top", "Bottom", "Left", "Right"],
 )
 def test_text_location(symbol, location, layout, position):
+    """Test text location."""
     symbol.controlsLocation = ContentLocation.Bottom
     symbol.channelsPrefix = "ca://area:function:device:01"
     symbol.showName = True
@@ -94,6 +104,7 @@ def test_text_location(symbol, location, layout, position):
     ids=["Left", "Right"],
 )
 def test_text_and_controls_location(symbol, location, layout, position):
+    """Test text and controls location."""
     symbol.controlsLocation = location
     symbol.channelsPrefix = "ca://area:function:device:01"
     symbol.showName = True
@@ -105,6 +116,7 @@ def test_text_and_controls_location(symbol, location, layout, position):
 
 
 def test_name_text(symbol):
+    """Test name text."""
     symbol.channelsPrefix = "ca://area:function:device:01"
     symbol.showName = True
     assert symbol.name.text() == "area-function-device-01"

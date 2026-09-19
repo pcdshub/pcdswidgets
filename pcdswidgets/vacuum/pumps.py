@@ -1,3 +1,5 @@
+"""PyDM symbol widgets for vacuum pumps."""
+
 import logging
 
 from pydm.widgets.channel import PyDMChannel
@@ -95,6 +97,7 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
     _controller_suffix = ":VPCNAME"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the IonPumpNoIlk widget with pressure readback and icon."""
         self._controller_base = ""
         self.controller_channel = None
         super().__init__(
@@ -110,10 +113,7 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
         self.readback_label.displayFormat = DisplayFormat.Exponential
 
     def create_channels(self):
-        """
-        Create a channel that tracks the controller base name used by
-        the expert screen.
-        """
+        """Create the controller-name channel used by the expert screen."""
         super().create_channels()
         self._controller_base = ""
         self.controller_channel = PyDMChannel(
@@ -124,8 +124,10 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
 
     def controller_value_changed(self, value):
         """
-        Callback invoked when the value changes for the Controller Channel.
-        This callback updates the cached controller base name used by the expert screen.
+        Handle a value change on the Controller Channel.
+
+        This callback updates the cached controller base name used by the
+        expert screen.
 
         Parameters
         ----------
@@ -136,6 +138,7 @@ class IonPumpNoIlk(ErrorMixin, StateMixin, ButtonLabelControl, PCDSSymbolBase):
         self._controller_base = value
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 80)
 
     def get_expert_macros(self, prefix):
@@ -234,6 +237,7 @@ class IonPump(InterlockMixin, IonPumpNoIlk):
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the IonPump widget with interlock support."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -243,8 +247,7 @@ class IonPump(InterlockMixin, IonPumpNoIlk):
 
 class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Turbo Pump with the proper icon and
-    controls.
+    A Symbol Widget representing a Turbo Pump with the proper icon and controls.
 
     Parameters
     ----------
@@ -321,6 +324,7 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
     EXPERT_UI_ORDER = ("detailed", "expert")
 
     def __init__(self, parent=None, **kwargs):
+        """Build the TurboPump widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -332,13 +336,13 @@ class TurboPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbo
         self.icon = TurboPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 80)
 
 
 class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymbolBase):
     """
-    A Symbol Widget representing a Scroll Pump with the proper icon and
-    controls.
+    A Symbol Widget representing a Scroll Pump with the proper icon and controls.
 
     Parameters
     ----------
@@ -414,6 +418,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
     EXPERT_UI_DIR = "pcdswidgets/screens/vacuum/pumps"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the ScrollPump widget and its icon."""
         super().__init__(
             parent=parent,
             interlock_suffix=self._interlock_suffix,
@@ -425,6 +430,7 @@ class ScrollPump(InterlockMixin, ErrorMixin, StateMixin, ButtonControl, PCDSSymb
         self.icon = ScrollPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
+        """Return the suggested default size for the widget."""
         return QSize(180, 80)
 
 
@@ -468,13 +474,14 @@ class GetterPump(PCDSSymbolBase):
     EXPERT_UI_DIR = "pcdswidgets/screens/vacuum/pumps"
 
     def __init__(self, parent=None, **kwargs):
+        """Build the GetterPump widget and its icon."""
         self._controls_location = ContentLocation.Hidden
         super().__init__(parent=parent, **kwargs)
         self.icon = GetterPumpSymbolIcon(parent=self)
 
     def sizeHint(self):
         """
-        Suggested initial size for the widget.
+        Return the suggested initial size for the widget.
 
         Returns
         -------
@@ -484,12 +491,15 @@ class GetterPump(PCDSSymbolBase):
 
     @Property(str, designable=False)
     def channelsPrefix(self):
+        """Return the (non-designable) channels prefix inherited from the base."""
         return super().channelsPrefix
 
     @Property(bool, designable=False)
     def showIcon(self):
+        """Return the (non-designable) showIcon value inherited from the base."""
         return super().showIcon
 
     @Property(ContentLocation, designable=False)
     def controlsLocation(self):
+        """Return the (non-designable) controlsLocation inherited from the base."""
         return super().controlsLocation

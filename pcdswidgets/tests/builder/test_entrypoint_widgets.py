@@ -1,3 +1,5 @@
+"""Tests that verify each pcdswidgets entry point can be imported."""
+
 from importlib.metadata import entry_points
 
 from pydm.config import ENTRYPOINT_WIDGET

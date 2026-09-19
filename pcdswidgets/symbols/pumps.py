@@ -1,3 +1,5 @@
+"""Symbol icons for vacuum pumps."""
+
 import math
 
 from qtpy.QtCore import Property, QPointF, QRectF
@@ -17,20 +19,24 @@ class ScrollPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the scroll pump icon with a transparent center brush."""
         super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)
     def centerBrush(self):
+        """Return the brush used to fill the pump center."""
         return self._center_brush
 
     @centerBrush.setter
     def centerBrush(self, new_brush):
+        """Set the brush used to fill the pump center."""
         if new_brush != self._center_brush:
             self._center_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the scroll pump symbol into ``painter``."""
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
@@ -64,6 +70,7 @@ class IonPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the ion pump symbol into ``painter``."""
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 45 * 16, -120 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 120 * 16)
@@ -111,20 +118,24 @@ class TurboPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def __init__(self, parent=None, **kwargs):
+        """Initialize the turbo pump icon with a transparent center brush."""
         super().__init__(parent, **kwargs)
         self._center_brush = QBrush(QColor("transparent"))
 
     @Property(QBrush)
     def centerBrush(self):
+        """Return the brush used to fill the pump center."""
         return self._center_brush
 
     @centerBrush.setter
     def centerBrush(self, new_brush):
+        """Set the brush used to fill the pump center."""
         if new_brush != self._center_brush:
             self._center_brush = new_brush
             self.update()
 
     def draw_icon(self, painter):
+        """Paint the turbo pump symbol into ``painter``."""
         # Outer circle
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
 
@@ -156,6 +167,7 @@ class GetterPumpSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the getter pump symbol into ``painter``."""
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 90 * 16, -100 * 16)
         painter.drawChord(QRectF(0.0, 0.0, 1.0, 1.0), 135 * 16, 100 * 16)

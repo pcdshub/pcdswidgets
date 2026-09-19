@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -12,6 +12,8 @@ from pcdswidgets.icons.glyphs import CAM_COG
 
 
 class AcquisitionControlFull(AcquisitionControlFullBase):
+    """User-editable subclass of the generated AcquisitionControlFull widget."""
+
     multiple_count_group: QWidget
     image_mode_combo: QComboBox
 
@@ -27,5 +29,5 @@ class AcquisitionControlFull(AcquisitionControlFullBase):
         self._toggle_multiple_visibility(self.image_mode_combo.currentText())
 
     def _toggle_multiple_visibility(self, value):
-        """only show multiple_count when in "Multiple" capture mode"""
+        """Only show multiple_count when in "Multiple" capture mode."""
         self.multiple_count_group.setVisible(value == "Multiple")
