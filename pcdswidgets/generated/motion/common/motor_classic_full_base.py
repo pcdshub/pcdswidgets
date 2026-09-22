@@ -138,7 +138,7 @@ class MotorClassicFullBase(DesignerWidget):
             (
                 "commands",
                 [
-                    """motor-expert-screen ${MOTOR}""",
+                    """pcdswidgets-show MotorExpertScreenBeckhoff --motor ${MOTOR}""",
                 ],
             ),
         ],

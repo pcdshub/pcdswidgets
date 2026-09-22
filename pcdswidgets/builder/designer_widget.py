@@ -15,7 +15,17 @@ from pydm.widgets.embedded_display import PyDMEmbeddedDisplay
 from pydm.widgets.qtplugin_extensions import RulesExtension
 from pydm.widgets.related_display_button import PyDMRelatedDisplayButton
 from qtpy.QtGui import QIcon
-from qtpy.QtWidgets import QAction, QDialog, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from qtpy.QtWidgets import (
+    QAction,
+    QComboBox,
+    QDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
 import pcdswidgets
 
@@ -53,6 +63,9 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     _widget_to_pre_template: ClassVar[dict[str, list[tuple[str, str | list[str]]]]]
     # Current values for each macro
     _macro_values: dict[str, str]
+    # Enum/choice properties to expose as dropdowns in the Core Settings editor.
+    # Maps a Qt property name to an ordered {display label: value} mapping.
+    editable_choice_properties: ClassVar[dict[str, dict[str, int]]] = {}
 
     def __init_subclass__(cls):
         super().__init_subclass__()
@@ -250,6 +263,7 @@ class MacroValueEditor(QDialog):
         super().__init__(parent)
         self.widget = widget
         self.edit_widgets: dict[str, QLineEdit] = {}
+        self.choice_widgets: dict[str, QComboBox] = {}
         self.setup_ui()
 
     def setup_ui(self):
@@ -266,6 +280,19 @@ class MacroValueEditor(QDialog):
             self.edit_widgets[macro_name] = QLineEdit()
             self.edit_widgets[macro_name].setText(value)
             edit_form_layout.addRow(macro_name.lower(), self.edit_widgets[macro_name])
+
+        for prop_name, choices in self.widget.editable_choice_properties.items():
+            combo = QComboBox()
+            for label, value in choices.items():
+                combo.addItem(label, value)
+            # Pre-select the widget's current value. property() returns an int
+            # (pyqt5) or an enum member (pyside6); normalize to the stored value.
+            current = self.widget.property(prop_name)
+            current = getattr(current, "value", current)
+            index = combo.findData(current)
+            combo.setCurrentIndex(index if index >= 0 else 0)
+            self.choice_widgets[prop_name] = combo
+            edit_form_layout.addRow(prop_name, combo)
 
         button_layout = QHBoxLayout()
         outer_layout.addLayout(button_layout)
@@ -285,6 +312,8 @@ class MacroValueEditor(QDialog):
     def save_changes(self):
         for macro_name, widget in self.edit_widgets.items():
             update_property_for_widget(self.widget, macro_name.lower(), widget.text())
+        for prop_name, combo in self.choice_widgets.items():
+            update_property_for_widget(self.widget, prop_name, combo.currentData())
         if self.sender() == self.save_button:
             self.accept()
 
