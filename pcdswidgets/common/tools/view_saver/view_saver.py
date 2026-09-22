@@ -11,8 +11,8 @@ from pydm.utilities import is_qt_designer
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
-from qtpy.QtCore import Property, QEvent, QRect, QSettings, QSize, Qt, QTimer
-from qtpy.QtGui import QColor, QFont, QIcon, QPainter, QPen
+from qtpy.QtCore import Property, QEvent, QObject, QRect, QSettings, QSize, Qt, QTimer
+from qtpy.QtGui import QColor, QFont, QIcon, QPainter, QPaintEvent, QPen
 from qtpy.QtWidgets import QAction, QApplication, QFrame, QSizePolicy, QWidget
 
 from .registry import (
@@ -96,7 +96,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         self._file_name: str = ""
         self._excluded: list[str] = []
         # objectName -> {propKey: (getter, setter)} resolved at runtime load
-        self._tracked_widgets: dict[str, dict[str, Any]] = {}
+        self._tracked_widgets: dict[str, dict[str, tuple[Callable, Callable]]] = {}
         self._loaded: bool = False
         self._last_snapshot: dict[str, Any] = {}
 
@@ -214,7 +214,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     # Widget Discovery
     # ------------------------------------------------------------------
 
-    def _walk_widget_tree(self):
+    def _walk_widget_tree(self) -> list[QWidget]:
         """Return every savable descendant.
 
         A widget is savable if it defines ``get_view_saver_properties`` or
@@ -247,7 +247,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         """Return the objectName of every savable descendant, skipping unnamed ones."""
         return [name for w in self._walk_widget_tree() if (name := w.objectName())]
 
-    def _resolve_tracked_widgets(self) -> dict[str, dict[str, Any]]:
+    def _resolve_tracked_widgets(self) -> dict[str, dict[str, tuple[Callable, Callable]]]:
         """Resolve savable child widgets into ``{objectName: {prop: (get, set)}}``.
 
         Walks the child tree and resolve the getter/setter for each saveable widget's
@@ -256,7 +256,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         Skips any excluded objectNames, and warns for savable widgets that lack an
         objectName since they cannot be keyed in the settings file.
         """
-        resolved: dict[str, dict[str, Any]] = {}
+        resolved: dict[str, dict[str, tuple[Callable, Callable]]] = {}
         for widget in self._walk_widget_tree():
             name = widget.objectName()
             if not name:
@@ -296,7 +296,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     # Events
     # ------------------------------------------------------------------
 
-    def eventFilter(self, obj, event) -> bool:  # noqa: N802
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:  # noqa: N802
         """Save when the watched container window is closing."""
         if event.type() == QEvent.Close and self._loaded:
             logger.debug("Window close event fired, saving view to file.")
@@ -311,7 +311,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         """Default size when first dropped in Designer."""
         return QSize(200, 200)
 
-    def paintEvent(self, event) -> None:  # noqa: N802
+    def paintEvent(self, event: QPaintEvent) -> None:  # noqa: N802
         """Draw a dashed outline and corner label, but only in Qt Designer.
 
         At runtime nothing is painted so the container is fully transparent and
@@ -344,7 +344,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         painter.drawText(chip, Qt.AlignCenter, text)
         painter.end()
 
-    def open_dialog(self):
+    def open_dialog(self) -> None:
         dialog = ViewSaverDialog(
             available_widgets=self._walk_widget_names(),
             excluded_widgets=list(self._excluded),
