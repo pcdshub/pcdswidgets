@@ -5,23 +5,38 @@ import os
 import random
 import string
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from pydm.utilities import is_qt_designer
 from pydm.utilities.iconfont import IconFont
 from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.designer_settings import update_property_for_widget
 from qtpy.QtCore import Property, QEvent, QRect, QSettings, QSize, Qt, QTimer
-from qtpy.QtGui import QColor, QFont, QIcon, QMouseEvent, QPainter, QPen
-from qtpy.QtWidgets import QApplication, QFrame, QSizePolicy, QWidget
+from qtpy.QtGui import QColor, QFont, QIcon, QPainter, QPen
+from qtpy.QtWidgets import QAction, QApplication, QFrame, QSizePolicy, QWidget
 
-from .edit_bindings_extension import EditWidgetListExtension
-from .registry import discover_widgets, iter_savable_widgets, resolve_widget_props
+from .registry import CONTAINER_REGISTRY_CLASSES, WIDGET_REGISTRY, _make_getter, _make_setter
 from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
 
 POLL_INTERVAL_MS = 60_000
+
+
+class EditWidgetListExtension:
+    """Adds an 'Edit ViewSaver…' action to the Designer right-click menu.
+
+    Follows the same pattern as ``MacroEditExtension`` in
+    ``pcdswidgets.builder.designer_widget``.
+    """
+
+    def __init__(self, widget: "ViewSaver"):
+        self.widget = widget
+        self._action = QAction("&Edit ViewSaver\u2026", self.widget)
+        self._action.triggered.connect(widget.open_dialog)
+
+    def actions(self) -> list[QAction]:
+        return [self._action]
 
 
 class ViewSaver(QFrame, PyDMPrimitiveWidget):
@@ -123,40 +138,17 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         ini_path = str(dir_path / f"{name}.ini")
         return QSettings(ini_path, QSettings.IniFormat)
 
-    def _discover_tracked(self) -> dict[str, dict[str, Any]]:
-        """Resolve savable child widgets into ``{objectName: {prop: (get, set)}}``.
-
-        Walks the child tree (stopping at registered widgets), skips any
-        excluded objectNames, and warns for savable widgets that lack an
-        objectName since they cannot be keyed in the settings file.
-        """
-        tracked: dict[str, dict[str, Any]] = {}
-        for widget in iter_savable_widgets(self):
-            name = widget.objectName()
-            if not name:
-                logger.warning(
-                    "ViewSaver: skipping savable %s with no objectName",
-                    type(widget).__name__,
-                )
-                continue
-            if name in self._excluded:
-                continue
-            prop_list = resolve_widget_props(widget)
-            if prop_list:
-                tracked[name] = prop_list
-        return tracked
-
     def _initial_load(self) -> None:
         """non-designer init that happens after all widgets load"""
         settings = self._build_settings()
         if settings is None:
             return
-        self._tracked_widgets = self._discover_tracked()
+        self._tracked_widgets = self._resolve_tracked_widgets()
         logger.debug(f"ViewSaver: loading from {settings.fileName()} ({len(self._tracked_widgets)} tracked widgets)")
         restored = 0
-        for widget_name, prop_list in self._tracked_widgets.items():
+        for widget_name, prop_dict in self._tracked_widgets.items():
             # restore any saved settings
-            for prop_name, (_getter, setter) in prop_list.items():
+            for prop_name, (_getter, setter) in prop_dict.items():
                 saved_val = settings.value(f"{widget_name}/{prop_name}")
                 if saved_val is None:
                     logger.debug(f"No saved value for {widget_name}/{prop_name}")
@@ -211,28 +203,94 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         logger.debug(f"Wrote {saved} value(s) to {settings.fileName()}")
 
     # ------------------------------------------------------------------
-    # Events
+    # Widget Discovery
     # ------------------------------------------------------------------
 
-    def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:  # noqa: N802
-        """Open the settings editor on double-click."""
-        dialog = ViewSaverDialog(
-            available_widgets=discover_widgets(self),
-            excluded_widgets=list(self._excluded),
-            dir_name=self._dir_name,
-            file_name=self._file_name,
-            parent=self,
-        )
-        if dialog.exec_():
-            # set properties based on result
-            dir_name, file_name, excluded = dialog.results()
-            self.dirName = dir_name
-            self.fileName = file_name
-            self.excludedWidgets = excluded
-            # informs designer the properties have changed for saves to ui file.
-            update_property_for_widget(self, "dirName", self._dir_name)
-            update_property_for_widget(self, "fileName", self._file_name)
-            update_property_for_widget(self, "excludedWidgets", list(self._excluded))
+    def _walk_widget_tree(self):
+        """Return every registered-savable descendant.
+
+        The child tree is walked manually so it stops as soon as a
+        widget's class matches WIDGET_REGISTRY
+
+        Non-registered containers and those in CONTAINER_REGISTRY_CLASSES
+        are descended into recursively.
+        """
+        found: list[QWidget] = []
+
+        def _walk(widget: QWidget) -> None:
+            for child in widget.children():
+                if not isinstance(child, QWidget):
+                    continue
+                # check if widget is saveable
+                if type(child).__name__ in WIDGET_REGISTRY:
+                    found.append(child)
+                    # A registered container still holds nested savables; keep
+                    # descending. A registered leaf is one savable unit; stop.
+                    if type(child).__name__ in CONTAINER_REGISTRY_CLASSES:
+                        _walk(child)
+                else:
+                    _walk(child)
+
+        _walk(self)
+        return found
+
+    def _walk_widget_names(self) -> list[str]:
+        """Return the objectName of every savable descendant, skipping unnamed ones."""
+        return [name for w in self._walk_widget_tree() if (name := w.objectName())]
+
+    def _resolve_tracked_widgets(self) -> dict[str, dict[str, Any]]:
+        """Resolve savable child widgets into ``{objectName: {prop: (get, set)}}``.
+
+        Walks the child tree and resolve the getter/setter for each saveable widget's
+        properties.
+
+        Skips any excluded objectNames, and warns for savable widgets that lack an
+        objectName since they cannot be keyed in the settings file.
+        """
+        resolved: dict[str, dict[str, Any]] = {}
+        for widget in self._walk_widget_tree():
+            name = widget.objectName()
+            if not name:
+                logger.warning(
+                    "ViewSaver: skipping savable %s with no objectName",
+                    type(widget).__name__,
+                )
+                continue
+            if name in self._excluded:
+                continue
+            prop_list = self._resolve_widget_props(widget)
+            if prop_list:
+                resolved[name] = prop_list
+        return resolved
+
+    def _resolve_widget_props(
+        self,
+        widget: QWidget,
+    ) -> dict[str, tuple[Callable, Callable]] | None:
+        """Resolve getter/setter callables for each persisted property of *widget*.
+
+        Returns a mapping ``{propKey: (getter, setter)}`` for the given widget
+        instance, or ``None`` if its class has no registered properties.
+        """
+        class_name = type(widget).__name__
+        props = WIDGET_REGISTRY.get(class_name)
+        if props is None:
+            logger.error(f"No registered properties for {class_name}")
+            return None
+        resolved_props: dict[str, tuple[Callable, Callable]] = {}
+        for prop_name, (getter, setter, load_fn, save_fn) in props.items():
+            try:
+                resolved_props[prop_name] = (
+                    _make_getter(widget, getter, save_fn),
+                    _make_setter(widget, setter, load_fn),
+                )
+            except AttributeError:
+                logger.exception(f"ViewSaver: could not resolve {class_name}.{prop_name}, skipping")
+        return resolved_props
+
+    # ------------------------------------------------------------------
+    # Events
+    # ------------------------------------------------------------------
 
     def eventFilter(self, obj, event) -> bool:  # noqa: N802
         """Save when the watched container window is closing."""
@@ -281,6 +339,22 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
         painter.setPen(QColor(255, 255, 255))
         painter.drawText(chip, Qt.AlignCenter, text)
         painter.end()
+
+    def open_dialog(self):
+        dialog = ViewSaverDialog(
+            available_widgets=self._walk_widget_names(),
+            excluded_widgets=list(self._excluded),
+            dir_name=self._dir_name,
+            file_name=self._file_name,
+            parent=self,
+        )
+        if dialog.exec_():
+            # set properties based on result
+            dir_name, file_name, excluded = dialog.results()
+            # informs designer the properties have changed for saves to ui file.
+            update_property_for_widget(self, "dirName", dir_name)
+            update_property_for_widget(self, "fileName", file_name)
+            update_property_for_widget(self, "excludedWidgets", list(excluded))
 
     # ------------------------------------------------------------------
     # Properties
