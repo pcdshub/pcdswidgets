@@ -50,7 +50,7 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
 
     Drop this widget onto a screen and place the widgets you want persisted
     inside it.
-    
+
     Any child that exposes a ``get_view_saver_properties`` or
     is registered in ``registry.WIDGET_REGISTRY`` is tracked.
 

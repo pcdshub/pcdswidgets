@@ -19,6 +19,7 @@ def _identity(value: Any) -> Any:
     """No-op converter, for values QSettings already round-trips faithfully."""
     return value
 
+
 def _json_default(obj: Any) -> Any:
     """Fallback encoder for values ``json.dumps`` can't handle natively.
 
@@ -27,6 +28,7 @@ def _json_default(obj: Any) -> Any:
     if hasattr(obj, "tolist"):
         return obj.tolist()
     raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
 
 def _json_dumps(value: Any) -> str:
     """``json.dumps`` that tolerates numpy arrays/scalars via ``_json_default``."""
