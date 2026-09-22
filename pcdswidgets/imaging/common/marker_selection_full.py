@@ -4,6 +4,7 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
+import json
 import logging
 
 from pydm.widgets import PyDMImageView, PyDMSpinbox
@@ -394,6 +395,20 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         """Apply states produced by :meth:`get_all_marker_states`."""
         for marker_number, state in states.items():
             self.set_marker_state(int(marker_number), state)
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+
+        return {
+            "markers": (
+                lambda: json.dumps(self.get_all_marker_states()),
+                lambda raw: self.set_all_marker_states(json.loads(raw)),
+            ),
+        }
 
     def _get_marker_color(self, idx: int) -> QColor:
         return self._markers[idx].color

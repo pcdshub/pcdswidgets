@@ -1,9 +1,16 @@
-"""Registry of savable widget properties for ViewSaver."""
+"""Fallback registry of savable widget properties for ViewSaver.
+
+This registry is the exception path used for widget classes
+we do not plan to override/subclasswith a ``get_view_saver_properties`` method.
+- i.e. built-in Qt widgets and third-party widgets
+"""
 
 import json
 import logging
-from functools import reduce
+from operator import attrgetter
 from typing import Callable
+
+from qtpy.QtWidgets import QWidget
 
 logger = logging.getLogger(__name__)
 
@@ -18,21 +25,6 @@ def _to_bool(value: object) -> bool:
     if isinstance(value, str):
         return value.strip().lower() in ("true", "1", "yes", "on")
     return bool(value)
-
-
-def _rgetattr(obj: object, path: str) -> object:
-    """Nested getattr: ``_rgetattr(w, "a.b")`` is ``w.a.b``.
-
-    Lets a registry entry reach a child widget's own getter/setter
-    (e.g. ``roi_multiplier_spinbox.value``) without the parent widget needing
-    a dedicated method.
-    """
-    return reduce(getattr, path.split("."), obj)
-
-
-def _json_tuple(raw: str) -> tuple:
-    """Casts a JSON array to a tuple, so the setter is called with positional args."""
-    return tuple(json.loads(raw))
 
 
 def _json_default(obj: object) -> object:
@@ -55,7 +47,7 @@ def _make_getter(widget: object, path: str, save_fn: Callable) -> Callable:
 
     ``save_fn`` turns value to what QSettings stores (usually string)
     """
-    method = _rgetattr(widget, path)
+    method = attrgetter(path)(widget)
     return lambda: save_fn(method())
 
 
@@ -67,7 +59,7 @@ def _make_setter(widget: object, path: str, load_fn: Callable) -> Callable:
     Special case:  tuples are splatted into positional args for
     multi-argument setters (e.g. ``set_levels(mn, mx)``)
     """
-    method = _rgetattr(widget, path)
+    method = attrgetter(path)(widget)
 
     def setter(raw: object) -> None:
         value = load_fn(raw)
@@ -94,6 +86,8 @@ def _make_setter(widget: object, path: str, load_fn: Callable) -> Callable:
 # QSettings, and must yield a string: use ``str`` for scalars and
 
 
+# Only built-in / third-party classes we do not subclass belong here; every
+# widget we own defines ``get_view_saver_properties`` instead.
 WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str, Callable, Callable]]] = {
     # QT BASE
     "QTabWidget": {"currentIndex": ("currentIndex", "setCurrentIndex", int, str)},
@@ -102,73 +96,9 @@ WIDGET_REGISTRY: dict[str, dict[str, tuple[str, str, Callable, Callable]]] = {
     "QCheckBox": {"checked": ("isChecked", "setChecked", _to_bool, str)},
     "QPushButton": {"checked": ("isChecked", "setChecked", _to_bool, str)},
     "QSplitter": {"state": ("saveState", "restoreState", _identity, _identity)},
-    # Imaging
+    # Imaging (PyDM widget, not subclassed by us)
     "PyDMImageView": {
         "view": ("view.vb.getState", "view.vb.setState", json.loads, _json_dumps),
-    },
-    "EpicsRoiFull": {
-        "style": ("get_style_state", "set_style_state", json.loads, json.dumps),
-    },
-    "CentroidTrackerFull": {
-        "threshold": (
-            "get_threshold_state",
-            "set_threshold_state",
-            json.loads,
-            json.dumps,
-        ),
-        "marker_style": (
-            "get_marker_style_state",
-            "set_marker_style_state",
-            json.loads,
-            json.dumps,
-        ),
-        "roi_multiplier": (
-            "roi_multiplier_spinbox.value",
-            "roi_multiplier_spinbox.setValue",
-            float,
-            str,
-        ),
-    },
-    "MarkerSelectionFull": {
-        "markers": (
-            "get_all_marker_states",
-            "set_all_marker_states",
-            json.loads,
-            json.dumps,
-        ),
-    },
-    "ColormapIntesityControlFull": {
-        "colormap_index": (
-            "colormap_combo.currentIndex",
-            "colormap_combo.setCurrentIndex",
-            int,
-            str,
-        ),
-        "normalize": (
-            "normalize_check.isChecked",
-            "normalize_check.setChecked",
-            _to_bool,
-            str,
-        ),
-        "levels": ("get_levels", "set_levels", _json_tuple, json.dumps),
-    },
-    "CollapsibleSection": {
-        "collapsed": ("get_collapsed", "set_collapsed", _to_bool, str),
-    },
-    # Motion
-    "MotorTipTiltFull": {
-        "horizontal_invert": (
-            "horizontal_invert.isChecked",
-            "horizontal_invert.setChecked",
-            _to_bool,
-            str,
-        ),
-        "vertical_invert": (
-            "vertical_invert.isChecked",
-            "vertical_invert.setChecked",
-            _to_bool,
-            str,
-        ),
     },
 }
 
@@ -177,5 +107,41 @@ CONTAINER_REGISTRY_CLASSES: set[str] = {
     "QSplitter",
     "QTabWidget",
     "QGroupBox",
-    "CollapsibleSection",
 }
+
+
+def is_registry_savable(widget: QWidget) -> bool:
+    """True if *widget*'s class has fallback properties in ``WIDGET_REGISTRY``."""
+    return type(widget).__name__ in WIDGET_REGISTRY
+
+
+def is_registry_container(widget: QWidget) -> bool:
+    """True if *widget*'s class is a registered container of other savables."""
+    return type(widget).__name__ in CONTAINER_REGISTRY_CLASSES
+
+
+def resolve_registry_props(
+    widget: QWidget,
+) -> dict[str, tuple[Callable, Callable]] | None:
+    """Resolve getter/setter callables for each registered property of *widget*.
+
+    Fallback used only for classes without ``get_view_saver_properties`` (see
+    module docstring). Returns ``{propKey: (getter, setter)}`` where the getter
+    yields a QSettings-storable value and the setter accepts the raw stored
+    value, or ``None`` if the class is not registered.
+    """
+    class_name = type(widget).__name__
+    props = WIDGET_REGISTRY.get(class_name)
+    if props is None:
+        logger.error(f"No registered properties for {class_name}")
+        return None
+    resolved_props: dict[str, tuple[Callable, Callable]] = {}
+    for prop_name, (getter, setter, load_fn, save_fn) in props.items():
+        try:
+            resolved_props[prop_name] = (
+                _make_getter(widget, getter, save_fn),
+                _make_setter(widget, setter, load_fn),
+            )
+        except AttributeError:
+            logger.exception(f"ViewSaver: could not resolve {class_name}.{prop_name}, skipping")
+    return resolved_props

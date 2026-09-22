@@ -4,6 +4,7 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
+import json
 import logging
 
 from pydm.widgets import PyDMImageView
@@ -148,6 +149,20 @@ class EpicsRoiFull(EpicsRoiFullBase):
             self.roi_rect.change_pen(width=state["thickness"])
         if "visible" in state:
             self.visibility_button.setChecked(state["visible"])
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+
+        return {
+            "style": (
+                lambda: json.dumps(self.get_style_state()),
+                lambda raw: self.set_style_state(json.loads(raw)),
+            ),
+        }
 
     def link_parent_widgets(self, parent) -> None:
         """

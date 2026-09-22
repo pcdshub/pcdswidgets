@@ -15,7 +15,11 @@ from qtpy.QtCore import Property, QEvent, QRect, QSettings, QSize, Qt, QTimer
 from qtpy.QtGui import QColor, QFont, QIcon, QPainter, QPen
 from qtpy.QtWidgets import QAction, QApplication, QFrame, QSizePolicy, QWidget
 
-from .registry import CONTAINER_REGISTRY_CLASSES, WIDGET_REGISTRY, _make_getter, _make_setter
+from .registry import (
+    is_registry_container,
+    is_registry_savable,
+    resolve_registry_props,
+)
 from .view_saver_dialog import ViewSaverDialog
 
 logger = logging.getLogger(__name__)
@@ -45,9 +49,13 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     widgets placed inside it, using QSettings.
 
     Drop this widget onto a screen and place the widgets you want persisted
-    inside it.  Any child whose class is registered in ``registry.WIDGET_REGISTRY``
-    is tracked automatically. Optional ``excludedWidgets`` list can opt
-    children out.
+    inside it.
+    
+    Any child that exposes a ``get_view_saver_properties`` or
+    is registered in ``registry.WIDGET_REGISTRY`` is tracked.
+
+    Optional ``excludedWidgets`` list can
+    opt children out.
 
     In QtDesigner the container draws a dashed border and a small corner label
     so it can be located and edited (double-click, or the right-click task
@@ -207,13 +215,14 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     # ------------------------------------------------------------------
 
     def _walk_widget_tree(self):
-        """Return every registered-savable descendant.
+        """Return every savable descendant.
 
-        The child tree is walked manually so it stops as soon as a
-        widget's class matches WIDGET_REGISTRY
+        A widget is savable if it defines ``get_view_saver_properties`` or
+        if its class is listed in ``WIDGET_REGISTRY``.
 
-        Non-registered containers and those in CONTAINER_REGISTRY_CLASSES
-        are descended into recursively.
+        The child tree is walked manually so it stops as soon as a widget is
+        found savable. Non-savable containers and registered/duck-typed
+        containers are descended into recursively.
         """
         found: list[QWidget] = []
 
@@ -222,11 +231,11 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
                 if not isinstance(child, QWidget):
                     continue
                 # check if widget is saveable
-                if type(child).__name__ in WIDGET_REGISTRY:
+                if hasattr(child, "get_view_saver_properties") or is_registry_savable(child):
                     found.append(child)
-                    # A registered container still holds nested savables; keep
-                    # descending. A registered leaf is one savable unit; stop.
-                    if type(child).__name__ in CONTAINER_REGISTRY_CLASSES:
+                    # A savable container still holds nested savables; keep
+                    # descending otherwise stop.
+                    if getattr(child, "VIEW_SAVER_IS_CONTAINER", False) or is_registry_container(child):
                         _walk(child)
                 else:
                     _walk(child)
@@ -269,24 +278,19 @@ class ViewSaver(QFrame, PyDMPrimitiveWidget):
     ) -> dict[str, tuple[Callable, Callable]] | None:
         """Resolve getter/setter callables for each persisted property of *widget*.
 
+        widgets with ``get_view_saver_properties`` are resolved here; this is preferred.
+        built-in widgets are checked in the widget registry (see ``registry.resolve_registry_props``).
+
         Returns a mapping ``{propKey: (getter, setter)}`` for the given widget
-        instance, or ``None`` if its class has no registered properties.
+        instance, or ``None`` if no savable properties could be resolved.
         """
-        class_name = type(widget).__name__
-        props = WIDGET_REGISTRY.get(class_name)
-        if props is None:
-            logger.error(f"No registered properties for {class_name}")
-            return None
-        resolved_props: dict[str, tuple[Callable, Callable]] = {}
-        for prop_name, (getter, setter, load_fn, save_fn) in props.items():
+        if hasattr(widget, "get_view_saver_properties"):
             try:
-                resolved_props[prop_name] = (
-                    _make_getter(widget, getter, save_fn),
-                    _make_setter(widget, setter, load_fn),
-                )
-            except AttributeError:
-                logger.exception(f"ViewSaver: could not resolve {class_name}.{prop_name}, skipping")
-        return resolved_props
+                return widget.get_view_saver_properties()
+            except Exception:
+                logger.exception(f"ViewSaver: get_view_saver_properties failed for {type(widget).__name__}")
+                return None
+        return resolve_registry_props(widget)
 
     # ------------------------------------------------------------------
     # Events

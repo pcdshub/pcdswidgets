@@ -2,6 +2,7 @@
 Collapsible widget wrapper for sidebar panels.
 """
 
+import json
 import logging
 
 from qtpy.QtCore import Qt, Signal
@@ -29,6 +30,9 @@ class CollapsibleSection(QWidget):
     """
 
     toggled = Signal(bool)  # emits the new expanded state (True = expanded)
+
+    # ViewSaver descends into this widget to reach nested savable children.
+    VIEW_SAVER_IS_CONTAINER = True
 
     def __init__(
         self,
@@ -119,6 +123,19 @@ class CollapsibleSection(QWidget):
     def get_collapsed(self) -> bool:
         """Getter method for the collapsed state needed for ViewSaver"""
         return self._collapsed
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+        return {
+            "collapsed": (
+                lambda: json.dumps(self.get_collapsed()),
+                lambda raw: self.set_collapsed(json.loads(raw)),
+            ),
+        }
 
     @property
     def is_collapsed(self) -> bool:
