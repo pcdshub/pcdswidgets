@@ -21,7 +21,8 @@ class MarkerStyle(IntEnum):
 
 
 class CamMarker:
-    """Composite marker overlay for a single point of interest.
+    """
+    Composite marker overlay for a single point of interest.
 
     Renders on one or more pyqtgraph ViewBoxes as crosshairs of varying
     sizes, infinite (full-span) lines, an ellipse, or infinite lines
@@ -78,7 +79,8 @@ class CamMarker:
         self._attachments: list[dict] = []
 
     def attach(self, view_box: ViewBox, offset: tuple[float, float] = (0.0, 0.0)) -> None:
-        """Attach this marker to a pyqtgraph ViewBox, rendered at (x - offset_x, y - offset_y).
+        """
+        Attach this marker to a pyqtgraph ViewBox, rendered at (x - offset_x, y - offset_y).
 
         Can be called more than once with different ViewBoxes to render the
         same marker in multiple views at once (e.g. a full-frame view with

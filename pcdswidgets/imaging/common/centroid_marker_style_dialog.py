@@ -20,7 +20,8 @@ from pcdswidgets.imaging.common.marker_style_dialog import HATCH_OPTIONS
 
 
 class CentroidMarkerStyleDialog(QDialog):
-    """Popup dialog for configuring the centroid tracker's marker.
+    """
+    Popup dialog for configuring the centroid tracker's marker.
 
     Unlike ``MarkerStyleDialog``, this only offers the symbol types relevant
     to a centroid tracker (infinite lines, an ellipse sized from the beam

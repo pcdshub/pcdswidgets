@@ -1,4 +1,5 @@
-"""User-editable widget subclass for MotorClassicRow.
+"""
+User-editable widget subclass for MotorClassicRow.
 
 Originally generated from jinja template ui_main_widget.j2.
 This file can be safely edited to change the runtime behavior of the widget.

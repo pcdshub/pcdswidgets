@@ -7,7 +7,8 @@ from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QSpinBox, 
 
 
 class CamROI(pg.ROI):
-    """High-level rectangular ROI for camera viewer overlays.
+    """
+    High-level rectangular ROI for camera viewer overlays.
 
     Extends ``pg.ROI`` with:
 
@@ -60,7 +61,8 @@ class CamROI(pg.ROI):
         return pos.x(), pos.y(), size.x(), size.y()
 
     def set_geometry_from_center(self, cx: float, cy: float, wx: float, wy: float) -> None:
-        """Set ROI position/size from center coordinates and dimensions.
+        """
+        Set ROI position/size from center coordinates and dimensions.
 
         Does nothing if width or height are non-positive.
         """
@@ -70,7 +72,8 @@ class CamROI(pg.ROI):
         self.setSize([wx, wy])
 
     def set_geometry_from_corner(self, x_start: float, y_start: float, wx: float, wy: float) -> None:
-        """Set ROI position/size from starting coordinates and dimensions.
+        """
+        Set ROI position/size from starting coordinates and dimensions.
 
         Does nothing if width or height are non-positive.
         """
@@ -80,7 +83,8 @@ class CamROI(pg.ROI):
         self.setSize([wx, wy])
 
     def set_from_corners(self, p1: QPointF, p2: QPointF) -> None:
-        """Set ROI position/size from two opposite corner points.
+        """
+        Set ROI position/size from two opposite corner points.
 
         Enforces a minimum size of 1 pixel in each dimension.
         """

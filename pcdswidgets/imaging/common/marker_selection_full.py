@@ -40,7 +40,8 @@ _ROI_MINY_SUFFIX = "MinY"
 
 
 class MarkerSelectionFull(MarkerSelectionFullBase):
-    """Interactive marker overlay widget for EPICS area-detector cameras.
+    """
+    Interactive marker overlay widget for EPICS area-detector cameras.
 
     Provides click-to-place, visibility toggle, and style/thickness controls
     for up to 4 point-of-interest markers overlaid on a PyDMImageView.
@@ -177,7 +178,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         return getattr(self, f"style_select{suffix}")
 
     def link_parent_widgets(self, parent) -> None:
-        """Connect this marker widget to a parent's PyDMImageView.
+        """
+        Connect this marker widget to a parent's PyDMImageView.
 
         Called by the parent widget at adoption time. Attaches marker
         overlay items to the ViewBox, and - if the parent also carries a
@@ -209,7 +211,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._link_secondary_view(getattr(parent, "secondary_image_view", None))
 
     def _link_secondary_view(self, secondary_image_view) -> None:
-        """Mirror all markers onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
+        """
+        Mirror all markers onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
 
         Also lets the user click-to-place markers from that view: a click
         there gives coordinates local to it, so the offset is added back
@@ -290,7 +293,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self.state_changed.emit()
 
     def _on_scene_clicked(self, event, view_box, offset: tuple[float, float]):
-        """Handle mouse clicks on a ViewBox scene for point-select mode.
+        """
+        Handle mouse clicks on a ViewBox scene for point-select mode.
 
         Works the same regardless of which view (primary or secondary) the
         click came from - `view_box` converts the click to that view's local

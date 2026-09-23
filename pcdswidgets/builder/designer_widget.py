@@ -241,7 +241,8 @@ class MacroEditExtension:
         self.edit_macros_action.triggered.connect(self.open_dialog)
 
     def actions(self) -> list[QAction]:
-        """Return the actions PyDM prepends in designer.
+        """
+        Return the actions PyDM prepends in designer.
 
         The first action is mapped to double-click.
         """

@@ -283,7 +283,8 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
 
     def _build_state_grid(self) -> QtWidgets.QWidget | None:
-        """Return the per-state grid widget, or ``None`` if state count or tokens are absent.
+        """
+        Return the per-state grid widget, or ``None`` if state count or tokens are absent.
 
         The grid layout is (state name | Motor k (Setpoint, Velo) x N) with
         motors numbered 1..n.
@@ -340,7 +341,8 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
 
 class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
-    """PMPS variant with a Configuration tab holding the PMPS controls.
+    """
+    PMPS variant with a Configuration tab holding the PMPS controls.
 
     The tab shows arb_enable and maint_mode -- each a value readback plus a
     setpoint selector, sharing the ``${DEVICE}`` prefix -- with the per-state
@@ -448,7 +450,8 @@ def _signal_value(channel: str) -> PyDMLabel:
 
 
 class _BoolBar(PyDMLabel):
-    """Full-width rounded bar (Typhos-style) with the value shown as text.
+    """
+    Full-width rounded bar (Typhos-style) with the value shown as text.
 
     Background is ``on_color`` when the value is set, ``off_color`` when clear.
     """
@@ -483,7 +486,8 @@ class _BoolBar(PyDMLabel):
 
 
 class _ErrorMessage(PyDMLabel):
-    """Decoded error-message string (char waveform).
+    """
+    Decoded error-message string (char waveform).
 
     Highlights red only while the separate error flag (``error_channel``) is
     set, plain otherwise.

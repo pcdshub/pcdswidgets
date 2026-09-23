@@ -1,4 +1,5 @@
-"""Rebuild the ``[project.entry-points."pydm.widget"]`` table in pyproject.toml.
+"""
+Rebuild the ``[project.entry-points."pydm.widget"]`` table in pyproject.toml.
 
 Invoke via ``python -m pcdswidgets.builder.entrypoint_finder``.
 """

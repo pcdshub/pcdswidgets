@@ -1,4 +1,5 @@
-"""Define the IconOptions enum of valid designer icon names.
+"""
+Define the IconOptions enum of valid designer icon names.
 
 This is a file generated from icon_options.j2.
 """

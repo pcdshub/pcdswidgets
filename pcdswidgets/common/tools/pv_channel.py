@@ -9,7 +9,8 @@ _CONNECT_RETRY_MAX_ATTEMPTS = 5
 
 
 class PVChannel(QObject):
-    """Read/write handle to a PV via PyDM's channel plugin.
+    """
+    Read/write handle to a PV via PyDM's channel plugin.
 
     PyDMChannel is the plain object every PyDM widget already uses
     internally to talk to the CA/PVA plugin; using it directly avoids
@@ -55,7 +56,8 @@ class PVChannel(QObject):
             self._retry_timer.start(_CONNECT_RETRY_INTERVAL_MS)
 
     def _retry_if_still_silent(self) -> None:
-        """Reconnect with a fresh channel if we're still missing what we're waiting for.
+        """
+        Reconnect with a fresh channel if we're still missing what we're waiting for.
 
         Readers wait for actual values (connection alone isn't enough - it fires
         immediately even if no value arrives). Write-only channels only wait for

@@ -4,7 +4,8 @@ from pydm.widgets.label import PyDMLabel
 
 
 class MovingLabel(PyDMLabel):
-    """Label under the moving LED indicating BUSY vs. DONE.
+    """
+    Label under the moving LED indicating BUSY vs. DONE.
 
     Shows "moving" when the tracked value (STATE:BUSY_RBV) is set, "done"
     when it is clear.

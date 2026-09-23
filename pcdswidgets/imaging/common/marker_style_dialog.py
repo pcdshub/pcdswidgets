@@ -26,7 +26,8 @@ HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
 
 
 class MarkerStyleDialog(QDialog):
-    """Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
+    """
+    Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
 
     Parameters
     ----------

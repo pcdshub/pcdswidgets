@@ -25,7 +25,8 @@ logger = logging.getLogger(__name__)
 
 
 class EpicsRoiFull(EpicsRoiFullBase):
-    """Interactive ROI overlay widget for EPICS area-detector cameras.
+    """
+    Interactive ROI overlay widget for EPICS area-detector cameras.
 
     Provides draw, center-select, move/resize, and color/thickness controls
     for a rectangular ROI overlaid on a PyDMImageView.
