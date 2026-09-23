@@ -96,5 +96,6 @@ WIDGET_PATHS = {
     "TabDock": "pcdswidgets.common.dock.tab_dock:TabDock",
     "TabDockButton": "pcdswidgets.common.dock.tab_dock_button:TabDockButton",
     "TurboPump": "pcdswidgets.vacuum.pumps:TurboPump",
+    "ViewSaver": "pcdswidgets.common.tools.view_saver.view_saver:ViewSaver",
     "YamlToolbar": "pcdswidgets.common.toolbar.yaml_toolbar:YamlToolbar",
 }

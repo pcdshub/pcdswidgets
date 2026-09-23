@@ -4,6 +4,7 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
+import json
 import logging
 import math
 
@@ -467,6 +468,28 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             self.threshold_mode_combo.setCurrentIndex(mode)
             self.threshold_mode_combo.blockSignals(False)
             self._apply_threshold_mode_ui(mode)
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+
+        return {
+            "threshold": (
+                lambda: json.dumps(self.get_threshold_state()),
+                lambda raw: self.set_threshold_state(json.loads(raw)),
+            ),
+            "marker_style": (
+                lambda: json.dumps(self.get_marker_style_state()),
+                lambda raw: self.set_marker_style_state(json.loads(raw)),
+            ),
+            "roi_multiplier": (
+                lambda: str(self.roi_multiplier_spinbox.value()),
+                lambda raw: self.roi_multiplier_spinbox.setValue(float(raw)),
+            ),
+        }
 
     def _set_roi_from_centroid(self):
         """Calculate a centroid +/- multiplier*FWHM ROI and push it to the shared EPICS ROI PVs."""
