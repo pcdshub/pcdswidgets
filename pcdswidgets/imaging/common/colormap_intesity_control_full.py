@@ -4,6 +4,8 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
+import json
+
 import numpy as np
 from pydm.widgets import PyDMImageView
 from pydm.widgets.colormaps import PyDMColorMap, cmap_names, cmaps
@@ -188,3 +190,24 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         self._histogram.item.setLevels(mn, mx)
         for image_view in self._linked_image_views():
             image_view.setColorMapLimits(mn, mx)
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+        return {
+            "colormap_index": (
+                lambda: str(self.colormap_combo.currentIndex()),
+                lambda raw: self.colormap_combo.setCurrentIndex(int(raw)),
+            ),
+            "normalize": (
+                lambda: json.dumps(self.normalize_check.isChecked()),
+                lambda raw: self.normalize_check.setChecked(json.loads(raw)),
+            ),
+            "levels": (
+                lambda: json.dumps(self.get_levels()),
+                lambda raw: self.set_levels(*json.loads(raw)),
+            ),
+        }

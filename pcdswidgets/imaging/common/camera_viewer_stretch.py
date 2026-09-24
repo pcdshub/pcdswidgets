@@ -194,6 +194,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
                 parent=self.sidebar_scroll.widget(),
                 collapsed=True,
             )
+            section.setObjectName(f"{child.objectName()}_collapse")
             sidebar_layout.addWidget(section)
             section.show()
             self._adopted_widgets.append(child)

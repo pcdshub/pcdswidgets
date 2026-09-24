@@ -4,6 +4,7 @@ Originally generated from jinja template ui_main_widget.j2
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
+import json
 import logging
 
 from qtpy.QtCore import Q_ENUMS
@@ -46,3 +47,21 @@ class MotorTipTiltFull(MotorTipTiltMixin, MotorTipTiltFullBase):
         self._refresh_axis("horizontal")
 
     motor_style = pyqtProperty(MotorStyle, getMotorStyle, setMotorStyle)
+
+    def get_view_saver_properties(self) -> dict:
+        """Resolved ViewSaver getter/setter pairs for this widget's saved state.
+
+        getter returns a QSettings-storable value
+        setter accepts and applies raw stored value
+        """
+
+        return {
+            "horizontal_invert": (
+                lambda: json.dumps(self.horizontal_invert.isChecked()),
+                lambda raw: self.horizontal_invert.setChecked(json.loads(raw)),
+            ),
+            "vertical_invert": (
+                lambda: json.dumps(self.vertical_invert.isChecked()),
+                lambda raw: self.vertical_invert.setChecked(json.loads(raw)),
+            ),
+        }
