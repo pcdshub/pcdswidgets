@@ -56,7 +56,9 @@ HappiLoaderCbDict = dict[str, list[Device]]
 class HappiLoaderCallback(Protocol):
     """Type annotation helper for HappiLoader-compatible callback functions."""
 
-    def __call__(self, devices: HappiLoaderCbDict) -> None: ...
+    def __call__(self, devices: HappiLoaderCbDict) -> None:
+        """Invoke the callback with the provided devices mapping."""
+        ...
 
 
 class BaseDeviceButton(QPushButton):
@@ -127,7 +129,7 @@ class BaseDeviceButton(QPushButton):
         self.device_menu.addMenu(sub_menu)
 
     def _show_device_wrapper(self, device: Device) -> Callable[[], QWidget]:
-        """Helper for assembling the menus."""
+        """Return a zero-arg callable that opens ``device`` (used to build menus)."""
 
         def inner():
             return self.show_device(device)
@@ -136,7 +138,7 @@ class BaseDeviceButton(QPushButton):
 
     def eventFilter(self, obj, event):  # type: ignore
         """
-        QWidget.eventFilter to be installed on child indicators
+        QWidget.eventFilter to be installed on child indicators.
 
         This is required to display the :meth:`.contextMenuEvent` even if an
         indicator is pressed.
@@ -163,11 +165,10 @@ class BaseDeviceButton(QPushButton):
 
 
 class QMenuWithClickableSubmenu(QMenu):
-    """
-    QMenu, but we can click our submenus to do their default actions.
-    """
+    """QMenu, but we can click our submenus to do their default actions."""
 
     def mousePressEvent(self, event: QMouseEvent) -> None:  # type: ignore
+        """Fire a submenu's default action on left click of that submenu's entry."""
         if event.button() == Qt.LeftButton:
             action = self.actionAt(event.pos())
             if action is None:
@@ -209,23 +210,24 @@ class IndicatorCell(BaseDeviceButton):
 
     @Property(bool)  # type: ignore
     def selected(self) -> bool:
-        """Whether the devices in this cell have been selected"""
+        """Whether the devices in this cell have been selected."""
         return bool(len(self._selecting_widgets))
 
     def add_indicator(self, widget: QWidget):
-        """Add an indicator to the Panel"""
+        """Add an indicator to the Panel."""
         widget.setFixedSize(self.icon_size, self.icon_size)
         widget.setMinimumSize(self.icon_size, self.icon_size)
         self.layout().addWidget(widget)
 
     def add_device(self, device: Device):
-        """Add a device to the IndicatorCell"""
+        """Add a device to the IndicatorCell."""
         indicator = indicator_for_device(device)
         indicator.setContextMenuPolicy(Qt.NoContextMenu)
         self.devices.append(device)
         self.add_indicator(indicator)
 
     def sizeHint(self):
+        """Return a size hint sized to the current icon grid."""
         size_per_icon = self.icon_size + self.spacing
         return QSize(self.max_columns * size_per_icon + self.spacing + 2 * self.margin, 36)
 
@@ -246,20 +248,21 @@ class IndicatorGroup(BaseDeviceButton):
         self.orientation = orientation
 
     def add_cell(self, cell: IndicatorCell):
+        """Append a cell to this group's cell list."""
         self.cells.append(cell)
 
     @property
     def devices(self) -> list[Device]:  # type: ignore
-        """All devices contained in the ``IndicatorGroup``"""
+        """All devices contained in the ``IndicatorGroup``."""
         return [device for cell in self.cells for device in cell.devices]
 
     @property
     def device_to_indicator(self) -> dict[Device, IndicatorCell]:
-        """Dictionary of Device to IndicatorCell"""
+        """Dictionary of Device to IndicatorCell."""
         return {device: cell for cell in self.cells for device in cell.devices}
 
     def eventFilter(self, obj, event):  # type: ignore
-        """Share QHoverEvents with all cells in the group"""
+        """Share QHoverEvents with all cells in the group."""
         if isinstance(event, QHoverEvent):
             for cell in self.cells:
                 cell.event(event)
@@ -394,17 +397,13 @@ class IndicatorGrid(QWidget):
         from ophyd.signal import EpicsSignalBase
 
         def ensure_read_write_on_conn(instance):
-            """
-            Subscribe our update function if and only if it is an EPICS signal
-            """
+            """Subscribe our update function if and only if it is an EPICS signal."""
             if not isinstance(instance, EpicsSignalBase):
                 return
             instance.subscribe(update_rw, event_type=instance.SUB_META, run=False)
 
         def update_rw(obj: EpicsSignalBase, connected: bool, **md):
-            """
-            If the signal appears to be affected by the access bug, reach into pyepics and get the access rights update.
-            """
+            """Reach into pyepics for access rights when the signal is affected by the access bug."""
             if connected and not obj.read_access:
                 pv_objs: list[PV] = [obj._read_pv]  # type: ignore
                 try:
@@ -431,6 +430,7 @@ class IndicatorGrid(QWidget):
 
 
 def get_happi_entry_value(entry: Entry, key: str) -> Any:
+    """Return ``entry.metadata[key]`` or None if it is falsy/missing."""
     value = entry.metadata.get(key, None)
     if not value:
         raise ValueError(f"Invalid Key ({key} not in {entry}.")
@@ -454,7 +454,7 @@ class HappiLoader(QtCore.QThread):
         super().__init__(*args, **kwargs)
 
     def _load_from_happi(self, row_group_key: str, col_group_key: str) -> HappiLoaderCbDict:
-        """Fill with Data from Happi"""
+        """Fill with Data from Happi."""
         cli = get_happi_client()
         results = []
         for line in self.beamline:
@@ -497,7 +497,7 @@ device_display_cache = {}
 
 
 def display_for_device(device: Device):
-    """Create a TyphosDeviceDisplay for a given device"""
+    """Create a TyphosDeviceDisplay for a given device."""
     # Embed optional dependency imports in function call
     from typhos.display import TyphosDeviceDisplay
     from typhos.utils import apply_standard_stylesheets, no_device_lazy_load

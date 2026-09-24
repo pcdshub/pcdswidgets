@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -10,6 +10,8 @@ from pcdswidgets.generated.motion.common.motor_state_mover_base import MotorStat
 
 
 class MotorStateMover(MotorStateMoverBase):
+    """User-editable subclass of the generated MotorStateMover base widget."""
+
     designer_options = DesignerOptions(
         group="ECS Motion Common",
         is_container=False,

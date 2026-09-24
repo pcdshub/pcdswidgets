@@ -1,3 +1,5 @@
+"""Miscellaneous vacuum symbol icons."""
+
 from qtpy.QtCore import QPointF
 from qtpy.QtGui import QPainterPath
 
@@ -26,4 +28,5 @@ class RGASymbolIcon(BaseSymbolIcon):
     path.closeSubpath()
 
     def draw_icon(self, painter):
+        """Paint the residual gas analyzer symbol into ``painter``."""
         painter.drawPath(self.path)

@@ -26,7 +26,8 @@ HATCH_OPTIONS: list[tuple[str, Qt.PenStyle]] = [
 
 
 class MarkerStyleDialog(QDialog):
-    """Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
+    """
+    Popup dialog for configuring marker style, thickness, hatch pattern, arm length, and radius.
 
     Parameters
     ----------
@@ -180,24 +181,30 @@ class MarkerStyleDialog(QDialog):
 
     @property
     def selected_style(self) -> MarkerStyle:
+        """Return the marker style chosen in the dialog."""
         return self._selected_style
 
     @property
     def selected_width(self) -> int:
+        """Return the marker pen width chosen in the dialog."""
         return self._selected_width
 
     @property
     def selected_arm_length(self) -> int:
+        """Return the crosshair arm length chosen in the dialog."""
         return self._selected_arm_length
 
     @property
     def selected_radius(self) -> int:
+        """Return the ellipse radius chosen in the dialog."""
         return self._selected_radius
 
     @property
     def selected_hatch_pattern(self) -> Qt.PenStyle:
+        """Return the hatch (dash) pattern chosen in the dialog."""
         return self._selected_hatch_pattern
 
     @property
     def apply_to_all(self) -> bool:
+        """Return True when the user asked to apply changes to all markers."""
         return self._apply_all_checkbox.isChecked()

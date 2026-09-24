@@ -82,14 +82,16 @@ def main(args: list[str] | None = None) -> int:
 class SubparserAction(Protocol):
     """Helper to type hint the _SubparserAction private type returned by ArgumentParser.add_subparsers()."""
 
-    def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser: ...
+    def add_parser(self, name: str, *, help: str, **kwargs) -> ArgumentParser:
+        """Add and return a new subparser named ``name``."""
+        ...
 
     choices: dict[str, Any]
 
 
 def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     """
-    The top-level parser without filling in any automatic subparser details.
+    Return the top-level parser without filling in any automatic subparser details.
 
     This is what will be shown to the user for the main --help text and
     if any of the the highlighted widgets or screens is used.

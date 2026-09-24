@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -26,7 +26,8 @@ logger = logging.getLogger(__name__)
 
 
 class EpicsRoiFull(EpicsRoiFullBase):
-    """Interactive ROI overlay widget for EPICS area-detector cameras.
+    """
+    Interactive ROI overlay widget for EPICS area-detector cameras.
 
     Provides draw, center-select, move/resize, and color/thickness controls
     for a rectangular ROI overlaid on a PyDMImageView.
@@ -171,7 +172,6 @@ class EpicsRoiFull(EpicsRoiFullBase):
         Called by the parent widget at adoption time.  Creates the ROI
         overlay item, attaches it to the ViewBox.
         """
-
         # link the ROI rect to the image_view box
         if hasattr(parent, "image_view"):
             self._image_view = parent.image_view
@@ -266,7 +266,7 @@ class EpicsRoiFull(EpicsRoiFullBase):
             self.roi_rect.set_from_corners(self._draw_origin, data_pos)
 
     def _on_spinbox_changed(self, new_value=None):
-        """update the ROI if spinbox values change not due to user input"""
+        """Update the ROI if spinbox values change not due to user input."""
         # only update ROI displayed if the move controls are not active
         if not self.user_moving_roi:
             sender = self.sender()
@@ -292,10 +292,12 @@ class EpicsRoiFull(EpicsRoiFullBase):
 
     @property
     def interactive_buttons(self):
+        """Return the tuple of buttons that let the user manipulate the ROI."""
         return (self.move_enabled_button, self.select_center_button, self.draw_roi_button)
 
     @property
     def user_moving_roi(self):
+        """Return True if any of the interactive buttons are currently active."""
         for button in self.interactive_buttons:
             button: QPushButton
             if button.isChecked():
@@ -303,25 +305,31 @@ class EpicsRoiFull(EpicsRoiFullBase):
         return False
 
     def get_roi_color(self) -> QColor:
+        """Return the color assigned to the ROI overlay."""
         return self.color_selection_button.get_color()
 
     def set_roi_color(self, color: QColor) -> None:
+        """Set the color assigned to the ROI overlay."""
         self.color_selection_button.set_color(color)
 
     roi_color = pyqtProperty(QColor, get_roi_color, set_roi_color)
 
     def get_nickname(self) -> str:
+        """Return the widget nickname string."""
         return self._nickname
 
     def set_nickname(self, value: str) -> None:
+        """Set the widget nickname string."""
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
 
     def get_is_xy_center(self) -> bool:
+        """Return whether the ROI position tracks the xy center."""
         return self._is_xy_center
 
     def set_is_xy_center(self, value: bool) -> None:
+        """Set whether the ROI position tracks the xy center."""
         self._is_xy_center = value
 
     is_xy_center = pyqtProperty(bool, get_is_xy_center, set_is_xy_center)

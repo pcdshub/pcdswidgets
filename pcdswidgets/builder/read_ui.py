@@ -132,5 +132,5 @@ macro_re = re.compile(r"\${(\S+?)}")
 
 
 def _get_macros(text_with_macro_sub: str) -> list[str]:
-    """Helper for getting the name of each macro in use in a macro string."""
+    """Return the names of each macro used in ``text_with_macro_sub``."""
     return macro_re.findall(text_with_macro_sub)

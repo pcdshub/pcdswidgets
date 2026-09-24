@@ -4,10 +4,15 @@ from pydm.widgets.label import PyDMLabel
 
 
 class MovingLabel(PyDMLabel):
-    """Label under the moving LED: shows "moving" when the tracked value
-    (STATE:BUSY_RBV) is set, "done" when it is clear."""
+    """
+    Label under the moving LED indicating BUSY vs. DONE.
+
+    Shows "moving" when the tracked value (STATE:BUSY_RBV) is set, "done"
+    when it is clear.
+    """
 
     def value_changed(self, value) -> None:
+        """Render "moving" while ``value`` is truthy, "done" otherwise."""
         try:
             busy = bool(int(value))
         except (TypeError, ValueError):

@@ -1,6 +1,7 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+User-editable widget subclass for MotorClassicFull.
 
+Originally generated from jinja template ui_main_widget.j2.
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
@@ -65,6 +66,7 @@ class MotorClassicFull(MotorClassicFullBase):
     BECKHOFF_LEGACY = MotorTypes.BECKHOFF_LEGACY
 
     def __init__(self, parent: QWidget | None = None):
+        """Build the widget with hidden expert/clear buttons by default."""
         super().__init__(parent)
         self._motor_type = MotorTypes.GENERIC
         self._clear_error_suffix = ""
@@ -73,15 +75,17 @@ class MotorClassicFull(MotorClassicFullBase):
         self.PyDMShellCommand_expert.hide()
 
     def after_set_macro(self, macro_name: str, value: str):
-        """Puts motor prefix into error reset PV and expert screen command."""
+        """Rebuild the error-reset PV and expert screen command when MOTOR changes."""
         if macro_name == "MOTOR":
             self.new_clear_error_motor(value)
             self.new_expert_command_motor(value)
 
     def get_motor_type(self) -> MotorTypes | int:
+        """Return the currently selected motor type."""
         return self._motor_type
 
     def set_motor_type(self, value: MotorTypes | int) -> None:
+        """Set the motor type and reconfigure the reset/expert widgets."""
         self._motor_type = value
         match value:
             case MotorTypes.IMS:
@@ -109,18 +113,22 @@ class MotorClassicFull(MotorClassicFullBase):
     motor_type = pyqtProperty(MotorTypes, get_motor_type, set_motor_type)
 
     def new_clear_error_suffix(self, suffix: str):
+        """Set the suffix used to build the clear-error PV."""
         self._clear_error_suffix = suffix
         if motor := self.get_macro("MOTOR"):
             self.new_clear_error_motor(motor)
 
     def new_clear_error_motor(self, motor: str):
+        """Rebuild the clear-error PyDMPushButton channel for ``motor``."""
         if self._clear_error_suffix:
             self.PyDMPushButton_clear_error.set_channel(f"ca://{motor}{self._clear_error_suffix}")
 
     def new_expert_command_template(self, template: str):
+        """Set the expert-command template string and refresh the button."""
         self._expert_command = template
         if motor := self.get_macro("MOTOR"):
             self.new_expert_command_motor(motor)
 
     def new_expert_command_motor(self, motor: str):
+        """Rebuild the expert PyDMShellCommand for ``motor``."""
         self.PyDMShellCommand_expert.commands = [self._expert_command.format(motor=motor)]

@@ -1,3 +1,5 @@
+"""Symbol icons for vacuum pressure gauges."""
+
 from qtpy.QtCore import QPointF, QRectF
 from qtpy.QtGui import QPainterPath
 
@@ -20,6 +22,7 @@ class RoughGaugeSymbolIcon(BaseSymbolIcon):
     path.closeSubpath()
 
     def draw_icon(self, painter):
+        """Paint the pirani gauge triangle into ``painter``."""
         painter.drawPath(self.path)
 
 
@@ -34,6 +37,7 @@ class CathodeGaugeSymbolIcon(BaseSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the cathode gauge circle into ``painter``."""
         painter.drawEllipse(QPointF(0.5, 0.5), 0.5, 0.5)
 
 
@@ -48,6 +52,7 @@ class HotCathodeGaugeSymbolIcon(CathodeGaugeSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the hot cathode gauge into ``painter``."""
         super().draw_icon(painter)
         painter.drawLine(QPointF(0.3, 0.1), QPointF(0.3, 0.9))
         painter.drawLine(QPointF(0.3, 0.5), QPointF(0.7, 0.5))
@@ -65,6 +70,7 @@ class ColdCathodeGaugeSymbolIcon(CathodeGaugeSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the cold cathode gauge into ``painter``."""
         super().draw_icon(painter)
         painter.drawArc(QRectF(0.25, 0.25, 0.5, 0.5), 45 * 16, 270 * 16)
 
@@ -85,6 +91,7 @@ class ColdCathodeComboGaugeSymbolIcon(CathodeGaugeSymbolIcon):
     path.closeSubpath()
 
     def draw_icon(self, painter):
+        """Paint the cold cathode combo gauge into ``painter``."""
         super().draw_icon(painter)
         painter.drawPath(self.path)
 
@@ -100,6 +107,7 @@ class HotCathodeComboGaugeSymbolIcon(ColdCathodeComboGaugeSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the hot cathode combo gauge into ``painter``."""
         super().draw_icon(painter)
         painter.drawLine(QPointF(0.4, 0.30), QPointF(0.4, 0.65))
         painter.drawLine(QPointF(0.4, 0.45), QPointF(0.6, 0.45))
@@ -117,6 +125,7 @@ class CapManometerGaugeSymbolIcon(RoughGaugeSymbolIcon):
     """
 
     def draw_icon(self, painter):
+        """Paint the capacitance manometer gauge into ``painter``."""
         super().draw_icon(painter)
         painter.drawLine(QPointF(0.35, 0.45), QPointF(0.35, 0.85))
         painter.drawLine(QPointF(0.35, 0.45), QPointF(0.5, 0.75))

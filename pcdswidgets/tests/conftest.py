@@ -1,3 +1,5 @@
+"""Shared pytest fixtures for the pcdswidgets test suite."""
+
 ############
 # Standard #
 ############
@@ -13,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope="function")
 def tab_dock(qtbot: QtBot) -> TabDock:
+    """Provide a fresh TabDock for the test."""
     dock = TabDock()
     dock.show()
     qtbot.addWidget(dock)

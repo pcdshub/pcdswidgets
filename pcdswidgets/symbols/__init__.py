@@ -1,3 +1,5 @@
+"""Drawing symbols used by pcdswidgets vacuum widget icons."""
+
 from .gauges import (
     CapManometerGaugeSymbolIcon,
     CathodeGaugeSymbolIcon,

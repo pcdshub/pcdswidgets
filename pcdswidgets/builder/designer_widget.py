@@ -1,6 +1,4 @@
-"""
-Helper for using designer to layout widgets.
-"""
+"""Helper for using designer to layout widgets."""
 
 import os
 import warnings
@@ -68,6 +66,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     editable_choice_properties: ClassVar[dict[str, dict[str, int]]] = {}
 
     def __init_subclass__(cls):
+        """Register the subclass with PyDM and dispatch designer options."""
         super().__init_subclass__()
         # Create _qt_designer_ for pydm if designer_options is present
         if hasattr(cls, "designer_options"):
@@ -93,7 +92,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
         self.update_relative_paths()
 
     def retranslateUi(self, *args, **kwargs):
-        """Required function for setupUi to work in __init__"""
+        """Forward retranslateUi to the ui_form to satisfy setupUi in __init__."""
         self.ui_form.retranslateUi(self, *args, **kwargs)  # type: ignore
 
     @classmethod
@@ -121,7 +120,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
 
     def update_relative_paths(self):
         """
-        Special handling for PyDMRelatedDisplay and PyDMEmbeddedDisplay.
+        Rewrite PyDMRelatedDisplay and PyDMEmbeddedDisplay paths for pcdswidgets.
 
         Relative filepaths are nearly non-functional when used in pcdswidgets,
         because they are relative to the filepath of the ui file (Display)
@@ -162,7 +161,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
                     obj.setFilenames(filenames)
 
     def get_macro(self, macro_name: str) -> str:
-        """Returns the current value of a macro that is applied to our subwidgets."""
+        """Return the current value of a macro that is applied to our subwidgets."""
         return self._macro_values[macro_name]
 
     def _get_macro(self, macro_name: str) -> str:
@@ -170,7 +169,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
         return self.get_macro(macro_name)
 
     def set_macro(self, macro_name: str, value: str):
-        """Updates a macro to a new value and propagates to all subwidget properties appropriately."""
+        """Update a macro to a new value and propagate it to subwidget properties."""
         self._macro_values[macro_name] = value
         self._updates_for_macro(macro_name)
         self.after_set_macro(macro_name=macro_name, value=value)
@@ -181,7 +180,7 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
 
     def after_set_macro(self, macro_name: str, value: str):
         """
-        Hook for additional actions to take when a macro is set.
+        Run additional actions after a macro is set.
 
         This exists so you can extend this behavior without overriding set_macro,
         which could otherwise make it easy to break the widget.
@@ -243,18 +242,21 @@ class MacroEditExtension:
 
     def actions(self) -> list[QAction]:
         """
-        PyDM checks this to decide which actions to prepent in designer. The first action is mapped to double-click.
+        Return the actions PyDM prepends in designer.
+
+        The first action is mapped to double-click.
         """
         return [self.edit_macros_action]
 
     def open_dialog(self):
+        """Open the macro editing dialog for this widget."""
         dialog = MacroValueEditor(self.widget, parent=self.widget)
         dialog.exec_()
 
 
 class MacroValueEditor(QDialog):
     """
-    Dialog for MacroEditExtension
+    Dialog for MacroEditExtension.
 
     See the BasicSettingsEditor from PyDM
     """
@@ -267,6 +269,7 @@ class MacroValueEditor(QDialog):
         self.setup_ui()
 
     def setup_ui(self):
+        """Populate the dialog with widget rows for each editable macro/property."""
         self.setWindowTitle("Widget Core Settings Editor")
         outer_layout = QVBoxLayout()
         outer_layout.setContentsMargins(5, 5, 5, 5)
@@ -310,6 +313,7 @@ class MacroValueEditor(QDialog):
         button_layout.addWidget(self.save_button)
 
     def save_changes(self):
+        """Apply edited macro/property values to the widget."""
         for macro_name, widget in self.edit_widgets.items():
             update_property_for_widget(self.widget, macro_name.lower(), widget.text())
         for prop_name, combo in self.choice_widgets.items():
@@ -318,8 +322,10 @@ class MacroValueEditor(QDialog):
             self.accept()
 
     def cancel_changes(self):
+        """Close the dialog without saving changes."""
         self.close()
 
 
 def get_icon_path(icon_file: str) -> str:
+    """Return the absolute filesystem path to an icon shipped with pcdswidgets."""
     return str(ICON_AREA / icon_file)

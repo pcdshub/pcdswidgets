@@ -1,3 +1,5 @@
+"""Form implementation generated from motor_state_mover.ui."""
+
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_state_mover.ui'
 #
@@ -8,6 +10,7 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+# ruff: noqa: D101, D102
 from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel

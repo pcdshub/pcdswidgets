@@ -1,6 +1,4 @@
-"""
-Unit tests for TabDock and TabDockButton.
-"""
+"""Unit tests for TabDock and TabDockButton."""
 
 from pathlib import Path
 from unittest.mock import Mock
@@ -18,6 +16,7 @@ TESTS_DIR = Path(__file__).parent.resolve()
 
 def test_add_to_dock_user_keybinds(tab_dock: TabDock, monkeypatch: pytest.MonkeyPatch, qtbot: QtBot):
     # Mock our own methods to check if they got called
+    """Test add to dock user keybinds."""
     add_to_dock_mock = Mock()
     open_in_new_window_mock = Mock()
     monkeypatch.setattr(TabDock, "add_to_dock", add_to_dock_mock)
@@ -66,6 +65,7 @@ def test_add_to_dock_user_keybinds(tab_dock: TabDock, monkeypatch: pytest.Monkey
 
 
 def test_add_to_dock(tab_dock: TabDock, qtbot: QtBot):
+    """Test add to dock."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
     widget2 = QWidget()
@@ -87,6 +87,7 @@ def test_add_to_dock(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_detach_from_dock(tab_dock: TabDock, qtbot: QtBot):
+    """Test detach from dock."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
 
@@ -104,6 +105,7 @@ def test_detach_from_dock(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_open_in_new_window(tab_dock: TabDock, qtbot: QtBot):
+    """Test open in new window."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
 
@@ -121,6 +123,7 @@ def test_open_in_new_window(tab_dock: TabDock, qtbot: QtBot):
 
 def test_reattach_user_choice(tab_dock: TabDock, monkeypatch: pytest.MonkeyPatch, qtbot: QtBot):
     # Mock our own methods to check if they got called
+    """Test reattach user choice."""
     reattach_to_dock_mock = Mock()
     show_attach_menu_mock = Mock()
     monkeypatch.setattr(TabDock, "reattach_to_dock", reattach_to_dock_mock)
@@ -157,6 +160,7 @@ def test_reattach_user_choice(tab_dock: TabDock, monkeypatch: pytest.MonkeyPatch
 
 
 def test_reattach_to_dock(tab_dock: TabDock, qtbot: QtBot):
+    """Test reattach to dock."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
 
@@ -181,6 +185,7 @@ def test_reattach_to_dock(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_show_attach_menu(tab_dock: TabDock, qtbot: QtBot):
+    """Test show attach menu."""
     tab_widget = tab_dock.tab_widgets[0][0]
 
     widgets = [QWidget() for _ in range(3)]
@@ -201,6 +206,7 @@ def test_show_attach_menu(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_clean_detached_widgets(tab_dock: TabDock, qtbot: QtBot):
+    """Test clean detached widgets."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
 
@@ -219,6 +225,7 @@ def test_clean_detached_widgets(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_not_clean_minimized_widgets(tab_dock: TabDock, qtbot: QtBot):
+    """Test not clean minimized widgets."""
     widget1 = QWidget()
     qtbot.add_widget(widget1)
 
@@ -237,6 +244,7 @@ def test_not_clean_minimized_widgets(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_multidock(tab_dock: TabDock, qtbot: QtBot):
+    """Test multidock."""
     widgets = [QWidget() for _ in range(7)]
     for widget in widgets:
         qtbot.add_widget(widget)
@@ -272,19 +280,23 @@ def test_multidock(tab_dock: TabDock, qtbot: QtBot):
 
 
 def test_dock_exists(tab_dock: TabDock):
+    """Test dock exists."""
     assert TabDock.dock_exists()
 
 
 def test_dock_does_not_exist():
+    """Test dock does not exist."""
     TabDock.clear_instance()
     assert not TabDock.dock_exists()
 
 
 def test_get_instance(tab_dock: TabDock):
+    """Test get instance."""
     assert tab_dock is TabDock.get_instance()
 
 
 def test_no_get_instance():
+    """Test no get instance."""
     TabDock.clear_instance()
     with pytest.raises(NoTabDockError):
         TabDock.get_instance()

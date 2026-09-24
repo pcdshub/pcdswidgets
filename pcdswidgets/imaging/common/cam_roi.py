@@ -7,7 +7,8 @@ from qtpy.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QSpinBox, 
 
 
 class CamROI(pg.ROI):
-    """High-level rectangular ROI for camera viewer overlays.
+    """
+    High-level rectangular ROI for camera viewer overlays.
 
     Extends ``pg.ROI`` with:
 
@@ -32,11 +33,13 @@ class CamROI(pg.ROI):
     # ── Qt geometry overrides ────────────────────────────────────────────
 
     def boundingRect(self) -> QRectF:
+        """Return a bounding rectangle padded by the current pen width."""
         pw = self.currentPen.width() if self.currentPen else 1
         margin = pw / 2.0 + 1
         return QRectF(0, 0, self.state["size"][0], self.state["size"][1]).adjusted(-margin, -margin, margin, margin)
 
     def stateChanged(self, finish=True):
+        """Invalidate the padded rect before the parent repaints, then chain up."""
         # Invalidate old padded rect before the parent repaints.
         self.prepareGeometryChange()
         super().stateChanged(finish)
@@ -58,7 +61,8 @@ class CamROI(pg.ROI):
         return pos.x(), pos.y(), size.x(), size.y()
 
     def set_geometry_from_center(self, cx: float, cy: float, wx: float, wy: float) -> None:
-        """Set ROI position/size from center coordinates and dimensions.
+        """
+        Set ROI position/size from center coordinates and dimensions.
 
         Does nothing if width or height are non-positive.
         """
@@ -68,7 +72,8 @@ class CamROI(pg.ROI):
         self.setSize([wx, wy])
 
     def set_geometry_from_corner(self, x_start: float, y_start: float, wx: float, wy: float) -> None:
-        """Set ROI position/size from starting coordinates and dimensions.
+        """
+        Set ROI position/size from starting coordinates and dimensions.
 
         Does nothing if width or height are non-positive.
         """
@@ -78,7 +83,8 @@ class CamROI(pg.ROI):
         self.setSize([wx, wy])
 
     def set_from_corners(self, p1: QPointF, p2: QPointF) -> None:
-        """Set ROI position/size from two opposite corner points.
+        """
+        Set ROI position/size from two opposite corner points.
 
         Enforces a minimum size of 1 pixel in each dimension.
         """
@@ -98,16 +104,17 @@ class CamROI(pg.ROI):
 
     @Slot(bool)
     def visible(self, state: bool):
+        """Show or hide the ROI graphic item."""
         self.setVisible(state)
 
     @Slot(QColor)
     def update_color(self, color: QColor):
-        """a slot for setting the color"""
+        """Set the ROI pen color."""
         self.change_pen(color=color)
 
     def change_pen(self, color=None, width=None):
         """
-        Similar to setPen but with key differences
+        Similar to setPen but with key differences.
 
         - defaults to previous width or color if ommited
         - adds updates hoverpen too with inverted color

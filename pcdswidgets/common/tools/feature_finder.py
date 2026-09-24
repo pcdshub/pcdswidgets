@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -40,6 +40,8 @@ logger = logging.getLogger(__name__)
 
 
 class FeatureFinder(FeatureFinderBase):
+    """User-editable subclass of the generated FeatureFinder base widget."""
+
     designer_options = DesignerOptions(
         group="ECS Common Tools",
         is_container=False,
@@ -112,7 +114,7 @@ class FeatureFinder(FeatureFinderBase):
 
     def after_set_macro(self, macro_name: str, value: str) -> None:
         """
-        Overriding the parent method for this to handle PyDMWidget channel swapping
+        Handle PyDMWidget channel swapping after a macro is updated.
 
         Parameters
         ----------
@@ -149,9 +151,7 @@ class FeatureFinder(FeatureFinderBase):
         self._macros_timer.start()
 
     def post_init_setup(self) -> None:
-        """
-        Need to wait for the object to exist for its macros to be available
-        """
+        """Need to wait for the object to exist for its macros to be available."""
         if not self.get_macro("motor") or not self.get_macro("detector"):
             self._macros_timer.start()
             return
@@ -174,9 +174,7 @@ class FeatureFinder(FeatureFinderBase):
         return f"{self._motor_pv}::{self._detector_pv}"
 
     def save_settings(self) -> None:
-        """
-        Save current settings to the config file for this motor/detector pair.
-        """
+        """Save current settings to the config file for this motor/detector pair."""
         try:
             # Load existing configs
             if self._config_file.exists():
@@ -211,9 +209,7 @@ class FeatureFinder(FeatureFinderBase):
             logger.warning(f"Failed to save settings: {e}")
 
     def load_settings(self) -> None:
-        """
-        Load saved settings from the config file for this motor/detector pair.
-        """
+        """Load saved settings from the config file for this motor/detector pair."""
         setter: QDoubleSpinBox
 
         # Wait for the macros to actually finish connecting
@@ -252,9 +248,7 @@ class FeatureFinder(FeatureFinderBase):
             logger.warning(f"Failed to load settings: {e}")
 
     def connect_motor(self) -> None:
-        """
-        Once the motor macro is available, connect all relevant attr, widgets, etc.
-        """
+        """Once the motor macro is available, connect all relevant attr, widgets, etc."""
         # Get the EGU as a channel
         if self._motor_egu_ch:
             self._motor_egu_ch.disconnect(destroying=True)
@@ -268,9 +262,7 @@ class FeatureFinder(FeatureFinderBase):
         self.connect_limits()
 
     def update_motor_egu(self, value) -> None:
-        """
-        Call back to update the motor EGU units when they change.
-        """
+        """Call back to update the motor EGU units when they change."""
         setter: QDoubleSpinBox
         getter: QLabel
 
@@ -289,8 +281,9 @@ class FeatureFinder(FeatureFinderBase):
 
     def connect_motor_buttons(self) -> None:
         """
-        Connect the motor widgets to their appropriate slots,
-        presumptively after pydm already expanded macros.
+        Connect the motor widgets to their appropriate slots.
+
+        Runs presumptively after pydm already expanded macros.
         """
         widget: PyDMPushButton
 
@@ -312,7 +305,8 @@ class FeatureFinder(FeatureFinderBase):
 
     def connect_limits(self) -> None:
         """
-        Connect the scan limit functions to their widgets, then format them.
+        Connect the scan limit functions to their widgets and format them.
+
         If they're already connected, update them.
         """
         widget: QDoubleSpinBox
@@ -337,9 +331,7 @@ class FeatureFinder(FeatureFinderBase):
             self._limits_connected = True
 
     def connect_detector(self) -> None:
-        """
-        Once the meter macro is available, connect all relevant widgets and update attr.
-        """
+        """Once the meter macro is available, connect all relevant widgets and update attr."""
         self._detector_pv = self.get_macro("detector")
         if self._detector_egu_ch:
             self._detector_egu_ch.disconnect(destroying=True)
@@ -347,9 +339,7 @@ class FeatureFinder(FeatureFinderBase):
         self._detector_egu_ch.connect()
 
     def update_detector_egu(self, value: str) -> None:
-        """
-        Call back to update the detector EGU units when they change.
-        """
+        """Call back to update the detector EGU units when they change."""
         self._detector_egu = value
         self.plot.setLabel("left", f"{self._detector_pv}", units=self._detector_egu)
 
@@ -357,6 +347,7 @@ class FeatureFinder(FeatureFinderBase):
     def show_change_pvs_dialog(self):
         """
         Show a dialog to change the motor and detector PV names.
+
         Includes a confirmation step before applying changes.
         """
         dialog = QDialog(self)
@@ -442,7 +433,8 @@ class FeatureFinder(FeatureFinderBase):
     @Slot(int)
     def on_motor_done_moving(self, val: int) -> None:
         """
-        Monitor motor.DMOV falling edge to detect when movement completes.
+        Detect when movement completes by monitoring motor.DMOV's falling edge.
+
         Return early if movement is not from the step functions.
 
         Parameters
@@ -469,37 +461,30 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def update_invert(self) -> None:
-        """
-        Update the optional x-axis inversion for plotting purposes
-        """
+        """Update the optional x-axis inversion for plotting purposes."""
         self._invert = self.invert_x_checkbox.isChecked()
         self.invert_x_axis()
 
     @Slot()
     def update_step_size(self) -> None:
-        """
-        Update the step size.
-        """
+        """Update the step size."""
         self._step_size = self.step_size_set.value()
         self.step_size_get.setText(f" {self._step_size:.6e} {self._motor_egu}")
 
     @Slot()
     def update_lower_limit(self) -> None:
-        """
-        Update the lower limit.
-        """
+        """Update the lower limit."""
         self._lower_limit = self.lower_limit_set.value()
         self.lower_limit_get.setText(f" {self._lower_limit:.6e} {self._motor_egu}")
 
     @Slot()
     def update_upper_limit(self) -> None:
-        """
-        Update the lower limit.
-        """
+        """Update the lower limit."""
         self._upper_limit = self.upper_limit_set.value()
         self.upper_limit_get.setText(f" {self._upper_limit:.6e} {self._motor_egu}")
 
     def check_limit(self, target: float, limit: str) -> float:
+        """Clamp ``target`` to the ``lower`` or ``upper`` scan limit."""
         if limit not in ["lower", "upper"]:
             raise ValueError(f"Invalid limit of {limit}")
 
@@ -519,9 +504,7 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def _bwd_step(self) -> None:
-        """
-        Move the motor backward one step, restricted by the lower limit
-        """
+        """Move the motor backward one step, restricted by the lower limit."""
         target = self.position_get.value - self.step_size_set.value()
         lim = "lower" if self._step_size > 0 else "upper"
         target = self.check_limit(target, limit=lim)
@@ -534,9 +517,9 @@ class FeatureFinder(FeatureFinderBase):
     @Slot()
     def _bwd_run(self) -> None:
         """
-        Continually move the motor backwards, until we hit the
-        lower limit for the scan. Clicking the button again
-        will stop the run.
+        Continually move the motor backwards until the lower scan limit is hit.
+
+        Clicking the button again will stop the run.
 
         The stop button will also override the run behavior.
         """
@@ -565,9 +548,7 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def _fwd_step(self) -> None:
-        """
-        Move the motor forward one step, restricted by the upper limit.
-        """
+        """Move the motor forward one step, restricted by the upper limit."""
         target = self.position_get.value + self.step_size_set.value()
         lim = "upper" if self._step_size > 0 else "lower"
         target = self.check_limit(target, limit=lim)
@@ -579,10 +560,7 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def _fwd_run(self) -> None:
-        """
-        Continually move the motor forwards, until we hit the
-        lower limit for the scan
-        """
+        """Continually move the motor forwards until the lower scan limit is hit."""
         limit = "_upper_limit" if self._step_size > 0 else "_lower_limit"
         compare = operator.ge if self._step_size > 0 else operator.le
         # Don't be silly and try to step with no step size
@@ -612,6 +590,7 @@ class FeatureFinder(FeatureFinderBase):
     def _continue_run(self) -> None:
         """
         Continue the run in the current direction if not at a limit.
+
         Called after motor finishes moving.
         """
         if not self._running:
@@ -655,9 +634,7 @@ class FeatureFinder(FeatureFinderBase):
             self._bwd_step()
 
     def _stop_run(self) -> None:
-        """
-        Stop the continuous run.
-        """
+        """Stop the continuous run."""
         if self._running:
             self._running = False
             self._run_direction = None
@@ -670,6 +647,7 @@ class FeatureFinder(FeatureFinderBase):
     def setup_plot(self) -> None:
         """
         Configure the scatter plot.
+
         PyDMScatterPlot should've made this easy, but since we only want
         data to update when the steps are completed, it complicates things.
         """
@@ -705,9 +683,7 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def _reset_graph(self) -> None:
-        """
-        Reset the curve data and reinitialize data buffer.
-        """
+        """Reset the curve data and reinitialize data buffer."""
         logger.debug("Resetting curve and plot data.")
 
         self._motor_positions = []
@@ -726,7 +702,6 @@ class FeatureFinder(FeatureFinderBase):
         axis : str
             One of either ['x', 'y'].
         """
-
         if axis == "y":
             values = np.array(self._detector_values)
             crosshair = self.detector_get.value
@@ -764,10 +739,10 @@ class FeatureFinder(FeatureFinderBase):
 
     def invert_x_axis(self) -> None:
         """
-        Update the plot after the inversion state changes, causes
-        the plot to update immediately.
-        """
+        Update the plot after the inversion state changes.
 
+        Causes the plot to update immediately.
+        """
         logger.debug("Inverting the x-axis, updating plot")
 
         invert = -1 if self._invert else 1
@@ -782,10 +757,7 @@ class FeatureFinder(FeatureFinderBase):
         self._update_axis_range("x")
 
     def update_plot_data(self) -> None:
-        """
-        Update the plot after motor movement completes.
-        """
-
+        """Update the plot after motor movement completes."""
         # Don't bother if the detector doesn't exist
         # or if we are manually moving the stage from elsewhere
         if not self._detector_pv or not self._step_called:
@@ -821,9 +793,7 @@ class FeatureFinder(FeatureFinderBase):
 
     @Slot()
     def _update_crosshair(self) -> None:
-        """
-        Update crosshair position from current PyDMLabel values.
-        """
+        """Update crosshair position from current PyDMLabel values."""
         if not hasattr(self, "_vline") or not hasattr(self, "_hline"):
             return
 

@@ -1,3 +1,5 @@
+"""Vacuum system PyDM widgets (valves, gauges, pumps, and related helpers)."""
+
 __all__ = [
     "HotCathodeGauge",
     "RoughGauge",

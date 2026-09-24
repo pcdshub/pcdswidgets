@@ -1,3 +1,5 @@
+"""Form implementation generated from motor_classic_vert.ui."""
+
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'pcdswidgets/ui/motion/common/motor_classic_vert.ui'
 #
@@ -8,6 +10,7 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+# ruff: noqa: D101, D102
 from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit

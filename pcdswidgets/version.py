@@ -1,3 +1,5 @@
+"""Runtime version string plumbing (setuptools-scm friendly)."""
+
 from collections import UserString
 from pathlib import Path
 from typing import Optional
@@ -51,6 +53,7 @@ class VersionProxy(UserString):
 
     @property
     def data(self) -> str:
+        """Return the resolved version string, computing it on first access."""
         # This is accessed by UserString to allow us to lazily fill in the
         # information
         if self._version is None:

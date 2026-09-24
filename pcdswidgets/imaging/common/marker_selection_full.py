@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -41,7 +41,8 @@ _ROI_MINY_SUFFIX = "MinY"
 
 
 class MarkerSelectionFull(MarkerSelectionFullBase):
-    """Interactive marker overlay widget for EPICS area-detector cameras.
+    """
+    Interactive marker overlay widget for EPICS area-detector cameras.
 
     Provides click-to-place, visibility toggle, and style/thickness controls
     for up to 4 point-of-interest markers overlaid on a PyDMImageView.
@@ -92,6 +93,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._connect_spinboxes()
 
     def after_set_macro(self, macro_name, value):
+        """Rebuild the secondary ROI channels when a macro changes."""
         if self._secondary_view_linked:
             self._rebuild_secondary_roi_channels()
 
@@ -151,7 +153,7 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
             style_btn.clicked.connect(lambda _checked, idx=i: self._open_style_dialog(idx))
 
     def _connect_spinboxes(self):
-        """connect on-screen overlayed markers to the spinbox values."""
+        """Connect on-screen overlayed markers to the spinbox values."""
         for idx in range(NUM_MARKERS):
             for axis in ["x", "y"]:
                 sb = self._spinbox(axis, idx)
@@ -177,7 +179,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         return getattr(self, f"style_select{suffix}")
 
     def link_parent_widgets(self, parent) -> None:
-        """Connect this marker widget to a parent's PyDMImageView.
+        """
+        Connect this marker widget to a parent's PyDMImageView.
 
         Called by the parent widget at adoption time. Attaches marker
         overlay items to the ViewBox, and - if the parent also carries a
@@ -209,7 +212,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self._link_secondary_view(getattr(parent, "secondary_image_view", None))
 
     def _link_secondary_view(self, secondary_image_view) -> None:
-        """Mirror all markers onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
+        """
+        Mirror all markers onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
 
         Also lets the user click-to-place markers from that view: a click
         there gives coordinates local to it, so the offset is added back
@@ -290,7 +294,8 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
         self.state_changed.emit()
 
     def _on_scene_clicked(self, event, view_box, offset: tuple[float, float]):
-        """Handle mouse clicks on a ViewBox scene for point-select mode.
+        """
+        Handle mouse clicks on a ViewBox scene for point-select mode.
 
         Works the same regardless of which view (primary or secondary) the
         click came from - `view_box` converts the click to that view's local
@@ -420,41 +425,51 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     ## Explicit properties for each marker that can be overwritten in designer.
 
     def get_color_1(self) -> QColor:
+        """Return the color of marker 1."""
         return self._get_marker_color(0)
 
     def set_color_1(self, color: QColor) -> None:
+        """Set the color of marker 1."""
         self._set_marker_color(0, color)
 
     color_1 = pyqtProperty(QColor, get_color_1, set_color_1)
 
     def get_color_2(self) -> QColor:
+        """Return the color of marker 2."""
         return self._get_marker_color(1)
 
     def set_color_2(self, color: QColor) -> None:
+        """Set the color of marker 2."""
         self._set_marker_color(1, color)
 
     color_2 = pyqtProperty(QColor, get_color_2, set_color_2)
 
     def get_color_3(self) -> QColor:
+        """Return the color of marker 3."""
         return self._get_marker_color(2)
 
     def set_color_3(self, color: QColor) -> None:
+        """Set the color of marker 3."""
         self._set_marker_color(2, color)
 
     color_3 = pyqtProperty(QColor, get_color_3, set_color_3)
 
     def get_color_4(self) -> QColor:
+        """Return the color of marker 4."""
         return self._get_marker_color(3)
 
     def set_color_4(self, color: QColor) -> None:
+        """Set the color of marker 4."""
         self._set_marker_color(3, color)
 
     color_4 = pyqtProperty(QColor, get_color_4, set_color_4)
 
     def get_nickname(self) -> str:
+        """Return the widget nickname string."""
         return self._nickname
 
     def set_nickname(self, value: str) -> None:
+        """Set the widget nickname string."""
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
@@ -463,9 +478,11 @@ class MarkerSelectionFull(MarkerSelectionFullBase):
     ## one is linked.
 
     def get_secondary_roi_plugin(self) -> str:
+        """Return the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         return self._secondary_roi_plugin
 
     def set_secondary_roi_plugin(self, value: str) -> None:
+        """Set the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         self._secondary_roi_plugin = value
         if self._secondary_view_linked:
             self._rebuild_secondary_roi_channels()

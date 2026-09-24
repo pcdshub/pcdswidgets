@@ -26,7 +26,10 @@ _TRUTHY = {"1", "true", "yes", "on"}
 
 
 class MotorStateMoverExpert(Display):
+    """PyDM Display that hosts the MotorStateMoverExpanded expert screen."""
+
     def __init__(self, parent=None, args=None, macros=None):
+        """Build the expert layout and forward macros into the mover."""
         super().__init__(parent=parent, args=args, macros=macros)
         macros = self.macros()  # Display stores the macros; returns {} if none
 
@@ -50,5 +53,6 @@ class MotorStateMoverExpert(Display):
         layout.addWidget(self.expanded)
 
     def ui_filename(self):
+        """Return None because the UI is built entirely in __init__."""
         # UI is built in __init__, so there is no .ui file to load.
         return None

@@ -1,3 +1,5 @@
+"""Relative filesystem paths to the SVG glyph assets bundled with pcdswidgets."""
+
 from pathlib import Path
 
 # relative paths to symbol SVGs stored as a constant

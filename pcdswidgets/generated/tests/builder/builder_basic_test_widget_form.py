@@ -1,3 +1,5 @@
+"""Form implementation generated from builder_basic_test_widget.ui."""
+
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'pcdswidgets/ui/tests/builder/builder_basic_test_widget.ui'
 #
@@ -8,6 +10,7 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+# ruff: noqa: D101, D102
 from pydm.widgets.shell_command import PyDMShellCommand
 from qtpy import QtCore, QtWidgets
 

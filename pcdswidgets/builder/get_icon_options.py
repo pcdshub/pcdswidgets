@@ -1,5 +1,5 @@
 """
-Generate a fresh version of icon_options.py
+Generate a fresh version of icon_options.py.
 
 This helps us figure out what options exist for designer icons as provided by pydm.
 """
@@ -64,9 +64,7 @@ def show_icon_options():
 
 
 def generate_icon_options():
-    """
-    Generate icon_options.py, which contains a large enum with icon options.
-    """
+    """Generate icon_options.py, which contains a large enum with icon options."""
     jinja_template = "icon_options.j2"
     env = Environment(trim_blocks=True, loader=PackageLoader("pcdswidgets", "builder"))
     template = env.get_template(jinja_template)
@@ -80,9 +78,7 @@ def generate_icon_options():
 
 
 def get_icon_options() -> list[str]:
-    """
-    Returns the names of all the icons present in pydm's iconfont with valid rendering.
-    """
+    """Return the names of all icons present in pydm's iconfont with valid rendering."""
     # The charmap file is everything that pydm recognizes as an icon, including things it has no image data for
     with open(Path(iconfont.__file__).parent / "fontawesome-charmap.json", "r") as fd:
         charmap: dict[str, str] = json.load(fd)

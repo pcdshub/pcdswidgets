@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -29,6 +29,8 @@ _COLORMAP_ORDER = [
 
 
 class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
+    """User-editable subclass of the generated ColormapIntesityControlFull widget."""
+
     colormap_combo: QtWidgets.QComboBox
     normalize_check: QtWidgets.QCheckBox
     histogram_container: QtWidgets.QWidget
@@ -118,6 +120,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         self._image_stream_paused = False
 
     def eventFilter(self, obj, event) -> bool:
+        """Track mouse press/release on the histogram viewport to detect drags."""
         if obj is self._histogram.viewport():
             if event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
@@ -144,7 +147,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
         self._histogram.item.gradient.setColorMap(colormap)
 
     def _linked_image_views(self):
-        """The primary image view plus the secondary one, if linked."""
+        """Return the primary image view plus the secondary one, if linked."""
         return [v for v in (self._image_view, self._secondary_image_view) if v is not None]
 
     def _on_colormap_changed(self, index: int) -> None:

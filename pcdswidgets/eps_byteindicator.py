@@ -1,3 +1,5 @@
+"""EPS byte indicator widget with per-bit tooltips."""
+
 from pydm.widgets import PyDMByteIndicator, PyDMChannel
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 from qtpy.QtCore import Property, Qt
@@ -14,6 +16,7 @@ class ByteIndicator_NegativeNums(PyDMByteIndicator):
     """
 
     def update_indicators(self):
+        """Update the indicator colors, allowing negative shift values."""
         if self._shift < 0:
             value = int(self.value) << abs(self._shift)
         else:
@@ -32,9 +35,7 @@ class ByteIndicator_NegativeNums(PyDMByteIndicator):
 
 
 class EPSByteIndicator(QWidget):
-    """
-    Widget for displaying EPS interlocks
-    """
+    """Widget for displaying EPS interlocks."""
 
     _qt_designer_ = {
         "group": "ECS EPS",
@@ -58,17 +59,12 @@ class EPSByteIndicator(QWidget):
         self.setLayout(layout)
 
     def value_change(self, new_value):
-        """
-        Callback function when value changes
-        """
+        """Handle a value change from the value PV."""
         self.template_widget.value = new_value
         self.template_widget.update_indicators()
 
     def label_change(self, new_labels):
-        """
-        Callback function when the lables change
-        """
-
+        """Handle a labels change from the label PV."""
         labels = parse_value_for_display(value=new_labels, precision=0, display_format_type=DisplayFormat.String)
 
         labels = labels.split(";")
@@ -77,20 +73,17 @@ class EPSByteIndicator(QWidget):
         self.template_widget.update_indicators()
 
     def value_channel(self, connection):
+        """Handle a connection state change on the value PV."""
         self.template_widget._connected = connection
 
     @Property(str)
     def channel(self):
-        """
-        PV of Base EPS strcture
-        """
+        """Return the base PV prefix of the EPS structure."""
         return self._channels_prefix
 
     @channel.setter
     def channel(self, ch):
-        """
-        Set PV of Base EPS strcture
-        """
+        """Set the base PV prefix of the EPS structure."""
         if ch != self._channels_prefix:
             self._value_pv = ch + ":nFlags_RBV"
             self._label_pv = ch + ":sFlagDesc_RBV"
@@ -107,47 +100,57 @@ class EPSByteIndicator(QWidget):
 
     @Property(bool)
     def circles(self):
+        """Return whether the byte indicators are drawn as circles."""
         return self.template_widget.circles
 
     @circles.setter
     def circles(self, circles):
+        """Set whether the byte indicators are drawn as circles."""
         self.template_widget.circles = circles
 
     @Property(QTabWidget.TabPosition)
     def label_position(self):
+        """Return the position of the labels relative to the indicators."""
         return self.template_widget._label_position
 
     @label_position.setter
     def label_position(self, position):
+        """Set the position of the labels relative to the indicators."""
         self.template_widget._label_position = position
         self.template_widget.rebuild_layout()
 
     @Property(Qt.Orientation)
     def orientation(self):
+        """Return the orientation of the indicator strip."""
         return self.template_widget._orientation
 
     @orientation.setter
     def orientation(self, orientation):
+        """Set the orientation of the indicator strip."""
         self.template_widget._orientation = orientation
         self.template_widget.set_spacing()
         self.template_widget.rebuild_layout()
 
     @Property(QColor)
     def OnColor(self):
+        """Return the color used for indicators in the on state."""
         return self.template_widget._on_color
 
     @OnColor.setter
     def OnColor(self, new_color):
+        """Set the color used for indicators in the on state."""
         if self.template_widget._on_color != new_color:
             self.template_widget._on_color = new_color
             self.template_widget.update_indicators()
 
     @Property(QColor)
     def OffColor(self):
+        """Return the color used for indicators in the off state."""
         return self.template_widget._off_color
 
     @OffColor.setter
     def OffColor(self, new_color):
+        """Set the color used for indicators in the off state."""
         if self.template_widget._off_color != new_color:
             self.template_widget._off_color = new_color
             self.template_widget.update_indicators()

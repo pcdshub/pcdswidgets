@@ -1,3 +1,5 @@
+"""Form implementation generated from exposure_timing_control_full.ui."""
+
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'pcdswidgets/ui/imaging/common/exposure_timing_control_full.ui'
 #
@@ -8,6 +10,7 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+# ruff: noqa: D101, D102
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit

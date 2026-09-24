@@ -1,3 +1,5 @@
+"""Assorted utility helpers shared across pcdswidgets."""
+
 import logging
 
 from qtpy.QtWidgets import QWidget
@@ -7,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 def refresh_style(widget):
     """
-    Method that traverse the widget tree starting at `widget` and refresh the
-    style for this widget and its childs.
+    Refresh the widget's stylesheet and every descendant widget's stylesheet.
 
     Parameters
     ----------
@@ -25,6 +26,7 @@ def refresh_style(widget):
 
 
 def find_ancestor_for_widget(widget, klass):
+    """Return the nearest ancestor of ``widget`` that is an instance of ``klass``."""
     w = widget
     while w.parent() is not None:
         w = w.parent()

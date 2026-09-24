@@ -1,3 +1,5 @@
+"""Tests for the vector-drawn symbol icon classes."""
+
 from unittest.mock import Mock
 
 import pytest
@@ -12,6 +14,7 @@ icons = [getattr(pcdswidgets.symbols, icon) for icon in pcdswidgets.symbols.__al
 
 @pytest.mark.parametrize("icon_class", icons, ids=pcdswidgets.symbols.__all__)
 def test_icon_smoke(qtbot, icon_class):
+    """Test icon smoke."""
     icon = icon_class()
     qtbot.addWidget(icon)
     with qtbot.waitExposed(icon):
@@ -21,6 +24,7 @@ def test_icon_smoke(qtbot, icon_class):
 
 @pytest.fixture(scope="function")
 def icon(qtbot):
+    """Provide a fresh BaseSymbolIcon for the test."""
     icon = BaseSymbolIcon()
     qtbot.addWidget(icon)
     return icon
@@ -37,11 +41,13 @@ def icon(qtbot):
     ids=("brush", "penStyle", "penColor", "penWidth"),
 )
 def test_icon_properties(icon, prop, value):
+    """Test icon properties."""
     setattr(icon, prop, value)
     assert getattr(icon, prop) == value
 
 
 def test_icon_clicks(qtbot, icon):
+    """Test icon clicks."""
     mock = Mock()
     icon.clicked.connect(mock)
     qtbot.mouseClick(icon, Qt.LeftButton)

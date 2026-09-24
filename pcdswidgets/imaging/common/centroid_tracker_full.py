@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -47,6 +47,8 @@ _MIN_ROI_SIZE = 10  # pixels
 
 
 class CentroidTrackerFull(CentroidTrackerFullBase):
+    """Interactive centroid tracker overlay for EPICS area-detector cameras."""
+
     # Emitted when the marker's persisted visual state changes (color,
     # style, sigma-radius toggle, visibility) - not for live position/radius updates.
     state_changed = Signal()
@@ -149,6 +151,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.roi_multiplier_spinbox.setSingleStep(0.5)
 
     def after_set_macro(self, macro_name, value):
+        """Reconnect derived channels after a macro value changes."""
         self._connect_value_labels()
         self._rebuild_roi_channels()
         self._rebuild_stats_channels()
@@ -189,7 +192,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._roi_sizey_writer.set_address(base + _ROI_SIZEY_SUFFIX)
 
     def _rebuild_stats_channels(self):
-        """Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros.
+        """
+        Point the CentroidThreshold writer at the current cam_prefix/stat_plugin macros.
 
         No-ops until cam_prefix is known - see _rebuild_source_roi_channels.
         """
@@ -242,7 +246,7 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.set_roi_button.clicked.connect(self._set_roi_from_centroid)
 
     def _connect_value_labels(self):
-        """Hook the centroid/sigma/threshold PyDMLabels to track their live values (wired up once)."""
+        """Wire up the centroid/sigma/threshold PyDMLabels to track live values (once)."""
         if self._labels_connected:
             return
 
@@ -256,7 +260,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
 
     @staticmethod
     def _wrap_value_changed(label: PyDMLabel, callback):
-        """Patch *label* to also invoke *callback* with each new value.
+        """
+        Patch *label* to also invoke *callback* with each new value.
 
         PyDMLabel has no public "new value" signal, so value_changed is
         wrapped in place.
@@ -354,7 +359,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             logger.warning(f"Invalid CentroidThreshold_RBV received: {value}")
 
     def _init_threshold_controls(self):
-        """Wire up the threshold mode combo and value entry.
+        """
+        Wire up the threshold mode combo and value entry.
 
         All three modes write to the same CentroidThreshold PV. 1/e^2 and %
         of max are max-derived, so they're kept live (rewritten whenever
@@ -375,7 +381,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self.threshold_value_edit.editingFinished.connect(self._on_threshold_value_committed)
 
     def _apply_threshold_mode_ui(self, mode: int) -> None:
-        """Update the value line edit's enabled state, validator range, and placeholder for *mode*.
+        """
+        Update the value line edit's enabled state, validator range, and placeholder for *mode*.
 
         Cosmetic only (never writes to EPICS), so it's safe to call during init.
         """
@@ -398,7 +405,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._sync_threshold_for_live_modes()
 
     def _threshold_for_mode(self, mode: int) -> float | None:
-        """Compute the raw threshold value for *mode*, or None if a required input isn't known yet.
+        """
+        Compute the raw threshold value for *mode*, or None if a required input isn't known yet.
 
         Raw mode has no derivation - it's written directly from the
         committed line edit text in _on_threshold_value_committed - so it
@@ -417,7 +425,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         return None
 
     def _sync_threshold_for_live_modes(self) -> None:
-        """Rewrite the threshold PV from the latest inputs while in the 1/e^2 or % of max mode.
+        """
+        Rewrite the threshold PV from the latest inputs while in the 1/e^2 or % of max mode.
 
         Called whenever MaxValue_RBV updates or the mode/% value changes so
         these two modes always track the current max.
@@ -516,7 +525,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._sync_epics_roi_full_buttons()
 
     def _sync_epics_roi_full_buttons(self):
-        """Show the ROI and drop move-mode on any EpicsRoiFull pointed at the same cam_prefix/roi_plugin.
+        """
+        Show the ROI and drop move-mode on any EpicsRoiFull pointed at the same cam_prefix/roi_plugin.
 
         EpicsRoiFull is fully independent of this widget - found only by
         searching the shared top-level window - so this is a no-op if none
@@ -531,7 +541,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
             roi_widget.move_enabled_button.setChecked(False)
 
     def link_parent_widgets(self, parent) -> None:
-        """Attach the marker to the parent's PyDMImageView and, if given, mirror it onto a second view.
+        """
+        Attach the marker to the parent's PyDMImageView and, if given, mirror it onto a second view.
 
         The source ROI offset (correcting the raw readback into an
         absolute value) is read directly from EPICS via cam_prefix and
@@ -554,7 +565,8 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
         self._link_secondary_view(getattr(parent, "secondary_image_view", None))
 
     def _link_secondary_view(self, secondary_image_view) -> None:
-        """Mirror the marker onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
+        """
+        Mirror the marker onto a second view, offset live by secondary_roi_plugin's MinX/MinY.
 
         Independent of the source ROI offset: that one corrects the raw
         readback into an absolute value; this one re-renders that same
@@ -672,17 +684,21 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## Property for marker color that can be overwritten in designer.
 
     def get_marker_color(self) -> QColor:
+        """Return the color assigned to the centroid marker."""
         return self._get_marker_color()
 
     def set_marker_color(self, color: QColor) -> None:
+        """Set the color assigned to the centroid marker."""
         self._set_marker_color(color)
 
     marker_color = pyqtProperty(QColor, get_marker_color, set_marker_color)
 
     def get_nickname(self) -> str:
+        """Return the widget nickname string."""
         return self._nickname
 
     def set_nickname(self, value: str) -> None:
+        """Set the widget nickname string."""
         self._nickname = value
 
     nickname = pyqtProperty(str, get_nickname, set_nickname)
@@ -690,9 +706,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## Property for the shared Camera ROI plugin (e.g. ":ROI2:")
 
     def get_roi_plugin(self) -> str:
+        """Return the shared Camera ROI plugin suffix (e.g. ``:ROI2:``)."""
         return self._roi_plugin
 
     def set_roi_plugin(self, value: str) -> None:
+        """Set the shared Camera ROI plugin suffix (e.g. ``:ROI2:``)."""
         self._roi_plugin = value
         self._rebuild_roi_channels()
 
@@ -702,9 +720,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## primary readback is relative to.
 
     def get_source_roi_plugin(self) -> str:
+        """Return the source ROI plugin suffix (e.g. ``:ROI1:``)."""
         return self._source_roi_plugin
 
     def set_source_roi_plugin(self, value: str) -> None:
+        """Set the source ROI plugin suffix (e.g. ``:ROI1:``)."""
         self._source_roi_plugin = value
         self._rebuild_source_roi_channels()
 
@@ -714,9 +734,11 @@ class CentroidTrackerFull(CentroidTrackerFullBase):
     ## one is linked.
 
     def get_secondary_roi_plugin(self) -> str:
+        """Return the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         return self._secondary_roi_plugin
 
     def set_secondary_roi_plugin(self, value: str) -> None:
+        """Set the secondary ROI plugin suffix (e.g. ``:ROI2:``)."""
         self._secondary_roi_plugin = value
         if self._secondary_view_linked:
             self._rebuild_secondary_roi_channels()

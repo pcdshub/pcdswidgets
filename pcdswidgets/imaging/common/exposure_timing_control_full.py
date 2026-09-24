@@ -1,5 +1,5 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+Originally generated from jinja template ui_main_widget.j2.
 
 This file can be safely edited to change the runtime behavior of the widget.
 """
@@ -10,6 +10,8 @@ from pcdswidgets.icons.glyphs import CAM_COG
 
 
 class ExposureTimingControlFull(ExposureTimingControlFullBase):
+    """User-editable subclass of the generated ExposureTimingControlFull widget."""
+
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
         is_container=False,

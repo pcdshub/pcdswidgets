@@ -1,3 +1,5 @@
+"""Base classes for the vector-drawn symbol icons rendered inside vacuum widgets."""
+
 from pydm.utilities import is_qt_designer, remove_protocol
 from qtpy.QtCore import Property, QEvent, QSize, Qt, Signal
 from qtpy.QtGui import QBrush, QColor, QPainter, QPen
@@ -9,6 +11,7 @@ from ..utils import find_ancestor_for_widget
 class BaseSymbolIcon(QWidget):
     """
     Base class to be used for all the Symbol Icon widgets.
+
     This class holds most of the properties to be exposed and takes care of 90%
     of the drawing code needed.
 
@@ -41,9 +44,7 @@ class BaseSymbolIcon(QWidget):
             self.installEventFilter(self)
 
     def eventFilter(self, obj, event):
-        """
-        EventFilter to redirect "middle click" to :meth:`.show_address_tooltip`
-        """
+        """EventFilter to redirect "middle click" to :meth:`.show_address_tooltip`."""
         # Override the eventFilter to capture all middle mouse button events,
         # and show a tooltip if needed.
         if event.type() == QEvent.MouseButtonPress:
@@ -54,7 +55,7 @@ class BaseSymbolIcon(QWidget):
 
     def show_state_channel(self, event):
         """
-        Show the State Channel Tooltip and copy address to clipboard
+        Show the State Channel Tooltip and copy address to clipboard.
 
         This is intended to replicate the behavior of the "middle click" from
         EDM. If the parent is not PCDSSymbolBase and does not have a valid
@@ -82,17 +83,18 @@ class BaseSymbolIcon(QWidget):
         QApplication.instance().sendEvent(clipboard, event)
 
     def minimumSizeHint(self):
+        """Return the icon's minimum size hint."""
         return QSize(32, 32)
 
     def paintEvent(self, event):
         """
+        Paint the icon, handling stylesheet-driven brush/pen setup.
+
         Paint events are sent to widgets that need to update themselves,
         for instance when part of a widget is exposed because a covering
-        widget was moved.
-
-        This method handles the painting with parameters from the stylesheet,
-        configures the brush, pen and calls ```draw_icon``` so the specifics
-        can be performed for each of the drawing classes.
+        widget was moved. This method configures the brush, pen and calls
+        ``draw_icon`` so the specifics can be performed for each of the
+        drawing classes.
 
         Parameters
         ----------
@@ -120,7 +122,8 @@ class BaseSymbolIcon(QWidget):
 
     def draw_icon(self, painter):
         """
-        Method responsible for the drawing of the icon part of the paintEvent.
+        Draw the icon portion of the paintEvent.
+
         This method must be implemented by the symbol icon widgets to include
         their specific drawings.
 
@@ -133,8 +136,7 @@ class BaseSymbolIcon(QWidget):
     @Property(QBrush)
     def brush(self):
         """
-        PyQT Property for the brush object to be used when coloring the
-        drawing
+        Return the brush used when coloring the drawing.
 
         Returns
         -------
@@ -145,8 +147,7 @@ class BaseSymbolIcon(QWidget):
     @brush.setter
     def brush(self, new_brush):
         """
-        PyQT Property for the brush object to be used when coloring the
-        drawing
+        Set the brush used when coloring the drawing.
 
         Parameters
         ----------
@@ -159,7 +160,7 @@ class BaseSymbolIcon(QWidget):
     @Property(Qt.PenStyle)
     def penStyle(self):
         """
-        PyQT Property for the pen style to be used when drawing the border
+        PyQT Property for the pen style to be used when drawing the border.
 
         Returns
         -------
@@ -171,7 +172,7 @@ class BaseSymbolIcon(QWidget):
     @penStyle.setter
     def penStyle(self, new_style):
         """
-        PyQT Property for the pen style to be used when drawing the border
+        PyQT Property for the pen style to be used when drawing the border.
 
         Parameters
         ----------
@@ -186,7 +187,7 @@ class BaseSymbolIcon(QWidget):
     @Property(QColor)
     def penColor(self):
         """
-        PyQT Property for the pen color to be used when drawing the border
+        PyQT Property for the pen color to be used when drawing the border.
 
         Returns
         -------
@@ -197,7 +198,7 @@ class BaseSymbolIcon(QWidget):
     @penColor.setter
     def penColor(self, new_color):
         """
-        PyQT Property for the pen color to be used when drawing the border
+        PyQT Property for the pen color to be used when drawing the border.
 
         Parameters
         ----------
@@ -211,7 +212,7 @@ class BaseSymbolIcon(QWidget):
     @Property(float)
     def penWidth(self):
         """
-        PyQT Property for the pen width to be used when drawing the border
+        PyQT Property for the pen width to be used when drawing the border.
 
         Returns
         -------
@@ -222,7 +223,7 @@ class BaseSymbolIcon(QWidget):
     @penWidth.setter
     def penWidth(self, new_width):
         """
-        PyQT Property for the pen width to be used when drawing the border
+        PyQT Property for the pen width to be used when drawing the border.
 
         Parameters
         ----------
@@ -238,7 +239,8 @@ class BaseSymbolIcon(QWidget):
     @Property(float)
     def rotation(self):
         """
-        PyQt Property for the rotation.
+        Return the icon rotation.
+
         This rotates the icon coordinate system clockwise.
 
         Returns
@@ -251,7 +253,8 @@ class BaseSymbolIcon(QWidget):
     @rotation.setter
     def rotation(self, angle):
         """
-        PyQt Property for the rotation.
+        Set the icon rotation.
+
         This rotates the icon coordinate system clockwise.
 
         Parameters
@@ -263,7 +266,7 @@ class BaseSymbolIcon(QWidget):
         self.update()
 
     def mousePressEvent(self, evt):
-        """Clicking the icon fires the ``clicked`` signal"""
+        """Clicking the icon fires the ``clicked`` signal."""
         # Default Qt reaction to the icon press
         super().mousePressEvent(evt)
         if evt.button() == Qt.LeftButton:

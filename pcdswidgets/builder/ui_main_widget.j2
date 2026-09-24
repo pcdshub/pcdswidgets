@@ -1,6 +1,7 @@
 """
-Originally generated from jinja template ui_main_widget.j2
+User-editable widget subclass for {{ base_cls }}.
 
+Originally generated from jinja template ui_main_widget.j2.
 This file can be safely edited to change the runtime behavior of the widget.
 """
 
@@ -10,6 +11,8 @@ from {{ absolute_import_path }} import {{ base_cls }}
 
 
 class {{ main_cls }}({{ base_cls }}):
+    """User-editable widget subclass for {{ base_cls }}."""
+
     designer_options = DesignerOptions(
         group="{{ default_group }}",
         is_container=False,

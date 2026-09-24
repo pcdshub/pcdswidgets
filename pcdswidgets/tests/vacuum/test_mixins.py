@@ -1,3 +1,5 @@
+"""Tests for the vacuum symbol widget mixin classes."""
+
 import pytest
 from qtpy.QtWidgets import QWidget
 
@@ -6,7 +8,7 @@ from pcdswidgets.vacuum.mixins import ErrorMixin, InterlockMixin, OpenCloseState
 
 
 class PCDSSymbolWithIcon(PCDSSymbolBase):
-    """Base mixable class"""
+    """Base mixable class."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -14,31 +16,32 @@ class PCDSSymbolWithIcon(PCDSSymbolBase):
 
 
 class Interlock(InterlockMixin, PCDSSymbolWithIcon):
-    """Simplest Interlock Widget"""
+    """Simplest Interlock Widget."""
 
     pass
 
 
 class Error(ErrorMixin, PCDSSymbolWithIcon):
-    """Simplest Error Widget"""
+    """Simplest Error Widget."""
 
     pass
 
 
 class State(StateMixin, PCDSSymbolWithIcon):
-    """Simplest State Widget"""
+    """Simplest State Widget."""
 
     pass
 
 
 class OpenClose(OpenCloseStateMixin, PCDSSymbolWithIcon):
-    """Simplest OpenCloseState Widget"""
+    """Simplest OpenCloseState Widget."""
 
     pass
 
 
 @pytest.fixture(scope="function")
 def interlock(qtbot):
+    """Provide an InterlockMixin-based widget for the test."""
     inter = Interlock(":ILK")
     qtbot.addWidget(inter)
     inter.create_channels()
@@ -47,6 +50,7 @@ def interlock(qtbot):
 
 @pytest.fixture(scope="function")
 def error(qtbot):
+    """Provide an ErrorMixin-based widget for the test."""
     error = Error(":ILK")
     qtbot.addWidget(error)
     error.create_channels()
@@ -56,6 +60,7 @@ def error(qtbot):
 
 @pytest.fixture(scope="function")
 def state(qtbot):
+    """Provide a StateMixin-based widget for the test."""
     state = State(":Status")
     qtbot.addWidget(state)
     state.create_channels()
@@ -65,6 +70,7 @@ def state(qtbot):
 
 @pytest.fixture(scope="function")
 def openclose(qtbot):
+    """Provide an OpenCloseStateMixin-based widget for the test."""
     openclose = OpenClose(":Open", "Close")
     qtbot.addWidget(openclose)
     openclose.create_channels()
@@ -73,6 +79,7 @@ def openclose(qtbot):
 
 @pytest.mark.parametrize("interlock_bit", (0, 1), ids=("low", "high"))
 def test_interlock_value_changed(interlock, interlock_bit):
+    """Test interlock value changed."""
     interlock.interlock_value_changed(not interlock_bit)
     orig_tooltip = interlock.status_tooltip()
     interlock.interlock_value_changed(interlock_bit)
@@ -83,6 +90,7 @@ def test_interlock_value_changed(interlock, interlock_bit):
 
 
 def test_error_value_changed(error):
+    """Test error value changed."""
     orig_tooltip = error.status_tooltip()
     error.error_value_changed(1)
     assert error.error == "Good"
@@ -90,6 +98,7 @@ def test_error_value_changed(error):
 
 
 def test_state_value_changed(state):
+    """Test state value changed."""
     orig_tooltip = state.status_tooltip()
     state.state_value_changed(1)
     assert state.state == "Good"
@@ -102,6 +111,7 @@ def test_state_value_changed(state):
     ids=["Fault", "Open", "Closed", "Invalid"],
 )
 def test_openclose_value_changed(openclose, open_switch, closed_switch, state):
+    """Test openclose value changed."""
     openclose.state_value_changed("OPEN", open_switch)
     openclose.state_value_changed("CLOSE", closed_switch)
     assert openclose.state == state

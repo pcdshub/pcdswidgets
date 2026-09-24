@@ -1,3 +1,5 @@
+"""Form implementation generated from epics_roi_full.ui."""
+
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'pcdswidgets/ui/imaging/common/epics_roi_full.ui'
 #
@@ -8,6 +10,7 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
+# ruff: noqa: D101, D102
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton

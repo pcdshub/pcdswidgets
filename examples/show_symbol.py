@@ -1,3 +1,5 @@
+"""Example script that renders a single vacuum symbol widget in a window."""
+
 import os
 
 from qtpy.QtWidgets import QApplication, QWidget
@@ -6,9 +8,7 @@ import pcdswidgets.symbols as symbols
 
 
 def screenshot(widget, filename):
-    """
-    Takes a screenshot of the widget window, saves png image to file
-    """
+    """Take a screenshot of the widget window and save it as a PNG file."""
     s = str(filename) + ".png"
     print("Filename: ", s)
     p = QWidget.grab(widget)
