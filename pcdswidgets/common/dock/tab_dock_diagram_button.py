@@ -1,6 +1,6 @@
 """A dock button with a standard beamline device symbol rendered"""
 
-from enum import IntEnum, auto
+from enum import IntEnum
 from pathlib import Path
 
 from pydm.widgets.base import PyDMPrimitiveWidget
@@ -46,31 +46,34 @@ class DiagramOption(IntEnum):
       (If the new enum is "NAME", the file should be "name.svg")
     """
 
-    BLANK = auto()
-    ATTENUATOR = auto()
-    BEAM_STOPPER = auto()
-    BURN_THRU_MONITOR = auto()
-    DIAMOND_GRATING = auto()
-    DIFF_ION_PUMP = auto()
-    EBD_MAGNETS = auto()
-    EBD_SAMPLE_CHAMBER = auto()
-    ENERGY_MONITOR = auto()
-    FAST_VALVE = auto()
-    FOCUSING_LENS = auto()
-    FOCUSING_LENS_2 = auto()
-    GATE_VALVE = auto()
-    GRATING = auto()
-    IMAGER = auto()
-    MIRROR = auto()
-    MONOCHROMATOR = auto()
-    PHOTON_COLLIMATOR = auto()
-    POLARIZATION_SWITCH = auto()
-    PULSE_SELECTOR = auto()
-    REFERENCE_LASER = auto()
-    SLIT = auto()
-    SLIT_2 = auto()
-    SPECTROMETER = auto()
-    WAVE_FRONT_SENSOR = auto()
+    # Explicit values (BLANK = 0 matches Qt Designer's default for an unset
+    # enum property, so a freshly-dropped widget renders blank rather than
+    # erroring). Values must stay stable so existing screens keep their symbol.
+    BLANK = 0
+    ATTENUATOR = 1
+    BEAM_STOPPER = 2
+    DIAMOND_GRATING = 3
+    DIFF_ION_PUMP = 4
+    ENERGY_MONITOR = 5
+    FAST_VALVE = 6
+    FOCUSING_LENS = 7
+    FOCUSING_LENS_2 = 8
+    GATE_VALVE = 9
+    IMAGER = 10
+    MIRROR = 11
+    MONOCHROMATOR = 12
+    PHOTON_COLLIMATOR = 13
+    POLARIZATION_SWITCH = 14
+    PULSE_SELECTOR = 15
+    REFERENCE_LASER = 16
+    SLIT = 17
+    SPECTROMETER = 18
+    BURN_THRU_MONITOR = 19
+    EBD_MAGNETS = 20
+    EBD_SAMPLE_CHAMBER = 21
+    GRATING = 22
+    SLIT_2 = 23
+    WAVE_FRONT_SENSOR = 24
 
     def get_image_path(self) -> Path:
         """Return a Path object pointing to the image we should use."""
@@ -152,15 +155,17 @@ class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
 
     def setDiagram(self, diagram: DiagramOption) -> None:
         """Sets the enum of the diagram to use."""
-        match diagram:
-            case DiagramOption.BLANK:
-                self._image_pixmap = None
-            case DiagramOption():
-                self._image_pixmap = diagram.get_pixmap()
-            case _:
-                raise ValueError(
-                    f"Invalid diagram option {diagram}, options are: {', '.join(item.name for item in DiagramOption)}"
-                )
+        # Designer sets enum properties as raw ints, so coerce to DiagramOption.
+        try:
+            diagram = DiagramOption(diagram)
+        except ValueError as err:
+            raise ValueError(
+                f"Invalid diagram option {diagram}, options are: {', '.join(item.name for item in DiagramOption)}"
+            ) from err
+        if diagram == DiagramOption.BLANK:
+            self._image_pixmap = None
+        else:
+            self._image_pixmap = diagram.get_pixmap()
         self._diagram = diagram
         self.repaint()
 
