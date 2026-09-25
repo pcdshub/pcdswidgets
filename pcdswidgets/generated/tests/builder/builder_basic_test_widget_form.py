@@ -32,7 +32,6 @@ class Ui_Form(object):
         self.one_two_shell.setAlarmSensitiveContent(False)
         self.one_two_shell.setAlarmSensitiveBorder(True)
         self.one_two_shell.setPyDMToolTip("")
-        self.one_two_shell.setChannel("")
         self.one_two_shell.setPyDMIcon("")
         self.one_two_shell.setShowConfirmDialog(False)
         self.one_two_shell.setRunCommandsInFullShell(False)
