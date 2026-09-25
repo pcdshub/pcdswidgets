@@ -3,10 +3,22 @@
 from enum import IntEnum, auto
 from pathlib import Path
 
+from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
+from pydm.widgets.designer_settings import update_property_for_widget
 from qtpy.QtCore import Q_ENUMS, QRect, Qt
 from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPalette, QPen, QPixmap
-from qtpy.QtWidgets import QSizePolicy, QWidget
+from qtpy.QtWidgets import (
+    QAction,
+    QComboBox,
+    QDialog,
+    QFormLayout,
+    QHBoxLayout,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 import pcdswidgets
 
@@ -30,47 +42,91 @@ class DiagramOption(IntEnum):
       (Old screens need the old enum name to exist and nothing more)
     - Copy the new entry into the enums specified at the top of the class body below
       (This makes the enums work up properly in designer)
-    - Add a new png to pcdswidgets/icons/beamline whose name matches the entry
-      (If the new enum is "NAME", the file should be "name.png")
+    - Add a new svg to pcdswidgets/icons/diagram whose name matches the entry
+      (If the new enum is "NAME", the file should be "name.svg")
     """
 
     BLANK = auto()
     ATTENUATOR = auto()
+    BEAM_STOPPER = auto()
+    DIAMOND_GRATING = auto()
+    DIFF_ION_PUMP = auto()
+    ENERGY_MONITOR = auto()
+    FAST_VALVE = auto()
+    FOCUSING_LENS = auto()
+    FOCUSING_LENS_2 = auto()
+    GATE_VALVE = auto()
     IMAGER = auto()
-    REFLASER = auto()
-    SLITS = auto()
+    MIRROR = auto()
+    MONOCHROMATOR = auto()
+    PHOTON_COLLIMATOR = auto()
+    POLARIZATION_SWITCH = auto()
+    PULSE_SELECTOR = auto()
+    REFERENCE_LASER = auto()
+    SLIT = auto()
+    SPECTROMETER = auto()
 
     def get_image_path(self) -> Path:
         """Return a Path object pointing to the image we should use."""
         if self == DiagramOption.BLANK:
             raise ValueError("No image for blank diagram")
-        return IMAGE_FOLDER / f"{self.name.lower()}.png"
+        return IMAGE_FOLDER / f"{self.name.lower()}.svg"
 
     def get_pixmap(self) -> QPixmap:
         """Return the pixmap to display for this enum."""
         return QPixmap(str(self.get_image_path()))
 
 
-class TabDockDiagramButton(TabDockButton):
+class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
     """
     Behaves identically to TabDockButton, but renders a standard symbol and lightpath info.
+
+    Inheriting PyDMPrimitiveWidget makes this widget eligible for PyDM's designer
+    task-menu extensions, which is what lets DiagramEditExtension provide the
+    double-click "Edit Diagram" picker below.
     """
 
     Q_ENUMS(DiagramOption)
     DiagramOption = DiagramOption
     BLANK = DiagramOption.BLANK
     ATTENUATOR = DiagramOption.ATTENUATOR
+    BEAM_STOPPER = DiagramOption.BEAM_STOPPER
+    DIAMOND_GRATING = DiagramOption.DIAMOND_GRATING
+    DIFF_ION_PUMP = DiagramOption.DIFF_ION_PUMP
+    ENERGY_MONITOR = DiagramOption.ENERGY_MONITOR
+    FAST_VALVE = DiagramOption.FAST_VALVE
+    FOCUSING_LENS = DiagramOption.FOCUSING_LENS
+    FOCUSING_LENS_2 = DiagramOption.FOCUSING_LENS_2
+    GATE_VALVE = DiagramOption.GATE_VALVE
     IMAGER = DiagramOption.IMAGER
-    REFLASER = DiagramOption.REFLASER
-    SLITS = DiagramOption.SLITS
+    MIRROR = DiagramOption.MIRROR
+    MONOCHROMATOR = DiagramOption.MONOCHROMATOR
+    PHOTON_COLLIMATOR = DiagramOption.PHOTON_COLLIMATOR
+    POLARIZATION_SWITCH = DiagramOption.POLARIZATION_SWITCH
+    PULSE_SELECTOR = DiagramOption.PULSE_SELECTOR
+    REFERENCE_LASER = DiagramOption.REFERENCE_LASER
+    SLIT = DiagramOption.SLIT
+    SPECTROMETER = DiagramOption.SPECTROMETER
 
-    _qt_designer = {
+    # Expose the "diagram" enum property as a dropdown in the double-click
+    # picker. Ordered alphabetically by device name (BLANK first) because
+    # PyQt5's native property-editor enum dropdown cannot be reliably sorted.
+    editable_choice_properties = {
+        "diagram": {
+            opt.name: int(opt) for opt in sorted(DiagramOption, key=lambda o: (o != DiagramOption.BLANK, o.name))
+        },
+    }
+
+    # "extensions" is populated at the end of this module (see below), once
+    # DiagramEditExtension has been defined, to avoid a forward reference.
+    _qt_designer_ = {
         "group": "ECS Common Dock",
         "is_container": False,
     }
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
+        PyDMPrimitiveWidget.__init__(self)
         self._image_pixmap: QPixmap | None = None
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.setFlat(True)
@@ -91,7 +147,7 @@ class TabDockDiagramButton(TabDockButton):
                 self._image_pixmap = diagram.get_pixmap()
             case _:
                 raise ValueError(
-                    f"Invalid diagram option {diagram}, options are: {', '.join(item for item in DiagramOption)}"
+                    f"Invalid diagram option {diagram}, options are: {', '.join(item.name for item in DiagramOption)}"
                 )
         self._diagram = diagram
         self.repaint()
@@ -210,3 +266,93 @@ class TabDockDiagramButton(TabDockButton):
     def setFlat(self, a0: bool) -> None:
         """Prevent flat = False which interferes with our rendering."""
         super().setFlat(True)
+
+
+class DiagramEditExtension:
+    """
+    Adds an "Edit Diagram" option to the designer task menu on double or
+    right click, mirroring PyDM's BasicSettingsExtension pattern.
+
+    PyDM maps the first action returned by actions() to double-click.
+    """
+
+    def __init__(self, widget: "TabDockDiagramButton"):
+        self.widget = widget
+        self.edit_diagram_action = QAction("&Edit Diagram", self.widget)
+        self.edit_diagram_action.triggered.connect(self.open_dialog)
+
+    def actions(self) -> list[QAction]:
+        """PyDM checks this to decide which actions to prepend in designer."""
+        return [self.edit_diagram_action]
+
+    def open_dialog(self):
+        dialog = DiagramEditor(self.widget, parent=self.widget)
+        dialog.exec_()
+
+
+class DiagramEditor(QDialog):
+    """
+    Dialog for DiagramEditExtension: pick the rendered diagram from a
+    dropdown. Choices come from the widget's editable_choice_properties.
+
+    This is a trimmed version of the builder's MacroValueEditor: a plain
+    button has no macros, so it only renders the choice dropdowns.
+    """
+
+    def __init__(self, widget: "TabDockDiagramButton", parent: QWidget | None):
+        super().__init__(parent)
+        self.widget = widget
+        self.choice_widgets: dict[str, QComboBox] = {}
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.setWindowTitle("Diagram Editor")
+        outer_layout = QVBoxLayout()
+        outer_layout.setContentsMargins(5, 5, 5, 5)
+        outer_layout.setSpacing(5)
+        self.setLayout(outer_layout)
+
+        edit_form_layout = QFormLayout()
+        outer_layout.addLayout(edit_form_layout)
+
+        for prop_name, choices in self.widget.editable_choice_properties.items():
+            combo = QComboBox()
+            for label, value in choices.items():
+                combo.addItem(label, value)
+            # Pre-select the widget's current value. property() returns an int
+            # (pyqt5) or an enum member (pyside6); normalize to the stored value.
+            current = self.widget.property(prop_name)
+            current = getattr(current, "value", current)
+            index = combo.findData(current)
+            combo.setCurrentIndex(index if index >= 0 else 0)
+            self.choice_widgets[prop_name] = combo
+            edit_form_layout.addRow(prop_name, combo)
+
+        button_layout = QHBoxLayout()
+        outer_layout.addLayout(button_layout)
+
+        self.save_button = QPushButton("&Save")
+        self.save_button.setAutoDefault(True)
+        self.save_button.setDefault(True)
+        self.save_button.clicked.connect(self.save_changes)
+        update_button = QPushButton("&Update")
+        update_button.clicked.connect(self.save_changes)
+        cancel_button = QPushButton("&Cancel")
+        cancel_button.clicked.connect(self.cancel_changes)
+        button_layout.addWidget(cancel_button)
+        button_layout.addWidget(update_button)
+        button_layout.addWidget(self.save_button)
+
+    def save_changes(self):
+        for prop_name, combo in self.choice_widgets.items():
+            update_property_for_widget(self.widget, prop_name, combo.currentData())
+        if self.sender() == self.save_button:
+            self.accept()
+
+    def cancel_changes(self):
+        self.close()
+
+
+# Register the task-menu extension now that it is defined, avoiding a
+# forward reference in the class body above.
+TabDockDiagramButton._qt_designer_["extensions"] = [DiagramEditExtension]
