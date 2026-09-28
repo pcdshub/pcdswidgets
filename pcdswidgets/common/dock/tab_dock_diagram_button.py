@@ -52,28 +52,27 @@ class DiagramOption(IntEnum):
     BLANK = 0
     ATTENUATOR = 1
     BEAM_STOPPER = 2
-    DIAMOND_GRATING = 3
-    DIFF_ION_PUMP = 4
-    ENERGY_MONITOR = 5
-    FAST_VALVE = 6
-    FOCUSING_LENS = 7
-    FOCUSING_LENS_2 = 8
-    GATE_VALVE = 9
-    IMAGER = 10
-    MIRROR = 11
-    MONOCHROMATOR = 12
-    PHOTON_COLLIMATOR = 13
-    POLARIZATION_SWITCH = 14
-    PULSE_SELECTOR = 15
-    REFERENCE_LASER = 16
-    SLIT = 17
-    SPECTROMETER = 18
-    BURN_THRU_MONITOR = 19
-    EBD_MAGNETS = 20
-    EBD_SAMPLE_CHAMBER = 21
-    GRATING = 22
-    SLIT_2 = 23
-    WAVE_FRONT_SENSOR = 24
+    DIFF_ION_PUMP = 3
+    ENERGY_MONITOR = 4
+    FAST_VALVE = 5
+    FOCUSING_LENS = 6
+    FOCUSING_LENS_2 = 7
+    GATE_VALVE = 8
+    IMAGER = 9
+    MIRROR = 10
+    MONOCHROMATOR = 11
+    PHOTON_COLLIMATOR = 12
+    POLARIZATION_SWITCH = 13
+    PULSE_SELECTOR = 14
+    REFERENCE_LASER = 15
+    SLIT = 16
+    SPECTROMETER = 17
+    BURN_THRU_MONITOR = 18
+    EBD_MAGNETS = 19
+    EBD_SAMPLE_CHAMBER = 20
+    GRATING = 21
+    SLIT_2 = 22
+    WAVE_FRONT_SENSOR = 23
 
     def get_image_path(self) -> Path:
         """Return a Path object pointing to the image we should use."""
@@ -89,10 +88,6 @@ class DiagramOption(IntEnum):
 class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
     """
     Behaves identically to TabDockButton, but renders a standard symbol and lightpath info.
-
-    Inheriting PyDMPrimitiveWidget makes this widget eligible for PyDM's designer
-    task-menu extensions, which is what lets DiagramEditExtension provide the
-    double-click "Edit Diagram" picker below.
     """
 
     Q_ENUMS(DiagramOption)
@@ -101,7 +96,6 @@ class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
     ATTENUATOR = DiagramOption.ATTENUATOR
     BEAM_STOPPER = DiagramOption.BEAM_STOPPER
     BURN_THRU_MONITOR = DiagramOption.BURN_THRU_MONITOR
-    DIAMOND_GRATING = DiagramOption.DIAMOND_GRATING
     DIFF_ION_PUMP = DiagramOption.DIFF_ION_PUMP
     EBD_MAGNETS = DiagramOption.EBD_MAGNETS
     EBD_SAMPLE_CHAMBER = DiagramOption.EBD_SAMPLE_CHAMBER
