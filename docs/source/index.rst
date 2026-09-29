@@ -4,37 +4,22 @@
     :maxdepth: 1
     :caption: Widgets
 
-    vacuum.rst
-    icons.rst
-
-.. toctree::
-   :maxdepth: 1
-   :caption: API Documentation
-   :hidden:
-
-   mixins.rst
-   utils.rst
-
+    catalog.rst
+    widgets/widgets.rst
 
 .. toctree::
    :maxdepth: 1
    :caption: Developer Documentation
-   :hidden:
 
-   dev.rst
-   addwidget.rst
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Related Projects
-   :hidden:
-
-   PyDM <https://github.com/slaclab/pydm>
+   developer/dev.rst
+   developer/addwidget.rst
+   developer/icons.rst
+   developer/mixins.rst
+   developer/utils.rst
 
 .. toctree::
    :maxdepth: 1
    :caption: Links
-   :hidden:
 
-   PCDSWidgets GitHub <https://github.com/pcdshub/pcdswidgets>
-   PCDS-wide GitHub <https://github.com/pcdshub>
+   pydm documentation <https://slaclab.github.io/pydm>
+   pcdswidgets on github <https://github.com/pcdshub/pcdswidgets>

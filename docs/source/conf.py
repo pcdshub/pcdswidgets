@@ -31,7 +31,6 @@ from pcdswidgets.version import version_tuple
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
@@ -102,6 +101,8 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+html_css_files = ["custom.css"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -175,6 +176,3 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"python": ("https://docs.python.org/3", None), "pydm": ("https://slaclab.github.io/pydm", None)}

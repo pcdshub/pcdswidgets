@@ -45,7 +45,7 @@ Symbol Widgets
 .. toctree::
    :maxdepth: 2
 
-   vacuum/valves.rst
-   vacuum/pumps.rst
-   vacuum/gauges.rst
-   vacuum/others.rst
+   valves.rst
+   pumps.rst
+   gauges.rst
+   others.rst

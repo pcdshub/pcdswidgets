@@ -11,4 +11,4 @@ At `LCLS`, this is pre-installed on all environments that provide `designer`.
 
 It is distributed via both `pypi` and `conda-forge`, so it is installable with `pip`, `conda`, `uv`, and `pixi`.
 
-See the [complete docs](https://pcdshub.github.io/pcdswidgets) for more information.
+See the [latest docs](https://pcdshub.github.io/pcdswidgets) for more information.
