@@ -1,8 +1,4 @@
-===========
-PCDSWidgets
-===========
-
-LCLS PyDM Widget Library
+.. include:: generated/README.rst
 
 .. toctree::
     :maxdepth: 1
