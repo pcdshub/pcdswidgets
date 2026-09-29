@@ -21,7 +21,6 @@ Display / read-only output
 --------------------------
 
 .. list-table::
-   :widths: 18 18 18 18
    :header-rows: 1
 
    * - Widget Name
@@ -48,7 +47,6 @@ Input / control (write to PV)
 -----------------------------
 
 .. list-table::
-   :widths: 9 9 24 30
    :header-rows: 1
 
    * - Widget Name
@@ -74,7 +72,6 @@ Plots
 -----
 
 .. list-table::
-   :widths: 18 18 18 18
    :header-rows: 1
 
    * - Widget Name
@@ -94,7 +91,6 @@ Layout / structure
 ------------------
 
 .. list-table::
-   :widths: 18 18 18 18
    :header-rows: 1
 
    * - Widget Name
@@ -118,7 +114,6 @@ Containers
 ----------
 
 .. list-table::
-   :widths: 18 18 18 18
    :header-rows: 1
 
    * - Widget Name
@@ -177,7 +172,6 @@ Tools: pcdswidgets/ui/common/tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 12 14 46
 
    * - Widget
      - Function
@@ -201,7 +195,6 @@ Common: pcdswidgets/ui/imaging/common
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 10 15 47
 
    * - Widget
      - Function
@@ -237,7 +230,6 @@ Common: pcdswidgets/ui/motion/common
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 11 18 43
 
    * - Widget
      - Function
@@ -271,7 +263,6 @@ Expert: pcdswidgets/ui/motion/expert
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 10 15 47
 
    * - Widget
      - Function
@@ -284,7 +275,6 @@ SmarAct: pcdswidgets/ui/motion/smaract
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 10 15 47
 
    * - Widget
      - Function
