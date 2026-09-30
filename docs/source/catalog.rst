@@ -140,16 +140,16 @@ Dock: pcdswidgets/common/dock
    * - Widget
      - Function
      - Example
-   * - `IndicatorGrid <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/common/dock/indicator_grid.py>`__
+   * - :any:`IndicatorGrid`
      - Standalone implementation of the classic "lucid" grid.
      - .. image:: /_static/catalog/indicator_grid.png
-   * - `TabDock <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/common/dock/tab_dock.py>`__
+   * - :any:`TabDock`
      - Standalone implementation of the "lucid" tabbed dock.
      - .. image:: /_static/catalog/tab_dock.png
-   * - `TabDockButton <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/common/dock/tab_dock_button.py>`__
+   * - :any:`TabDockButton`
      - Opens a screen in the TabDock.
      - .. image:: /_static/catalog/tab_dock_button.png
-   * - TabDockDiagramButton
+   * - :any:`TabDockDiagramButton`
      - | Displays a beamline schematic component, and opens a screen in
        | the TabDock
      - .. image:: /_static/catalog/tab_dock_diagram_button.png
@@ -162,7 +162,7 @@ Toolbar: pcdswidgets/common/toolbar
    * - Widget
      - Function
      - Example
-   * - `YamlToolbar <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/common/toolbar/yaml_toolbar.py>`__
+   * - :any:`YamlToolbar`
      - | Standalone implementation of the classic "lucid" toolbar.
        | Loads related display, script, and dock buttons from a yaml
        | config.
@@ -176,10 +176,10 @@ Tools: pcdswidgets/ui/common/tools
    * - Widget
      - Function
      - Example
-   * - `FeatureFinder <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/common/tools/feature_finder.ui>`__
+   * - :any:`FeatureFinder`
      - Generic "scanner" application to optimize signal.
      - .. image:: /_static/catalog/feature_finder.png
-   * - ViewSaver
+   * - :any:`ViewSaver`
      - | A Tool for adding persistence to screens (the view state is
        | saved to a file, and recovered on reload). Add this widget
        | container to your project and any widget that is supported
@@ -199,26 +199,26 @@ Common: pcdswidgets/ui/imaging/common
    * - Widget
      - Function
      - Example
-   * - `AcquisitionControlFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/acquisition_control_full.ui>`__
+   * - :any:`AcquisitionControlFull`
      - | A panel for controlling camera acquisition, such as
        | starting/stopping and setting the capture mode.
      - N/a
-   * - `CameraViewerStretch <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/camera_viewer_stretch.ui>`__
+   * - :any:`CameraViewerStretch`
      - | Top-level camera viewer that displays the live image alongside a
        | sidebar of collapsible control panels.
      - N/a
-   * - `ColormapIntensityControlFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/colormap_intesity_control_full.ui>`__
+   * - :any:`ColormapIntesityControlFull`
      - | A panel for selecting the colormap and adjusting image intensity
        | levels via a histogram.
      - N/a
-   * - `EpicsRoiFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/epics_roi_full.ui>`__
+   * - :any:`EpicsRoiFull`
      - A panel for drawing, moving, and locking a region-of-interest box
        that syncs its geometry to EPICS PVs.
      - .. image:: /_static/catalog/epics_roi_full.png
-   * - `ExposureTimingControlFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/exposure_timing_control_full.ui>`__
+   * - :any:`ExposureTimingControlFull`
      - A panel for adjusting exposure time and acquisition timing/rate.
      - N/a
-   * - `MarkerSelectionFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/imaging/common/marker_selection_full.ui>`__
+   * - :any:`MarkerSelectionFull`
      - | Widget for placing and configuring up to four crosshair markers
        | (position, color, style, visibility) on camViewer image.
      - .. image:: /_static/catalog/marker_selection_full.png
@@ -234,30 +234,38 @@ Common: pcdswidgets/ui/motion/common
    * - Widget
      - Function
      - Example
-   * - `MotorBeckhoffSlits <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_beckhoff_slits.ui>`__
+   * - :any:`MotorBeckhoffSlits`
      - | Motor control for Beckhoff slits to control slit center position
        | and gap.
      - .. image:: /_static/catalog/motor_beckhoff_slits.png
-   * - `MotorClassicFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_classic_full.ui>`__
+   * - :any:`MotorClassicFull`
      - | Classic full layout for IMS, Beckhoff, or SmarAct motor control.
        | Define "motor_type" for full functionality.
      - .. image:: /_static/catalog/motor_classic_full.png
-   * - `MotorClassicRow <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_classic_row.ui>`__
+   * - :any:`MotorClassicRow`
      - | Classic row layout for IMS, Beckhoff, or SmarAct motor control.
        | Define "motor_type" for full functionality.
      - .. image:: /_static/catalog/motor_classic_row.png
-   * - `MotorClassicVert <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_classic_vert.ui>`__
+   * - :any:`MotorClassicVert`
      - | Classic vertical layout for IMS, Beckhoff, or SmarAct motor
        | control.
        | Define "motor_type" for full functionality.
      - .. image:: /_static/catalog/motor_classic_vert.png
-   * - `MotorStateMover <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_state_mover.ui>`__
+   * - :any:`MotorStateMover`
      - State mover motor control
      - .. image:: /_static/catalog/motor_state_mover.png
-   * - `MotorTcClassicRow <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/common/motor_tc_classic_row.ui>`__
+   * - :any:`MotorTcClassicRow`
      - | Classic row layout for IMS, Beckhoff, or SmarAct motor control
        | including motor temperature interlock
      - .. image:: /_static/catalog/motor_classic_row.png
+   * - :any:`MotorTipTiltDouble`
+     - | Tip/tilt motion control for two motors. Set "motor_style" to
+       | drive standard motor record or SmarAct step fields.
+     - .. image:: /_static/catalog/motor_tip_tilt_double.png
+   * - :any:`MotorTipTiltFull`
+     - | Full tip/tilt motion control layout. Set "motor_style" to
+       | drive standard motor record or SmarAct step fields.
+     - .. image:: /_static/catalog/motor_tip_tilt_full.png
 
 Expert: pcdswidgets/ui/motion/expert
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -267,7 +275,7 @@ Expert: pcdswidgets/ui/motion/expert
    * - Widget
      - Function
      - Example
-   * - MotorExpertScreenBeckhoff
+   * - :any:`MotorExpertScreenBeckhoff`
      - Expert configuration options for Beckhoff motors.
      - .. image:: /_static/catalog/motor_expert_screen_beckhoff.png
 
@@ -279,15 +287,9 @@ SmarAct: pcdswidgets/ui/motion/smaract
    * - Widget
      - Function
      - Example
-   * - `SmaractOpenLoopClassicRow <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/smaract/smaract_open_loop_classic_row.ui>`__
+   * - :any:`SmaractOpenLoopClassicRow`
      - N/a
      - N/a
-   * - `SmaractOpenLoopContextDouble <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/smaract/smaract_open_loop_context_double.ui>`__
+   * - :any:`SmaractOpenLoopContextDouble`
      - SmarAct detailed motion control
      - .. image:: /_static/catalog/smaract_open_loop_context_double.png
-   * - `SmaractTipTiltDouble <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/smaract/smaract_tip_tilt_double.ui>`__
-     - SmarAct Tip Tilt Motion control
-     - .. image:: /_static/catalog/smaract_tip_tilt_double.png
-   * - `SmaractTipTiltFull <https://github.com/pcdshub/pcdswidgets/blob/master/pcdswidgets/ui/motion/smaract/smaract_tip_tilt_full.ui>`__
-     - SmarAct Tip Tilt Motion control
-     - .. image:: /_static/catalog/smaract_tip_tilt_full.png
