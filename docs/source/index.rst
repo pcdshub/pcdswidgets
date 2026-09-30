@@ -25,3 +25,10 @@
 
     pydm documentation <https://slaclab.github.io/pydm>
     pcdswidgets on github <https://github.com/pcdshub/pcdswidgets>
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Version
+    :hidden:
+
+    release.rst
