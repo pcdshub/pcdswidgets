@@ -131,7 +131,7 @@ class TabDockDiagramButton(TabDockButton):
             self._image_pixmap = diagram.get_pixmap()
         self._diagram = diagram
         self.repaint()
-        
+
     diagram = Property(DiagramOption, readDiagram, setDiagram)
 
     def readLightpathChannel(self) -> str:
