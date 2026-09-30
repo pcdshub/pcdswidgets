@@ -23,7 +23,7 @@
 - [ ] Screenshots of these widgets in designer are included above (`pixi run designer`)
 - [ ] Screenshots of these widgets working in PyDM are included above (`pixi run pydm`)
 - [ ] Catalog entries are included, with up-to-date text and images (docs/source/catalog.rst)
-- [ ] Widget has its own documentation page
+- [ ] Widget has its own documentation page and it is up-to-date
 - [ ] New/changed widgets are part of the test suite (semi-automatic)
 ### For All PRs:
 - [ ] Code works interactively
