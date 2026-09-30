@@ -205,6 +205,9 @@ Common: pcdswidgets/ui/imaging/common
      - | Top-level camera viewer that displays the live image alongside a
        | sidebar of collapsible control panels.
      - N/a
+   * - :any:`CentroidTrackerFull`
+     - N/a
+     - N/a
    * - :any:`ColormapIntesityControlFull`
      - | A panel for selecting the colormap and adjusting image intensity
        | levels via a histogram.
@@ -252,6 +255,12 @@ Common: pcdswidgets/ui/motion/common
    * - :any:`MotorStateMover`
      - State mover motor control
      - .. image:: /_static/catalog/motor_state_mover.png
+   * - :any:`MotorStateMoverExpanded`
+     - N/a
+     - N/a
+   * - :any:`MotorStateMoverExpandedPMPS`
+     - N/a
+     - N/a
    * - :any:`MotorTcClassicRow`
      - | Classic row layout for IMS, Beckhoff, or SmarAct motor control
        | including motor temperature interlock
@@ -264,6 +273,9 @@ Common: pcdswidgets/ui/motion/common
      - | Full tip/tilt motion control layout. Set "motor_style" to
        | drive standard motor record or SmarAct step fields.
      - .. image:: /_static/catalog/motor_tip_tilt_full.png
+   * - :any:`SvgMultiStateLED`
+     - N/a
+     - N/a
 
 Expert: pcdswidgets/ui/motion/expert
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
