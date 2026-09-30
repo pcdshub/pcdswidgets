@@ -1,11 +1,56 @@
 =======================================
-Configuring the Development Environment
+Development Environment
 =======================================
 
-#. Create a virtual environment with conda or use a preexisting environment.
-#. Activate the environment. All following steps assume that you are inside this enviornment.
-#. Install pydm, pyqt, and pcdsdevices from the conda-forge channel with ``conda install -c conda-forge pydm pyqt pcdsdevices``
-#. Clone a copy of pcdswidgets from here ``https://github.com/pcdshub/pcdswidgets``
-#. Move into the newly cloned pcdswidgets directory and run ``pip install -e .`` to perform a development install of pcdswidgets.
-#. In order to ensure that designer loads the new widgets add the newly cloned pcdswidgets directory to the environment variable ``PYQTDESIGNERPATH``. For example, use ``export PYQTDESIGNERPATH=$PWD:$PYQTDESIGNERPATH`` after cd'ing into your pcdswidgets directory.
-#. Setup of the environment is now complete. You should be able to make changes to your newly cloned pcdswidgets directory and see those changes reflected in ``designer``.
+A ``pixi`` environment is included here.
+This is the shared context in which we build, develop, and test ``pcdswidgets``.
+
+Note that you *must* have ``pixi`` on your path for this to work. That means that ``pixi`` is a developer requirement.
+
+At lcls you can get this via ctrlenv-pathmunge::
+
+    source ctrlenv_setup.sh
+    ctrlenv-pathmunge
+    pixi --version
+
+You can create the environment with ``pixi run install``.
+If this is the first ``pixi`` command you've run with this repo, it will build the environment for you,
+and then run the post-env install script to set up the designer plugin, which is the ``install`` task in this repo.
+
+You can also just ``make``, which will run all the important build steps,
+or ``make pixi`` for just the ``pixi`` step.
+
+This will create a ``pixi`` environment under the ``.pixi`` folder that will be ready to go
+to help you run designer and test your custom widgets.
+To work, this requires a pre-compiled designer python plugin,
+which is tricky to set up properly.
+
+If you are not at LCLS, you will need to edit the ``pixi_scripts/install.sh`` script to point to your plugin source,
+or you'll need to copy it into your environment manually,
+or you'll need to actually figure out why all the conda-forge pyqt builds stopped including this automatically,
+or you'll need to pick a build that has this problem fixed.
+
+You can run ``pixi install`` (or, ``make pixi``)
+to update the environment with any new widgets you've added since the last run.
+
+When you are ready to test, you can use ``pixi run designer`` to
+make sure your widgets are exporting cleanly in an editable way in designer.
+
+You can also use ``pixi run pydm`` to launch a version of ``pydm`` that includes
+your new widgets.
+
+Each of these ``pixi`` commands will build or update the environment as needed.
+
+You can alternatively build your own environment:
+
+- ``pip install -e .``
+
+or
+
+- ``uv sync``
+
+or whatever your favorite method is.
+
+Note that we can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
+This is due to complications in the build process where our existing compiled binary for the plugin
+is not cross-compiled, and therefore needs exact versions of ``Python`` and ``PyQt`` on the specific architecture.
