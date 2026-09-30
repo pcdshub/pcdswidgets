@@ -34,6 +34,8 @@ class DiagramOption(IntEnum):
       (If the new enum is "NAME", the file should be "name.svg")
     """
 
+    # BLANK is pinned to 0 so it matches Qt Designer's default for an unset enum
+    # property (a freshly-dropped widget then renders blank rather than erroring).
     BLANK = 0
     ATTENUATOR = auto()
     BEAM_STOPPER = auto()
