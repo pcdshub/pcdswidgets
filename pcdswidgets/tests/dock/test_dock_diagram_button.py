@@ -49,6 +49,34 @@ def test_diagram_options(qtbot: QtBot, diagram_button: TabDockDiagramButton, dia
     qtbot.wait(50)
 
 
+@pytest.mark.parametrize("diagram_option", list(DiagramOption))
+def test_diagram_options_by_int(qtbot: QtBot, diagram_button: TabDockDiagramButton, diagram_option: DiagramOption):
+    """
+    Qt Designer sets enum properties as raw ints, not DiagramOption instances.
+
+    setDiagram must accept the integer value and coerce it back to the matching
+    option. This also guards against accidental renumbering of the serialized
+    values that existing .ui screens depend on.
+    """
+    # Pass the plain int, exactly as Designer would when loading a .ui file
+    diagram_button.setDiagram(int(diagram_option))
+    # It should resolve to the matching option (as an enum member, not a bare int)
+    assert diagram_button.readDiagram() == diagram_option
+    assert diagram_button.readDiagram() is diagram_option
+    qtbot.wait(50)
+
+
+def test_diagram_invalid_int_raises(diagram_button: TabDockDiagramButton):
+    """An out-of-range integer must raise a clean ValueError (not TypeError)."""
+    # One past the largest valid value -- no option uses this int
+    out_of_range = max(int(option) for option in DiagramOption) + 1
+    with pytest.raises(ValueError):
+        diagram_button.setDiagram(out_of_range)
+    # A clearly-bogus value too, for good measure
+    with pytest.raises(ValueError):
+        diagram_button.setDiagram(9999)
+
+
 def test_lightpath_channel(qtbot: QtBot, diagram_button: TabDockDiagramButton):
     """Make sure the lightpath option setting is stable."""
 
