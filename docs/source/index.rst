@@ -13,7 +13,7 @@
     :maxdepth: 1
     :caption: Developer Documentation
 
-    developer/dev.rst
+    developer/environment.rst
     developer/addwidget.rst
     developer/icons.rst
     developer/mixins.rst
