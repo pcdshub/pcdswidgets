@@ -166,7 +166,7 @@ Toolbar: pcdswidgets/common/toolbar
        | config.
      - .. image:: /_static/catalog/yaml_toolbar.png
 
-Tools: pcdswidgets/ui/common/tools
+Tools: pcdswidgets/common/tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::

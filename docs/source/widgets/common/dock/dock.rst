@@ -2,9 +2,9 @@
 Dock Widgets
 ============================
 
-The dock widgets are a small group with interopability around the :any:`TabDock` widget.
+The dock widgets are a small group with interoperability around the :any:`TabDock` widget.
 
-These are in the `Common Dock`` group in the designer widgets box.
+These are in the `Common Dock` group in the designer widgets box.
 
 .. toctree::
     :maxdepth: 1

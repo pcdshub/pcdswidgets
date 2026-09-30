@@ -40,14 +40,15 @@ This process will take a lot of iterations
 To make this process smoother, I added a script embedded in the icons module.
 Try this to open an application that simply displays a widget:
 
-.. code-block bash
+.. code-block:: bash
+
    python -m pcdswidgets.icons.demo ControlValve
 
 Some tips:
 
 - The coordinate system starts from the top left of the icon, so positive y is down
 - The expected size of the widget icon is from 0 to 1 in both x and y
-- If you want something to be modifyable via stylesheet, PV, etc., you can make it
+- If you want something to be modifiable via stylesheet, PV, etc., you can make it
   a property with qt's @Property flag. This is useful for alarm sensitive coloring,
   for example.
 - When drawing a shape, it's useful to parameterize it even if you only use it once.
@@ -56,7 +57,7 @@ Some tips:
   "arrow_length" are easier to modify later.
 - When designing your shape, note that the widget might need to look good at
   different sizes. Pay particular care in designing widget icons with small features,
-  these can become indistiguishable as we shrink the shapes down.
+  these can become indistinguishable as we shrink the shapes down.
 
 
 Adding a New Widget Class
@@ -75,7 +76,8 @@ understand how that particular feature is implemented.
 
 You can test your new widget quickly by running the helper script:
 
-.. code-block bash
+.. code-block:: bash
+
    python -m pcdswidgets.vacuum.demo PneumaticValveDA CRIX:VGC:11
 
 But you should make some screens with it to explore the finer details.
@@ -84,7 +86,7 @@ But you should make some screens with it to explore the finer details.
 Adding your Widget to the Designer
 ----------------------------------
 This is probably the easiest step of the process. Simply import your new widget
-in designer.py and add an appriopriate entry using the qtplugin_factory.
+in designer.py and add an appropriate entry using the qtplugin_factory.
 
 To check that this worked, you can simply open designer. You should see
 your widget added to the list.
@@ -93,7 +95,7 @@ your widget added to the list.
 Stylesheets
 -----------
 For the widget to properly display its state, it needs an entry in the stylesheet.
-For widgets that are exceedingly simple to existing widgets, this might just
+For widgets that are exceedingly similar to existing widgets, this might just
 involve copying and pasting existing entries in the stylesheet, and editing the
 copy to refer to your new widget. This is appropriate for adding a new valve type
 for example.
