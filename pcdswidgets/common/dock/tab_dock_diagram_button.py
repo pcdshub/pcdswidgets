@@ -34,7 +34,10 @@ class DiagramOption(IntEnum):
       (If the new enum is "NAME", the file should be "name.svg")
     """
 
-    BLANK = auto()
+    # BLANK is pinned to 0 so it matches Qt Designer's default for an unset enum
+    # property (a freshly-dropped widget then renders blank rather than erroring).
+    # The rest use auto(), so append new options at the END only.
+    BLANK = 0
     ATTENUATOR = auto()
     BEAM_STOPPER = auto()
     BURN_THRU_MONITOR = auto()
@@ -122,15 +125,17 @@ class TabDockDiagramButton(TabDockButton):
 
     def setDiagram(self, diagram: DiagramOption) -> None:
         """Sets the enum of the diagram to use."""
-        match diagram:
-            case DiagramOption.BLANK:
-                self._image_pixmap = None
-            case DiagramOption():
-                self._image_pixmap = diagram.get_pixmap()
-            case _:
-                raise ValueError(
-                    f"Invalid diagram option {diagram}, options are: {', '.join(item for item in DiagramOption)}"
-                )
+        # Designer sets enum properties as raw ints, so coerce to DiagramOption.
+        try:
+            diagram = DiagramOption(diagram)
+        except ValueError as err:
+            raise ValueError(
+                f"Invalid diagram option {diagram}, options are: {', '.join(item.name for item in DiagramOption)}"
+            ) from err
+        if diagram == DiagramOption.BLANK:
+            self._image_pixmap = None
+        else:
+            self._image_pixmap = diagram.get_pixmap()
         self._diagram = diagram
         self.repaint()
 
