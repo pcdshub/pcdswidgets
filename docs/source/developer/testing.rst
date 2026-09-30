@@ -37,7 +37,7 @@ maintaining runtime logic.
 
 Testing with ``pcdswidgets-show``
 ---------------------------------
-Widgets should also be tested with ``pcdswidgets-show``,
-see :doc:`pcdswidgets_show`.
+Widgets should also be tested with ``pcdswidgets_show``,
+see :doc:`/pcdswidgets_show`.
 
 Every widget should be openable from this command-line tool.
