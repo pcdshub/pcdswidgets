@@ -11,3 +11,5 @@ These are in the `Common Tools` group in the designer widgets box.
 
     feature_finder.rst
     view_saver.rst
+    eps_byteindicator.rst
+    table.rst
