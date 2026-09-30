@@ -34,9 +34,6 @@ class DiagramOption(IntEnum):
       (If the new enum is "NAME", the file should be "name.svg")
     """
 
-    # BLANK is pinned to 0 so it matches Qt Designer's default for an unset enum
-    # property (a freshly-dropped widget then renders blank rather than erroring).
-    # The rest use auto(), so append new options at the END only.
     BLANK = 0
     ATTENUATOR = auto()
     BEAM_STOPPER = auto()
@@ -47,7 +44,6 @@ class DiagramOption(IntEnum):
     ENERGY_MONITOR = auto()
     FAST_VALVE = auto()
     FOCUSING_LENS = auto()
-    FOCUSING_LENS_2 = auto()
     GATE_VALVE = auto()
     GRATING = auto()
     IMAGER = auto()
@@ -58,7 +54,6 @@ class DiagramOption(IntEnum):
     PULSE_SELECTOR = auto()
     REFERENCE_LASER = auto()
     SLIT = auto()
-    SLIT_2 = auto()
     SPECTROMETER = auto()
     WAVE_FRONT_SENSOR = auto()
 
@@ -90,7 +85,6 @@ class TabDockDiagramButton(TabDockButton):
     ENERGY_MONITOR = DiagramOption.ENERGY_MONITOR
     FAST_VALVE = DiagramOption.FAST_VALVE
     FOCUSING_LENS = DiagramOption.FOCUSING_LENS
-    FOCUSING_LENS_2 = DiagramOption.FOCUSING_LENS_2
     GATE_VALVE = DiagramOption.GATE_VALVE
     GRATING = DiagramOption.GRATING
     IMAGER = DiagramOption.IMAGER
@@ -101,7 +95,6 @@ class TabDockDiagramButton(TabDockButton):
     PULSE_SELECTOR = DiagramOption.PULSE_SELECTOR
     REFERENCE_LASER = DiagramOption.REFERENCE_LASER
     SLIT = DiagramOption.SLIT
-    SLIT_2 = DiagramOption.SLIT_2
     SPECTROMETER = DiagramOption.SPECTROMETER
     WAVE_FRONT_SENSOR = DiagramOption.WAVE_FRONT_SENSOR
 
