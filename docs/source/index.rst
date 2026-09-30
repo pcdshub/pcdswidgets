@@ -2,10 +2,11 @@
 
 .. toctree::
     :maxdepth: 1
-    :caption: Widgets
+    :caption: User Documentation
 
     catalog.rst
     widgets/widgets.rst
+    pcdswidgets_show.rst
 
 .. toctree::
    :maxdepth: 1

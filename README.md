@@ -5,7 +5,7 @@ When `pcdswidgets` is installed in a `python` environment, it will provide:
 
 - Additional widgets in `designer` via `pydm`'s widget entrypoint.
 - The same additional widgets at runtime for use in `pydm` and `PyQt` displays.
-- A cli interface, `pcdswidgets-show`, for showing standalone windows with screens and widgets sourced from the module.
+- A command-line interface, `pcdswidgets-show`, for showing standalone windows with screens and widgets sourced from the module.
 
 At `LCLS`, this is pre-installed on all environments that provide `designer`.
 
