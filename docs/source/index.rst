@@ -4,6 +4,7 @@
     :maxdepth: 1
     :caption: User Documentation
 
+    install.rst
     catalog.rst
     widgets/widgets.rst
     pcdswidgets_show.rst
