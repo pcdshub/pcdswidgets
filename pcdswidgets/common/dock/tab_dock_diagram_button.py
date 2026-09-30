@@ -31,21 +31,38 @@ class DiagramOption(IntEnum):
       (Old screens need the old enum name to exist and nothing more)
     - Copy the new entry into the enums specified at the top of the class body below
       (This makes the enums work up properly in designer)
-    - Add a new png to pcdswidgets/icons/beamline whose name matches the entry
-      (If the new enum is "NAME", the file should be "name.png")
+    - Add a new svg to pcdswidgets/icons/diagram whose name matches the entry
+      (If the new enum is "NAME", the file should be "name.svg")
     """
 
     BLANK = auto()
     ATTENUATOR = auto()
+    BEAM_STOPPER = auto()
+    BURN_THRU_MONITOR = auto()
+    DIFF_ION_PUMP = auto()
+    EBD_MAGNETS = auto()
+    EBD_SAMPLE_CHAMBER = auto()
+    ENERGY_MONITOR = auto()
+    FAST_VALVE = auto()
+    FOCUSING_LENS = auto()
+    GATE_VALVE = auto()
+    GRATING = auto()
     IMAGER = auto()
-    REFLASER = auto()
-    SLITS = auto()
+    MIRROR = auto()
+    MONOCHROMATOR = auto()
+    PHOTON_COLLIMATOR = auto()
+    POLARIZATION_SWITCH = auto()
+    PULSE_SELECTOR = auto()
+    REFERENCE_LASER = auto()
+    SLIT = auto()
+    SPECTROMETER = auto()
+    WAVE_FRONT_SENSOR = auto()
 
     def get_image_path(self) -> Path:
         """Return a Path object pointing to the image we should use."""
         if self == DiagramOption.BLANK:
             raise ValueError("No image for blank diagram")
-        return IMAGE_FOLDER / f"{self.name.lower()}.png"
+        return IMAGE_FOLDER / f"{self.name.lower()}.svg"
 
     def get_pixmap(self) -> QPixmap:
         """Return the pixmap to display for this enum."""
@@ -61,9 +78,26 @@ class TabDockDiagramButton(TabDockButton):
     DiagramOption = DiagramOption
     BLANK = DiagramOption.BLANK
     ATTENUATOR = DiagramOption.ATTENUATOR
+    BEAM_STOPPER = DiagramOption.BEAM_STOPPER
+    BURN_THRU_MONITOR = DiagramOption.BURN_THRU_MONITOR
+    DIFF_ION_PUMP = DiagramOption.DIFF_ION_PUMP
+    EBD_MAGNETS = DiagramOption.EBD_MAGNETS
+    EBD_SAMPLE_CHAMBER = DiagramOption.EBD_SAMPLE_CHAMBER
+    ENERGY_MONITOR = DiagramOption.ENERGY_MONITOR
+    FAST_VALVE = DiagramOption.FAST_VALVE
+    FOCUSING_LENS = DiagramOption.FOCUSING_LENS
+    GATE_VALVE = DiagramOption.GATE_VALVE
+    GRATING = DiagramOption.GRATING
     IMAGER = DiagramOption.IMAGER
-    REFLASER = DiagramOption.REFLASER
-    SLITS = DiagramOption.SLITS
+    MIRROR = DiagramOption.MIRROR
+    MONOCHROMATOR = DiagramOption.MONOCHROMATOR
+    PHOTON_COLLIMATOR = DiagramOption.PHOTON_COLLIMATOR
+    POLARIZATION_SWITCH = DiagramOption.POLARIZATION_SWITCH
+    PULSE_SELECTOR = DiagramOption.PULSE_SELECTOR
+    REFERENCE_LASER = DiagramOption.REFERENCE_LASER
+    SLIT = DiagramOption.SLIT
+    SPECTROMETER = DiagramOption.SPECTROMETER
+    WAVE_FRONT_SENSOR = DiagramOption.WAVE_FRONT_SENSOR
 
     _qt_designer = {
         "group": "ECS Common Dock",
@@ -85,15 +119,17 @@ class TabDockDiagramButton(TabDockButton):
 
     def setDiagram(self, diagram: DiagramOption) -> None:
         """Sets the enum of the diagram to use."""
-        match diagram:
-            case DiagramOption.BLANK:
-                self._image_pixmap = None
-            case DiagramOption():
-                self._image_pixmap = diagram.get_pixmap()
-            case _:
-                raise ValueError(
-                    f"Invalid diagram option {diagram}, options are: {', '.join(item for item in DiagramOption)}"
-                )
+        # Designer sets enum properties as raw ints, so coerce to DiagramOption.
+        try:
+            diagram = DiagramOption(diagram)
+        except ValueError as err:
+            raise ValueError(
+                f"Invalid diagram option {diagram}, options are: {', '.join(item.name for item in DiagramOption)}"
+            ) from err
+        if diagram == DiagramOption.BLANK:
+            self._image_pixmap = None
+        else:
+            self._image_pixmap = diagram.get_pixmap()
         self._diagram = diagram
         self.repaint()
 
