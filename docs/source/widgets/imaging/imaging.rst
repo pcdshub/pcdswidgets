@@ -5,7 +5,7 @@ Imaging Widgets
 The imaging widgets are used to build camera viewer screens and to control
 image acquisition, display, and analysis.
 
-These are in the `Imaging Common` group in the designer widgets box.
+There is currently only a `Imaging Commmon` subsection in the designer widget box.
 
 .. toctree::
     :maxdepth: 1

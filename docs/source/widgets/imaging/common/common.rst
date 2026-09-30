@@ -5,6 +5,8 @@ Imaging Common Widgets
 These widgets provide the panels and controls used to build camera viewer
 screens.
 
+These are in the `Imaging Common` group in the designer widgets box.
+
 .. toctree::
     :maxdepth: 1
 

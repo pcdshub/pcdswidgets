@@ -2,11 +2,9 @@
 Motion Widgets
 ============================
 
-The motion widgets are used to build motor control screens for IMS, Beckhoff,
-and SmarAct motors.
+The motion widgets are used to build motor control screens.
 
-These are sorted into the `Motion Common`, `Motion Expert`, and
-`Motion SmarAct` groups in the designer widgets box.
+These are in various groups starting with "Motion" in the designer widgets box.
 
 .. toctree::
     :maxdepth: 1
