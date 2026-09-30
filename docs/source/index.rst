@@ -14,10 +14,10 @@
     :caption: Developer Documentation
 
     developer/environment.rst
-    developer/addwidget.rst
-    developer/icons.rst
-    developer/mixins.rst
-    developer/utils.rst
+    developer/testing.rst
+    developer/widgets.rst
+    developer/build.rst
+    developer/misc_api.rst
 
 .. toctree::
     :maxdepth: 1

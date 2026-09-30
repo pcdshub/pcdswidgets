@@ -11,8 +11,6 @@ for users trying to understand which widgets should be used in a screen.
 
 It will contain links to each widget's dedicated documentation page.
 
-This page aims to show examples of the currently existing pcdswidgets
-repository widgets: https://github.com/pcdshub/pcdswidgets
 
 **Frequently Used Widget Classes:**
 ___________________________________

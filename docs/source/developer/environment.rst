@@ -2,10 +2,15 @@
 Development Environment
 =======================================
 
+.. tip::
+    If you just want to create a widget, you might not need a development environment.
+    See :doc:`create_composite_widget`
+
 A ``pixi`` environment is included here.
 This is the shared context in which we build, develop, and test ``pcdswidgets``.
 
-Note that you *must* have ``pixi`` on your path for this to work. That means that ``pixi`` is a developer requirement.
+.. note::
+    You *must* have ``pixi`` on your path for this to work. That means that ``pixi`` is a developer requirement.
 
 At lcls you can get this via ctrlenv-pathmunge::
 
@@ -51,6 +56,7 @@ or
 
 or whatever your favorite method is.
 
-Note that we can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
-This is due to complications in the build process where our existing compiled binary for the plugin
-is not cross-compiled, and therefore needs exact versions of ``Python`` and ``PyQt`` on the specific architecture.
+.. warning::
+    We can currently only run designer with custom widgets on our Rocky 9 OS machines at LCLS.
+    This is due to complications in the build process where our existing compiled binary for the plugin
+    is not cross-compiled, and therefore needs exact versions of ``Python`` and ``PyQt`` on the specific architecture.
