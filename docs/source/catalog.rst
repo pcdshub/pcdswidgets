@@ -208,7 +208,7 @@ Common: pcdswidgets/ui/imaging/common
    * - :any:`CentroidTrackerFull`
      - N/a
      - N/a
-   * - :any:`ColormapIntesityControlFull`
+   * - :any:`ColormapIntensityControlFull`
      - | A panel for selecting the colormap and adjusting image intensity
        | levels via a histogram.
      - N/a

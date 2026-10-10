@@ -1,4 +1,4 @@
-"""Module for ColormapIntesityControlFull"""
+"""Module for ColormapIntensityControlFull"""
 # Originally generated from jinja template ui_main_widget.j2
 # This file can be safely edited to change the runtime behavior of the widget.
 
@@ -12,7 +12,7 @@ from pyqtgraph.widgets.HistogramLUTWidget import HistogramLUTWidget
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
-from pcdswidgets.generated.imaging.common.colormap_intesity_control_full_base import ColormapIntesityControlFullBase
+from pcdswidgets.generated.imaging.common.colormap_intesity_control_full_base import ColormapIntensityControlFullBase
 from pcdswidgets.icons.glyphs import CAM_COG
 
 _COLORMAP_ORDER = [
@@ -26,7 +26,7 @@ _COLORMAP_ORDER = [
 ]
 
 
-class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
+class ColormapIntensityControlFull(ColormapIntensityControlFullBase):
     colormap_combo: QtWidgets.QComboBox
     normalize_check: QtWidgets.QCheckBox
     histogram_container: QtWidgets.QWidget

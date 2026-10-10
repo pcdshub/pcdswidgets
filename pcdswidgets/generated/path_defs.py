@@ -53,7 +53,7 @@ WIDGET_PATHS = {
     "CentroidTrackerFull": "pcdswidgets.imaging.common.centroid_tracker_full:CentroidTrackerFull",
     "ColdCathodeComboGauge": "pcdswidgets.vacuum.gauges:ColdCathodeComboGauge",
     "ColdCathodeGauge": "pcdswidgets.vacuum.gauges:ColdCathodeGauge",
-    "ColormapIntesityControlFull": "pcdswidgets.imaging.common.colormap_intesity_control_full:ColormapIntesityControlFull",
+    "ColormapIntensityControlFull": "pcdswidgets.imaging.common.colormap_intesity_control_full:ColormapIntensityControlFull",
     "ControlOnlyValveNC": "pcdswidgets.vacuum.valves:ControlOnlyValveNC",
     "ControlOnlyValveNO": "pcdswidgets.vacuum.valves:ControlOnlyValveNO",
     "ControlValve": "pcdswidgets.vacuum.valves:ControlValve",

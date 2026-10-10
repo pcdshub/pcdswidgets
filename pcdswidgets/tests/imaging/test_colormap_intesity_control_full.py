@@ -6,7 +6,7 @@ from pydm.widgets import PyDMImageView
 from pytestqt.qtbot import QtBot
 from qtpy import QtCore, QtGui, QtWidgets
 
-from pcdswidgets.imaging.common.colormap_intesity_control_full import ColormapIntesityControlFull
+from pcdswidgets.imaging.common.colormap_intesity_control_full import ColormapIntensityControlFull
 
 
 class _ImageParent(QtWidgets.QWidget):
@@ -18,12 +18,12 @@ class _ImageParent(QtWidgets.QWidget):
 
 
 @pytest.fixture(scope="function")
-def control(qtbot: QtBot) -> ColormapIntesityControlFull:
+def control(qtbot: QtBot) -> ColormapIntensityControlFull:
     # qtbot only weak-references what it tracks, so the parent has to be held
     # for the duration of the test or Qt tears the image item down with it
     parent = _ImageParent()
     qtbot.addWidget(parent)
-    widget = ColormapIntesityControlFull(parent)
+    widget = ColormapIntensityControlFull(parent)
     widget.link_parent_widgets(parent)
     parent.show()
     widget.show()
@@ -41,7 +41,7 @@ def control(qtbot: QtBot) -> ColormapIntesityControlFull:
     gc.collect()
 
 
-def _feed_frame(control: ColormapIntesityControlFull, mini: float, maxi: float) -> None:
+def _feed_frame(control: ColormapIntensityControlFull, mini: float, maxi: float) -> None:
     """
     Push one frame the way PyDM does with normalize enabled.
 
@@ -54,7 +54,7 @@ def _feed_frame(control: ColormapIntesityControlFull, mini: float, maxi: float) 
     image_item.setImage(frame, autoLevels=False)
 
 
-def test_frames_are_not_user_interaction(control: ColormapIntesityControlFull, qtbot: QtBot):
+def test_frames_are_not_user_interaction(control: ColormapIntensityControlFull, qtbot: QtBot):
     """Live frames re-sync the histogram region, which is not a user gesture."""
     control._image_view.setColorMapLimits(10.0, 200.0)
 
@@ -67,7 +67,7 @@ def test_frames_are_not_user_interaction(control: ColormapIntesityControlFull, q
     assert (control._image_view.cm_min, control._image_view.cm_max) == (10.0, 200.0)
 
 
-def test_set_levels_does_not_emit(control: ColormapIntesityControlFull, qtbot: QtBot):
+def test_set_levels_does_not_emit(control: ColormapIntensityControlFull, qtbot: QtBot):
     """Restoring saved levels applies them without reporting a user change."""
     with qtbot.assertNotEmitted(control.state_changed):
         control.set_levels(5.0, 90.0)
@@ -77,7 +77,7 @@ def test_set_levels_does_not_emit(control: ColormapIntesityControlFull, qtbot: Q
     assert (control._image_view.cm_min, control._image_view.cm_max) == (5.0, 90.0)
 
 
-def test_user_drag_emits_once(control: ColormapIntesityControlFull, qtbot: QtBot):
+def test_user_drag_emits_once(control: ColormapIntensityControlFull, qtbot: QtBot):
     """
     A histogram drag emits state_changed exactly once and applies the levels.
 
