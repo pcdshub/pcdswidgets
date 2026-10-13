@@ -7,7 +7,6 @@ This file can be safely edited to change the runtime behavior of the widget.
 import logging
 from collections import deque
 
-from pydm.widgets import PyDMImageView
 from qtpy import QtGui, QtWidgets
 from qtpy.QtCore import QChildEvent, QEvent, Qt, QTimer
 
@@ -21,6 +20,7 @@ from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.generated.imaging.common.camera_viewer_stretch_base import (
     CameraViewerStretchBase,
 )
+from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
 
 from .collapsible_section import CollapsibleSection
 
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 class CameraViewerStretch(CameraViewerStretchBase):
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
-    image_view: PyDMImageView
+    image_view: PCDSImageView
     display_fps_label: QtWidgets.QLabel
     main_splitter: QtWidgets.QSplitter
     active_pv_label: QtWidgets.QLabel
@@ -160,6 +160,14 @@ class CameraViewerStretch(CameraViewerStretchBase):
             self._first_show = False
             if not self._is_designer_editing():
                 self._adopt_child_widgets()
+        self.image_view.resume()
+
+    def hideEvent(self, event) -> None:
+        """Pause the image stream when the view goes off-screen (tab/dock switch)."""
+        super().hideEvent(event)
+        if self._initializing:
+            return
+        self.image_view.pause()
 
     def _adopt_child_widgets(self) -> None:
         """

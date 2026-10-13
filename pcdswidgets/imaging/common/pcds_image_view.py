@@ -10,9 +10,9 @@ from pydm.widgets import PyDMImageView
 logger = logging.getLogger(__name__)
 
 class PCDSImageView(PyDMImageView):
-    """PyDMImageView with visibility-based pausing and a pulsed slow mode.
+    """PyDMImageView with a stream pausing interface
 
-    Visibility Pausing: owning widget calls pause/resume to stop
+    Pausing: owning widget uses visibility hooks to pause/resume to mitigate
     heavy image-stream subscriptions.
     """
 
@@ -27,8 +27,9 @@ class PCDSImageView(PyDMImageView):
         super().__init__(parent=parent, image_channel=image_channel, width_channel=width_channel)
 
 
-    def _set_stream_connected(self, connected: bool) -> None:
+    def _apply_stream_state(self) -> None:
         """Connect or disconnect the heavy image-stream channels."""
+        connected = not self._paused
         if connected == self._stream_connected:
             logger.debug("stream already %s; skipping", "connected" if connected else "disconnected")
             return
@@ -41,11 +42,6 @@ class PCDSImageView(PyDMImageView):
             except Exception:
                 logger.exception("Failed to %s stream channel", "connect" if connected else "disconnect")
         self._stream_connected = connected
-
-    def _apply_stream_state(self) -> None:
-        """Drive the stream to match the current paused flag."""
-        logger.debug("apply_stream_state: paused=%s", self._paused)
-        self._set_stream_connected(not self._paused)
 
     def pause(self) -> None:
         """Tear down the image stream (called when the view is hidden)."""

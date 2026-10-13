@@ -36,7 +36,7 @@ class CameraViewerStretchBase(DesignerWidget):
     fps_label: "QtWidgets.QLabel"
     fps_label2: "QtWidgets.QLabel"
     image_container: "QtWidgets.QWidget"
-    image_view: "PyDMImageView"
+    image_view: "PCDSImageView"
     main_splitter: "QtWidgets.QSplitter"
     nickname_label: "QtWidgets.QLabel"
     sidebar_content: "QtWidgets.QWidget"

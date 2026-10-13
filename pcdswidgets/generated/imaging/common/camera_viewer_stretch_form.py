@@ -8,9 +8,10 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
-from pydm.widgets.image import PyDMImageView
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
+
+from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
 
 
 class Ui_Form(object):
@@ -60,7 +61,7 @@ class Ui_Form(object):
         self.image_container_layout = QtWidgets.QVBoxLayout(self.image_container)
         self.image_container_layout.setContentsMargins(0, 0, 0, 0)
         self.image_container_layout.setObjectName("image_container_layout")
-        self.image_view = PyDMImageView(self.image_container)
+        self.image_view = PCDSImageView(self.image_container)
         self.image_view.setToolTip("")
         self.image_view.setAlarmSensitiveContent(False)
         self.image_view.setAlarmSensitiveBorder(True)

@@ -120,7 +120,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="PyDMImageView" name="image_view">
+        <widget class="PCDSImageView" name="image_view">
          <property name="toolTip">
           <string/>
          </property>
@@ -320,9 +320,9 @@
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>PyDMImageView</class>
+   <class>PCDSImageView</class>
    <extends>QWidget</extends>
-   <header>pydm.widgets.image</header>
+   <header>pcdswidgets.imaging.common.pcds_image_view</header>
   </customwidget>
  </customwidgets>
  <resources/>
