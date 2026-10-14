@@ -9,6 +9,7 @@ from pydm.widgets import PyDMImageView
 
 logger = logging.getLogger(__name__)
 
+
 class PCDSImageView(PyDMImageView):
     """PyDMImageView with a stream pausing interface
 
@@ -25,7 +26,6 @@ class PCDSImageView(PyDMImageView):
         self._stream_connected: bool = False
 
         super().__init__(parent=parent, image_channel=image_channel, width_channel=width_channel)
-
 
     def _apply_stream_state(self) -> None:
         """Connect or disconnect the heavy image-stream channels."""
