@@ -23,7 +23,7 @@ Overview
   preview.
 
 Important macros and properties
-------------------------------
+-------------------------------
 
 ``cam_prefix``
     The base prefix for the camera PVs, such as ``IOC:CAM:``. This is the main
