@@ -173,7 +173,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
         """Return the preset index closest (in Hz) to actual MinCallbackTime."""
         if seconds < 0.02: # > 50fps is displayed as unlimited
             #largest value is always last
-            return -1
+            return len(_STREAM_RATE_PRESETS) - 1
         target_hz = 1.0 / seconds
         best_index = 0
         best_delta = float("inf")
