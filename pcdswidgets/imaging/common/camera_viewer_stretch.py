@@ -42,6 +42,24 @@ _STREAM_RATE_PRESETS: list[tuple[str, float]] = [
 
 
 class CameraViewerStretch(CameraViewerStretchBase):
+    """Top-level AreaDetector viewer with a collapsible control sidebar.
+
+    This is a container that combines a live image display with a sidebar
+    for related sub-widgets. Widgets added as direct children are detected
+    on first show, adopted into the sidebar, and wrapped in collapsible sections.
+
+    Adopted child widgets inherit the active camera context where supported,
+    including ``cam_prefix`` and ``stream_plugin``. If a child widget exposes a
+    ``nickname`` property, that value is used as the collapsible section title.
+    Multiple adopted widgets are ordered by their original ``y`` position in
+    the design.
+
+    The sidebar remains hidden until there are adopted widgets to show. The
+    layout can be oriented horizontally or vertically with the
+    ``orientation`` property to control how the sidebar sits relative to the
+    live preview.
+    """
+
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
     image_view: PCDSImageView

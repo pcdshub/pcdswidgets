@@ -1,32 +1,17 @@
 ============================
 CameraViewerStretch
 ============================
+.. image:: /_static/catalog/camera_viewer_stretch.png
 
-``CameraViewerStretch`` is a top-level AreaDetector viewer that combines the live
-image display with a collapsible sidebar. It is meant to act as a container: any
-widgets dropped into it are adopted into the sidebar on first show and wrapped in
-collapsible sections for organization.
-
-This makes it useful for building a camera-specific control panel where the main
-preview remains visible while auxiliary controls are kept in a hidable side panel.
-
-Overview
---------
-
-- The widget displays the live image stream from an AreaDetector plugin.
-- The sidebar is hidden by default until widgets are adopted or the toggle is
-  enabled.
-- Adopted child widgets inherit the parent camera context, including the active
-  ``cam_prefix`` and stream plugin information.
-- The widget can be oriented either horizontally or vertically via the
-  ``orientation`` property, which controls how the sidebar sits relative to the
-  preview.
+``CameraViewerStretch`` is useful for building a camera-specific control panel
+where the main preview remains visible while auxiliary controls stay grouped in
+a hidable side panel.
 
 Important macros and properties
 -------------------------------
 
 ``cam_prefix``
-    The base prefix for the camera PVs, such as ``IOC:CAM:``. This is the main
+    The base prefix for the camera PVs, such as ``LAS:CAM:``. This is the main
     camera identifier used by the image view and is propagated to adopted child
     widgets so they point at the same detector.
 
@@ -58,11 +43,6 @@ Important macros and properties
 Sidebar behavior
 ----------------
 
-The sidebar is designed to hold camera-specific controls and other widgets that
-should stay grouped with the preview. When widgets are dropped into the container,
-``CameraViewerStretch`` detects them and adopts them into a collapsible sidebar
-section on first show. The toggle button can hide or show the sidebar as needed.
-
 The title shown at the top of each collapsible section is taken from the adopted
 child widget's ``nickname`` property. In other words, the section header is the
 sub-widget's ``nickname`` label, not a separate viewer label. If a widget is
@@ -74,12 +54,6 @@ positions in the design, using their ``y`` coordinate. In practice, placement
 otherwise has no effect on the final sidebar ordering. This can look a bit ugly
 in the Designer preview when a large number of widgets are present, but the final
 runtime layout is still sorted by that coordinate.
-
-The sidebar layout can be oriented relative to the preview using the
-``orientation`` property:
-
-- ``Qt.Horizontal``: preview and sidebar sit side-by-side.
-- ``Qt.Vertical``: preview and sidebar are stacked in the other direction.
 
 
 
