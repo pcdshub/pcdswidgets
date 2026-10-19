@@ -98,6 +98,49 @@ _TAB_STYLE = (
 )
 
 
+class _TabPage(QtWidgets.QWidget):
+    """Tab page that reports its own natural height only while it is the current
+    page, so a hidden page never inflates the tab widget's size."""
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None):
+        super().__init__(parent)
+        self.active = False
+
+    def sizeHint(self) -> QtCore.QSize:
+        hint = super().sizeHint()
+        return hint if self.active else QtCore.QSize(hint.width(), 0)
+
+    def minimumSizeHint(self) -> QtCore.QSize:
+        hint = super().minimumSizeHint()
+        return hint if self.active else QtCore.QSize(hint.width(), 0)
+
+
+class _CurrentPageTabWidget(QtWidgets.QTabWidget):
+    """QTabWidget made of :class:`_TabPage` pages that sizes to the visible page
+    rather than the tallest one, so the short Normal tab doesn't reserve the
+    Configuration tab's height (which grows further in the PMPS variant)."""
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None):
+        super().__init__(parent)
+        self.currentChanged.connect(self._sync_active_page)
+
+    def tabInserted(self, index: int) -> None:
+        super().tabInserted(index)
+        self._sync_active_page()
+
+    def tabRemoved(self, index: int) -> None:
+        super().tabRemoved(index)
+        self._sync_active_page()
+
+    def _sync_active_page(self, *_args) -> None:
+        current = self.currentWidget()
+        for i in range(self.count()):
+            page = self.widget(i)
+            page.active = page is current
+            page.updateGeometry()
+        self.updateGeometry()
+
+
 class MotorStateMoverExpanded(QtWidgets.QFrame):
     """Plain state mover + a read-only, dynamically sized state-config grid."""
 
@@ -148,24 +191,62 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         top_row.addStretch(1)
         self._outer.addLayout(top_row)
 
-        self.tabs = QtWidgets.QTabWidget(self)
+        self.tabs = _CurrentPageTabWidget(self)
         self.tabs.setStyleSheet(_TAB_STYLE)
 
         # "Normal" tab: always present -- the raw device signals
-        self._normal_tab = QtWidgets.QWidget()
+        self._normal_tab = _TabPage()
         self._normal_layout = QtWidgets.QVBoxLayout(self._normal_tab)
         self._normal_layout.setContentsMargins(14, 14, 14, 14)
         self.tabs.addTab(self._normal_tab, "Normal")
 
         # "Configuration" tab: built here but attached only when state_count and
         # device tokens are provided by the caller (see _sync_config_tab)
-        self._config_tab = QtWidgets.QWidget()
+        self._config_tab = _TabPage()
         self._config_layout = QtWidgets.QVBoxLayout(self._config_tab)
         self._config_layout.setContentsMargins(12, 12, 12, 12)
 
         self._outer.addWidget(self.tabs)
         self._rebuild_normal()
         self._rebuild_grid()
+        self.tabs.currentChanged.connect(self._on_tab_changed)
+
+    def _on_tab_changed(self, _index: int) -> None:
+        self.tabs.updateGeometry()
+        self._fit_window_height()
+
+    def _relayout_to_window(self, win: QtWidgets.QWidget) -> None:
+        """Synchronously invalidate and re-activate every layout between the tabs
+        and the window. Relying on posted LayoutRequest events is not enough: the
+        invalidation climbs one level per event round, so the window's minimum
+        height would still be the previous tab's when we resize."""
+        chain = []
+        widget = self.tabs
+        while widget is not None:
+            chain.append(widget)
+            if widget is win:
+                break
+            widget = widget.parentWidget()
+        for widget in chain:
+            if widget.layout() is not None:
+                widget.layout().invalidate()
+        for widget in chain:
+            if widget.layout() is not None:
+                widget.layout().activate()
+
+    def _fit_window_height(self) -> None:
+        win = self.window()
+        if win.isMaximized() or win.isFullScreen():
+            return
+        # Do the whole relayout + resize synchronously with painting suspended so
+        # the intermediate (cropped / oversized) state is never shown.
+        win.setUpdatesEnabled(False)
+        try:
+            self._relayout_to_window(win)
+            win.resize(win.width(), win.height() + self.sizeHint().height() - self.height())
+            self._relayout_to_window(win)
+        finally:
+            win.setUpdatesEnabled(True)
 
     # props
     def get_device(self) -> str:
@@ -268,6 +349,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                 self.tabs.addTab(self._config_tab, "Configuration")
         elif idx != -1:
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
+        self.tabs.updateGeometry()
 
     def _build_state_grid(self) -> QtWidgets.QGroupBox | None:
         """"States" frame holding the scrollable per-state grid (state name |

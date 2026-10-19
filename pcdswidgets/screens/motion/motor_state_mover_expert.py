@@ -48,6 +48,9 @@ class MotorStateMoverExpert(Display):
             self.expanded.setProperty("stateCount", 0)
 
         layout.addWidget(self.expanded)
+        # PyDM sizes the window from the display's initial size; start at the
+        # content's natural size rather than the default widget size
+        self.resize(self.sizeHint())
 
     def ui_filename(self):
         # UI is built in __init__, so there is no .ui file to load.
