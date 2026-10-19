@@ -589,11 +589,13 @@ class _ErrorMessage(PyDMLabel):
         self.destroyed.connect(lambda: _safe_disconnect(chan))
 
     def _paint(self, error: bool) -> None:
-        # blue by default, red only while the error flag is set
-        self.setStyleSheet(
-            f"PyDMLabel {{ color: white; background: {_BAR_RED if error else _BAR_ON};"
-            f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; padding: 2px 10px; }}"
-        )
+        # read-only line-edit look (white field, thin border) so it reads as text,
+        # not a button; red text/border/tint only while the error flag is set
+        if error:
+            colors = f"color: {_BAR_RED}; background: rgb(253, 236, 236); border: 1px solid {_BAR_RED};"
+        else:
+            colors = f"color: {_CELL_TXT}; background: white; border: 1px solid {_CELL_BD};"
+        self.setStyleSheet(f"PyDMLabel {{ {colors} border-radius: 4px; padding: 2px 10px; }}")
 
     def _error_changed(self, value) -> None:
         self._paint(bool(value))
@@ -645,10 +647,13 @@ def _command_button(channel: str) -> PyDMPushButton:
     btn.setMinimumHeight(26)
     btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     btn.pressValue = "1"
+    btn.setCursor(QtCore.Qt.PointingHandCursor)
+    # grey at rest, blue on hover, darker blue while pressed
     btn.setStyleSheet(
-        f"PyDMPushButton {{ background: {_BAR_ON}; border: 1px solid rgba(0, 0, 0, 40);"
+        f"PyDMPushButton {{ background: rgb(233, 237, 240); border: 1px solid {_CELL_BD};"
         f" border-radius: 4px; padding: 2px 10px; }}"
-        f"PyDMPushButton:hover {{ background: {_BAR_ON_HOVER}; }}"
+        f"PyDMPushButton:hover {{ background: {_BAR_ON}; border: 1px solid {_BAR_ON_HOVER}; }}"
+        f"PyDMPushButton:pressed {{ background: {_BAR_ON_HOVER}; }}"
     )
     btn.channel = channel
     return btn
