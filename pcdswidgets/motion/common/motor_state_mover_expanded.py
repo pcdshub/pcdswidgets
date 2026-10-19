@@ -24,7 +24,7 @@ resolve to::
     ca://{motor}:STATE:{token}:{NN}:{leaf}_RBV
 
 with ``{NN}`` the zero-padded 2-digit state index and ``{leaf}`` one of
-``NAME``, ``SETPOINT``, ``VELO``, ``MOVE_OK``.
+``NAME`` or ``SETPOINT``.
 """
 
 from __future__ import annotations
@@ -214,10 +214,6 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
     def _channel(self, token: str, index: int, leaf: str) -> str:
         return f"ca://{self._device}:STATE:{token}:{index:02d}:{leaf}_RBV"
 
-    def _velo_channel(self, token: str) -> str:
-        # velocity is a per-motor readback (not per-state): {motor}:{token}:fVelocity_RBV
-        return f"ca://{self._device}:{token}:fVelocity_RBV"
-
     @staticmethod
     def _clear_layout(layout: QtWidgets.QLayout) -> None:
         while layout.count():
@@ -273,9 +269,9 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         elif idx != -1:
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
 
-    def _build_state_grid(self) -> QtWidgets.QWidget | None:
-        """Per-state grid (state name | Motor k (Setpoint, Velo) x N), or None
-        when no state count / tokens were supplied. Motors are numbered 1..n."""
+    def _build_state_grid(self) -> QtWidgets.QGroupBox | None:
+        """"States" frame holding the scrollable per-state grid (state name |
+        "<motor>: SetPoint" x N), or None when no state count / tokens were supplied."""
         tokens = self._tokens
         if not (self._state_count > 0 and tokens):
             return None
@@ -286,13 +282,15 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         grid.setHorizontalSpacing(6)
         grid.setVerticalSpacing(5)
 
-        # header row: (no state / motor labels) | (Setpoint, Velo) x N,
-        # motors implied left-to-right in token order
-        col = 1
-        for _token in tokens:
-            grid.addWidget(_hdr("Setpoint", sub=True), 0, col)
-            grid.addWidget(_hdr("Velo", sub=True), 0, col + 1)
-            col += 2
+        # header row: one "<motor>: SetPoint" column per device token; the state
+        # column is fixed, the setpoint columns share the remaining width equally
+        for col, token in enumerate(tokens, start=1):
+            header = _hdr(f"{token}: SetPoint", sub=True)
+            header.setFixedHeight(22)
+            grid.addWidget(header, 0, col)
+            grid.setColumnStretch(col, 1)
+        # absorb extra height below the last state so rows stay compact
+        grid.setRowStretch(self._state_count + 1, 1)
 
         for r in range(self._state_count):
             index = self._state_start + r
@@ -306,13 +304,20 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             )
             grid.addWidget(name, row, 0)
 
-            col = 1
-            for token in tokens:
+            for col, token in enumerate(tokens, start=1):
                 grid.addWidget(_cell_label(self._channel(token, index, "SETPOINT")), row, col)
-                grid.addWidget(_cell_label(self._velo_channel(token)), row, col + 1)
-                col += 2
 
-        return box
+        # up to ~15 states per motor: keep the tab compact and scroll instead
+        scroll = QtWidgets.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QtWidgets.QFrame.NoFrame)
+        scroll.setMinimumHeight(120)
+        scroll.setStyleSheet(
+            "QScrollArea { background: transparent; border: none; }"
+            "QScrollArea > QWidget > QWidget { background: transparent; }"
+        )
+        scroll.setWidget(box)
+        return _group("States", scroll)
 
     def _rebuild_grid(self) -> None:
         self._clear_layout(self._config_layout)
@@ -322,8 +327,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
         box = self._build_state_grid()
         if box is not None:
-            self._config_layout.addWidget(box)
-        self._config_layout.addStretch(1)
+            self._config_layout.addWidget(box, 1)
         self._sync_config_tab()
 
 
@@ -337,7 +341,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
         # the PMPS controls only need the device prefix (no state count / tokens)
         return bool(self._device)
 
-    def _build_pmps_box(self) -> QtWidgets.QWidget:
+    def _build_pmps_box(self) -> QtWidgets.QGroupBox:
         box = QtWidgets.QWidget()
         grid = QtWidgets.QGridLayout(box)
         grid.setContentsMargins(0, 0, 0, 0)
@@ -351,7 +355,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
             grid.addWidget(_bool_bar(f"ca://{self._device}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1)
             grid.addWidget(_setpoint_combo(f"ca://{self._device}:{suffix}"), r, 2)
 
-        return box
+        return _group("PMPS", box)
 
     def _rebuild_grid(self) -> None:
         self._clear_layout(self._config_layout)
@@ -365,14 +369,30 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
         # the standard expert (only when state count / tokens are supplied)
         state_box = self._build_state_grid()
         if state_box is not None:
-            self._config_layout.addSpacing(12)
-            self._config_layout.addWidget(state_box)
-
-        self._config_layout.addStretch(1)
+            self._config_layout.addSpacing(4)
+            self._config_layout.addWidget(state_box, 1)
+        else:
+            self._config_layout.addStretch(1)
         self._sync_config_tab()
 
 
 # helpers
+def _group(title: str, content: QtWidgets.QWidget) -> QtWidgets.QGroupBox:
+    """Titled frame around ``content``."""
+    group = QtWidgets.QGroupBox(title)
+    group.setFont(_bold(10))
+    group.setStyleSheet(
+        f"QGroupBox {{ color: {_SLATE}; border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
+        " margin-top: 10px; padding-top: 6px; background: transparent; }"
+        "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;"
+        " left: 12px; padding: 0 6px; }"
+    )
+    layout = QtWidgets.QVBoxLayout(group)
+    layout.setContentsMargins(8, 8, 8, 8)
+    layout.addWidget(content)
+    return group
+
+
 def _plain(size: int) -> QtGui.QFont:
     return QtGui.QFont("DejaVu Sans", size)
 
@@ -523,6 +543,15 @@ def _setpoint_combo(channel: str) -> PyDMEnumComboBox:
     combo.setFont(_plain(10))
     combo.setMinimumHeight(28)
     combo.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+    # same look as the plain mover's target-state selector (motor_state_mover.ui)
+    combo.setStyleSheet(
+        "PyDMEnumComboBox { color: rgb(120, 120, 120); background-color: rgb(255, 255, 255);"
+        " border: 2px solid rgb(42, 91, 215); border-radius: 3px; padding-left: 10px; }"
+        "PyDMEnumComboBox::drop-down { width: 26px; border-left: 1px solid rgb(208, 208, 208); }"
+        "PyDMEnumComboBox::down-arrow { image: none; border-left: 5px solid transparent;"
+        " border-right: 5px solid transparent; border-top: 7px solid rgb(154, 154, 154);"
+        " margin-right: 8px; }"
+    )
     combo.channel = channel
     return combo
 
