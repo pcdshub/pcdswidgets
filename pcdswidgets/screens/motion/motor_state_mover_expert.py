@@ -12,6 +12,7 @@ Macros:
                  motor grid.
     STATE_COUNT  number of states (int), e.g. ``4``
     DEVICE_TOKENS comma-separated per-device tokens, e.g. ``D1M1,D2M1,D3M1``
+                 (also drives the Diagnostics tab, one row per token)
 """
 
 from pydm import Display

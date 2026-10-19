@@ -17,6 +17,13 @@ hidden -- we are already in the expert screen), then a tab group with
   - ``deviceTokens`` -- comma-separated per-device tokens (grid columns). The
     tokens are device specific (e.g. ``D1M1,D3M1``) and cannot be generated from a
     count, so they are listed explicitly. ``device_count`` == number of tokens.
+* **Diagnostics** -- shown when the device and ``deviceTokens`` are provided
+  (both variants). A per-motor grid (one row per token, in order) of the
+  transit breakdown from ``FB_PositionStateReadND``: ``MOVING`` and ``STATUS``
+  (AT_STATE / IN_TRANSIT / UNKNOWN; STATUS already covers the at-state case).
+  The STATUS bar turns red while that motor's axis error
+  (``ca://{device}:{token}:bError_RBV``) is set, and so does the plain mover's
+  GET readback while *any* motor's axis error is set.
 
 Everything here is read-only display (plus the reset command). Config cells
 resolve to::
@@ -24,7 +31,12 @@ resolve to::
     ca://{motor}:STATE:{token}:{NN}:{leaf}_RBV
 
 with ``{NN}`` the zero-padded 2-digit state index and ``{leaf}`` one of
-``NAME`` or ``SETPOINT``.
+``NAME`` or ``SETPOINT``. Diagnostics cells resolve to::
+
+    ca://{motor}:{leaf}:{NN}_RBV
+
+with ``{NN}`` the zero-padded 2-digit motor index (position in ``deviceTokens``,
+from 1) and ``{leaf}`` one of ``MOVING`` or ``STATUS``.
 """
 
 from __future__ import annotations
@@ -72,6 +84,18 @@ _NORMAL_SIGNALS = (
 )
 _ERROR_SUFFIX = "STATE:ERR_RBV"
 _RESET_SUFFIX = "STATE:RESET"
+
+# "Diagnostics" tab per-motor columns: (header, PV leaf under ${DEVICE}:, kind).
+# Each cell resolves to ca://{device}:{leaf}:{NN}_RBV with {NN} the
+# zero-padded motor index (position in deviceTokens, starting at 1).
+_DIAG_COLUMNS = (
+    ("Moving", "MOVING", "bool"),
+    ("Status", "STATUS", "status"),
+)
+# E_MotorTransitStatus values -> bar color
+_TRANSIT_COLORS = {0: "rgb(224, 138, 20)", 1: "rgb(46, 160, 67)", 2: _BAR_ON}
+# per-motor axis error flag: ca://{device}:{token}:bError_RBV (red status bar while set)
+_AXIS_ERROR_LEAF = "bError_RBV"
 
 # PMPS variant Configuration rows: (row label, PV suffix under ${DEVICE}).
 # Each row shows a value readback (ca://{device}:{suffix}_RBV) and a setpoint
@@ -165,6 +189,14 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         # own Expert Screen button -- we are already inside the expert screen --
         # and its error message, which the Normal tab already shows)
         self.plainMover = MotorStateMover(self)
+        # the GET readback goes red while any motor's axis error is set
+        # (see _watch_axis_errors); remember its stylesheet to restore it
+        self._readback = getattr(self.plainMover, "stateReadback", None)
+        self._readback_style = self._readback.styleSheet() if self._readback is not None else ""
+        self._axis_probes: list[tuple[PyDMChannel, _AxisErrorProbe]] = []
+        self._axis_errors: set[str] = set()
+        probes = self._axis_probes
+        self.destroyed.connect(lambda: [_safe_disconnect(chan) for chan, _ in probes])
         expert_btn = getattr(self.plainMover, "expertScreenButton", None)
         if expert_btn is not None:
             expert_btn.hide()
@@ -201,10 +233,16 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self.tabs.addTab(self._normal_tab, "Normal")
 
         # "Configuration" tab: built here but attached only when state_count and
-        # device tokens are provided by the caller (see _sync_config_tab)
+        # device tokens are provided by the caller (see _sync_tabs)
         self._config_tab = _TabPage()
         self._config_layout = QtWidgets.QVBoxLayout(self._config_tab)
         self._config_layout.setContentsMargins(12, 12, 12, 12)
+
+        # "Diagnostics" tab: per-motor transit breakdown, attached only when
+        # device tokens are provided (see _sync_tabs)
+        self._diag_tab = _TabPage()
+        self._diag_layout = QtWidgets.QVBoxLayout(self._diag_tab)
+        self._diag_layout.setContentsMargins(12, 12, 12, 12)
 
         self._outer.addWidget(self.tabs)
         self._rebuild_normal()
@@ -342,14 +380,91 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         """The Configuration tab only exists when the caller supplies both."""
         return self._state_count > 0 and bool(self._tokens)
 
-    def _sync_config_tab(self) -> None:
+    def _diag_provided(self) -> bool:
+        """The Diagnostics tab needs the device prefix and the motor tokens."""
+        return bool(self._device) and bool(self._tokens)
+
+    def _watch_axis_errors(self) -> None:
+        """Track every motor's axis error flag; the GET readback goes red while
+        any of them is set."""
+        for chan, _ in self._axis_probes:
+            _safe_disconnect(chan)
+        self._axis_probes.clear()
+        self._axis_errors.clear()
+        self._paint_readback()
+        if not self._diag_provided():
+            return
+        for token in self._tokens:
+            probe = _AxisErrorProbe(token, self._axis_error_changed)
+            chan = PyDMChannel(address=_axis_error_channel(self._device, token), value_slot=probe.on_value)
+            chan.connect()
+            self._axis_probes.append((chan, probe))
+
+    def _axis_error_changed(self, token: str, error: bool) -> None:
+        if error:
+            self._axis_errors.add(token)
+        else:
+            self._axis_errors.discard(token)
+        self._paint_readback()
+
+    def _paint_readback(self) -> None:
+        if self._readback is None:
+            return
+        style = self._readback_style
+        if self._axis_errors:
+            style += f" background-color: {_BAR_RED};"  # later declaration wins
+        self._readback.setStyleSheet(style)
+
+    def _sync_tabs(self) -> None:
+        """Attach/detach the optional tabs, keeping Normal / Configuration /
+        Diagnostics order."""
+        self._rebuild_diag()
+        self._watch_axis_errors()
         idx = self.tabs.indexOf(self._config_tab)
         if self._config_provided():
             if idx == -1:
-                self.tabs.addTab(self._config_tab, "Configuration")
+                self.tabs.insertTab(1, self._config_tab, "Configuration")
         elif idx != -1:
             self.tabs.removeTab(idx)  # detach (does not delete the widget)
+
+        idx = self.tabs.indexOf(self._diag_tab)
+        if self._diag_provided():
+            if idx == -1:
+                self.tabs.addTab(self._diag_tab, "Diagnostics")
+        elif idx != -1:
+            self.tabs.removeTab(idx)
         self.tabs.updateGeometry()
+
+    def _rebuild_diag(self) -> None:
+        self._clear_layout(self._diag_layout)
+        if not self._diag_provided():
+            return
+
+        box = QtWidgets.QWidget()
+        grid = QtWidgets.QGridLayout(box)
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.setHorizontalSpacing(8)
+        grid.setVerticalSpacing(6)
+
+        for col, (title, _leaf, _kind) in enumerate(_DIAG_COLUMNS, start=1):
+            header = _hdr(title, sub=True)
+            header.setFixedHeight(22)
+            grid.addWidget(header, 0, col)
+            grid.setColumnStretch(col, 1)
+
+        for r, token in enumerate(self._tokens):
+            grid.addWidget(_row_label(token), r + 1, 0)
+            for col, (_title, leaf, kind) in enumerate(_DIAG_COLUMNS, start=1):
+                channel = f"ca://{self._device}:{leaf}:{r + 1:02d}_RBV"
+                if kind == "bool":
+                    widget = _bool_bar(channel, on_color=_BAR_ON, off_color=_BAR_OFF)
+                else:
+                    # a set axis error turns the status bar red whatever the status is
+                    widget = _status_bar(channel, _axis_error_channel(self._device, token))
+                grid.addWidget(widget, r + 1, col)
+
+        self._diag_layout.addWidget(_group("Per-Motor Diagnostics", box))
+        self._diag_layout.addStretch(1)
 
     def _build_state_grid(self) -> QtWidgets.QGroupBox | None:
         """"States" frame holding the scrollable per-state grid (state name |
@@ -404,13 +519,13 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
     def _rebuild_grid(self) -> None:
         self._clear_layout(self._config_layout)
         if not self._config_provided():
-            self._sync_config_tab()
+            self._sync_tabs()
             return
 
         box = self._build_state_grid()
         if box is not None:
             self._config_layout.addWidget(box, 1)
-        self._sync_config_tab()
+        self._sync_tabs()
 
 
 class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
@@ -442,7 +557,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
     def _rebuild_grid(self) -> None:
         self._clear_layout(self._config_layout)
         if not self._config_provided():
-            self._sync_config_tab()
+            self._sync_tabs()
             return
 
         self._config_layout.addWidget(self._build_pmps_box())
@@ -455,7 +570,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
             self._config_layout.addWidget(state_box, 1)
         else:
             self._config_layout.addStretch(1)
-        self._sync_config_tab()
+        self._sync_tabs()
 
 
 # helpers
@@ -567,6 +682,50 @@ class _BoolBar(PyDMLabel):
         self._paint(bool(new_value))
 
 
+class _StatusBar(PyDMLabel):
+    """Enum text (``E_MotorTransitStatus``) on a rounded bar colored by value:
+    AT_STATE green, IN_TRANSIT blue, UNKNOWN amber (the "stopped mid-transit"
+    symptom this tab exists to expose). While the motor's axis error flag
+    (``error_channel``) is set the bar is red regardless of the status."""
+
+    def __init__(self, error_channel: str = "", parent: QtWidgets.QWidget | None = None):
+        super().__init__(parent)
+        self.setFont(_bold(10))
+        self.setAlignment(QtCore.Qt.AlignCenter)
+        self.setMinimumHeight(26)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.alarmSensitiveContent = False
+        self.alarmSensitiveBorder = False
+        self._status = None
+        self._axis_error = False
+        self._paint()
+
+        if error_channel:
+            self._error_chan = PyDMChannel(address=error_channel, value_slot=self._error_changed)
+            self._error_chan.connect()
+            chan = self._error_chan
+            self.destroyed.connect(lambda: _safe_disconnect(chan))
+
+    def _paint(self) -> None:
+        color = _BAR_RED if self._axis_error else _TRANSIT_COLORS.get(self._status, _BAR_OFF)
+        self.setStyleSheet(
+            f"PyDMLabel {{ color: white; background: {color};"
+            f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; }}"
+        )
+
+    def value_changed(self, new_value) -> None:
+        super().value_changed(new_value)  # renders the enum string
+        try:
+            self._status = int(new_value)
+        except (TypeError, ValueError):
+            self._status = None
+        self._paint()
+
+    def _error_changed(self, value) -> None:
+        self._axis_error = bool(value)
+        self._paint()
+
+
 class _ErrorMessage(PyDMLabel):
     """Decoded error-message string (char waveform). Highlights red only while
     the separate error flag (``error_channel``) is set, plain otherwise."""
@@ -601,6 +760,21 @@ class _ErrorMessage(PyDMLabel):
         self._paint(bool(value))
 
 
+def _axis_error_channel(device: str, token: str) -> str:
+    return f"ca://{device}:{token}:{_AXIS_ERROR_LEAF}"
+
+
+class _AxisErrorProbe:
+    """Forwards one motor's axis error flag, tagged with its token."""
+
+    def __init__(self, token: str, callback) -> None:
+        self._token = token
+        self._callback = callback
+
+    def on_value(self, value) -> None:
+        self._callback(self._token, bool(value))
+
+
 def _safe_disconnect(chan: PyDMChannel) -> None:
     # Called from the widget's destroyed signal; the underlying connection may
     # already be gone during app teardown, so ignore that case.
@@ -612,6 +786,12 @@ def _safe_disconnect(chan: PyDMChannel) -> None:
 
 def _bool_bar(channel: str, on_color: str = _BAR_ON, off_color: str = _BAR_OFF) -> _BoolBar:
     bar = _BoolBar(on_color=on_color, off_color=off_color)
+    bar.channel = channel
+    return bar
+
+
+def _status_bar(channel: str, error_channel: str) -> _StatusBar:
+    bar = _StatusBar(error_channel)
     bar.channel = channel
     return bar
 
