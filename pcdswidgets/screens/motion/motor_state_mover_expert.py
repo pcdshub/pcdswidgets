@@ -10,9 +10,12 @@ Macros:
     PMPS         truthy ("1"/"true") -> PMPS variant: the Configuration tab adds
                  the PMPS controls (arb_enable, maint_mode) above the per-state
                  motor grid.
-    STATE_COUNT  number of states (int), e.g. ``4``
+    STATE_COUNT  number of states (int), e.g. ``4``; optional -- defaults to the
+                 IOC's ``{DEVICE}:STATE:STATE_COUNT_RBV``, and is capped at it
     DEVICE_TOKENS comma-separated per-device tokens, e.g. ``D1M1,D2M1,D3M1``
-                 (also drives the Diagnostics tab, one row per token)
+                 (also drives the Diagnostics tab, one row per token); optional
+                 -- defaults to the IOC's ``{DEVICE}:STATE:MOTOR_TOKENS_RBV``,
+                 and tokens the IOC does not publish are dropped
     MOTOR_TYPE   optional motor type for the Diagnostics cog buttons:
                  GENERIC, IMS, BECKHOFF (default) or BECKHOFF_LEGACY
 """
