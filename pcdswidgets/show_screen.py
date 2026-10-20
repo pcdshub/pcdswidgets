@@ -135,6 +135,21 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
         help="Motor type for the Diagnostics cog buttons (default BECKHOFF)",
     )
 
+    _add_subp_arg(
+        state_expert,
+        "MAX_VISIBLE_STATES",
+        action="store",
+        type=int,
+        help="State rows shown in the Configuration grid before it scrolls (default 3)",
+    )
+    _add_subp_arg(
+        state_expert,
+        "MAX_VISIBLE_MOTORS",
+        action="store",
+        type=int,
+        help="Motor columns shown in the Configuration grid before it scrolls (default 3)",
+    )
+
     # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
     feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
     _add_subp_arg(feature_finder, "detector", action="store", required=True, help="PV value to plot on the y-axis.")

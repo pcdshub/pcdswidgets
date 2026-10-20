@@ -18,6 +18,10 @@ Macros:
                  and tokens the IOC does not publish are dropped
     MOTOR_TYPE   optional motor type for the Diagnostics cog buttons:
                  GENERIC, IMS, BECKHOFF (default) or BECKHOFF_LEGACY
+    MAX_VISIBLE_STATES  optional (default 3): state rows shown in the Configuration
+                 grid before it scrolls vertically
+    MAX_VISIBLE_MOTORS  optional (default 3): motor columns shown in the
+                 Configuration grid before it scrolls horizontally
 """
 
 from pydm import Display
@@ -53,6 +57,12 @@ class MotorStateMoverExpert(Display):
             self.expanded.setProperty("stateCount", int(macros.get("STATE_COUNT", 0)))
         except (TypeError, ValueError):
             self.expanded.setProperty("stateCount", 0)
+        for macro, prop in (("MAX_VISIBLE_STATES", "maxVisibleStates"), ("MAX_VISIBLE_MOTORS", "maxVisibleMotors")):
+            if str(macros.get(macro, "")).strip():
+                try:
+                    self.expanded.setProperty(prop, int(macros[macro]))
+                except (TypeError, ValueError):
+                    pass  # keep the default
 
         layout.addWidget(self.expanded)
         # PyDM sizes the window from the display's initial size; start at the
