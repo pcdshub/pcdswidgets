@@ -21,7 +21,8 @@ Macros:
     MAX_VISIBLE_STATES  optional (default 3): state rows shown in the Configuration
                  grid before it scrolls vertically
     MAX_VISIBLE_MOTORS  optional (default 3): motor columns shown in the
-                 Configuration grid before it scrolls horizontally
+                 Configuration grid before it scrolls horizontally, and motor
+                 rows shown in the Diagnostics tab before it scrolls vertically
 """
 
 from pydm import Display

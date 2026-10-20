@@ -147,7 +147,7 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
         "MAX_VISIBLE_MOTORS",
         action="store",
         type=int,
-        help="Motor columns shown in the Configuration grid before it scrolls (default 3)",
+        help="Motor columns (Configuration) / rows (Diagnostics) shown before scrolling (default 3)",
     )
 
     # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
