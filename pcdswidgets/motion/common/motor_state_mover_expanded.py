@@ -22,8 +22,11 @@ hidden -- we are already in the expert screen), then a tab group with
   transit breakdown from ``FB_PositionStateReadND``: ``MOVING`` and ``STATUS``
   (AT_STATE / IN_TRANSIT / UNKNOWN; STATUS already covers the at-state case).
   The STATUS bar turns red while that motor's axis error
-  (``ca://{device}:{token}:bError_RBV``) is set, and so does the plain mover's
-  GET readback while *any* motor's axis error is set.
+  (``ca://{device}:{token}:bError_RBV``) is set. Each row also has a cog
+  button that runs ``pcdswidgets-show MotorClassicRow --motor {device}:{token}
+  --motor_type {motorType}``; ``motorType`` (GENERIC, IMS, BECKHOFF or
+  BECKHOFF_LEGACY, default BECKHOFF) picks which expert screen that row's own
+  button then opens.
 
 Everything here is read-only display (plus the reset command). Config cells
 resolve to::
@@ -41,11 +44,13 @@ from 1) and ``{leaf}`` one of ``MOVING`` or ``STATUS``.
 
 from __future__ import annotations
 
+from pydm.utilities import IconFont
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.display_format import DisplayFormat
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.shell_command import PyDMShellCommand
 from qtpy import QtCore, QtGui, QtWidgets
 
 from pcdswidgets.motion.common.motor_state_mover import MotorStateMover
@@ -96,6 +101,8 @@ _DIAG_COLUMNS = (
 _TRANSIT_COLORS = {0: "rgb(224, 138, 20)", 1: "rgb(46, 160, 67)", 2: _BAR_ON}
 # per-motor axis error flag: ca://{device}:{token}:bError_RBV (red status bar while set)
 _AXIS_ERROR_LEAF = "bError_RBV"
+# Motor types understood by MotorClassicRow (selects its expert-screen command)
+_MOTOR_TYPES = ("GENERIC", "IMS", "BECKHOFF", "BECKHOFF_LEGACY")
 
 # PMPS variant Configuration rows: (row label, PV suffix under ${DEVICE}).
 # Each row shows a value readback (ca://{device}:{suffix}_RBV) and a setpoint
@@ -180,6 +187,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._state_count = 0
         self._state_start = 1
         self._device_tokens = ""
+        self._motor_type = "BECKHOFF"
 
         self._outer = QtWidgets.QVBoxLayout(self)
         self._outer.setContentsMargins(8, 8, 8, 8)
@@ -189,14 +197,6 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         # own Expert Screen button -- we are already inside the expert screen --
         # and its error message, which the Normal tab already shows)
         self.plainMover = MotorStateMover(self)
-        # the GET readback goes red while any motor's axis error is set
-        # (see _watch_axis_errors); remember its stylesheet to restore it
-        self._readback = getattr(self.plainMover, "stateReadback", None)
-        self._readback_style = self._readback.styleSheet() if self._readback is not None else ""
-        self._axis_probes: list[tuple[PyDMChannel, _AxisErrorProbe]] = []
-        self._axis_errors: set[str] = set()
-        probes = self._axis_probes
-        self.destroyed.connect(lambda: [_safe_disconnect(chan) for chan, _ in probes])
         expert_btn = getattr(self.plainMover, "expertScreenButton", None)
         if expert_btn is not None:
             expert_btn.hide()
@@ -325,6 +325,17 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
 
     deviceTokens = pyqtProperty(str, get_device_tokens, set_device_tokens)
 
+    def get_motor_type(self) -> str:
+        return self._motor_type
+
+    def set_motor_type(self, value: str) -> None:
+        value = str(value).strip().upper()
+        self._motor_type = value if value in _MOTOR_TYPES else "BECKHOFF"
+        self._rebuild_diag()
+
+    # MotorClassicRow motor type used by the Diagnostics cog buttons
+    motorType = pyqtProperty(str, get_motor_type, set_motor_type)
+
     # build
     @property
     def _tokens(self) -> list[str]:
@@ -384,42 +395,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         """The Diagnostics tab needs the device prefix and the motor tokens."""
         return bool(self._device) and bool(self._tokens)
 
-    def _watch_axis_errors(self) -> None:
-        """Track every motor's axis error flag; the GET readback goes red while
-        any of them is set."""
-        for chan, _ in self._axis_probes:
-            _safe_disconnect(chan)
-        self._axis_probes.clear()
-        self._axis_errors.clear()
-        self._paint_readback()
-        if not self._diag_provided():
-            return
-        for token in self._tokens:
-            probe = _AxisErrorProbe(token, self._axis_error_changed)
-            chan = PyDMChannel(address=_axis_error_channel(self._device, token), value_slot=probe.on_value)
-            chan.connect()
-            self._axis_probes.append((chan, probe))
-
-    def _axis_error_changed(self, token: str, error: bool) -> None:
-        if error:
-            self._axis_errors.add(token)
-        else:
-            self._axis_errors.discard(token)
-        self._paint_readback()
-
-    def _paint_readback(self) -> None:
-        if self._readback is None:
-            return
-        style = self._readback_style
-        if self._axis_errors:
-            style += f" background-color: {_BAR_RED};"  # later declaration wins
-        self._readback.setStyleSheet(style)
-
     def _sync_tabs(self) -> None:
         """Attach/detach the optional tabs, keeping Normal / Configuration /
         Diagnostics order."""
         self._rebuild_diag()
-        self._watch_axis_errors()
         idx = self.tabs.indexOf(self._config_tab)
         if self._config_provided():
             if idx == -1:
@@ -462,6 +441,9 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                     # a set axis error turns the status bar red whatever the status is
                     widget = _status_bar(channel, _axis_error_channel(self._device, token))
                 grid.addWidget(widget, r + 1, col)
+            grid.addWidget(
+                _expert_button(f"{self._device}:{token}", self._motor_type), r + 1, len(_DIAG_COLUMNS) + 1
+            )
 
         self._diag_layout.addWidget(_group("Per-Motor Diagnostics", box))
         self._diag_layout.addStretch(1)
@@ -764,17 +746,6 @@ def _axis_error_channel(device: str, token: str) -> str:
     return f"ca://{device}:{token}:{_AXIS_ERROR_LEAF}"
 
 
-class _AxisErrorProbe:
-    """Forwards one motor's axis error flag, tagged with its token."""
-
-    def __init__(self, token: str, callback) -> None:
-        self._token = token
-        self._callback = callback
-
-    def on_value(self, value) -> None:
-        self._callback(self._token, bool(value))
-
-
 def _safe_disconnect(chan: PyDMChannel) -> None:
     # Called from the widget's destroyed signal; the underlying connection may
     # already be gone during app teardown, so ignore that case.
@@ -818,6 +789,50 @@ def _setpoint_combo(channel: str) -> PyDMEnumComboBox:
     )
     combo.channel = channel
     return combo
+
+
+class _ExpertButton(PyDMShellCommand):
+    """Icon-only shell-command button: grey cog at rest, white on the blue hover."""
+
+    _ICON = "cog"
+
+    def __init__(self, parent: QtWidgets.QWidget | None = None):
+        super().__init__(parent)
+        self.showIcon = False  # drop PyDM's default icon; we set our own
+        self._rest_icon = IconFont().icon(self._ICON, QtGui.QColor(90, 90, 90))
+        self._hover_icon = IconFont().icon(self._ICON, QtGui.QColor("white"))
+        self.setIconSize(QtCore.QSize(16, 16))
+        self._set_icon(self._rest_icon)
+
+    def _set_icon(self, icon) -> None:
+        if icon is not None:  # None when no QApplication yet
+            self.setIcon(icon)
+
+    def enterEvent(self, event) -> None:
+        self._set_icon(self._hover_icon)
+        super().enterEvent(event)
+
+    def leaveEvent(self, event) -> None:
+        self._set_icon(self._rest_icon)
+        super().leaveEvent(event)
+
+
+def _expert_button(motor: str, motor_type: str) -> _ExpertButton:
+    """Opens the motor row for ``motor`` in a new window. ``motor_type`` selects
+    which expert screen MotorClassicRow's own button then launches."""
+    btn = _ExpertButton()
+    btn.setFixedSize(34, 26)
+    btn.setCursor(QtCore.Qt.PointingHandCursor)
+    btn.setToolTip(f"Open the {motor_type.lower()} motor screen for {motor}")
+    btn.setStyleSheet(
+        f"PyDMShellCommand {{ background: rgb(233, 237, 240);"
+        f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 0; }}"
+        f"PyDMShellCommand:hover {{ background: {_BAR_ON};"
+        f" border: 1px solid {_BAR_ON_HOVER}; }}"
+        f"PyDMShellCommand:pressed {{ background: {_BAR_ON_HOVER}; }}"
+    )
+    btn.commands = [f"pcdswidgets-show MotorClassicRow --motor {motor} --motor_type {motor_type}"]
+    return btn
 
 
 def _command_button(channel: str) -> PyDMPushButton:
