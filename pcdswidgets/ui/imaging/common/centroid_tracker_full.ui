@@ -567,7 +567,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="roi_multiplier_spinbox"/>
+      <widget class="NoScrollDoubleSpinBox" name="roi_multiplier_spinbox"/>
      </item>
      <item>
       <widget class="QPushButton" name="set_roi_button">
@@ -584,6 +584,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>NoScrollDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox</header>
+  </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>

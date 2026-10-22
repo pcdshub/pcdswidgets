@@ -12,6 +12,7 @@ from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
+from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import NoScrollDoubleSpinBox
 
 
 class Ui_Form(object):
@@ -211,7 +212,7 @@ class Ui_Form(object):
         self.label_7 = QtWidgets.QLabel(Form)
         self.label_7.setObjectName("label_7")
         self.horizontalLayout_3.addWidget(self.label_7)
-        self.roi_multiplier_spinbox = QtWidgets.QDoubleSpinBox(Form)
+        self.roi_multiplier_spinbox = NoScrollDoubleSpinBox(Form)
         self.roi_multiplier_spinbox.setObjectName("roi_multiplier_spinbox")
         self.horizontalLayout_3.addWidget(self.roi_multiplier_spinbox)
         self.set_roi_button = QtWidgets.QPushButton(Form)

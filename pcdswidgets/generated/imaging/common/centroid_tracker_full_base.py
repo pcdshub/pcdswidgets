@@ -45,7 +45,7 @@ class CentroidTrackerFullBase(DesignerWidget):
     label_8: "QtWidgets.QLabel"
     label_9: "QtWidgets.QLabel"
     max_value_label: "PyDMLabel"
-    roi_multiplier_spinbox: "QtWidgets.QDoubleSpinBox"
+    roi_multiplier_spinbox: "NoScrollDoubleSpinBox"
     set_roi_button: "QtWidgets.QPushButton"
     sigma_x_label: "PyDMLabel"
     sigma_y_label: "PyDMLabel"

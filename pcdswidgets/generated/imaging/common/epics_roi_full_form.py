@@ -11,7 +11,7 @@
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
-from pcdswidgets.imaging.common.spinbox import PyDMSpinboxEnter
+from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import PcdsSpinbox
 
 
 class Ui_Form(object):
@@ -27,7 +27,7 @@ class Ui_Form(object):
         self.label_19 = QtWidgets.QLabel(Form)
         self.label_19.setObjectName("label_19")
         self.gridLayout_3.addWidget(self.label_19, 0, 6, 1, 1)
-        self.y_spinbox = PyDMSpinboxEnter(Form)
+        self.y_spinbox = PcdsSpinbox(Form)
         self.y_spinbox.setMaximumSize(QtCore.QSize(75, 16777215))
         self.y_spinbox.setToolTip("")
         self.y_spinbox.setKeyboardTracking(False)
@@ -44,7 +44,7 @@ class Ui_Form(object):
         self.y_spinbox.setProperty("writeOnPress", True)
         self.y_spinbox.setObjectName("y_spinbox")
         self.gridLayout_3.addWidget(self.y_spinbox, 0, 3, 1, 1)
-        self.width_spinbox = PyDMSpinboxEnter(Form)
+        self.width_spinbox = PcdsSpinbox(Form)
         self.width_spinbox.setMaximumSize(QtCore.QSize(75, 16777215))
         self.width_spinbox.setToolTip("")
         self.width_spinbox.setKeyboardTracking(False)
@@ -61,7 +61,7 @@ class Ui_Form(object):
         self.width_spinbox.setProperty("writeOnPress", True)
         self.width_spinbox.setObjectName("width_spinbox")
         self.gridLayout_3.addWidget(self.width_spinbox, 0, 5, 1, 1)
-        self.x_spinbox = PyDMSpinboxEnter(Form)
+        self.x_spinbox = PcdsSpinbox(Form)
         self.x_spinbox.setMaximumSize(QtCore.QSize(75, 16777215))
         self.x_spinbox.setToolTip("")
         self.x_spinbox.setKeyboardTracking(False)
@@ -81,7 +81,7 @@ class Ui_Form(object):
         self.label_20 = QtWidgets.QLabel(Form)
         self.label_20.setObjectName("label_20")
         self.gridLayout_3.addWidget(self.label_20, 0, 0, 1, 1)
-        self.height_spinbox = PyDMSpinboxEnter(Form)
+        self.height_spinbox = PcdsSpinbox(Form)
         self.height_spinbox.setMaximumSize(QtCore.QSize(75, 16777215))
         self.height_spinbox.setToolTip("")
         self.height_spinbox.setKeyboardTracking(False)

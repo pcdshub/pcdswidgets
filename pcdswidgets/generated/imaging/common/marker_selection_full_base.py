@@ -58,14 +58,14 @@ class MarkerSelectionFullBase(DesignerWidget):
     visibility_2: "QtWidgets.QPushButton"
     visibility_3: "QtWidgets.QPushButton"
     visibility_4: "QtWidgets.QPushButton"
-    x_spinbox_1: "PyDMSpinboxEnter"
-    x_spinbox_2: "PyDMSpinboxEnter"
-    x_spinbox_3: "PyDMSpinboxEnter"
-    x_spinbox_4: "PyDMSpinboxEnter"
-    y_spinbox_1: "PyDMSpinboxEnter"
-    y_spinbox_2: "PyDMSpinboxEnter"
-    y_spinbox_3: "PyDMSpinboxEnter"
-    y_spinbox_4: "PyDMSpinboxEnter"
+    x_spinbox_1: "PcdsSpinbox"
+    x_spinbox_2: "PcdsSpinbox"
+    x_spinbox_3: "PcdsSpinbox"
+    x_spinbox_4: "PcdsSpinbox"
+    y_spinbox_1: "PcdsSpinbox"
+    y_spinbox_2: "PcdsSpinbox"
+    y_spinbox_3: "PcdsSpinbox"
+    y_spinbox_4: "PcdsSpinbox"
 
     ui_form = Ui_Form
     _macro_to_widget = {
