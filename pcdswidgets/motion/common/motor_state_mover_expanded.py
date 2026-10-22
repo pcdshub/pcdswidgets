@@ -605,9 +605,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
                     # a set axis error turns the status bar red whatever the status is
                     widget = _status_bar(channel, _axis_error_channel(self._device, token))
                 grid.addWidget(widget, r + 1, col)
-            grid.addWidget(
-                _expert_button(f"{self._device}:{token}", self._motor_type), r + 1, len(_DIAG_COLUMNS) + 1
-            )
+            grid.addWidget(_expert_button(f"{self._device}:{token}", self._motor_type), r + 1, len(_DIAG_COLUMNS) + 1)
 
         # Shows at most maxVisibleMotors rows (plus the header) and scrolls for
         # more, so the window does not grow with the motor count. Row height is
@@ -629,7 +627,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._diag_layout.addStretch(1)
 
     def _build_state_grid(self) -> QtWidgets.QGroupBox | None:
-        """"States" frame holding the scrollable per-state grid (state name |
+        """ "States" frame holding the scrollable per-state grid (state name |
         "<motor>: Position" x N), or None when no state count / tokens were supplied."""
         tokens = self._tokens
         state_count = self._effective_state_count()
