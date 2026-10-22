@@ -12,6 +12,7 @@ from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
+from pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox import NoScrollComboBox
 from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import NoScrollDoubleSpinBox
 
 
@@ -180,7 +181,7 @@ class Ui_Form(object):
         self.label_8.setMaximumSize(QtCore.QSize(65, 16777215))
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_4.addWidget(self.label_8)
-        self.threshold_mode_combo = QtWidgets.QComboBox(Form)
+        self.threshold_mode_combo = NoScrollComboBox(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

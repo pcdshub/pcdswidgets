@@ -49,7 +49,7 @@ class CentroidTrackerFullBase(DesignerWidget):
     set_roi_button: "QtWidgets.QPushButton"
     sigma_x_label: "PyDMLabel"
     sigma_y_label: "PyDMLabel"
-    threshold_mode_combo: "QtWidgets.QComboBox"
+    threshold_mode_combo: "NoScrollComboBox"
     threshold_rbv_label: "PyDMLabel"
     threshold_value_edit: "QtWidgets.QLineEdit"
 

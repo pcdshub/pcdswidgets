@@ -484,7 +484,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="threshold_mode_combo">
+      <widget class="NoScrollComboBox" name="threshold_mode_combo">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -588,6 +588,11 @@
    <class>NoScrollDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox</header>
+  </customwidget>
+  <customwidget>
+   <class>NoScrollComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
