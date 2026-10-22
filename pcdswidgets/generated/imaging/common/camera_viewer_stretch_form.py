@@ -11,8 +11,8 @@
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
 
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox import NoScrollComboBox
 from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
+from pcdswidgets.imaging.common.widget_overrides.pcds_combobox import NoScrollComboBox
 
 
 class Ui_Form(object):

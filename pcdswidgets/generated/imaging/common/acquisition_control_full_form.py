@@ -14,7 +14,7 @@ from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
 from qtpy import QtCore, QtGui, QtWidgets
 
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import PcdsSpinbox
+from pcdswidgets.imaging.common.widget_overrides.pcds_spinbox import PcdsSpinbox
 
 
 class Ui_Form(object):

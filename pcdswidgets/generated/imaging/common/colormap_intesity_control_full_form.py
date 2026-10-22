@@ -10,7 +10,7 @@
 # ruff: noqa: E501
 from qtpy import QtCore, QtWidgets
 
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox import NoScrollComboBox
+from pcdswidgets.imaging.common.widget_overrides.pcds_combobox import NoScrollComboBox
 
 
 class Ui_Form(object):

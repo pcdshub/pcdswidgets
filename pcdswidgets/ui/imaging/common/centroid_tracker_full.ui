@@ -587,12 +587,12 @@
   <customwidget>
    <class>NoScrollDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox</header>
+   <header>pcdswidgets.imaging.common.widget_overrides.pcds_spinbox</header>
   </customwidget>
   <customwidget>
    <class>NoScrollComboBox</class>
    <extends>QComboBox</extends>
-   <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox</header>
+   <header>pcdswidgets.imaging.common.widget_overrides.pcds_combobox</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>

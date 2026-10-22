@@ -52,7 +52,7 @@
   <customwidget>
    <class>NoScrollComboBox</class>
    <extends>QComboBox</extends>
-   <header>pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox</header>
+   <header>pcdswidgets.imaging.common.widget_overrides.pcds_combobox</header>
   </customwidget>
  </customwidgets>
  <resources/>

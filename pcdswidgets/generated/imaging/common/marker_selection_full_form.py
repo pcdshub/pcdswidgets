@@ -11,7 +11,7 @@
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import PcdsSpinbox
+from pcdswidgets.imaging.common.widget_overrides.pcds_spinbox import PcdsSpinbox
 
 
 class Ui_Form(object):

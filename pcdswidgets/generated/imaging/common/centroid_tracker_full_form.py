@@ -12,8 +12,8 @@ from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_combobox import NoScrollComboBox
-from pcdswidgets.imaging.common.overwritten_widgets.pcds_spinbox import NoScrollDoubleSpinBox
+from pcdswidgets.imaging.common.widget_overrides.pcds_combobox import NoScrollComboBox
+from pcdswidgets.imaging.common.widget_overrides.pcds_spinbox import NoScrollDoubleSpinBox
 
 
 class Ui_Form(object):

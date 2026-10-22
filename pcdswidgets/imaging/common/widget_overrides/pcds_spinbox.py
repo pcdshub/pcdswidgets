@@ -1,6 +1,6 @@
 """Overridden spinbox widgets.
 
-Overwrite mix-ins for PyDMSpinbox and QTSpinbox widget to change two behaviors
+Override mix-ins for PyDMSpinbox and QTSpinbox widget to change two behaviors
 - ignore wheel events unless the spinbox has keyboard
 - validate/send value and clear focus on <Enter>.
 """
