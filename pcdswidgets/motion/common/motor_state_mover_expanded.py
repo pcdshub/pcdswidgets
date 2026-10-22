@@ -29,7 +29,9 @@ hidden -- we are already in the expert screen), then a tab group with
   ``MOVING`` and ``STATUS`` (relative to the goal state), a red status on an axis
   error, and a cog button opening the motor's own expert screen (``motorType``).
 
-Everything here is read-only display (plus the reset command). Config cells
+Everything here is read-only display (plus the reset command). Colors and fonts
+live in ``motor_state_mover_expanded.qss``; the code only tags widgets for it.
+Config cells
 resolve to::
 
     ca://{motor}:STATE:{token}:{NN}:{leaf}_RBV
@@ -40,9 +42,11 @@ publishes) and ``{leaf}`` one of ``NAME``, ``SETPOINT``.
 
 from __future__ import annotations
 
+import functools
 import logging
 import math
 import numbers
+from pathlib import Path
 
 from pydm.utilities import IconFont
 from pydm.widgets.channel import PyDMChannel
@@ -62,6 +66,10 @@ except ImportError:  # PySide fallback
 
 logger = logging.getLogger(__name__)
 
+# Colors, fonts and borders live in motor_state_mover_expanded.qss; the code only
+# tags widgets with the properties that stylesheet selects on (see _tag).
+_STYLESHEET = Path(__file__).with_suffix(".qss")
+
 # MOTOR_TOKENS_RBV is an lsi (long string); a plain read is cut off at 40
 # characters, so it is read as .VAL$ to get the whole string
 _TOKENS_LEAF = "MOTOR_TOKENS_RBV.VAL$"
@@ -69,23 +77,8 @@ _TOKENS_LEAF = "MOTOR_TOKENS_RBV.VAL$"
 # how long to wait for the IOC's state-table metadata before warning
 _METADATA_TIMEOUT_MS = 5000
 
-# palette shared with the plain state mover
-_SLATE = "rgb(52, 73, 94)"
-_MUTE = "rgb(125, 125, 125)"
-_CELL_TXT = "rgb(51, 51, 51)"
-_CELL_BG = "rgb(244, 244, 244)"
-_CELL_BD = "rgb(201, 201, 201)"
-
-# boolean-bar colors: Typhos blue when set, grey when clear (matches the plain
-# state mover's moving LED). The error bar toggles blue (clear) / red (set), and
-# the error message turns red only while the error flag is set.
-_BAR_ON = "rgb(20, 100, 239)"
-_BAR_ON_HOVER = "rgb(15, 80, 200)"
-_BAR_OFF = "rgb(150, 150, 150)"
-_BAR_RED = "rgb(220, 40, 40)"
-
 # "Normal" tab device signals: (row label, PV suffix under ${MOTOR}, kind).
-# kind: "led" -> boolean bar, blue (set) / grey (clear);
+# kind: "led" -> boolean bar, always blue (Typhos-style);
 #       "error_led" -> boolean bar, red (set) / blue (clear);
 #       "text" -> numeric text;
 #       "error_msg" -> char waveform decoded as a string, red while ERR is set.
@@ -106,8 +99,8 @@ _DIAG_COLUMNS = (
     ("Moving", "MOVING", "bool"),
     ("Status", "STATUS", "status"),
 )
-# E_MotorTransitStatus values -> bar color
-_TRANSIT_COLORS = {0: "rgb(224, 138, 20)", 1: "rgb(46, 160, 67)", 2: _BAR_ON}
+# E_MotorTransitStatus values -> the bar's ``state`` in the stylesheet
+_TRANSIT_STATES = {0: "unknown", 1: "at-state", 2: "in-transit"}
 # per-motor axis error flag: ca://{device}:{token}:bError_RBV (red status bar while set)
 _AXIS_ERROR_LEAF = "bError_RBV"
 # Motor types understood by MotorClassicRow (selects its expert-screen command)
@@ -140,15 +133,6 @@ _PLAIN_MOVER_WIDTH = 680
 # is matched to this once it moves onto the main row in the expert
 _MAIN_ROW_HEIGHT = 46
 
-_TAB_STYLE = (
-    "QTabWidget::pane { border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
-    " top: -1px; background: rgb(251, 252, 253); }"
-    "QTabBar::tab { background: rgb(233, 237, 240); color: rgb(125, 125, 125);"
-    " padding: 6px 18px; border: 1px solid rgb(207, 214, 220); border-bottom: none;"
-    " border-top-left-radius: 6px; border-top-right-radius: 6px; margin-right: 2px; }"
-    f"QTabBar::tab:selected {{ background: rgb(251, 252, 253); color: {_SLATE}; }}"
-)
-
 
 class _TabPage(QtWidgets.QWidget):
     """Tab page. The Normal page (``reference`` is None) reports its natural size;
@@ -178,10 +162,7 @@ def _scrolling_page(reference: _TabPage) -> tuple[_TabPage, QtWidgets.QVBoxLayou
     scroll.setFrameShape(QtWidgets.QFrame.NoFrame)
     scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
     scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-    scroll.setStyleSheet(
-        "QScrollArea { background: transparent; border: none; }"
-        "QScrollArea > QWidget > QWidget { background: transparent; }"
-    )
+    _tag(scroll, "transparent")
     content = QtWidgets.QWidget()
     content_layout = QtWidgets.QVBoxLayout(content)
     content_layout.setContentsMargins(12, 12, 12, 12)
@@ -258,6 +239,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._metadata_timer.setSingleShot(True)
         self._metadata_timer.timeout.connect(self._warn_no_metadata)
 
+        self.setStyleSheet(_stylesheet())
         self._outer = QtWidgets.QVBoxLayout(self)
         self._outer.setContentsMargins(8, 8, 8, 8)
         self._outer.setSpacing(8)
@@ -293,7 +275,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         self._outer.addLayout(top_row)
 
         self.tabs = QtWidgets.QTabWidget(self)
-        self.tabs.setStyleSheet(_TAB_STYLE)
+        self.tabs.setObjectName("expertTabs")
 
         # "Normal" tab: always present -- the raw device signals. Its size is the
         # size of every tab (see _TabPage).
@@ -547,10 +529,10 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             form.addWidget(_row_label(label), row, 0)
             channel = f"ca://{self._device}:{suffix}"
             if kind == "led":
-                # non-error signals stay blue by default (Typhos-style)
-                widget = _bool_bar(channel, on_color=_BAR_ON, off_color=_BAR_ON)
+                # non-error signals stay blue whatever the value (Typhos-style)
+                widget = _bool_bar(channel, "always-on")
             elif kind == "error_led":
-                widget = _bool_bar(channel, on_color=_BAR_RED, off_color=_BAR_ON)
+                widget = _bool_bar(channel, "error")
             elif kind == "error_msg":
                 widget = _error_message(channel, error_channel)
             else:  # text
@@ -618,7 +600,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
             for col, (_title, leaf, kind) in enumerate(_DIAG_COLUMNS, start=1):
                 channel = f"ca://{self._device}:{leaf}:{motor_index:0{motor_width}d}_RBV"
                 if kind == "bool":
-                    widget = _bool_bar(channel, on_color=_BAR_ON, off_color=_BAR_OFF)
+                    widget = _bool_bar(channel, "led")
                 else:
                     # a set axis error turns the status bar red whatever the status is
                     widget = _status_bar(channel, _axis_error_channel(self._device, token))
@@ -640,10 +622,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         header_height = 22
         scroll.setFixedHeight(header_height + visible * (content_height - header_height) // max(rows, 1))
-        scroll.setStyleSheet(
-            "QScrollArea { background: transparent; border: none; }"
-            "QScrollArea > QWidget > QWidget { background: transparent; }"
-        )
+        _tag(scroll, "transparent")
         scroll.setWidget(box)
 
         self._diag_layout.addWidget(_group("Per-Motor Diagnostics", scroll))
@@ -704,10 +683,7 @@ class MotorStateMoverExpanded(QtWidgets.QFrame):
         else:
             scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         scroll.setFixedHeight(height)
-        scroll.setStyleSheet(
-            "QScrollArea { background: transparent; border: none; }"
-            "QScrollArea > QWidget > QWidget { background: transparent; }"
-        )
+        _tag(scroll, "transparent")
         scroll.setWidget(box)
         return _group("States", scroll)
 
@@ -746,7 +722,7 @@ class MotorStateMoverExpandedPMPS(MotorStateMoverExpanded):
 
         for r, (label, suffix) in enumerate(_PMPS_ROWS):
             grid.addWidget(_row_label(label), r, 0)
-            grid.addWidget(_bool_bar(f"ca://{self._device}:{suffix}_RBV", on_color=_BAR_ON, off_color=_BAR_ON), r, 1)
+            grid.addWidget(_bool_bar(f"ca://{self._device}:{suffix}_RBV", "always-on"), r, 1)
             grid.addWidget(_setpoint_combo(f"ca://{self._device}:{suffix}"), r, 2)
 
         return _group("PMPS", box)
@@ -793,43 +769,49 @@ def _decode_tokens(value) -> list[str]:
     return tokens
 
 
+@functools.lru_cache(maxsize=1)
+def _stylesheet() -> str:
+    return _STYLESHEET.read_text(encoding="utf-8")
+
+
+def _tag(widget: QtWidgets.QWidget, role: str, **properties: str) -> None:
+    """Mark ``widget`` for the stylesheet: its ``role`` plus any extra selectors."""
+    widget.setProperty("role", role)
+    for name, value in properties.items():
+        widget.setProperty(name, value)
+
+
+def _set_state(widget: QtWidgets.QWidget, name: str, value: str) -> None:
+    """Change a property the stylesheet selects on and restyle the widget."""
+    if widget.property(name) == value:
+        return
+    widget.setProperty(name, value)
+    style = widget.style()
+    style.unpolish(widget)
+    style.polish(widget)
+    widget.update()
+
+
 def _group(title: str, content: QtWidgets.QWidget) -> QtWidgets.QGroupBox:
     """Titled frame around ``content``."""
     group = QtWidgets.QGroupBox(title)
-    group.setFont(_bold(10))
-    group.setStyleSheet(
-        f"QGroupBox {{ color: {_SLATE}; border: 1px solid rgb(207, 214, 220); border-radius: 6px;"
-        " margin-top: 10px; padding-top: 6px; background: transparent; }"
-        "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left;"
-        " left: 12px; padding: 0 6px; }"
-    )
+    _tag(group, "group")
     layout = QtWidgets.QVBoxLayout(group)
     layout.setContentsMargins(8, 8, 8, 8)
     layout.addWidget(content)
     return group
 
 
-def _plain(size: int) -> QtGui.QFont:
-    return QtGui.QFont("DejaVu Sans", size)
-
-
-def _bold(size: int) -> QtGui.QFont:
-    f = QtGui.QFont("DejaVu Sans", size)
-    f.setBold(True)
-    return f
-
-
 def _hdr(text: str, sub: bool = False) -> QtWidgets.QLabel:
     lab = QtWidgets.QLabel(text)
     lab.setAlignment(QtCore.Qt.AlignCenter)
-    lab.setFont(_bold(9 if sub else 10))
-    lab.setStyleSheet(f"color: {_MUTE if sub else _SLATE}; background: transparent;")
+    _tag(lab, "header-sub" if sub else "header")
     return lab
 
 
 def _cell_label(channel: str, bold: bool = False, align=QtCore.Qt.AlignCenter, as_string: bool = False) -> PyDMLabel:
     lab = PyDMLabel()
-    lab.setFont(_bold(10) if bold else _plain(10))
+    _tag(lab, "cell", bold="true" if bold else "false")
     lab.setFixedHeight(_STATE_ROW_HEIGHT)
     lab.setMinimumWidth(80)
     lab.setAlignment(align)
@@ -838,78 +820,56 @@ def _cell_label(channel: str, bold: bool = False, align=QtCore.Qt.AlignCenter, a
         # NAME_RBV is a char waveform; decode it to a string instead of showing
         # the raw array of character codes.
         lab.displayFormat = DisplayFormat.String
-    lab.setStyleSheet(
-        f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
-        f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 0 8px; }}"
-    )
     lab.channel = channel
     return lab
 
 
 def _row_label(text: str, min_width: int = 100) -> QtWidgets.QLabel:
     lab = QtWidgets.QLabel(text)
-    lab.setFont(_bold(10))
+    _tag(lab, "row-label")
     lab.setMinimumWidth(min_width)
     lab.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-    lab.setStyleSheet(f"color: {_SLATE}; background: transparent;")
     return lab
 
 
 def _signal_value(channel: str) -> PyDMLabel:
     lab = PyDMLabel()
-    lab.setFont(_plain(10))
+    _tag(lab, "signal")
     lab.setMinimumHeight(26)
     lab.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
     lab.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-    lab.setStyleSheet(
-        f"PyDMLabel {{ color: {_CELL_TXT}; background: {_CELL_BG};"
-        f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 2px 10px; }}"
-    )
     lab.channel = channel
     return lab
 
 
 class _BoolBar(PyDMLabel):
-    """Full-width rounded bar (Typhos-style) with the value shown as text.
-    Background is ``on_color`` when the value is set, ``off_color`` when clear."""
+    """Full-width rounded bar (Typhos-style) with the value shown as text. Its
+    ``variant`` (led, error or always-on) decides the colors for the set / clear
+    ``state`` in the stylesheet."""
 
-    def __init__(
-        self,
-        on_color: str = _BAR_ON,
-        off_color: str = _BAR_OFF,
-        parent: QtWidgets.QWidget | None = None,
-    ):
+    def __init__(self, variant: str = "led", parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
-        self._on_color = on_color
-        self._off_color = off_color
-        self.setFont(_bold(10))
+        _tag(self, "bar", variant=variant, state="off")
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.setMinimumHeight(26)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.alarmSensitiveContent = False
         self.alarmSensitiveBorder = False
-        self._paint(False)
-
-    def _paint(self, on: bool) -> None:
-        self.setStyleSheet(
-            f"PyDMLabel {{ color: white; background: {self._on_color if on else self._off_color};"
-            f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; }}"
-        )
 
     def value_changed(self, new_value) -> None:
         super().value_changed(new_value)  # renders the value text
-        self._paint(bool(new_value))
+        _set_state(self, "state", "on" if new_value else "off")
 
 
 class _StatusBar(PyDMLabel):
-    """Enum text (``E_MotorTransitStatus``) on a rounded bar colored by value:
-    AT_STATE green, IN_TRANSIT blue, UNKNOWN amber (the "stopped mid-transit"
-    symptom this tab exists to expose). While the motor's axis error flag
-    (``error_channel``) is set the bar is red regardless of the status."""
+    """Enum text (``E_MotorTransitStatus``) on a rounded bar whose ``state`` in the
+    stylesheet follows the value: AT_STATE, IN_TRANSIT or UNKNOWN (the "stopped
+    mid-transit" symptom this tab exists to expose). While the motor's axis error
+    flag (``error_channel``) is set the state is ``error`` regardless of the status."""
 
     def __init__(self, error_channel: str = "", parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
-        self.setFont(_bold(10))
+        _tag(self, "bar", variant="status", state="none")
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.setMinimumHeight(26)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -917,7 +877,6 @@ class _StatusBar(PyDMLabel):
         self.alarmSensitiveBorder = False
         self._status = None
         self._axis_error = False
-        self._paint()
 
         if error_channel:
             self._error_chan = PyDMChannel(address=error_channel, value_slot=self._error_changed)
@@ -926,11 +885,8 @@ class _StatusBar(PyDMLabel):
             self.destroyed.connect(lambda: _safe_disconnect(chan))
 
     def _paint(self) -> None:
-        color = _BAR_RED if self._axis_error else _TRANSIT_COLORS.get(self._status, _BAR_OFF)
-        self.setStyleSheet(
-            f"PyDMLabel {{ color: white; background: {color};"
-            f" border: 1px solid rgba(0, 0, 0, 40); border-radius: 8px; }}"
-        )
+        state = "error" if self._axis_error else _TRANSIT_STATES.get(self._status, "none")
+        _set_state(self, "state", state)
 
     def value_changed(self, new_value) -> None:
         super().value_changed(new_value)  # renders the enum string
@@ -946,37 +902,27 @@ class _StatusBar(PyDMLabel):
 
 
 class _ErrorMessage(PyDMLabel):
-    """Decoded error-message string (char waveform). Highlights red only while
-    the separate error flag (``error_channel``) is set, plain otherwise."""
+    """Decoded error-message string (char waveform). Flagged as an error in the
+    stylesheet only while the separate error flag (``error_channel``) is set."""
 
     def __init__(self, error_channel: str, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
-        self.setFont(_plain(10))
+        _tag(self, "message", error="false")
         self.setMinimumHeight(26)
         self.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.displayFormat = DisplayFormat.String
         self.alarmSensitiveContent = False
         self.alarmSensitiveBorder = False
-        self._paint(False)
 
-        # a second channel drives only the color, tracking the error flag
+        # a second channel drives only the error flag
         self._error_chan = PyDMChannel(address=error_channel, value_slot=self._error_changed)
         self._error_chan.connect()
         chan = self._error_chan
         self.destroyed.connect(lambda: _safe_disconnect(chan))
 
-    def _paint(self, error: bool) -> None:
-        # read-only line-edit look (white field, thin border) so it reads as text,
-        # not a button; red text/border/tint only while the error flag is set
-        if error:
-            colors = f"color: {_BAR_RED}; background: rgb(253, 236, 236); border: 1px solid {_BAR_RED};"
-        else:
-            colors = f"color: {_CELL_TXT}; background: white; border: 1px solid {_CELL_BD};"
-        self.setStyleSheet(f"PyDMLabel {{ {colors} border-radius: 4px; padding: 2px 10px; }}")
-
     def _error_changed(self, value) -> None:
-        self._paint(bool(value))
+        _set_state(self, "error", "true" if value else "false")
 
 
 def _axis_error_channel(device: str, token: str) -> str:
@@ -992,8 +938,8 @@ def _safe_disconnect(chan: PyDMChannel) -> None:
         pass
 
 
-def _bool_bar(channel: str, on_color: str = _BAR_ON, off_color: str = _BAR_OFF) -> _BoolBar:
-    bar = _BoolBar(on_color=on_color, off_color=off_color)
+def _bool_bar(channel: str, variant: str) -> _BoolBar:
+    bar = _BoolBar(variant)
     bar.channel = channel
     return bar
 
@@ -1012,18 +958,9 @@ def _error_message(channel: str, error_channel: str) -> _ErrorMessage:
 
 def _setpoint_combo(channel: str) -> PyDMEnumComboBox:
     combo = PyDMEnumComboBox()
-    combo.setFont(_plain(10))
+    _tag(combo, "setpoint-combo")
     combo.setMinimumHeight(28)
     combo.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-    # same look as the plain mover's target-state selector (motor_state_mover.ui)
-    combo.setStyleSheet(
-        "PyDMEnumComboBox { color: rgb(120, 120, 120); background-color: rgb(255, 255, 255);"
-        " border: 2px solid rgb(42, 91, 215); border-radius: 3px; padding-left: 10px; }"
-        "PyDMEnumComboBox::drop-down { width: 26px; border-left: 1px solid rgb(208, 208, 208); }"
-        "PyDMEnumComboBox::down-arrow { image: none; border-left: 5px solid transparent;"
-        " border-right: 5px solid transparent; border-top: 7px solid rgb(154, 154, 154);"
-        " margin-right: 8px; }"
-    )
     combo.channel = channel
     return combo
 
@@ -1058,16 +995,10 @@ def _expert_button(motor: str, motor_type: str) -> _ExpertButton:
     """Opens the motor row for ``motor`` in a new window. ``motor_type`` selects
     which expert screen MotorClassicRow's own button then launches."""
     btn = _ExpertButton()
+    _tag(btn, "icon-button")
     btn.setFixedSize(34, 26)
     btn.setCursor(QtCore.Qt.PointingHandCursor)
     btn.setToolTip(f"Open the {motor_type.lower()} motor screen for {motor}")
-    btn.setStyleSheet(
-        f"PyDMShellCommand {{ background: rgb(233, 237, 240);"
-        f" border: 1px solid {_CELL_BD}; border-radius: 4px; padding: 0; }}"
-        f"PyDMShellCommand:hover {{ background: {_BAR_ON};"
-        f" border: 1px solid {_BAR_ON_HOVER}; }}"
-        f"PyDMShellCommand:pressed {{ background: {_BAR_ON_HOVER}; }}"
-    )
     btn.commands = [f"pcdswidgets-show MotorClassicRow --motor {motor} --motor_type {motor_type}"]
     return btn
 
@@ -1075,17 +1006,11 @@ def _expert_button(motor: str, motor_type: str) -> _ExpertButton:
 def _command_button(channel: str) -> PyDMPushButton:
     # No label -- the "Command" text was redundant; the button still writes.
     btn = PyDMPushButton()
+    _tag(btn, "command-button")
     btn.setText("")
     btn.setMinimumHeight(26)
     btn.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
     btn.pressValue = "1"
     btn.setCursor(QtCore.Qt.PointingHandCursor)
-    # grey at rest, blue on hover, darker blue while pressed
-    btn.setStyleSheet(
-        f"PyDMPushButton {{ background: rgb(233, 237, 240); border: 1px solid {_CELL_BD};"
-        f" border-radius: 4px; padding: 2px 10px; }}"
-        f"PyDMPushButton:hover {{ background: {_BAR_ON}; border: 1px solid {_BAR_ON_HOVER}; }}"
-        f"PyDMPushButton:pressed {{ background: {_BAR_ON_HOVER}; }}"
-    )
     btn.channel = channel
     return btn
