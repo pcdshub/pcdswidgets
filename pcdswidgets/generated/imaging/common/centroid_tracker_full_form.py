@@ -11,9 +11,9 @@
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtWidgets
 
+from pcdswidgets.common.widget_overrides.combobox_no_scroll import ComboBoxNoScroll
+from pcdswidgets.common.widget_overrides.spinbox_click_to_scroll import DoubleSpinBoxClickToScroll
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
-from pcdswidgets.imaging.common.widget_overrides.pcds_combobox import NoScrollComboBox
-from pcdswidgets.imaging.common.widget_overrides.pcds_spinbox import NoScrollDoubleSpinBox
 
 
 class Ui_Form(object):
@@ -181,7 +181,7 @@ class Ui_Form(object):
         self.label_8.setMaximumSize(QtCore.QSize(65, 16777215))
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_4.addWidget(self.label_8)
-        self.threshold_mode_combo = NoScrollComboBox(Form)
+        self.threshold_mode_combo = ComboBoxNoScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -213,7 +213,7 @@ class Ui_Form(object):
         self.label_7 = QtWidgets.QLabel(Form)
         self.label_7.setObjectName("label_7")
         self.horizontalLayout_3.addWidget(self.label_7)
-        self.roi_multiplier_spinbox = NoScrollDoubleSpinBox(Form)
+        self.roi_multiplier_spinbox = DoubleSpinBoxClickToScroll(Form)
         self.roi_multiplier_spinbox.setObjectName("roi_multiplier_spinbox")
         self.horizontalLayout_3.addWidget(self.roi_multiplier_spinbox)
         self.set_roi_button = QtWidgets.QPushButton(Form)

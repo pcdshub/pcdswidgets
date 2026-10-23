@@ -42,7 +42,7 @@ class CameraViewerStretchBase(DesignerWidget):
     sidebar_content: "QtWidgets.QWidget"
     sidebar_scroll: "QtWidgets.QScrollArea"
     sidebar_toggle: "QtWidgets.QPushButton"
-    stream_rate_combo: "NoScrollComboBox"
+    stream_rate_combo: "ComboBoxNoScroll"
     stream_rate_label: "QtWidgets.QLabel"
 
     ui_form = Ui_Form

@@ -36,7 +36,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="PcdsSpinbox" name="y_spinbox">
+      <widget class="PyDMSpinBoxClickToScroll" name="y_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -88,7 +88,7 @@
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PcdsSpinbox" name="width_spinbox">
+      <widget class="PyDMSpinBoxClickToScroll" name="width_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -140,7 +140,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PcdsSpinbox" name="x_spinbox">
+      <widget class="PyDMSpinBoxClickToScroll" name="x_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -199,7 +199,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="PcdsSpinbox" name="height_spinbox">
+      <widget class="PyDMSpinBoxClickToScroll" name="height_spinbox">
        <property name="maximumSize">
         <size>
          <width>75</width>
@@ -447,9 +447,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PcdsSpinbox</class>
+   <class>PyDMSpinBoxClickToScroll</class>
    <extends>QDoubleSpinBox</extends>
-   <header>pcdswidgets.imaging.common.widget_overrides.pcds_spinbox</header>
+   <header>pcdswidgets.common.widget_overrides.spinbox_click_to_scroll</header>
   </customwidget>
   <customwidget>
    <class>ColorButton</class>

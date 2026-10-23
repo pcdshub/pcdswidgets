@@ -297,7 +297,7 @@
       </widget>
      </item>
      <item>
-      <widget class="NoScrollComboBox" name="stream_rate_combo">
+      <widget class="ComboBoxNoScroll" name="stream_rate_combo">
        <property name="maximumSize">
         <size>
          <width>90</width>
@@ -343,9 +343,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NoScrollComboBox</class>
+   <class>ComboBoxNoScroll</class>
    <extends>QComboBox</extends>
-   <header>pcdswidgets.imaging.common.widget_overrides.pcds_combobox</header>
+   <header>pcdswidgets.common.widget_overrides.combobox_no_scroll</header>
   </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
