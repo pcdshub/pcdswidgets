@@ -11,6 +11,7 @@
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
 
+from pcdswidgets.common.widget_overrides.combobox_no_scroll import ComboBoxNoScroll
 from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
 
 
@@ -132,7 +133,7 @@ class Ui_Form(object):
         self.stream_rate_label.setFont(font)
         self.stream_rate_label.setObjectName("stream_rate_label")
         self.bottom_bar.addWidget(self.stream_rate_label)
-        self.stream_rate_combo = QtWidgets.QComboBox(Form)
+        self.stream_rate_combo = ComboBoxNoScroll(Form)
         self.stream_rate_combo.setMaximumSize(QtCore.QSize(90, 16777215))
         self.stream_rate_combo.setObjectName("stream_rate_combo")
         self.bottom_bar.addWidget(self.stream_rate_combo)
