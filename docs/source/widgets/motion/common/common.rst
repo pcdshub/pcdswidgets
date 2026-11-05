@@ -13,6 +13,7 @@ These are in the `Motion Common` group in the designer widgets box.
     motor_classic_full.rst
     motor_classic_row.rst
     motor_classic_vert.rst
+    motor_tweak_row.rst
     motor_state_mover.rst
     motor_state_mover_expanded.rst
     motor_tc_classic_row.rst
