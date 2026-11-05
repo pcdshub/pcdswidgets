@@ -69,6 +69,7 @@ MotorStateMoverExpandedPMPS = "pcdswidgets.motion.common.motor_state_mover_expan
 MotorTcClassicRow = "pcdswidgets.motion.common.motor_tc_classic_row:MotorTcClassicRow"
 MotorTipTiltDouble = "pcdswidgets.motion.common.motor_tip_tilt_double:MotorTipTiltDouble"
 MotorTipTiltFull = "pcdswidgets.motion.common.motor_tip_tilt_full:MotorTipTiltFull"
+MotorTweakRow = "pcdswidgets.motion.common.motor_tweak_row:MotorTweakRow"
 NeedleValve = "pcdswidgets.vacuum.valves:NeedleValve"
 PneumaticValve = "pcdswidgets.vacuum.valves:PneumaticValve"
 PneumaticValveDA = "pcdswidgets.vacuum.valves:PneumaticValveDA"
