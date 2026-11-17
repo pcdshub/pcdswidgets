@@ -132,6 +132,17 @@ def select(states: EthercatTerminalStatesStretch, port: int):
     return widget
 
 
+@pytest.fixture(autouse=True)
+def _no_real_ads(monkeypatch):
+    """
+    Never run a real ads-actions from the tests (it may be installed, e.g. on psbuild):
+    only a fake one that a test sets explicitly through ADS_ACTIONS_BIN.
+    """
+    from pcdswidgets.common.ethercat import discover
+
+    monkeypatch.setattr(discover, "find_ads", lambda: os.environ.get("ADS_ACTIONS_BIN") or None)
+
+
 @pytest.fixture(scope="module")
 def shared_states(qapp):
     """One read-only mock widget per test module (tests must not change simulated PVs)."""

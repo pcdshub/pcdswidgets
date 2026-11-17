@@ -58,6 +58,33 @@ LINK_ENUM = (
 )
 
 
+def resolve_output(path: str | Path | None, plc: str) -> Path:
+    """
+    Discovery file for ``plc`` at ``path``.
+
+    No path -> ``~/.cache/ecat-states/<plc>.json``. A directory (an existing one, a
+    path ending in ``/``, or a path without a file suffix) -> ``<path>/<plc>.json``.
+    Anything else is the file itself. Missing parent directories are created on write.
+    """
+    if path is None or str(path).strip() == "":
+        return CACHE_DIR / f"{plc}.json"
+    text = str(path).strip()
+    resolved = Path(text).expanduser()
+    if resolved.is_dir() or text.endswith(("/", os.sep)) or (not resolved.exists() and not resolved.suffix):
+        return resolved / f"{plc}.json"
+    return resolved
+
+
+def can_create(path: Path) -> bool:
+    """True if ``path`` can be written: it is writable, or its nearest existing ancestor directory is."""
+    if path.exists():
+        return path.is_file() and os.access(path, os.W_OK)
+    parent = path.parent
+    while not parent.exists() and parent != parent.parent:
+        parent = parent.parent
+    return parent.is_dir() and os.access(parent, os.W_OK | os.X_OK)
+
+
 def find_ads() -> str | None:
     """Locate the ads-actions CLI (PATH, $ADS_ACTIONS_BIN, released install)."""
     for candidate in (os.environ.get("ADS_ACTIONS_BIN"), shutil.which("ads"), RELEASED_ADS):
@@ -149,7 +176,11 @@ def discover(plc: str, master_ams_net_id: str | None, timeout: float) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("plc", help="PLC host name or IP, e.g. plc-sds-raptor")
-    parser.add_argument("-o", "--output", type=Path, help="output JSON (default: ~/.cache/ecat-states/<plc>.json)")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="output JSON, or a directory for <dir>/<plc>.json (default: ~/.cache/ecat-states/<plc>.json)",
+    )
     parser.add_argument(
         "--ethercat-master-ams-net-id",
         default=None,
@@ -158,7 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout", type=float, default=300.0, help="per-command timeout in seconds (default 300)")
     args = parser.parse_args(argv)
 
-    output = args.output or CACHE_DIR / f"{args.plc}.json"
+    output = resolve_output(args.output, args.plc)
     try:
         result = discover(args.plc, args.ethercat_master_ams_net_id, args.timeout)
     except Exception as ex:

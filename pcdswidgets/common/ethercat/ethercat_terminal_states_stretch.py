@@ -5,11 +5,11 @@
 from __future__ import annotations
 
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
+from pydm.utilities import is_qt_designer
 from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import Qt
 
@@ -104,6 +104,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.meta: dict = {}
         self.discovery_path: Path | None = None
         self._process: QtCore.QProcess | None = None
+        self._auto_discovered: Path | None = None  # target already auto-created once (no retry loop)
         self._refresh_timer = QtCore.QTimer(self, singleShot=True, interval=150)
         self._refresh_timer.timeout.connect(self.refresh)
         # Properties can arrive in any order (designer, .ui, code): reload once they settle.
@@ -144,7 +145,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     prefix = pyqtProperty(str, get_prefix, set_prefix)
 
     def get_discovery_file(self) -> str:
-        """Discovery JSON (default: ~/.cache/ecat-states/<plc>.json)."""
+        """Discovery JSON or a directory for <dir>/<plc>.json (default ~/.cache/ecat-states); created if missing."""
         return self._discovery_file
 
     def set_discovery_file(self, value: str) -> None:
@@ -254,8 +255,24 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     def _default_discovery(self) -> Path:
         return CACHE_DIR / f"{self._plc or 'unknown'}.json"
 
+    def discovery_target(self) -> Path:
+        """
+        Where the discovery file is read from and written to.
+
+        ``discoveryFile`` may be a file or a directory (then ``<dir>/<plc>.json``);
+        empty means ``~/.cache/ecat-states/<plc>.json``.
+        """
+        if not self._discovery_file:
+            return self._default_discovery()
+        return discover.resolve_output(self._discovery_file, self._plc or "unknown")
+
+    def _write_target(self) -> Path:
+        """The discovery target, or the user cache if the target location is not writable."""
+        target = self.discovery_target()
+        return target if discover.can_create(target) else self._default_discovery()
+
     def reload(self):
-        """(Re)load the discovery file and (re)connect every terminal."""
+        """(Re)load the discovery file and (re)connect every terminal; create the file if it is missing."""
         self._reload_timer.stop()
         self.DeviceName.setText(self._title())
         ads = discover.find_ads()
@@ -264,16 +281,13 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self.rediscoverButton.setToolTip(
                 "ads-actions not found: run `ctrlenv-pathmunge ads-actions` before launching"
             )
-        self.discovery_path = Path(self._discovery_file).expanduser() if self._discovery_file else None
-        if not self._plc and self.discovery_path is None:
+        if not self._plc and not self._discovery_file:
             self._show_message("Set the plc and prefix properties (and optionally discoveryFile).")
             return
-        candidates = [p for p in (self.discovery_path, self._default_discovery()) if p is not None and p.is_file()]
+        target = self.discovery_path = self.discovery_target()
+        candidates = [p for p in {target, self._write_target()} if p.is_file()]
         if not candidates:
-            self._show_message(
-                f"No discovery file for {self._plc or self._discovery_file}. Press Rediscover "
-                f"(needs ads-actions) or run: python -m pcdswidgets.common.ethercat.discover {self._plc or '<plc>'}"
-            )
+            self._create_missing(target, ads)
             return
         newest = max(candidates, key=lambda f: f.stat().st_mtime)
         try:
@@ -284,39 +298,59 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.meta["_path"] = str(newest)
         self._build(terminals, newest)
 
-    def rediscover(self):
+    def _create_missing(self, target: Path, ads: str | None):
+        """No discovery file yet: create it with the read-only discovery (never in designer)."""
+        output = self._write_target()
+        where = str(output) + ("" if output == target else f" ({target.parent} is not writable)")
+        cli = f"python -m pcdswidgets.common.ethercat.discover {self._plc or '<plc>'} -o {target}"
+        if self._process is not None:
+            self._show_message(f"Creating {where} (read-only discovery)...")
+        elif not self._plc:
+            self._show_message(f"No discovery file at {target}. Set the plc property to create it.")
+        elif is_qt_designer():
+            self._show_message(f"No discovery file at {target} yet: it is created when the screen runs, or run: {cli}")
+        elif ads is None:
+            self._show_message(
+                f"No discovery file at {target}. It is created automatically when ads-actions is available "
+                f"(ctrlenv-pathmunge ads-actions), or run: {cli}"
+            )
+        elif self._auto_discovered == target:
+            self._show_message(f"Could not create {where}. Press Rediscover to retry, or run: {cli}")
+        else:
+            self._auto_discovered = target
+            self._show_message(f"Creating {where} (read-only discovery)...")
+            self.rediscover(auto=True)
+
+    def rediscover(self, auto: bool = False):
         """Run the read-only discovery (ads read-ecat-topology) in the background."""
         if self._process is not None or not self._plc:
             return
-        output = self.discovery_path or self._default_discovery()
-        if not os.access(output.parent if output.parent.exists() else output.parent.parent, os.W_OK):
-            output = self._default_discovery()
-        output.parent.mkdir(parents=True, exist_ok=True)
+        output = self._write_target()
         args = ["-m", "pcdswidgets.common.ethercat.discover", self._plc, "-o", str(output)]
         process = QtCore.QProcess(self)
         process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-        process.finished.connect(lambda code, _status: self._on_discovery_done(code, output))
+        process.finished.connect(lambda code, _status: self._on_discovery_done(code, output, auto))
         self._process = process
         self.rediscoverButton.setEnabled(False)
         self.rediscoverButton.setText("Discovering...")
         process.start(sys.executable, args)
 
-    def _on_discovery_done(self, code: int, output: Path):
+    def _on_discovery_done(self, code: int, output: Path, auto: bool = False):
         log = bytes(self._process.readAll()).decode(errors="replace").strip()
         self._process.deleteLater()
         self._process = None
         self.rediscoverButton.setEnabled(True)
         self.rediscoverButton.setText("Rediscover")
         if code == 0 and output.is_file():
-            if self.discovery_path is not None and output != self.discovery_path:
-                self.discovery_path = output
             self.reload()
+            return
+        detail = "\n".join(log.splitlines()[-6:]) if log else f"exit code {code}"
+        if auto:  # no modal dialog for the automatic first discovery: say it in the tree
+            self._show_message(f"Could not create {output}: {detail.splitlines()[-1]} Press Rediscover to retry.")
+            self.terminalTree.topLevelItem(0).setToolTip(COL_NAME, detail)
         else:
             QtWidgets.QMessageBox.warning(
-                self,
-                "Discovery failed",
-                f"Read-only discovery of {self._plc} failed:\n\n"
-                + ("\n".join(log.splitlines()[-6:]) if log else f"exit code {code}"),
+                self, "Discovery failed", f"Read-only discovery of {self._plc} failed:\n\n{detail}"
             )
 
     def _show_message(self, text: str):
