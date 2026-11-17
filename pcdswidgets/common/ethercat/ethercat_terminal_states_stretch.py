@@ -66,19 +66,20 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     """
     Every EtherCAT terminal of one PLC as a tree, with status roll-up and a state panel.
 
-    Set ``plc`` (host used for discovery, e.g. ``plc-sds-raptor``) and ``prefix``
-    (IOC prefix incl. trailing colon, e.g. ``PLC:ICL:IOC:``). The tree comes from a
-    read-only discovery file (``discoveryFile``, default
-    ``~/.cache/ecat-states/<plc>.json``), refreshed with the Rediscover button
-    (``ads read-ecat-topology``, needs ads-actions).
+    Designer properties: ``plc`` (host used for discovery, e.g. ``plc-sds-raptor``),
+    ``prefix`` (IOC prefix incl. trailing colon, e.g. ``PLC:ICL:IOC:``),
+    ``discoveryFile`` (read-only discovery JSON, default ``~/.cache/ecat-states/<plc>.json``)
+    and ``confirmRequests``. The discovery is refreshed with the Rediscover button
+    (``ads read-ecat-topology``, needs ads-actions; the EtherCAT master's AMS Net ID is
+    resolved by ads-actions).
 
     Every group / Port row and every junction terminal shows the worst status below
     it (grey dot = OK, red = not OP / link not OK / state flag, dashed ring =
     disconnected). Selecting a terminal shows an :class:`EthercatTerminalStateDoubleRow`.
 
-    ``mock`` replaces Channel Access with simulated ``loc://`` PVs seeded from the
-    discovery snapshot (plus optional ``mockOverridesFile``): nothing is read from or
-    written to EPICS.
+    Not shown in designer (code, screen macros and tests only): ``mock`` replaces
+    Channel Access with simulated ``loc://`` PVs seeded from the discovery snapshot
+    (plus optional ``mockOverridesFile``): nothing is read from or written to EPICS.
     """
 
     designer_options = DesignerOptions(
@@ -96,7 +97,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self._discovery_file = ""
         self._mock = False
         self._mock_overrides_file = ""
-        self._ams_net_id = ""
         self._confirm = True
 
         self.monitors: dict[int, TerminalMonitor] = {}
@@ -164,7 +164,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._mock = value
             self._prop_changed()
 
-    mock = pyqtProperty(bool, get_mock, set_mock)
+    mock = pyqtProperty(bool, get_mock, set_mock, designable=False)
 
     def get_mock_overrides_file(self) -> str:
         """Mock only: JSON overrides (state/link/access/flags per port); default <discovery>.mock.json."""
@@ -175,16 +175,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._mock_overrides_file = str(value).strip()
             self._prop_changed()
 
-    mockOverridesFile = pyqtProperty(str, get_mock_overrides_file, set_mock_overrides_file)
-
-    def get_ams_net_id(self) -> str:
-        """Optional EtherCAT master AMS Net ID passed to the discovery."""
-        return self._ams_net_id
-
-    def set_ams_net_id(self, value: str) -> None:
-        self._ams_net_id = str(value).strip()
-
-    amsNetId = pyqtProperty(str, get_ams_net_id, set_ams_net_id)
+    mockOverridesFile = pyqtProperty(str, get_mock_overrides_file, set_mock_overrides_file, designable=False)
 
     def get_confirm_requests(self) -> bool:
         """Ask for confirmation before writing State_SP (default True)."""
@@ -302,8 +293,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             output = self._default_discovery()
         output.parent.mkdir(parents=True, exist_ok=True)
         args = ["-m", "pcdswidgets.common.ethercat.discover", self._plc, "-o", str(output)]
-        if self._ams_net_id:
-            args += ["--ethercat-master-ams-net-id", self._ams_net_id]
         process = QtCore.QProcess(self)
         process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
         process.finished.connect(lambda code, _status: self._on_discovery_done(code, output))

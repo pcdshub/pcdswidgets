@@ -128,6 +128,25 @@ def test_terminal_macros_become_properties():
         assert hasattr(EthercatTerminalStateDoubleRow, name)
 
 
+def test_states_designer_properties():
+    """In designer the tree widget only asks for plc, prefix, discoveryFile and confirmRequests."""
+    from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import EthercatTerminalStatesStretch
+
+    meta = EthercatTerminalStatesStretch.staticMetaObject
+    own = {
+        meta.property(i).name(): meta.property(i).isDesignable()
+        for i in range(meta.propertyOffset(), meta.propertyCount())
+    }
+    assert {name for name, designable in own.items() if designable} == {
+        "plc",
+        "prefix",
+        "discoveryFile",
+        "confirmRequests",
+    }
+    assert own["mock"] is False and own["mockOverridesFile"] is False  # code / macros / tests only
+    assert "amsNetId" not in own
+
+
 def test_designer_group():
     from pcdswidgets.common.ethercat.ethercat_terminal_state_double_row import EthercatTerminalStateDoubleRow
     from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import EthercatTerminalStatesStretch

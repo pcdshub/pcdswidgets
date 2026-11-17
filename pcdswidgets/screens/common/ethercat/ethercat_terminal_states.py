@@ -10,7 +10,6 @@ Macros:
     DISCOVERY       discovery JSON (default ``~/.cache/ecat-states/<PLC>.json``)
     MOCK            truthy ("1"/"true") -> simulated loc:// PVs, nothing read from / written to EPICS
     MOCK_OVERRIDES  mock only: overrides JSON (default ``<DISCOVERY>.mock.json``)
-    AMS_NET_ID      EtherCAT master AMS Net ID for the discovery (optional)
     CONFIRM         "0" -> state requests are sent without a confirmation dialog
 
 Launch:
@@ -38,7 +37,6 @@ class EthercatTerminalStates(Display):
         self.states.setProperty("confirmRequests", str(macros.get("CONFIRM", "1")).strip().lower() in _TRUTHY)
         self.states.setProperty("mock", str(macros.get("MOCK", "")).strip().lower() in _TRUTHY)
         self.states.setProperty("mockOverridesFile", str(macros.get("MOCK_OVERRIDES", "")))
-        self.states.setProperty("amsNetId", str(macros.get("AMS_NET_ID", "")))
         self.states.setProperty("discoveryFile", str(macros.get("DISCOVERY", "")))
         self.states.setProperty("prefix", str(macros.get("PREFIX", "")))
         self.states.setProperty("plc", str(macros.get("PLC", "")))
