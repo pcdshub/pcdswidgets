@@ -28,6 +28,7 @@ from pcdswidgets.common.ethercat.ethercat_state import (
     LINK_ENUM,
     LOCK_COLORS,
     MUTED_GREY,
+    READ_ONLY_NOTE,
     STATE_ENUM,
     Node,
     TerminalMonitor,
@@ -37,6 +38,7 @@ from pcdswidgets.common.ethercat.ethercat_state import (
     lock_pixmap,
     mock_resend,
     mock_seeds,
+    session_read_only,
     status_stylesheet,
 )
 from pcdswidgets.generated.common.ethercat.ethercat_terminal_states_stretch_base import (
@@ -496,7 +498,8 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             _set_foreground(item, col, color)
         access, reasons = monitor.access
         item.setIcon(COL_ACCESS, self._locks[access])
-        item.setToolTip(COL_ACCESS, f"{access}\n" + ("\n".join(reasons) if reasons else ACCESS_GRANTED))
+        note = f"\n\n{READ_ONLY_NOTE}" if session_read_only() else ""
+        item.setToolTip(COL_ACCESS, f"{access}\n" + ("\n".join(reasons) if reasons else ACCESS_GRANTED) + note)
         flags = monitor.state_flags
         flag_text = "flags: " + (" + ".join(flags) if flags else "none") if flags is not None else ""
         item.setToolTip(

@@ -13,10 +13,12 @@ from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.common.ethercat.ethercat_state import (
     ACCESS_GRANTED,
+    READ_ONLY_NOTE,
     access_rule,
     decode_link_text,
     decode_state_flags,
     lock_pixmap,
+    session_read_only,
     set_status,
     status_stylesheet,
 )
@@ -210,10 +212,14 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         self.accessLabel.setText(access)
         set_status(self.accessLabel, {"EDITABLE": "editable", "LOCKED": ""}.get(access, "muted"))
         why = "\n".join(reasons) if reasons else ACCESS_GRANTED
+        read_only = session_read_only()
+        if read_only:
+            why += f"\n\n{READ_ONLY_NOTE}"
         for widget in (self.accessIcon, self.accessLabel):
             widget.setToolTip(f"{access}\n{why}")
-        self.requestFrame.setEnabled(access == "EDITABLE")
-        self.requestFrame.setToolTip("" if access == "EDITABLE" else f"Requests disabled: {access}\n{why}")
+        can_request = access == "EDITABLE" and not read_only
+        self.requestFrame.setEnabled(can_request)
+        self.requestFrame.setToolTip("" if can_request else f"Requests disabled: {access}\n{why}")
 
     @staticmethod
     def _show_disconnected_text(label):

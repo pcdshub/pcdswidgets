@@ -34,6 +34,7 @@ import os
 import re
 from pathlib import Path
 
+from pydm.data_plugins import is_read_only
 from pydm.widgets.channel import PyDMChannel
 from qtpy import QtCore, QtGui
 from qtpy.QtCore import Qt
@@ -88,6 +89,10 @@ LOCK_COLORS = {
 }
 
 ACCESS_GRANTED = "State requests accepted (DISP == 0, DISA != DISV)"
+READ_ONLY_NOTE = (
+    "This PyDM session is read-only (Qt Designer or pydm --read-only): Channel Access write "
+    "permission is not checked and state requests are disabled here."
+)
 TRUTHY = {"1", "true", "yes", "on"}
 
 
@@ -114,12 +119,22 @@ def decode_link_text(code) -> str | None:
     return f"{what} \u00b7 {where}" if what and where else (what or where)
 
 
+def session_read_only() -> bool:
+    """True in a read-only PyDM session: Qt Designer, or ``pydm --read-only``."""
+    return bool(is_read_only())
+
+
 def access_rule(disp, disa, disv, write_access=None) -> tuple[str, list[str]]:
     """
     EDITABLE / LOCKED / UNKNOWN for one terminal, with the reasons when locked.
 
     EDITABLE when ``DISP == 0`` and ``DISA != DISV`` and write access is not denied.
+    In a read-only PyDM session (Qt Designer, ``pydm --read-only``) every channel
+    reports no write access regardless of the IOC, so write access is ignored there:
+    the answer then comes from the record fields only.
     """
+    if session_read_only():
+        write_access = None
     if disp is None or disa is None or disv is None:
         return "UNKNOWN", ["State_SP access fields not connected"]
     try:
