@@ -150,6 +150,34 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
         help="Motor columns (Configuration) / rows (Diagnostics) shown before scrolling (default 3)",
     )
 
+    # EtherCAT terminal states: a .py screen, so its macros are documented here.
+    ecat_states = subparsers.add_parser(
+        "ethercat_terminal_states", help="EtherCAT terminal states of a Beckhoff PLC (system summary)"
+    )
+    _add_subp_arg(ecat_states, "PLC", action="store", required=True, help="PLC host name, e.g. plc-sds-raptor")
+    _add_subp_arg(
+        ecat_states,
+        "PREFIX",
+        action="store",
+        required=True,
+        help="IOC PV prefix incl. trailing colon, e.g. PLC:ICL:IOC:",
+    )
+    _add_subp_arg(
+        ecat_states, "DISCOVERY", action="store", help="Discovery JSON (default ~/.cache/ecat-states/<PLC>.json)"
+    )
+    _add_subp_arg(
+        ecat_states,
+        "MOCK",
+        action="store_const",
+        const="1",
+        help="Simulated loc:// PVs from the discovery snapshot (no EPICS reads or writes)",
+    )
+    _add_subp_arg(ecat_states, "MOCK_OVERRIDES", action="store", help="Mock only: overrides JSON")
+    _add_subp_arg(ecat_states, "AMS_NET_ID", action="store", help="EtherCAT master AMS Net ID for the discovery")
+    _add_subp_arg(
+        ecat_states, "CONFIRM", action="store", choices=["0", "1"], help="0 = no confirmation before state requests"
+    )
+
     # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
     feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")
     _add_subp_arg(feature_finder, "detector", action="store", required=True, help="PV value to plot on the y-axis.")
