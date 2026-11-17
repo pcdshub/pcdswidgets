@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pcdswidgets EthercatTerminalStateDoubleRow (ECS Common Ethercat), size class "double row":
+  800 x 100 minimum, stretches horizontally to fill its container, height fixed at 100.
+    title: PyDMLabel_name (TERMINAL_NAME) | type (TERMINAL_TYPE) | PV base
+    row 1: State (PyDMLabel_rbv = State_RBV) | Flags (StateRaw bits) | Request (PyDMEnumComboBox_state = State_SP)
+    row 2: Link (LinkCode decoded: condition . port)                 | Access (EDITABLE / LOCKED)
+  Macros -> designer properties: PREFIX (prefix, IOC prefix incl. trailing colon), PORT (port),
+  TERMINAL_NAME (terminal_name), TERMINAL_TYPE (terminal_type).
+  Logic (Flags/Link decoding, access gating, request confirmation) lives in
+  pcdswidgets/common/ethercat/ethercat_terminal_state_double_row.py.
+  No inline styleSheet: the look comes from the application theme; status colours come
+  from ethercat_status.qss (ecatStatus rules). No macros on the root widget (builder rule).
+-->
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>800</width><height>100</height></rect></property>
+  <property name="minimumSize"><size><width>800</width><height>100</height></size></property>
+  <property name="maximumSize"><size><width>16777215</width><height>100</height></size></property>
+  <property name="sizePolicy"><sizepolicy hsizetype="Expanding" vsizetype="Fixed"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property>
+  <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+  <property name="windowTitle"><string>EtherCAT terminal</string></property>
+  <layout class="QVBoxLayout" name="formLayout">
+   <property name="spacing"><number>0</number></property>
+   <property name="leftMargin"><number>0</number></property>
+   <property name="topMargin"><number>0</number></property>
+   <property name="rightMargin"><number>0</number></property>
+   <property name="bottomMargin"><number>0</number></property>
+   <item>
+    <widget class="QFrame" name="terminalFrame">
+     <property name="frameShape"><enum>QFrame::Box</enum></property>
+     <property name="frameShadow"><enum>QFrame::Plain</enum></property>
+     <property name="lineWidth"><number>1</number></property>
+     <layout class="QVBoxLayout" name="terminalLayout">
+      <property name="spacing"><number>2</number></property>
+      <property name="leftMargin"><number>6</number></property>
+      <property name="topMargin"><number>3</number></property>
+      <property name="rightMargin"><number>6</number></property>
+      <property name="bottomMargin"><number>3</number></property>
+      <item>
+       <layout class="QHBoxLayout" name="titleLayout">
+        <property name="spacing"><number>10</number></property>
+        <item>
+         <widget class="PyDMLabel" name="PyDMLabel_name">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="toolTip"><string>Terminal name (TwinCAT)</string></property>
+          <property name="text"><string>${TERMINAL_NAME}</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="typeLabel">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="ecatStatus" stdset="0"><string>secondary</string></property>
+          <property name="text"><string>${TERMINAL_TYPE}</string></property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="titleSpacer">
+          <property name="orientation"><enum>Qt::Horizontal</enum></property>
+          <property name="sizeHint" stdset="0"><size><width>10</width><height>10</height></size></property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="pvLabel">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>PV base of this terminal</string></property>
+          <property name="ecatStatus" stdset="0"><string>secondary</string></property>
+          <property name="text"><string>${PREFIX}ECAT:${PORT}</string></property>
+          <property name="textInteractionFlags"><set>Qt::TextSelectableByMouse</set></property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="titleRule">
+        <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="row1Layout" stretch="0,0,0,0,1,0,0">
+        <property name="spacing"><number>8</number></property>
+        <item>
+         <widget class="QLabel" name="stateCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>State</string></property>
+          <property name="minimumSize"><size><width>60</width><height>0</height></size></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMLabel" name="PyDMLabel_rbv">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>EtherCAT state machine state (State_RBV)</string></property>
+          <property name="minimumSize"><size><width>120</width><height>0</height></size></property>
+          <property name="channel" stdset="0"><string>ca://${PREFIX}ECAT:${PORT}:State_RBV</string></property>
+          <property name="alarmSensitiveContent" stdset="0"><bool>true</bool></property>
+          <property name="alarmSensitiveBorder" stdset="0"><bool>false</bool></property>
+          <property name="ecatStatus" stdset="0"><string>readback</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="flagsCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>Flags</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="flagsLabel">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>EtherCAT state flags: ERROR / INVALID_VPRS / INITCMD_ERROR / DISABLED</string></property>
+          <property name="minimumSize"><size><width>150</width><height>0</height></size></property>
+          <property name="text"><string/></property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="row1Spacer">
+          <property name="orientation"><enum>Qt::Horizontal</enum></property>
+          <property name="sizeHint" stdset="0"><size><width>10</width><height>10</height></size></property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="requestCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>Request</string></property>
+          <property name="minimumSize"><size><width>75</width><height>0</height></size></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="requestFrame">
+          <property name="enabled"><bool>false</bool></property>
+          <property name="toolTip"><string>Enabled only when the terminal is editable</string></property>
+          <layout class="QHBoxLayout" name="requestLayout">
+           <property name="spacing"><number>0</number></property>
+           <property name="leftMargin"><number>0</number></property>
+           <property name="topMargin"><number>0</number></property>
+           <property name="rightMargin"><number>0</number></property>
+           <property name="bottomMargin"><number>0</number></property>
+           <item>
+            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_state">
+             <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+             <property name="toolTip"><string>Request an EtherCAT state (State_SP). Shows the last request.</string></property>
+             <property name="minimumSize"><size><width>150</width><height>0</height></size></property>
+             <property name="channel" stdset="0"><string>ca://${PREFIX}ECAT:${PORT}:State_SP</string></property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="row2Layout" stretch="0,1,0,0">
+        <property name="spacing"><number>8</number></property>
+        <item>
+         <widget class="QLabel" name="linkCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>Link</string></property>
+          <property name="minimumSize"><size><width>60</width><height>0</height></size></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="linkLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred"><horstretch>1</horstretch><verstretch>0</verstretch></sizepolicy>
+          </property>
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Link condition and the port it applies to (LinkCode)</string></property>
+          <property name="text"><string/></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="accessCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>Access</string></property>
+          <property name="minimumSize"><size><width>75</width><height>0</height></size></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="accessBox">
+          <property name="minimumSize"><size><width>150</width><height>0</height></size></property>
+          <layout class="QHBoxLayout" name="accessLayout">
+           <property name="spacing"><number>4</number></property>
+           <property name="leftMargin"><number>0</number></property>
+           <property name="topMargin"><number>0</number></property>
+           <property name="rightMargin"><number>0</number></property>
+           <property name="bottomMargin"><number>0</number></property>
+           <item>
+            <widget class="QLabel" name="accessIcon">
+             <property name="minimumSize"><size><width>14</width><height>14</height></size></property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="accessLabel">
+             <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+             <property name="text"><string/></property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="accessSpacer">
+             <property name="orientation"><enum>Qt::Horizontal</enum></property>
+             <property name="sizeHint" stdset="0"><size><width>0</width><height>10</height></size></property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>PyDMEnumComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

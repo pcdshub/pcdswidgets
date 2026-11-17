@@ -1,0 +1,50 @@
+/*
+ * ethercat_status.qss  —  widget-local rules for the pcdswidgets common.ethercat widgets
+ *
+ * NOT a theme. The look (surface, fonts, buttons, fields, tree, alarm palette)
+ * comes from whatever stylesheet the application uses (PyDM's default, or a
+ * class-based theme passed with `pydm --stylesheet`, e.g. Carbon Gray 10).
+ *
+ * The widgets apply this sheet to themselves so a few computed
+ * (non-PV) labels can carry MEANING colours. Every rule is keyed on the dynamic
+ * property `ecatStatus`, so nothing without that property is touched and the
+ * theme is never overridden. Colours are Carbon support tokens:
+ *   fault    #da1e28  support-error   (not OP, link not OK, state flag set)
+ *   editable #0f62fe  Blue 60         (the interaction accent: requests accepted)
+ *   muted    #8d8d8d  Gray 50         (disconnected / unknown / secondary text)
+ * Normal values carry no ecatStatus and use the theme's text colour.
+ *
+ * The only other rule is title emphasis (ECS guide: titles bold and one step
+ * larger). The shared themes set one font size for every widget, which flattens
+ * the .ui title fonts, so the title weight/size is restored here. No colour.
+ */
+
+PyDMLabel#DeviceName {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+PyDMLabel#PyDMLabel_name {
+    font-weight: bold;
+}
+
+QLabel[ecatStatus="fault"] {
+    color: #da1e28;
+    font-weight: bold;
+}
+
+QLabel[ecatStatus="editable"] {
+    color: #0f62fe;
+}
+
+QLabel[ecatStatus="muted"],
+QLabel[ecatStatus="secondary"] {
+    color: #8d8d8d;
+}
+
+/* PyDM's DISCONNECTED alarm colour is white (#FFFFFF), which is invisible on the
+ * light Gray 10 surface. Keep the DISCONNECTED text readable on the State readback
+ * (scoped to readbacks inside these widgets that opt in via ecatStatus). */
+PyDMLabel[ecatStatus="readback"][alarmSeverity="4"] {
+    color: #8d8d8d;
+}
