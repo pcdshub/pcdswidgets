@@ -255,6 +255,9 @@ Common: pcdswidgets/ui/motion/common
        | control.
        | Define "motor_type" for full functionality.
      - .. image:: /_static/catalog/motor_classic_vert.png
+   * - :any:`MotorTweakRow`
+     - Compact motor readback and tweak controls.
+     - N/a
    * - :any:`MotorStateMover`
      - State mover motor control
      - .. image:: /_static/catalog/motor_state_mover.png
