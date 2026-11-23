@@ -87,6 +87,7 @@ WIDGET_PATHS = {
     "MotorTipTiltDouble": "pcdswidgets.motion.common.motor_tip_tilt_double:MotorTipTiltDouble",
     "MotorTipTiltFull": "pcdswidgets.motion.common.motor_tip_tilt_full:MotorTipTiltFull",
     "NeedleValve": "pcdswidgets.vacuum.valves:NeedleValve",
+    "PCDSSymbolBase": "pcdswidgets.vacuum.base:PCDSSymbolBase",
     "PneumaticValve": "pcdswidgets.vacuum.valves:PneumaticValve",
     "PneumaticValveDA": "pcdswidgets.vacuum.valves:PneumaticValveDA",
     "PneumaticValveNO": "pcdswidgets.vacuum.valves:PneumaticValveNO",
