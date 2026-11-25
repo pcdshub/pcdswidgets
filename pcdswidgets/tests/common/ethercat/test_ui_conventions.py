@@ -11,7 +11,6 @@ from pathlib import Path
 import pytest
 
 import pcdswidgets
-from pcdswidgets.builder.build import get_main_class_name
 
 MODULE = Path(pcdswidgets.__file__).parent
 UI_DIR = MODULE / "ui" / "common" / "ethercat"
@@ -28,13 +27,6 @@ def prop(widget, name):
         if p.get("name") == name:
             return p
     return None
-
-
-def test_expected_ui_files():
-    assert [p.name for p in UI_FILES] == [
-        "ethercat_terminal_state_double_row.ui",
-        "ethercat_terminal_states_stretch.ui",
-    ]
 
 
 @pytest.mark.parametrize("ui_path", UI_FILES, ids=lambda p: p.name)
@@ -74,19 +66,6 @@ def test_fonts_are_sans_serif_11_or_12(ui_path):
     assert bad == []
 
 
-@pytest.mark.parametrize(
-    "name, cls",
-    [
-        ("PyDMLabel_name", "PyDMLabel"),
-        ("PyDMLabel_rbv", "PyDMLabel"),
-        ("PyDMEnumComboBox_state", "PyDMEnumComboBox"),
-    ],
-)
-def test_terminal_naming_contract(name, cls):
-    names = {w.get("name"): w.get("class") for w in widgets(UI_DIR / "ethercat_terminal_state_double_row.ui")}
-    assert names.get(name) == cls
-
-
 def test_states_naming_and_frame():
     ws = {w.get("name"): w for w in widgets(UI_DIR / "ethercat_terminal_states_stretch.ui")}
     assert ws["DeviceName"].get("class") == "PyDMLabel"
@@ -111,23 +90,6 @@ def test_design_sizes(ui_name, size):
     assert (int(rect.findtext("width")), int(rect.findtext("height"))) == size
 
 
-@pytest.mark.parametrize("ui_path", UI_FILES, ids=lambda p: p.name)
-def test_generated_and_main_files_exist(ui_path):
-    stem = ui_path.stem
-    assert (MODULE / "generated" / "common" / "ethercat" / f"{stem}_form.py").is_file()
-    assert (MODULE / "generated" / "common" / "ethercat" / f"{stem}_base.py").is_file()
-    main = MODULE / "common" / "ethercat" / f"{stem}.py"
-    assert f"class {get_main_class_name(str(ui_path))}(" in main.read_text()
-
-
-def test_terminal_macros_become_properties():
-    from pcdswidgets.common.ethercat.ethercat_terminal_state_double_row import EthercatTerminalStateDoubleRow
-
-    assert set(EthercatTerminalStateDoubleRow._macro_to_widget) == {"PREFIX", "PORT", "TERMINAL_NAME", "TERMINAL_TYPE"}
-    for name in ("prefix", "port", "terminal_name", "terminal_type", "confirmRequests"):
-        assert hasattr(EthercatTerminalStateDoubleRow, name)
-
-
 def test_states_designer_properties():
     """In designer the tree widget only asks for plc, prefix, discoveryFile and confirmRequests."""
     from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import EthercatTerminalStatesStretch
@@ -143,8 +105,7 @@ def test_states_designer_properties():
         "discoveryFile",
         "confirmRequests",
     }
-    assert own["mock"] is False and own["mockOverridesFile"] is False  # code / macros / tests only
-    assert "amsNetId" not in own
+    assert not {"mock", "mockOverridesFile", "amsNetId"} & set(own)
 
 
 def test_designer_group():

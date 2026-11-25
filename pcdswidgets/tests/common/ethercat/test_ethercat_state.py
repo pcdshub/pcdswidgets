@@ -1,4 +1,4 @@
-"""Pure logic of pcdswidgets.common.ethercat: decoding, access/health rules, tree, mock seeds."""
+"""Pure logic of pcdswidgets.common.ethercat: decoding, access/health rules, tree."""
 
 import pytest
 
@@ -74,7 +74,7 @@ def _t(port, a=0, b=0, c=0, d=0, name=None):
 
 
 def test_build_tree_chain_is_flat():
-    groups = es.build_tree([_t(1, b=2), _t(2, a=1, b=3), _t(3, a=2)], topology=True)
+    groups = es.build_tree([_t(1, b=2), _t(2, a=1, b=3), _t(3, a=2)])
     assert [g.label for g in groups] == ["Master line"]
     assert [n.terminal.port for n in groups[0].children] == [1, 2, 3]
     assert all(not n.children for n in groups[0].children)
@@ -83,7 +83,7 @@ def test_build_tree_chain_is_flat():
 def test_build_tree_junction_gets_port_branches():
     # 1 -> junction 2 with downstream ports C (3) and D (4 -> 5)
     terminals = [_t(1, b=2), _t(2, a=1, c=3, d=4), _t(3, a=2), _t(4, a=2, b=5), _t(5, a=4)]
-    junction = es.build_tree(terminals, topology=True)[0].children[1]
+    junction = es.build_tree(terminals)[0].children[1]
     assert junction.terminal.port == 2
     assert [(b.kind, b.label) for b in junction.children] == [("branch", "Port C"), ("branch", "Port D")]
     assert [n.terminal.port for n in junction.children[1].children] == [4, 5]
@@ -91,49 +91,26 @@ def test_build_tree_junction_gets_port_branches():
 
 def test_build_tree_hot_connect_and_standalone():
     terminals = [_t(1, b=2), _t(2, a=1), _t(10, b=11, name="Box"), _t(11, a=10), _t(20)]
-    assert [g.label for g in es.build_tree(terminals, topology=True)] == [
+    assert [g.label for g in es.build_tree(terminals)] == [
         "Master line",
         "Box group",
         "Standalone terminals",
     ]
 
 
-def test_build_tree_without_topology_is_flat():
-    groups = es.build_tree([_t(p) for p in (3, 1, 2)], topology=False)
+def test_build_tree_without_neighbours_is_flat():
+    groups = es.build_tree([_t(p) for p in (3, 1, 2)])  # every port A-D neighbour is 0
     assert [g.label for g in groups] == ["Configured terminals"]
     assert groups[0].count_terminals() == 3
 
 
-def test_real_snapshot_tree():
+def test_real_discovery_tree():
     meta, terminals = es.load_discovery(DISCOVERY)
     assert meta["plc"] == PLC and len(terminals) == 85
-    groups = es.build_tree(terminals, bool(meta.get("topology_available")))
+    groups = es.build_tree(terminals)
     assert groups[0].label == "Master line"
     assert sum(g.count_terminals() for g in groups) == 85  # every terminal placed exactly once
     assert "Unplaced terminals" not in [g.label for g in groups]
-
-
-# --------------------------------------------------------------------- mock
-def test_mock_seeds_default_locked_and_overrides():
-    _, terminals = es.load_discovery(DISCOVERY)
-    plain = es.mock_seeds(terminals)
-    assert all((s["disp"], s["disa"], s["disv"]) == (1, 1, 1) for s in plain.values())  # pytmc default deny
-    seeds = es.mock_seeds(
-        terminals,
-        {
-            "state": {"1020": "SAFEOP"},
-            "access": {"1020": {"DISP": 0, "DISA": 0, "DISV": 1}},
-            "state_flags": {"1020": ["ERROR"]},
-        },
-    )
-    assert seeds[1020]["state"] == es.STATE_ENUM.index("SAFEOP")
-    assert es.access_rule(seeds[1020]["disp"], seeds[1020]["disa"], seeds[1020]["disv"])[0] == "EDITABLE"
-    assert es.decode_state_flags(seeds[1020]["raw"]) == ["ERROR"]
-
-
-def test_mock_query_has_enum_strings():
-    query = es.mock_query("state", {"state": 3})
-    assert query.startswith("?type=int&init=3") and "'SAFEOP'" in query
 
 
 # --------------------------------------------------------------- pixmaps

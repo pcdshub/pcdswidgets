@@ -1,7 +1,8 @@
 """
-discoveryFile handling: a directory or a not-yet-existing file is created by the
-read-only discovery instead of erroring. Uses a fake ``ads`` script (via
-ADS_ACTIONS_BIN) that only answers ``read-ecat-topology``: no PLC, no ads-actions.
+discoveryFile handling. A missing file is only explained: the read-only discovery runs
+when the user presses Rediscover, never on its own. A directory or a not-yet-existing
+file is then created. Uses a fake ``ads`` script (via ADS_ACTIONS_BIN) that only
+answers ``read-ecat-topology``: no PLC, no ads-actions.
 """
 
 import json
@@ -14,7 +15,7 @@ from pcdswidgets.common.ethercat import discover
 from pcdswidgets.common.ethercat import ethercat_terminal_states_stretch as stretch_module
 from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import EthercatTerminalStatesStretch
 
-from .conftest import wait_until
+from .conftest import PREFIX, wait_until
 
 TOPOLOGY = {
     "slaves": [
@@ -43,7 +44,7 @@ def make(qtbot, discovery_file: str) -> EthercatTerminalStatesStretch:
     states = EthercatTerminalStatesStretch()
     qtbot.addWidget(states)
     states.setProperty("plc", "plc-test")
-    states.setProperty("prefix", "PYTEST:DISC:")
+    states.setProperty("prefix", PREFIX)
     states.setProperty("discoveryFile", discovery_file)
     states.reload()
     return states
@@ -82,24 +83,35 @@ def test_can_create(tmp_path):
         locked.chmod(stat.S_IRWXU)
 
 
-def test_cli_accepts_a_directory(fake_ads, tmp_path):
-    assert discover.main(["plc-cli", "-o", str(tmp_path / "out") + "/"]) == 0
-    data = json.loads((tmp_path / "out" / "plc-cli.json").read_text())
-    assert [t["port"] for t in data["terminals"]] == [1001, 1002]
-    assert not list(tmp_path.glob("**/*.tmp"))
+# ------------------------------------------------- discovery is a user action
+def press_rediscover(states):
+    assert states.rediscoverButton.isEnabled()
+    states.rediscoverButton.click()
 
 
-# ---------------------------------------------------------- widget creates
-@pytest.mark.parametrize("kind", ["existing_dir", "dir_with_slash", "missing_file", "no_suffix"])
-def test_missing_discovery_file_is_created(qtbot, fake_ads, tmp_path, kind):
-    (tmp_path / "existing_dir").mkdir()
-    given, created = {
-        "existing_dir": (tmp_path / "existing_dir", tmp_path / "existing_dir" / "plc-test.json"),
-        "dir_with_slash": (f"{tmp_path / 'new_dir'}/", tmp_path / "new_dir" / "plc-test.json"),
-        "missing_file": (tmp_path / "a" / "b" / "snap.json", tmp_path / "a" / "b" / "snap.json"),
-        "no_suffix": (tmp_path / "no_suffix", tmp_path / "no_suffix" / "plc-test.json"),
-    }[kind]
-    states = make(qtbot, str(given))
+def test_missing_file_starts_nothing(qtbot, fake_ads, tmp_path):
+    states = make(qtbot, str(tmp_path / "out"))
+    qtbot.wait(500)
+    assert states._process is None and states.monitors == {}
+    assert not (tmp_path / "out").exists()
+    text = states.terminalTree.topLevelItem(0).text(0)
+    assert text.startswith("No discovery file") and "Press Rediscover" in text
+    assert "pcdswidgets.common.ethercat.discover" in text  # the command-line alternative
+
+
+def test_reload_never_discovers(qtbot, fake_ads, tmp_path):
+    states = make(qtbot, str(tmp_path / "out"))
+    for _ in range(3):
+        states.reload()
+    assert states._process is None and not (tmp_path / "out").exists()
+
+
+def test_rediscover_creates_the_file(qtbot, fake_ads, tmp_path):
+    """End to end once (the path variants are covered by test_resolve_output)."""
+    created = tmp_path / "a" / "b" / "snap.json"  # missing parent directories too
+    states = make(qtbot, str(created))
+    assert not created.exists()
+    press_rediscover(states)
     assert states.terminalTree.topLevelItem(0).text(0).startswith(f"Creating {created}")
     wait_until(lambda: len(states.monitors) == 2, timeout=30)
     assert created.is_file() and states.meta["_path"] == str(created)
@@ -116,6 +128,7 @@ def test_unwritable_location_falls_back_to_cache(qtbot, fake_ads, tmp_path):
             pytest.skip("running as a user that can write read-only directories")
         states = make(qtbot, str(locked / "snap.json"))
         assert "is not writable" in states.terminalTree.topLevelItem(0).text(0)
+        press_rediscover(states)
         wait_until(lambda: len(states.monitors) == 2, timeout=30)
         assert states.meta["_path"] == str(tmp_path / "cache" / "plc-test.json")
         states.teardown()
@@ -123,22 +136,15 @@ def test_unwritable_location_falls_back_to_cache(qtbot, fake_ads, tmp_path):
         locked.chmod(stat.S_IRWXU)
 
 
-def test_no_automatic_discovery_in_designer(qtbot, fake_ads, tmp_path, monkeypatch):
-    monkeypatch.setattr(stretch_module, "is_qt_designer", lambda: True)
-    states = make(qtbot, str(tmp_path / "designer_dir"))
-    qtbot.wait(500)
-    assert states._process is None and states.monitors == {}
-    assert "created when the screen runs" in states.terminalTree.topLevelItem(0).text(0)
-    assert not (tmp_path / "designer_dir").exists()
-
-
-def test_failed_automatic_discovery_is_reported_once(qtbot, fake_ads, tmp_path, monkeypatch):
+def test_failed_discovery_is_reported(qtbot, fake_ads, tmp_path, monkeypatch):
     fake_ads.write_text("#!/bin/sh\necho 'route to plc-test missing' >&2\nexit 3\n")
     dialogs = []
     monkeypatch.setattr(stretch_module.QtWidgets.QMessageBox, "warning", lambda *a: dialogs.append(a))
     states = make(qtbot, str(tmp_path / "out"))
-    wait_until(lambda: states._process is None and "Could not create" in states.terminalTree.topLevelItem(0).text(0))
-    assert dialogs == []  # automatic first discovery: no modal dialog
-    states.reload()  # a reload must not start the failing discovery again
-    assert states._process is None
-    assert "Press Rediscover to retry" in states.terminalTree.topLevelItem(0).text(0)
+    press_rediscover(states)
+    wait_until(lambda: states._process is None, timeout=30)
+    assert len(dialogs) == 1 and "route to plc-test missing" in dialogs[0][2]
+    assert states.terminalTree.topLevelItem(0).text(0).startswith("No discovery file")  # explanation restored
+    assert states.rediscoverButton.isEnabled()  # the user can retry
+    states.reload()
+    assert states._process is None  # never retried on its own

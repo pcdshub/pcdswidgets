@@ -216,9 +216,9 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "EtherCAT terminal"))
         self.PyDMLabel_name.setToolTip(_translate("Form", "Terminal name (TwinCAT)"))
-        self.typeLabel.setProperty("ecatStatus", _translate("Form", "secondary"))
+        self.typeLabel.setProperty("ecatStatus", _translate("Form", "muted"))
         self.pvLabel.setToolTip(_translate("Form", "PV base of this terminal"))
-        self.pvLabel.setProperty("ecatStatus", _translate("Form", "secondary"))
+        self.pvLabel.setProperty("ecatStatus", _translate("Form", "muted"))
         self.stateCaption.setText(_translate("Form", "State"))
         self.PyDMLabel_rbv.setToolTip(_translate("Form", "EtherCAT state machine state (State_RBV)"))
         self.PyDMLabel_rbv.setProperty("ecatStatus", _translate("Form", "readback"))

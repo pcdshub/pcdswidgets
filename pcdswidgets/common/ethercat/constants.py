@@ -14,7 +14,7 @@ from pathlib import Path
 CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "ecat-states"
 
 # Enum strings in record order (pytmc/ethercat.py). Live mode uses the strings
-# reported by Channel Access; these are the fallback and the mock definition.
+# reported by Channel Access; these are the fallback.
 STATE_ENUM = ("INIT", "PREOP", "BOOTSTRAP", "SAFEOP", "OP")
 LINK_ENUM = (
     "OK",

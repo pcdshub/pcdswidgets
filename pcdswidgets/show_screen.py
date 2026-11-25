@@ -166,14 +166,6 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
         ecat_states, "DISCOVERY", action="store", help="Discovery JSON (default ~/.cache/ecat-states/<PLC>.json)"
     )
     _add_subp_arg(
-        ecat_states,
-        "MOCK",
-        action="store_const",
-        const="1",
-        help="Simulated loc:// PVs from the discovery snapshot (no EPICS reads or writes)",
-    )
-    _add_subp_arg(ecat_states, "MOCK_OVERRIDES", action="store", help="Mock only: overrides JSON")
-    _add_subp_arg(
         ecat_states, "CONFIRM", action="store", choices=["0", "1"], help="0 = no confirmation before state requests"
     )
 

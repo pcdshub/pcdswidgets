@@ -40,14 +40,11 @@ from qtpy.QtCore import Qt
 
 from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM
 
-MODULE_DIR = Path(__file__).resolve().parent
-STATUS_QSS = MODULE_DIR / "ethercat_status.qss"
+STATUS_QSS = Path(__file__).resolve().parent / "ethercat_status.qss"
 
 GOOD_STATE, GOOD_LINK = "OP", "OK"
-ABSENT_LINKS = {"NOT_PRESENT", "LINK_WITHOUT_COMM", "MISSING_LINK"}
 # Raw EtherCAT state word (pytmc helper records StateRaw / LinkCode):
 #   bits 0-3 state code, bits 4-7 state flags, bits 8-15 link byte (conditions 0-3, ports 4-7)
-STATE_CODES = {"INIT": 0x01, "PREOP": 0x02, "BOOTSTRAP": 0x03, "SAFEOP": 0x04, "OP": 0x08}
 STATE_FLAG_BITS = {"ERROR": 0x10, "INVALID_VPRS": 0x20, "INITCMD_ERROR": 0x40, "DISABLED": 0x80}
 LINK_FLAG_BITS = {
     "NOT_PRESENT": 0x01,
@@ -62,11 +59,10 @@ LINK_FLAG_BITS = {
 
 # Health, ordered like EPICS severities: OK < FAULT (MAJOR) < DISCONNECTED (INVALID)
 H_OK, H_FAULT, H_DISCONNECTED = 0, 1, 2
-HEALTH_TEXT = {H_OK: "OK", H_FAULT: "FAULT", H_DISCONNECTED: "DISCONNECTED"}
+HEALTHS = (H_OK, H_FAULT, H_DISCONNECTED)
 
 FAULT_RED = QtGui.QColor("#da1e28")  # Carbon support-error
-MUTED_GREY = QtGui.QColor("#8d8d8d")  # Carbon Gray 50: readable on light and dark themes
-OK_GREY = QtGui.QColor("#8d8d8d")
+MUTED_GREY = QtGui.QColor("#8d8d8d")  # Carbon Gray 50: OK markers and muted text, light and dark themes
 LOCK_COLORS = {
     "EDITABLE": QtGui.QColor("#0f62fe"),  # Carbon Blue 60, the interaction accent
     "LOCKED": QtGui.QColor("#6f6f6f"),
@@ -176,7 +172,7 @@ def dot_pixmap(health: int, size: int) -> QtGui.QPixmap:
     rect = QtCore.QRectF(1.5, 1.5, size - 3, size - 3)
     if health in (H_OK, H_FAULT):
         painter.setPen(Qt.NoPen)
-        painter.setBrush(OK_GREY if health == H_OK else FAULT_RED)
+        painter.setBrush(MUTED_GREY if health == H_OK else FAULT_RED)
     else:
         pen = QtGui.QPen(MUTED_GREY, 1.5)
         pen.setStyle(Qt.DashLine)
@@ -213,25 +209,11 @@ def lock_pixmap(access: str, size: int) -> QtGui.QPixmap:
 class Terminal:
     """One discovered terminal."""
 
-    def __init__(
-        self,
-        port,
-        name,
-        type,
-        neighbors=None,
-        snapshot_state=None,
-        snapshot_link=None,
-        snapshot_state_flags=None,
-        snapshot_link_flags=None,
-    ):
+    def __init__(self, port, name, type, neighbors=None):
         self.port = int(port)
         self.name = name
         self.type = type
         self.neighbors = dict(neighbors or {})
-        self.snapshot_state = snapshot_state
-        self.snapshot_link = snapshot_link
-        self.snapshot_state_flags = snapshot_state_flags
-        self.snapshot_link_flags = snapshot_link_flags
 
     @property
     def display_name(self) -> str:
@@ -261,24 +243,19 @@ def load_discovery(path) -> tuple[dict, list[Terminal]]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     terminals = []
     for row in data.get("terminals", []):
-        snapshot = row.get("snapshot") or {}
         terminals.append(
             Terminal(
                 port=int(row["port"]),
                 name=str(row.get("name") or f"Port {row['port']}"),
                 type=str(row.get("type") or ""),
                 neighbors={k: int(v or 0) for k, v in (row.get("neighbors") or {}).items()},
-                snapshot_state=snapshot.get("state"),
-                snapshot_link=snapshot.get("link"),
-                snapshot_state_flags=snapshot.get("state_flags"),
-                snapshot_link_flags=snapshot.get("link_flags"),
             )
         )
     terminals.sort(key=lambda t: t.port)
     return data, terminals
 
 
-def build_tree(terminals: list[Terminal], topology: bool) -> list[Node]:
+def build_tree(terminals: list[Terminal]) -> list[Node]:
     """
     Turn port A-D neighbours into a readable tree.
 
@@ -286,11 +263,11 @@ def build_tree(terminals: list[Terminal], topology: bool) -> list[Node]:
     a terminal with several downstream neighbours (junction, EK1122, EP9128...)
     gets one "Port X" branch per neighbour. The first configured slave starts
     the master line; other segments with an open port A (typically Hot Connect
-    groups) become their own groups.
+    groups) become their own groups. Without any neighbour the list stays flat.
     """
     if not terminals:
         return []
-    if not topology or not any(t.neighbors for t in terminals):
+    if not any(any(t.neighbors.values()) for t in terminals):
         return [
             Node(
                 "group",
@@ -385,89 +362,7 @@ class _TreeBuilder:
         return groups
 
 
-# ---------------------------------------------------------------------- mock
-def _enum_literal(strings) -> str:
-    return "(" + ",".join(f"'{s}'" for s in strings) + ")"
-
-
-def mock_query(key: str, seed: dict) -> str:
-    """``loc://`` query string that creates a simulated PV with its initial value."""
-    if key in ("state", "sp"):
-        return f"?type=int&init={seed[key]}&enum_string={_enum_literal(STATE_ENUM)}"
-    if key == "link":
-        return f"?type=int&init={seed[key]}&enum_string={_enum_literal(LINK_ENUM)}"
-    return f"?type=int&init={seed[key]}"
-
-
-def mock_seeds(terminals: list[Terminal], overrides: dict | None = None) -> dict[int, dict]:
-    """
-    Initial values of the simulated PVs, from the discovery snapshot plus optional overrides.
-
-    ``overrides`` (all keyed by port as a string): ``state``, ``link``, ``access``
-    (``{"DISP": 0, "DISA": 0, "DISV": 1}``), ``state_flags``, ``link_flags``.
-    Without overrides every terminal is locked (pytmc default DISP=DISA=DISV=1).
-    """
-    overrides = overrides or {}
-    seeds = {}
-    for t in terminals:
-        port = str(t.port)
-        state = overrides.get("state", {}).get(port) or t.snapshot_state or "OP"
-        link = overrides.get("link", {}).get(port) or t.snapshot_link or "OK"
-        state_index = STATE_ENUM.index(state) if state in STATE_ENUM else 0
-        gates = {"DISP": 1, "DISA": 1, "DISV": 1}
-        gates.update(overrides.get("access", {}).get(port, {}))
-        link_flags = overrides.get("link_flags", {}).get(port, t.snapshot_link_flags)
-        if link_flags is None:  # old snapshot: single-flag enums only
-            link_flags = [] if link == "OK" else [link] if link in LINK_FLAG_BITS else []
-        state_flags = overrides.get("state_flags", {}).get(port, t.snapshot_state_flags or [])
-        link_code = sum(LINK_FLAG_BITS.get(f, 0) for f in link_flags)
-        raw = (link_code << 8) | sum(STATE_FLAG_BITS.get(f, 0) for f in state_flags) | STATE_CODES.get(state, 0x01)
-        seeds[t.port] = {
-            "state": state_index,
-            "link": LINK_ENUM.index(link) if link in LINK_ENUM else 1,
-            "sp": state_index,
-            "disp": int(gates["DISP"]),
-            "disa": int(gates["DISA"]),
-            "disv": int(gates["DISV"]),
-            "raw": raw,
-            "linkcode": link_code,
-        }
-    return seeds
-
-
-def mock_resend(prefix: str, port: int):
-    """
-    Mock only: re-broadcast the simulated PVs of one terminal to newly created widgets.
-
-    PyDM's ``loc://`` plugin sends enum strings to the first listener only, and
-    hands a new listener its value before its connection state. Channel Access
-    has neither problem.
-    """
-    from pydm.data_plugins import plugin_for_address
-
-    plugin = plugin_for_address("loc://mock-resend")
-    for _key, suffix in TerminalMonitor.FIELDS:
-        connection = plugin.connections.get(f"{prefix}ECAT:{port}:{suffix}")
-        if connection is None:
-            continue
-        strings = getattr(connection, "_enum_string", None)
-        if strings:
-            connection.enum_strings_signal.emit(tuple(strings))
-        if getattr(connection, "value", None) is not None:
-            connection.send_new_value(connection.value)
-
-
 # ------------------------------------------------------------------- monitor
-def disconnect_all(channels: list):
-    """Disconnect and drop every channel (the list is emptied, so later calls are no-ops)."""
-    while channels:
-        channel = channels.pop()
-        try:
-            channel.disconnect()
-        except Exception:
-            pass
-
-
 def release_monitors(monitors: list | dict):
     """
     Disconnect every monitor in a list or dict (which is emptied, so later calls are no-ops).
@@ -483,16 +378,11 @@ def release_monitors(monitors: list | dict):
 
 class TerminalMonitor(QtCore.QObject):
     """
-    Read-only subscription to one terminal's PVs, with the derived state / link / access.
-
-    Shared by both widgets. ``protocol == "loc://"`` (mock) works around PyDM's
-    ``loc://`` quirks; a ``mock_seed`` additionally creates the simulated PVs and
-    makes the terminal follow State_SP requests.
+    Read-only Channel Access subscription to one terminal's PVs, with the derived
+    state / link / access. Shared by both widgets.
     """
 
     changed = QtCore.Signal()
-    simulated_rbv = QtCore.Signal(int)  # mock only: drives the simulated State_RBV
-    simulated_raw = QtCore.Signal(int)  # mock only: drives the simulated StateRaw
 
     FIELDS = (
         ("state", "State_RBV"),
@@ -505,35 +395,25 @@ class TerminalMonitor(QtCore.QObject):
         ("linkcode", "LinkCode"),
     )
 
-    def __init__(self, terminal: Terminal, prefix: str, protocol: str, mock_seed: dict | None = None, parent=None):
+    def __init__(self, terminal: Terminal, prefix: str, parent=None):
         super().__init__(parent)
         self.terminal = terminal
         self.base = f"{prefix}ECAT:{terminal.port}"
-        self.protocol = protocol
-        self.mock = protocol == "loc://"
-        self.mock_seed = mock_seed
         self.values = {key: None for key, _ in self.FIELDS}
         self.connected = {key: False for key, _ in self.FIELDS}
         self.enums: dict[str, tuple] = {}
         self.write_access = None
-        self._last_sp = None
         self.channels = []
         for key, suffix in self.FIELDS:
-            address = f"{protocol}{self.base}:{suffix}"
-            if mock_seed is not None:
-                address += mock_query(key, mock_seed)
             self.channels.append(
                 PyDMChannel(
-                    address=address,
+                    address=f"ca://{self.base}:{suffix}",
                     connection_slot=functools.partial(self._on_connection, key),
                     value_slot=functools.partial(self._on_value, key),
                     enum_strings_slot=(
                         functools.partial(self._on_enums, key) if key in ("state", "link", "sp") else None
                     ),
                     write_access_slot=self._on_write_access if key == "sp" else None,
-                    value_signal=(
-                        {"state": self.simulated_rbv, "raw": self.simulated_raw}.get(key) if mock_seed else None
-                    ),
                 )
             )
 
@@ -542,23 +422,21 @@ class TerminalMonitor(QtCore.QObject):
             channel.connect()
 
     def disconnect_channels(self):
-        disconnect_all(self.channels)
+        """Disconnect and drop every channel (the list is emptied, so later calls are no-ops)."""
+        while self.channels:
+            channel = self.channels.pop()
+            try:
+                channel.disconnect()
+            except Exception:
+                pass
 
     # slots
     def _on_connection(self, key, connected):
-        if self.mock and not connected:
-            return  # PyDM loc:// quirk: the first listener gets a stray False after True
         self.connected[key] = bool(connected)
         self.changed.emit()
 
     def _on_value(self, key, value):
         self.values[key] = value
-        if self.mock:
-            self.connected[key] = True  # PyDM loc:// quirk: value can arrive before the connection
-        if key == "sp" and self.mock_seed is not None:
-            if self._last_sp is not None and value != self._last_sp:
-                self._simulate_request(value)
-            self._last_sp = value
         self.changed.emit()
 
     def _on_enums(self, key, strings):
@@ -568,26 +446,6 @@ class TerminalMonitor(QtCore.QObject):
     def _on_write_access(self, allowed):
         self.write_access = bool(allowed)
         self.changed.emit()
-
-    def _simulate_request(self, value):
-        """Mock: a present terminal follows the request after a short delay."""
-        if self.link_text in ABSENT_LINKS:
-            return  # an absent terminal cannot leave INIT
-        try:
-            target = int(value)
-        except (TypeError, ValueError):
-            return
-        raw = self.values.get("raw")
-        new_raw = None
-        if raw is not None and 0 <= target < len(STATE_ENUM):
-            new_raw = (int(raw) & ~0x0F) | STATE_CODES[STATE_ENUM[target]]
-
-        def apply():
-            self.simulated_rbv.emit(target)
-            if new_raw is not None:
-                self.simulated_raw.emit(new_raw)
-
-        QtCore.QTimer.singleShot(800, apply)
 
     # derived status
     def _enum_text(self, key, fallback):

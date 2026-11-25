@@ -5,12 +5,10 @@
 from __future__ import annotations
 
 import functools
-import json
 import sys
 from datetime import datetime
 from pathlib import Path
 
-from pydm.utilities import is_qt_designer
 from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import Qt
 
@@ -24,7 +22,7 @@ from pcdswidgets.common.ethercat.ethercat_state import (
     GOOD_STATE,
     H_DISCONNECTED,
     H_OK,
-    HEALTH_TEXT,
+    HEALTHS,
     LOCK_COLORS,
     MUTED_GREY,
     Node,
@@ -34,8 +32,6 @@ from pcdswidgets.common.ethercat.ethercat_state import (
     dot_pixmap,
     load_discovery,
     lock_pixmap,
-    mock_resend,
-    mock_seeds,
     release_monitors,
     status_stylesheet,
 )
@@ -51,10 +47,6 @@ except ImportError:
 COL_NAME, COL_PORT, COL_STATE, COL_LINK, COL_ACCESS = range(5)
 ROLE_PORT = Qt.UserRole + 1
 SHOW_ALL, SHOW_FAULTS, SHOW_NOT_OP, SHOW_LINK, SHOW_EDITABLE, SHOW_DISCONNECTED = range(6)
-
-TEXT_NORMAL = None  # None = theme text colour (no override)
-TEXT_FAULT = FAULT_RED
-TEXT_MUTED = MUTED_GREY
 
 
 def _set_foreground(item, col, color):
@@ -84,10 +76,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     Every group / Port row and every junction terminal shows the worst status below
     it (grey dot = OK, red = not OP / link not OK / state flag, dashed ring =
     disconnected). Selecting a terminal shows an :class:`EthercatTerminalStateDoubleRow`.
-
-    Not shown in designer (code, screen macros and tests only): ``mock`` replaces
-    Channel Access with simulated ``loc://`` PVs seeded from the discovery snapshot
-    (plus optional ``mockOverridesFile``): nothing is read from or written to EPICS.
     """
 
     designer_options = DesignerOptions(
@@ -96,23 +84,17 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         icon=IconOptions.NONE,
     )
 
-    terminalSelected = QtCore.Signal(int)
-
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
         self._plc = ""
         self._prefix = ""
         self._discovery_file = ""
-        self._mock = False
-        self._mock_overrides_file = ""
         self._confirm = True
 
         self.monitors: dict[int, TerminalMonitor] = {}
         self.terminal_items: dict[int, QtWidgets.QTreeWidgetItem] = {}
         self.meta: dict = {}
-        self.discovery_path: Path | None = None
         self._process: QtCore.QProcess | None = None
-        self._auto_discovered: Path | None = None  # target already auto-created once (no retry loop)
         self._refresh_timer = QtCore.QTimer(self, singleShot=True, interval=150)
         self._refresh_timer.timeout.connect(self.refresh)
         # Properties can arrive in any order (designer, .ui, code): reload once they settle.
@@ -156,7 +138,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     prefix = pyqtProperty(str, get_prefix, set_prefix)
 
     def get_discovery_file(self) -> str:
-        """Discovery JSON or a directory for <dir>/<plc>.json (default ~/.cache/ecat-states); created if missing."""
+        """Discovery JSON or a directory for <dir>/<plc>.json (default ~/.cache/ecat-states); written by Rediscover."""
         return self._discovery_file
 
     def set_discovery_file(self, value: str) -> None:
@@ -165,29 +147,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._prop_changed()
 
     discoveryFile = pyqtProperty(str, get_discovery_file, set_discovery_file)
-
-    def get_mock(self) -> bool:
-        """Simulated loc:// PVs seeded from the discovery snapshot (no EPICS)."""
-        return self._mock
-
-    def set_mock(self, value: bool) -> None:
-        value = to_bool(value)
-        if value != self._mock:
-            self._mock = value
-            self._prop_changed()
-
-    mock = pyqtProperty(bool, get_mock, set_mock, designable=False)
-
-    def get_mock_overrides_file(self) -> str:
-        """Mock only: JSON overrides (state/link/access/flags per port); default <discovery>.mock.json."""
-        return self._mock_overrides_file
-
-    def set_mock_overrides_file(self, value: str) -> None:
-        if value != self._mock_overrides_file:
-            self._mock_overrides_file = str(value).strip()
-            self._prop_changed()
-
-    mockOverridesFile = pyqtProperty(str, get_mock_overrides_file, set_mock_overrides_file, designable=False)
 
     def get_confirm_requests(self) -> bool:
         """Ask for confirmation before writing State_SP (default True)."""
@@ -198,10 +157,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.terminalWidget.setProperty("confirmRequests", self._confirm)
 
     confirmRequests = pyqtProperty(bool, get_confirm_requests, set_confirm_requests)
-
-    @property
-    def protocol(self) -> str:
-        return "loc://" if self._mock else "ca://"
 
     # ---------------------------------------------------------------- set up
     def _setup_widgets(self):
@@ -219,7 +174,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.filterEdit.textChanged.connect(self._on_filter_changed)
         self.expandButton.clicked.connect(tree.expandAll)
         self.collapseButton.clicked.connect(lambda: tree.collapseAll())
-        self.rediscoverButton.clicked.connect(self._on_rediscover_clicked)
+        self.rediscoverButton.clicked.connect(self.rediscover)
         self._make_icons()
         self._update_column_widths()
 
@@ -233,7 +188,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     def _make_icons(self):
         size = max(10, int(self.terminalTree.fontMetrics().height() * 0.7))
         self.terminalTree.setIconSize(QtCore.QSize(size, size))
-        self._dots = {h: QtGui.QIcon(dot_pixmap(h, size)) for h in HEALTH_TEXT}
+        self._dots = {h: QtGui.QIcon(dot_pixmap(h, size)) for h in HEALTHS}
         self._locks = {access: QtGui.QIcon(lock_pixmap(access, size)) for access in LOCK_COLORS}
 
     def _update_column_widths(self):
@@ -260,8 +215,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
 
     # -------------------------------------------------------------- discovery
     def _title(self) -> str:
-        title = f"EtherCAT Terminal States - {self._plc or 'set the plc property'}"
-        return title + (" (MOCK)" if self._mock else "")
+        return f"EtherCAT Terminal States - {self._plc or 'set the plc property'}"
 
     def _default_discovery(self) -> Path:
         return discover.resolve_output(None, self._plc or "unknown")
@@ -281,7 +235,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         return target if discover.can_create(target) else self._default_discovery()
 
     def reload(self):
-        """(Re)load the discovery file and (re)connect every terminal; create the file if it is missing."""
+        """(Re)load the discovery file and (re)connect every terminal. Never runs a discovery itself."""
         self._reload_timer.stop()
         self.DeviceName.setText(self._title())
         ads = discover.find_ads()
@@ -293,10 +247,10 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         if not self._plc and not self._discovery_file:
             self._show_message("Set the plc and prefix properties (and optionally discoveryFile).")
             return
-        target = self.discovery_path = self.discovery_target()
+        target = self.discovery_target()
         candidates = [p for p in {target, self._write_target()} if p.is_file()]
         if not candidates:
-            self._create_missing(target, ads)
+            self._explain_missing(target, ads)
             return
         newest = max(candidates, key=lambda f: f.stat().st_mtime)
         try:
@@ -305,54 +259,43 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._show_message(f"Could not read {newest}: {ex}")
             return
         self.meta["_path"] = str(newest)
-        self._build(terminals, newest)
+        self._build(terminals)
 
-    def _create_missing(self, target: Path, ads: str | None):
-        """No discovery file yet: create it with the read-only discovery (never in designer)."""
+    def _explain_missing(self, target: Path, ads: str | None):
+        """No discovery file yet: say how to create one. Discovery only ever runs when the user asks."""
         output = self._write_target()
         where = str(output) + ("" if output == target else f" ({target.parent} is not writable)")
         cli = f"python -m pcdswidgets.common.ethercat.discover {self._plc or '<plc>'} -o {target}"
         if self._process is not None:
             self._show_message(f"Creating {where} (read-only discovery)...")
         elif not self._plc:
-            self._show_message(f"No discovery file at {target}. Set the plc property to create it.")
-        elif is_qt_designer():
-            self._show_message(f"No discovery file at {target} yet: it is created when the screen runs, or run: {cli}")
+            self._show_message(f"No discovery file at {target}. Set the plc property to discover the terminals.")
         elif ads is None:
             self._show_message(
-                f"No discovery file at {target}. It is created automatically when ads-actions is available "
-                f"(ctrlenv-pathmunge ads-actions), or run: {cli}"
+                f"No discovery file at {target}. Load ads-actions (ctrlenv-pathmunge ads-actions) "
+                f"and press Rediscover, or run: {cli}"
             )
-        elif self._auto_discovered == target:
-            self._show_message(f"Could not create {where}. Press Rediscover to retry, or run: {cli}")
         else:
-            self._auto_discovered = target
-            self._show_message(f"Creating {where} (read-only discovery)...")
-            self.rediscover(auto=True)
+            self._show_message(f"No discovery file at {target}. Press Rediscover to create {where}, or run: {cli}")
 
-    def _on_rediscover_clicked(self, _checked: bool = False):
-        """Rediscover button: a manual run. ``clicked(bool)`` must not land in ``auto``.
-
-        A bound method, not a lambda: PyQt drops it with this widget, while a lambda
-        closing over ``self`` crashes when the widget is deleted.
-        """
-        self.rediscover(auto=False)
-
-    def rediscover(self, auto: bool = False):
-        """Run the read-only discovery (ads read-ecat-topology) in the background."""
+    @QtCore.Slot()  # clicked(bool) calls it without arguments; a bound method, never a lambda over self
+    def rediscover(self):
+        """Run the read-only discovery (ads read-ecat-topology) in the background. User action only."""
         if self._process is not None or not self._plc:
             return
         output = self._write_target()
         args = ["-m", "pcdswidgets.common.ethercat.discover", self._plc, "-o", str(output)]
         process = QtCore.QProcess(self)
         process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-        process.finished.connect(lambda code, _status: self._on_discovery_done(code, output, auto))
+        process.finished.connect(lambda code, _status: self._on_discovery_done(code, output))
         self._process = process
         self.rediscoverButton.setEnabled(False)
         self.rediscoverButton.setText("Discovering...")
+        if not self.monitors:  # nothing loaded yet: show progress in the tree
+            self._show_message(f"Creating {output} (read-only discovery)...")
         process.start(sys.executable, args)
 
-    def _on_discovery_done(self, code: int, output: Path, auto: bool = False):
+    def _on_discovery_done(self, code: int, output: Path):
         log = bytes(self._process.readAll()).decode(errors="replace").strip()
         self._process.deleteLater()
         self._process = None
@@ -362,42 +305,31 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self.reload()
             return
         detail = "\n".join(log.splitlines()[-6:]) if log else f"exit code {code}"
-        if auto:  # no modal dialog for the automatic first discovery: say it in the tree
-            self._show_message(f"Could not create {output}: {detail.splitlines()[-1]} Press Rediscover to retry.")
-            self.terminalTree.topLevelItem(0).setToolTip(COL_NAME, detail)
-        else:
-            QtWidgets.QMessageBox.warning(
-                self, "Discovery failed", f"Read-only discovery of {self._plc} failed:\n\n{detail}"
-            )
+        if not self.monitors:  # still nothing loaded: restore the explanation in the tree
+            self.reload()
+        QtWidgets.QMessageBox.warning(
+            self, "Discovery failed", f"Read-only discovery of {self._plc} failed:\n\n{detail}"
+        )
 
     def _show_message(self, text: str):
         self.teardown()
         self.terminalTree.clear()
         item = QtWidgets.QTreeWidgetItem([text])
-        _set_foreground(item, COL_NAME, TEXT_MUTED)
+        _set_foreground(item, COL_NAME, MUTED_GREY)
         self.terminalTree.addTopLevelItem(item)
         self.refresh()
 
     # ------------------------------------------------------------------- build
-    def _mock_overrides(self, discovery_file: Path) -> dict:
-        path = Path(self._mock_overrides_file).expanduser() if self._mock_overrides_file else None
-        if path is None:
-            path = discovery_file.with_name(discovery_file.stem + ".mock.json")
-        if path.is_file():
-            return json.loads(path.read_text(encoding="utf-8"))
-        return {}
-
-    def _build(self, terminals, discovery_file: Path):
+    def _build(self, terminals):
         self.teardown()
         tree = self.terminalTree
         tree.clear()
-        seeds = mock_seeds(terminals, self._mock_overrides(discovery_file)) if self._mock else {}
         for t in terminals:
-            monitor = TerminalMonitor(t, self._prefix, self.protocol, seeds.get(t.port), self)
+            monitor = TerminalMonitor(t, self._prefix, self)
             monitor.changed.connect(self._schedule_refresh)
             self.monitors[t.port] = monitor
 
-        for node in build_tree(terminals, bool(self.meta.get("topology_available"))):
+        for node in build_tree(terminals):
             tree.addTopLevelItem(self._make_item(node))
         tree.collapseAll()  # default: top-level groups only (each carries its status)
         self._update_column_widths()
@@ -413,13 +345,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             f"{generated} ({sources or 'ads-actions'})\n{self.meta.get('_path', '')}\n"
             f"PVs {self._prefix}ECAT:<port>:State_RBV / Link_RBV / State_SP"
         )
-        mock_note = (
-            "MOCK DATA: simulated loc:// channels seeded from the discovery snapshot. "
-            "Nothing is read from or written to EPICS.\n\n"
-            if self._mock
-            else ""
-        )
-        self.DeviceName.setToolTip(mock_note + info)
+        self.DeviceName.setToolTip(info)
         self.rediscoverButton.setToolTip(
             "Re-run the read-only ads-actions discovery (read-ecat-topology)\n\nLast discovery: " + info
         )
@@ -507,9 +433,9 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             (COL_LINK, monitor.link_text, GOOD_LINK),
         ):
             item.setText(col, text if text is not None else "DISCONNECTED")
-            color = TEXT_MUTED if text is None else TEXT_NORMAL if text == good else TEXT_FAULT
+            color = MUTED_GREY if text is None else None if text == good else FAULT_RED
             if col == COL_STATE and text is not None and monitor.state_flags:
-                color = TEXT_FAULT  # e.g. OP with the ERROR flag
+                color = FAULT_RED  # e.g. OP with the ERROR flag
             _set_foreground(item, col, color)
         access, reasons = monitor.access
         item.setIcon(COL_ACCESS, self._locks[access])
@@ -541,7 +467,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         )
         for col, text, good in ((COL_STATE, state, not_op == 0), (COL_LINK, link, bad_link == 0)):
             item.setText(col, text)
-            color = TEXT_MUTED if disconnected else TEXT_NORMAL if good else TEXT_FAULT
+            color = MUTED_GREY if disconnected else None if good else FAULT_RED
             _set_foreground(item, col, color)
         group_access = "EDITABLE" if editable else "UNKNOWN" if unknown == total else "LOCKED"
         item.setIcon(COL_ACCESS, self._locks[group_access])
@@ -628,7 +554,3 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         widget.set_monitor(monitor, self._prefix)
         self.detailPlaceholder.setVisible(False)
         widget.setVisible(True)
-        port = monitor.terminal.port
-        self.terminalSelected.emit(port)
-        if self._mock:
-            QtCore.QTimer.singleShot(50, lambda: mock_resend(self._prefix, port))

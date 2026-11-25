@@ -54,7 +54,6 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
 
     def __init__(self, parent: QtWidgets.QWidget | None = None):
         super().__init__(parent)
-        self._protocol = "ca://"
         self._confirm = True
         self._monitor: TerminalMonitor | None = None  # the monitor shown (own or shared)
         self._adopting = False  # set_monitor() is setting the macros: do not reconnect
@@ -91,28 +90,6 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         """PV base of the terminal, ``{prefix}ECAT:{port}``."""
         return f"{self.get_macro('PREFIX')}ECAT:{self.get_macro('PORT')}"
 
-    def set_channel_protocol(self, protocol: str) -> None:
-        """
-        Use another PyDM data plugin for every channel, e.g. ``"loc://"`` for simulated PVs.
-
-        Not a designer property: screens use the default ``ca://``. The terminal-states
-        widget switches to ``loc://`` in mock mode.
-        """
-        if protocol == self._protocol:
-            return
-        templates = type(self)._widget_to_pre_template
-        self._widget_to_pre_template = {
-            widget: [
-                (prop, templ.replace("ca://", protocol, 1) if isinstance(templ, str) else templ)
-                for prop, templ in entries
-            ]
-            for widget, entries in templates.items()
-        }
-        self._protocol = protocol
-        for macro in ("PREFIX", "PORT"):
-            self._updates_for_macro(macro)
-        self._reconnect()
-
     def after_set_macro(self, macro_name: str, value: str):
         if macro_name in ("PREFIX", "PORT") and not self._adopting:
             self._reconnect()
@@ -131,7 +108,6 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         terminal: no second subscription is made and the PV macros are set once. The
         monitor stays owned by the caller; this widget never disconnects it.
         """
-        self.set_channel_protocol(monitor.protocol)
         self._set_shown(monitor)
         terminal = monitor.terminal
         self._adopting = True
@@ -165,13 +141,12 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
     def _reconnect(self):
         prefix, port = self.get_macro("PREFIX"), self.get_macro("PORT")
         shown = self._monitor
-        if shown is not None and shown.base == self.base and shown.protocol == self._protocol:
+        if shown is not None and shown.base == self.base:
             self._refresh()  # already showing this terminal
             return
         self._set_shown(None)
         if prefix and port and str(port).strip().isdigit():
-            terminal = Terminal(port, self.get_macro("TERMINAL_NAME") or "", self.get_macro("TERMINAL_TYPE") or "")
-            monitor = TerminalMonitor(terminal, prefix, self._protocol)
+            monitor = TerminalMonitor(Terminal(port, name="", type=""), prefix)  # labels come from the macros
             self._owned.append(monitor)
             self._set_shown(monitor)
             monitor.connect_channels()

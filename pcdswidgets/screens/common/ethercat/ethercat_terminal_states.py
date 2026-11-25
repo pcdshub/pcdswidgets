@@ -8,8 +8,6 @@ Macros:
     PLC             PLC host name used for discovery, e.g. ``plc-sds-raptor`` (required)
     PREFIX          IOC PV prefix incl. trailing colon, e.g. ``PLC:ICL:IOC:`` (required)
     DISCOVERY       discovery JSON (default ``~/.cache/ecat-states/<PLC>.json``)
-    MOCK            truthy ("1"/"true") -> simulated loc:// PVs, nothing read from / written to EPICS
-    MOCK_OVERRIDES  mock only: overrides JSON (default ``<DISCOVERY>.mock.json``)
     CONFIRM         "0" -> state requests are sent without a confirmation dialog
 
 Launch:
@@ -34,8 +32,6 @@ class EthercatTerminalStates(Display):
 
         self.states = EthercatTerminalStatesStretch()
         self.states.setProperty("confirmRequests", to_bool(str(macros.get("CONFIRM", "1"))))
-        self.states.setProperty("mock", to_bool(str(macros.get("MOCK", ""))))
-        self.states.setProperty("mockOverridesFile", str(macros.get("MOCK_OVERRIDES", "")))
         self.states.setProperty("discoveryFile", str(macros.get("DISCOVERY", "")))
         self.states.setProperty("prefix", str(macros.get("PREFIX", "")))
         self.states.setProperty("plc", str(macros.get("PLC", "")))
@@ -47,9 +43,6 @@ class EthercatTerminalStates(Display):
     def ui_filename(self):
         # UI is built in __init__, so there is no .ui file to load.
         return None
-
-    def minimumSizeHint(self):
-        return self.states.minimumSizeHint()
 
     def closeEvent(self, event):
         self.states.teardown()

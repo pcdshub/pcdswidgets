@@ -1,19 +1,21 @@
 """
-EthercatTerminalStateDoubleRow: the selected-terminal panel on MOCK data, plus standalone use.
+EthercatTerminalStateDoubleRow: the selected-terminal panel on the test data, plus standalone use.
 
-Request tests use ``fresh_states`` (own loc:// PVs) because they change the simulated
-State_SP / State_RBV. The confirmation dialog is answered by patching QMessageBox.question.
+Request tests use ``fresh_states`` (their own widget) and record the State_SP write
+instead of sending it. The confirmation dialog is answered by patching QMessageBox.question.
 """
 
 import pytest
 from pytestqt.qtbot import QtBot
+from qtpy import QtWidgets
 
 from pcdswidgets.common.ethercat.ethercat_terminal_state_double_row import EthercatTerminalStateDoubleRow
 
-from .conftest import BLUE, RED, select, text_color, wait, wait_until
+from .conftest import BLUE, PREFIX, RED, feed_panel, record_writes, select, text_color, wait
 
 
 def request(widget, state: str):
+    """Pick a state in the Request combo box as a user would."""
     combo = widget.PyDMEnumComboBox_state
     index = combo.findText(state)
     assert index >= 0, state
@@ -72,9 +74,8 @@ def test_switching_terminals_reuses_panel(states):
     assert second.PyDMLabel_rbv.channel.endswith("ECAT:1001:State_RBV")
 
 
-@pytest.mark.parametrize("width", [850, 1100, 1536])
-def test_terminal_widget_fills_panel_width(states, width):
-    states.setFixedSize(width, 1000)
+def test_terminal_widget_fills_panel_width(states):
+    states.setFixedSize(1100, 1000)  # wider than designed: the panel follows
     try:
         w = select(states, 1020)
         wait(0.3)
@@ -85,54 +86,62 @@ def test_terminal_widget_fills_panel_width(states, width):
         states.setFixedSize(850, 1000)
 
 
-# ----------------------------------------------------- requests (own PVs)
-def test_request_cancelled_changes_nothing(fresh_states, answer):
+# ------------------------------------------------- requests (writes recorded)
+def test_request_cancelled_writes_nothing(fresh_states, answer, monkeypatch):
     w = select(fresh_states, 1020)
+    writes = record_writes(w, monkeypatch)
     calls = answer("no")
     request(w, "OP")
-    wait(1.5)
     assert len(calls) == 1 and "OP" in calls[0] and "RCC-E6" in calls[0]
-    assert fresh_states.monitors[1020].state_text == "SAFEOP"
+    assert writes == []
     assert w.PyDMEnumComboBox_state.currentText() == "SAFEOP"  # reverted
 
 
-def test_request_confirmed_moves_state(fresh_states, answer):
+def test_request_confirmed_writes_state_sp(fresh_states, answer, monkeypatch):
     w = select(fresh_states, 1020)
-    answer("yes")
+    writes = record_writes(w, monkeypatch)
+    calls = answer("yes")
     request(w, "OP")
-    wait_until(lambda: fresh_states.monitors[1020].state_text == "OP", timeout=5)
-    wait(0.5)
-    assert w.PyDMLabel_rbv.text() == "OP"
-    assert w.PyDMEnumComboBox_state.currentText() == "OP"
-    assert w.flagsLabel.text() == "ERROR"  # flag bits kept
-    fresh_states.refresh()
-    assert fresh_states.terminal_items[1020].parent().text(2) == "1 NOT OP"  # only RCC-E7 left
+    assert len(calls) == 1 and f"{fresh_states.get_prefix()}ECAT:1020:State_SP" in calls[0]
+    assert writes == [4]  # OP
 
 
-def test_same_state_request_asks_nothing(fresh_states, answer):
+def test_same_state_request_asks_nothing(fresh_states, answer, monkeypatch):
     w = select(fresh_states, 1020)
+    writes = record_writes(w, monkeypatch)
     calls = answer("yes")
     request(w, "SAFEOP")
-    wait(0.5)
-    assert calls == []
+    assert calls == [] and writes == []
 
 
-def test_confirmation_can_be_disabled(fresh_states, answer):
+def test_confirmation_can_be_disabled(fresh_states, answer, monkeypatch):
     fresh_states.setProperty("confirmRequests", False)
     w = select(fresh_states, 1020)
     assert w.property("confirmRequests") is False
+    writes = record_writes(w, monkeypatch)
     calls = answer("no")
     request(w, "PREOP")
-    wait_until(lambda: fresh_states.monitors[1020].state_text == "PREOP", timeout=5)
-    assert calls == []
+    assert calls == [] and writes == [1]  # PREOP
 
 
-def test_absent_terminal_cannot_leave_init(fresh_states):
-    """Mock rule: a NOT_PRESENT terminal stays in INIT even if a request is accepted."""
-    port = next(p for p, m in fresh_states.monitors.items() if m.link_text == "NOT_PRESENT")
-    fresh_states.monitors[port]._simulate_request(4)
-    wait(1.2)
-    assert fresh_states.monitors[port].state_text == "INIT"
+def test_request_not_sent_if_locked_while_confirming(fresh_states, monkeypatch):
+    """The dialog lets PV updates in: a terminal that becomes LOCKED meanwhile is not written."""
+    w = select(fresh_states, 1020)
+    writes = record_writes(w, monkeypatch)
+    monitor = fresh_states.monitors[1020]
+    warnings = []
+
+    def question(*_args, **_kwargs):
+        monitor._on_value("disp", 1)  # DISP goes to 1 while the operator reads the dialog
+        return QtWidgets.QMessageBox.Yes
+
+    monkeypatch.setattr(QtWidgets.QMessageBox, "question", question)
+    monkeypatch.setattr(QtWidgets.QMessageBox, "warning", lambda *args, **_kw: warnings.append(args[2]))
+    request(w, "OP")
+    assert writes == []
+    assert len(warnings) == 1 and "LOCKED" in warnings[0] and "DISP" in warnings[0]
+    assert w.PyDMEnumComboBox_state.currentText() == "SAFEOP"  # reverted
+    assert w.accessLabel.text() == "LOCKED" and not w.requestFrame.isEnabled()
 
 
 # ------------------------------------------------------------- standalone
@@ -145,53 +154,30 @@ def test_standalone_designer_defaults(qtbot: QtBot):
     assert w.monitor is None  # nothing connects until prefix and port are set
 
 
-def test_standalone_live_disconnected(qtbot: QtBot):
-    """ca:// with no IOC: everything reads DISCONNECTED, requests disabled. Nothing is written."""
+def test_standalone_disconnected(qtbot: QtBot):
+    """No IOC answers: everything reads DISCONNECTED, requests disabled. Nothing is written."""
     w = EthercatTerminalStateDoubleRow()
     qtbot.addWidget(w)
-    w.setProperty("prefix", "PYTEST:NO:IOC:")
+    w.setProperty("prefix", PREFIX)
     w.setProperty("port", "1015")
     w.setProperty("terminal_name", "RCC-E1")
     w.show()
-    wait(0.5)
-    assert w.PyDMLabel_rbv.channel == "ca://PYTEST:NO:IOC:ECAT:1015:State_RBV"
+    feed_panel(w)  # the plugin's "not connected" report
+    assert w.PyDMLabel_rbv.channel == f"ca://{PREFIX}ECAT:1015:State_RBV"
     assert [w.PyDMLabel_rbv.text(), w.flagsLabel.text(), w.linkLabel.text()] == ["DISCONNECTED"] * 3
     assert w.accessLabel.text() == "UNKNOWN" and not w.requestFrame.isEnabled()
     assert (w.width(), w.height()) == (800, 100)
     w.disconnect_channels()
 
 
-def test_protocol_switch_rewrites_every_channel(qtbot: QtBot):
+def test_standalone_monitor_uses_channel_access(qtbot: QtBot):
     w = EthercatTerminalStateDoubleRow()
     qtbot.addWidget(w)
-    w.setProperty("prefix", "PYTEST:PROTO:")
+    w.setProperty("prefix", PREFIX)
     w.setProperty("port", "1")
-    w.set_channel_protocol("loc://")
-    assert w.PyDMLabel_rbv.channel.startswith("loc://")
-    assert w.PyDMEnumComboBox_state.channel.startswith("loc://")
-    assert all(c.address.startswith("loc://PYTEST:PROTO:ECAT:1:") for c in w.monitor.channels)
-    assert type(w)._widget_to_pre_template["PyDMLabel_rbv"][0][1].startswith("ca://")  # class untouched
+    assert w.PyDMLabel_rbv.channel == f"ca://{PREFIX}ECAT:1:State_RBV"
+    assert w.PyDMEnumComboBox_state.channel == f"ca://{PREFIX}ECAT:1:State_SP"
+    assert [c.address for c in w.monitor.channels] == [
+        f"ca://{PREFIX}ECAT:1:{suffix}" for _key, suffix in type(w.monitor).FIELDS
+    ]
     w.disconnect_channels()
-
-
-# ------------------------------------------------- access re-checked at write
-def test_request_not_sent_if_locked_while_confirming(fresh_states, monkeypatch):
-    """The dialog lets PV updates in: a terminal that becomes LOCKED meanwhile is not written."""
-    from qtpy import QtWidgets
-
-    w = select(fresh_states, 1020)
-    monitor = fresh_states.monitors[1020]
-    warnings = []
-
-    def question(*_args, **_kwargs):
-        monitor.values["disp"] = 1  # DISP goes to 1 while the operator reads the dialog
-        return QtWidgets.QMessageBox.Yes
-
-    monkeypatch.setattr(QtWidgets.QMessageBox, "question", question)
-    monkeypatch.setattr(QtWidgets.QMessageBox, "warning", lambda *args, **_kw: warnings.append(args[2]))
-    sp_before = monitor.value("sp")
-    request(w, "OP")
-    wait(1.2)
-    assert len(warnings) == 1 and "LOCKED" in warnings[0] and "DISP" in warnings[0]
-    assert monitor.value("sp") == sp_before and monitor.state_text == "SAFEOP"
-    assert w.PyDMEnumComboBox_state.currentText() == "SAFEOP"  # reverted

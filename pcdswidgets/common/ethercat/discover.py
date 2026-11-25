@@ -5,8 +5,8 @@ run anything else:
 
     ads read-ecat-topology <plc> --format json --port-end 65535
 
-which returns every configured terminal (port, name, type), its port A-D
-neighbours (the tree) and a state/link snapshot. The result is reformatted into
+which returns every configured terminal (port, name, type) and its port A-D
+neighbours (the tree). The result is reformatted into
 the discovery JSON read by :class:`EthercatTerminalStatesStretch` and written to
 the user cache (``~/.cache/ecat-states/<plc>.json``) unless ``-o`` is given.
 
@@ -30,7 +30,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from pcdswidgets.common.ethercat.constants import CACHE_DIR, LINK_ENUM
+from pcdswidgets.common.ethercat.constants import CACHE_DIR
 
 SCHEMA_VERSION = 1
 
@@ -100,18 +100,6 @@ def parse_topology(text: str) -> dict:
     return json.loads(text[start:])
 
 
-def link_enum_from_flags(flags: list[str] | None) -> str | None:
-    """Map topology link flags onto the Link_RBV enum string."""
-    if flags is None:
-        return None
-    flags = [flag for flag in flags if flag != "OK"]
-    if not flags:
-        return "OK"
-    if len(flags) == 1 and flags[0] in LINK_ENUM:
-        return flags[0]
-    return "MULTIPLE_FLAGS"
-
-
 def discover(plc: str, master_ams_net_id: str | None, timeout: float) -> dict:
     ads = find_ads()
     if ads is None:
@@ -128,34 +116,21 @@ def discover(plc: str, master_ams_net_id: str | None, timeout: float) -> dict:
     if missing:
         print(f"warning: {len(missing)} configured port(s) not readable: {missing}", file=sys.stderr)
 
-    terminals = []
-    for slave in slaves:
-        port = int(slave["port"])
-        terminals.append(
-            {
-                "port": port,
-                "name": slave.get("device_name") or f"Port {port}",
-                "type": slave.get("terminal_type") or "",
-                "status": "ok",  # listed by read-ecat-topology = config object read OK
-                "neighbors": {side: int(value or 0) for side, value in (slave.get("port_neighbors") or {}).items()},
-                "snapshot": {
-                    "state": slave.get("state"),
-                    "link": link_enum_from_flags(slave.get("link_flags")),
-                    # raw flag names, so decoded flags/links can be shown (e.g. in mock mode)
-                    "state_flags": list(slave.get("state_flags") or []),
-                    "link_flags": [f for f in (slave.get("link_flags") or []) if f != "OK"],
-                },
-            }
-        )
+    terminals = [
+        {
+            "port": int(slave["port"]),
+            "name": slave.get("device_name") or f"Port {slave['port']}",
+            "type": slave.get("terminal_type") or "",
+            "neighbors": {side: int(value or 0) for side, value in (slave.get("port_neighbors") or {}).items()},
+        }
+        for slave in slaves
+    ]
 
     return {
         "schema": SCHEMA_VERSION,
         "plc": plc,
-        "ethercat_master_ams_net_id": master_ams_net_id,
         "generated": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
         "sources": [f"ads read-ecat-topology {' '.join(args)}"],
-        "topology_available": True,
-        "topology_error": None,
         "terminals": terminals,
     }
 
@@ -187,11 +162,7 @@ def main(argv: list[str] | None = None) -> int:
     tmp = output.with_suffix(output.suffix + ".tmp")
     tmp.write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8")
     tmp.replace(output)
-    print(
-        f"wrote {output} ({len(result['terminals'])} terminals, "
-        f"topology={'yes' if result['topology_available'] else 'no'})",
-        file=sys.stderr,
-    )
+    print(f"wrote {output} ({len(result['terminals'])} terminals)", file=sys.stderr)
     return 0
 
 

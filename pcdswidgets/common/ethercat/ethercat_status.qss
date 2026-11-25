@@ -37,8 +37,7 @@ QLabel[ecatStatus="editable"] {
     color: #0f62fe;
 }
 
-QLabel[ecatStatus="muted"],
-QLabel[ecatStatus="secondary"] {
+QLabel[ecatStatus="muted"] {
     color: #8d8d8d;
 }
 

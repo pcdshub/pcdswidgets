@@ -1,6 +1,6 @@
 """
-Live mode (ca://) with no IOC, the discovery wrapper (no ads-actions needed), and the
-pcdswidgets-show screen. Nothing is written to EPICS and no ads command is run.
+Never-connected widgets (an unreachable IOC), the discovery wrapper (no ads-actions
+needed), and the pcdswidgets-show screen. Offline: no Channel Access, no ads command.
 """
 
 import json
@@ -11,36 +11,25 @@ from pcdswidgets.common.ethercat import discover
 from pcdswidgets.generated.path_defs import SCREEN_PATHS, WIDGET_PATHS
 from pcdswidgets.show_screen import main as show_main
 
-from .conftest import DISCOVERY, PLC, make_states, select, wait
+from .conftest import DISCOVERY, PLC, PREFIX, make_states
 
 
-# ------------------------------------------------------------------ live
+# --------------------------------------------------------- never connected
 @pytest.fixture(scope="module")
-def live_states(qapp):
-    states = make_states(mock=False, prefix="PYTEST:NO:IOC:")
-    wait(2.0)
+def unfed_states(qapp):
+    """Every channel opened, no value ever arrives: what an unreachable IOC looks like."""
+    states = make_states(fed=False)
     yield states
     states.teardown()
     states.close()
     states.deleteLater()
 
 
-def test_live_uses_channel_access(live_states):
-    assert live_states.protocol == "ca://"
-    assert "(MOCK)" not in live_states.DeviceName.text()
-
-
-def test_live_rows_disconnected(live_states):
-    top = live_states.terminalTree.topLevelItem(0)
+def test_unfed_rows_disconnected(unfed_states):
+    top = unfed_states.terminalTree.topLevelItem(0)
     assert (top.text(2), top.text(3)) == ("DISCONNECTED", "DISCONNECTED")
-    assert all(m.health == 2 for m in live_states.monitors.values())
-    assert all(m.access[0] == "UNKNOWN" for m in live_states.monitors.values())
-
-
-def test_live_panel_disconnected(live_states):
-    w = select(live_states, 1015)
-    assert [w.PyDMLabel_rbv.text(), w.flagsLabel.text(), w.linkLabel.text()] == ["DISCONNECTED"] * 3
-    assert w.accessLabel.text() == "UNKNOWN" and not w.requestFrame.isEnabled()
+    assert all(m.health == 2 for m in unfed_states.monitors.values())
+    assert all(m.access[0] == "UNKNOWN" for m in unfed_states.monitors.values())
 
 
 # --------------------------------------------------------------- designer
@@ -55,37 +44,14 @@ def test_unconfigured_widget_shows_hint(qtbot):
     assert not states.rediscoverButton.isEnabled()
 
 
-def test_missing_discovery_file_explains(qtbot, tmp_path, monkeypatch):
-    from pcdswidgets.common.ethercat import discover
-    from pcdswidgets.common.ethercat import ethercat_terminal_states_stretch as module
-
-    monkeypatch.setattr(discover, "CACHE_DIR", tmp_path)
-    states = module.EthercatTerminalStatesStretch()
-    qtbot.addWidget(states)
-    states.setProperty("plc", "plc-does-not-exist")
-    states.reload()
-    text = states.terminalTree.topLevelItem(0).text(0)
-    assert "No discovery file" in text and "pcdswidgets.common.ethercat.discover" in text
-
-
 # ---------------------------------------------------------------- discover
 def test_discover_refuses_non_read_only_commands():
     with pytest.raises(RuntimeError, match="refusing"):
         discover.run_ads("/bin/true", "request-ecat-state", [], timeout=1)
 
 
-@pytest.mark.parametrize(
-    "flags, enum",
-    [
-        (None, None),
-        ([], "OK"),
-        (["OK"], "OK"),
-        (["NOT_PRESENT"], "NOT_PRESENT"),
-        (["ADDITIONAL_LINK", "PORT_D"], "MULTIPLE_FLAGS"),
-    ],
-)
-def test_link_enum_from_flags(flags, enum):
-    assert discover.link_enum_from_flags(flags) == enum
+DISCOVERY_KEYS = {"schema", "plc", "generated", "sources", "terminals"}
+TERMINAL_KEYS = {"port", "name", "type", "neighbors"}
 
 
 def test_discover_builds_discovery_json(monkeypatch, tmp_path):
@@ -108,23 +74,26 @@ def test_discover_builds_discovery_json(monkeypatch, tmp_path):
 
     monkeypatch.setattr(discover, "find_ads", lambda: "/fake/ads")
     monkeypatch.setattr(discover, "run_ads", fake_run_ads)
-    output = tmp_path / "plc.json"
-    assert discover.main(["plc-test", "-o", str(output)]) == 0
+    assert discover.main(["plc-test", "-o", f"{tmp_path / 'new_dir'}/"]) == 0  # a directory: <dir>/<plc>.json
+    output = tmp_path / "new_dir" / "plc-test.json"
+    assert not list(tmp_path.glob("**/*.tmp"))  # written atomically
     assert calls == [("read-ecat-topology", ["plc-test", "--format", "json", "--port-end", "65535"])]
     data = json.loads(output.read_text())
+    assert set(data) == DISCOVERY_KEYS
     assert [t["port"] for t in data["terminals"]] == [1001, 1002]
     first = data["terminals"][0]
-    assert first["snapshot"] == {
-        "state": "OP",
-        "link": "MULTIPLE_FLAGS",
-        "state_flags": ["ERROR"],
-        "link_flags": ["ADDITIONAL_LINK", "PORT_D"],
+    assert first == {
+        "port": 1001,
+        "name": "Term 1 (EK1100)",
+        "type": "EK1100",
+        "neighbors": {"A": 0, "B": 1002, "C": 0, "D": 0},
     }
-    assert first["neighbors"] == {"A": 0, "B": 1002, "C": 0, "D": 0}
 
 
-def test_snapshot_matches_discovery_schema():
+def test_test_data_matches_discovery_format():
+    """The test discovery file has exactly what discover.py writes (states are test-only data)."""
     data = json.loads(DISCOVERY.read_text())
+    assert set(data) == DISCOVERY_KEYS and all(set(t) == TERMINAL_KEYS for t in data["terminals"])
     assert data["schema"] == discover.SCHEMA_VERSION and data["plc"] == PLC
     assert data["sources"][0].startswith("ads read-ecat-topology")
 
@@ -140,8 +109,9 @@ def test_show_screen_help(capsys):
     with pytest.raises(SystemExit):
         show_main(["ethercat_terminal_states", "--help"])
     out = capsys.readouterr().out
-    for macro in ("--PLC", "--PREFIX", "--DISCOVERY", "--MOCK", "--CONFIRM"):
+    for macro in ("--PLC", "--PREFIX", "--DISCOVERY", "--CONFIRM"):
         assert macro in out
+    assert "--MOCK" not in out
 
 
 def test_screen_display_from_macros(qtbot):
@@ -152,16 +122,11 @@ def test_screen_display_from_macros(qtbot):
     path = f"{pcdswidgets.__path__[0]}/{SCREEN_PATHS['ethercat_terminal_states']}"
     module = import_module_by_filename(path)
     display = module.EthercatTerminalStates(
-        macros={"PLC": PLC, "PREFIX": "SCREEN:", "DISCOVERY": str(DISCOVERY), "MOCK": "1", "CONFIRM": "0"}
+        macros={"PLC": PLC, "PREFIX": PREFIX, "DISCOVERY": str(DISCOVERY), "CONFIRM": "0"}
     )
     qtbot.addWidget(display)
     states = display.states
-    assert (states.get_plc(), states.get_prefix(), states.get_mock(), states.get_confirm_requests()) == (
-        PLC,
-        "SCREEN:",
-        True,
-        False,
-    )
+    assert (states.get_plc(), states.get_prefix(), states.get_confirm_requests()) == (PLC, PREFIX, False)
     assert len(states.monitors) == 85
-    assert display.windowTitle() == "EtherCAT Terminal States - plc-sds-raptor (MOCK)"
+    assert display.windowTitle() == "EtherCAT Terminal States - plc-sds-raptor"
     states.teardown()

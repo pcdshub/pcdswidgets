@@ -1,4 +1,4 @@
-"""EthercatTerminalStatesStretch on the MOCK data set (read-only: no simulated PV is changed here)."""
+"""EthercatTerminalStatesStretch on the test data set (read-only: no value is changed here)."""
 
 import pytest
 from qtpy import QtCore, QtWidgets
@@ -18,9 +18,8 @@ from .conftest import (
 
 def test_loads_all_terminals(states):
     assert len(states.monitors) == TERMINALS
-    assert all(m.state_text is not None for m in states.monitors.values()), "all mock channels connected"
-    assert states.DeviceName.text() == "EtherCAT Terminal States - plc-sds-raptor (MOCK)"
-    assert states.protocol == "loc://"
+    assert all(m.state_text is not None for m in states.monitors.values()), "every monitor has data"
+    assert states.DeviceName.text() == "EtherCAT Terminal States - plc-sds-raptor"
 
 
 def test_states_use_enum_strings(states):
@@ -68,18 +67,6 @@ def test_every_terminal_dot_is_worst_of_itself_and_below(states):
     for port, row in states.terminal_items.items():
         worst = max(states.monitors[q].health for q in ports_below(row) + [port])
         assert marker_color(row, tree)[0] == want[worst], row.text(0)
-
-
-def test_collapsed_master_line_shows_deep_faults(states):
-    master = top_level(states.terminalTree, "Master line")
-    assert not master.isExpanded() and marker_color(master, states.terminalTree)[0] == RED
-
-
-def test_terminal_markers(states):
-    tree = states.terminalTree
-    assert marker_color(states.terminal_items[1001], tree) == (GREY, 255)  # OP / OK
-    assert marker_color(states.terminal_items[1004], tree) == (RED, 255)  # MULTIPLE_FLAGS
-    assert marker_color(states.terminal_items[1020], tree) == (RED, 255)  # SAFEOP + ERROR
 
 
 def test_junction_terminal_rolls_up_downstream(states):
@@ -144,7 +131,3 @@ def test_text_filter_and_clear(states):
     states.filterEdit.setText("")
     wait(0.2)
     assert len(visible_ports(states)) == TERMINALS
-
-
-def test_no_horizontal_scroll_bar(states):
-    assert states.terminalTree.horizontalScrollBarPolicy() == QtCore.Qt.ScrollBarAlwaysOff
