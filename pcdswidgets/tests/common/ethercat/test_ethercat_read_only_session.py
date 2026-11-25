@@ -49,7 +49,7 @@ def test_panel_shows_editable_but_disables_requests_in_read_only_session(qtbot, 
     states = make_states(qtbot)
     try:
         w = select(states, 1020)
-        w._write_access = False  # what Channel Access reports in a read-only session
+        w.monitor.write_access = False  # what Channel Access reports in a read-only session
         w._refresh()
         assert w.accessLabel.text() == "EDITABLE"
         assert not w.requestFrame.isEnabled()

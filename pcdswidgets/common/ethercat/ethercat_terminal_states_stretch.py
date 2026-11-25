@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import functools
 import json
 import sys
 from datetime import datetime
@@ -16,29 +17,26 @@ from qtpy.QtCore import Qt
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.common.ethercat import discover
+from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM, to_bool
 from pcdswidgets.common.ethercat.ethercat_state import (
-    ACCESS_GRANTED,
-    CACHE_DIR,
     FAULT_RED,
     GOOD_LINK,
     GOOD_STATE,
     H_DISCONNECTED,
     H_OK,
     HEALTH_TEXT,
-    LINK_ENUM,
     LOCK_COLORS,
     MUTED_GREY,
-    READ_ONLY_NOTE,
-    STATE_ENUM,
     Node,
     TerminalMonitor,
+    access_tooltip,
     build_tree,
     dot_pixmap,
     load_discovery,
     lock_pixmap,
     mock_resend,
     mock_seeds,
-    session_read_only,
+    release_monitors,
     status_stylesheet,
 )
 from pcdswidgets.generated.common.ethercat.ethercat_terminal_states_stretch_base import (
@@ -62,6 +60,14 @@ TEXT_MUTED = MUTED_GREY
 def _set_foreground(item, col, color):
     """Tree text colour; None clears it so the theme's text colour applies."""
     item.setData(col, Qt.ForegroundRole, QtGui.QBrush(color) if color is not None else None)
+
+
+def _expand_parents(item):
+    """Expand every ancestor of a tree item so it is visible."""
+    parent = item.parent()
+    while parent is not None:
+        parent.setExpanded(True)
+        parent = parent.parent()
 
 
 class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
@@ -115,9 +121,12 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
 
         self.setStyleSheet(status_stylesheet())  # ecatStatus rules only, never the theme
         self._setup_widgets()
+        # Release the PV connections even when the widget is deleted without a closeEvent
+        # (embedded in a screen that goes away). ``self.monitors`` is never rebound.
+        self.destroyed.connect(functools.partial(release_monitors, self.monitors))
         app = QtWidgets.QApplication.instance()
         if app is not None:
-            app.aboutToQuit.connect(self.teardown)
+            app.aboutToQuit.connect(functools.partial(release_monitors, self.monitors))
         self.reload()
 
     # ----------------------------------------------------------- properties
@@ -162,7 +171,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         return self._mock
 
     def set_mock(self, value: bool) -> None:
-        value = value.strip().lower() in ("1", "true", "yes", "on") if isinstance(value, str) else bool(value)
+        value = to_bool(value)
         if value != self._mock:
             self._mock = value
             self._prop_changed()
@@ -185,7 +194,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         return self._confirm
 
     def set_confirm_requests(self, value: bool) -> None:
-        self._confirm = value.strip().lower() in ("1", "true", "yes") if isinstance(value, str) else bool(value)
+        self._confirm = to_bool(value)
         self.terminalWidget.setProperty("confirmRequests", self._confirm)
 
     confirmRequests = pyqtProperty(bool, get_confirm_requests, set_confirm_requests)
@@ -210,7 +219,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.filterEdit.textChanged.connect(self._on_filter_changed)
         self.expandButton.clicked.connect(tree.expandAll)
         self.collapseButton.clicked.connect(lambda: tree.collapseAll())
-        self.rediscoverButton.clicked.connect(self.rediscover)
+        self.rediscoverButton.clicked.connect(self._on_rediscover_clicked)
         self._make_icons()
         self._update_column_widths()
 
@@ -255,7 +264,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         return title + (" (MOCK)" if self._mock else "")
 
     def _default_discovery(self) -> Path:
-        return CACHE_DIR / f"{self._plc or 'unknown'}.json"
+        return discover.resolve_output(None, self._plc or "unknown")
 
     def discovery_target(self) -> Path:
         """
@@ -264,9 +273,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         ``discoveryFile`` may be a file or a directory (then ``<dir>/<plc>.json``);
         empty means ``~/.cache/ecat-states/<plc>.json``.
         """
-        if not self._discovery_file:
-            return self._default_discovery()
-        return discover.resolve_output(self._discovery_file, self._plc or "unknown")
+        return discover.resolve_output(self._discovery_file or None, self._plc or "unknown")
 
     def _write_target(self) -> Path:
         """The discovery target, or the user cache if the target location is not writable."""
@@ -322,6 +329,14 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._auto_discovered = target
             self._show_message(f"Creating {where} (read-only discovery)...")
             self.rediscover(auto=True)
+
+    def _on_rediscover_clicked(self, _checked: bool = False):
+        """Rediscover button: a manual run. ``clicked(bool)`` must not land in ``auto``.
+
+        A bound method, not a lambda: PyQt drops it with this widget, while a lambda
+        closing over ``self`` crashes when the widget is deleted.
+        """
+        self.rediscover(auto=False)
 
     def rediscover(self, auto: bool = False):
         """Run the read-only discovery (ads read-ecat-topology) in the background."""
@@ -434,10 +449,10 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self.terminalWidget.disconnect_channels()
         except RuntimeError:  # already deleted
             pass
-        for monitor in self.monitors.values():
-            monitor.disconnect_channels()
+        monitors = list(self.monitors.values())
+        release_monitors(self.monitors)
+        for monitor in monitors:
             monitor.deleteLater()
-        self.monitors.clear()
         self.terminal_items.clear()
         self._show_detail(None)
 
@@ -498,8 +513,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             _set_foreground(item, col, color)
         access, reasons = monitor.access
         item.setIcon(COL_ACCESS, self._locks[access])
-        note = f"\n\n{READ_ONLY_NOTE}" if session_read_only() else ""
-        item.setToolTip(COL_ACCESS, f"{access}\n" + ("\n".join(reasons) if reasons else ACCESS_GRANTED) + note)
+        item.setToolTip(COL_ACCESS, access_tooltip(access, reasons))
         flags = monitor.state_flags
         flag_text = "flags: " + (" + ".join(flags) if flags else "none") if flags is not None else ""
         item.setToolTip(
@@ -514,8 +528,9 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         disconnected = sum(m.health == H_DISCONNECTED for m in monitors)
         not_op = sum(m.state_text is not None and m.state_text != GOOD_STATE for m in monitors)
         bad_link = sum(m.link_text is not None and m.link_text != GOOD_LINK for m in monitors)
-        editable = sum(m.access[0] == "EDITABLE" for m in monitors)
-        unknown = sum(m.access[0] == "UNKNOWN" for m in monitors)
+        accesses = [m.access[0] for m in monitors]
+        editable = accesses.count("EDITABLE")
+        unknown = accesses.count("UNKNOWN")
         worst = max(m.health for m in monitors)
         item.setIcon(COL_NAME, self._dots[worst])
         item.setFont(COL_NAME, bold)
@@ -562,10 +577,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         tree.collapseAll()
         current = tree.currentItem()
         if current is not None:
-            parent = current.parent()
-            while parent is not None:
-                parent.setExpanded(True)
-                parent = parent.parent()
+            _expand_parents(current)
             tree.scrollToItem(current)
 
     def apply_filter(self):
@@ -595,32 +607,28 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         item = self.terminal_items.get(port)
         if item is None:
             return False
-        parent = item.parent()
-        while parent is not None:
-            parent.setExpanded(True)
-            parent = parent.parent()
+        _expand_parents(item)
         self.terminalTree.setCurrentItem(item)
         self.terminalTree.scrollToItem(item)
         return True
 
     def _on_current_item_changed(self, current, _previous):
         port = current.data(COL_NAME, ROLE_PORT) if current is not None else None
-        self._show_detail(self.monitors[port].terminal if port in self.monitors else None)
+        self._show_detail(self.monitors.get(port))
 
-    def _show_detail(self, terminal):
+    def _show_detail(self, monitor: TerminalMonitor | None):
+        """Show the selected terminal in the panel, through its existing monitor (no second subscription)."""
         widget = self.terminalWidget
-        if terminal is None:
+        if monitor is None:
+            widget.disconnect_channels()
             widget.setVisible(False)
             self.detailPlaceholder.setVisible(True)
             return
-        widget.set_channel_protocol(self.protocol)
         widget.setProperty("confirmRequests", self._confirm)
-        widget.setProperty("terminal_name", terminal.display_name)
-        widget.setProperty("terminal_type", terminal.type)
-        widget.setProperty("prefix", self._prefix)
-        widget.setProperty("port", str(terminal.port))
+        widget.set_monitor(monitor, self._prefix)
         self.detailPlaceholder.setVisible(False)
         widget.setVisible(True)
-        self.terminalSelected.emit(terminal.port)
+        port = monitor.terminal.port
+        self.terminalSelected.emit(port)
         if self._mock:
-            QtCore.QTimer.singleShot(50, lambda port=terminal.port: mock_resend(self._prefix, port))
+            QtCore.QTimer.singleShot(50, lambda: mock_resend(self._prefix, port))

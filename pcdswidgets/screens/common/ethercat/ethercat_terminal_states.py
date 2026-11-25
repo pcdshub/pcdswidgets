@@ -20,9 +20,8 @@ Launch:
 from pydm import Display
 from qtpy import QtWidgets
 
+from pcdswidgets.common.ethercat.constants import to_bool
 from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import EthercatTerminalStatesStretch
-
-_TRUTHY = {"1", "true", "yes", "on"}
 
 
 class EthercatTerminalStates(Display):
@@ -34,8 +33,8 @@ class EthercatTerminalStates(Display):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self.states = EthercatTerminalStatesStretch()
-        self.states.setProperty("confirmRequests", str(macros.get("CONFIRM", "1")).strip().lower() in _TRUTHY)
-        self.states.setProperty("mock", str(macros.get("MOCK", "")).strip().lower() in _TRUTHY)
+        self.states.setProperty("confirmRequests", to_bool(str(macros.get("CONFIRM", "1"))))
+        self.states.setProperty("mock", to_bool(str(macros.get("MOCK", ""))))
         self.states.setProperty("mockOverridesFile", str(macros.get("MOCK_OVERRIDES", "")))
         self.states.setProperty("discoveryFile", str(macros.get("DISCOVERY", "")))
         self.states.setProperty("prefix", str(macros.get("PREFIX", "")))

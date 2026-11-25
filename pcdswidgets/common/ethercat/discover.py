@@ -30,7 +30,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "ecat-states"
+from pcdswidgets.common.ethercat.constants import CACHE_DIR, LINK_ENUM
+
 SCHEMA_VERSION = 1
 
 # The only ads-actions sub-command that may ever be executed (passive ADS reads).
@@ -42,20 +43,6 @@ PORT_END = 65535
 
 # Fallback location of the released ads-actions CLI (what ctrlenv-pathmunge adds to PATH).
 RELEASED_ADS = "/reg/g/pcds/pyps/apps/ads-actions/latest-released/bin/rhel9-x86_64/ads"
-
-# Link_RBV enum strings, in record order (pytmc/ethercat.py _LINK_ENUM_STATES).
-LINK_ENUM = (
-    "OK",
-    "NOT_PRESENT",
-    "LINK_WITHOUT_COMM",
-    "MISSING_LINK",
-    "ADDITIONAL_LINK",
-    "PORT_A",
-    "PORT_B",
-    "PORT_C",
-    "PORT_D",
-    "MULTIPLE_FLAGS",
-)
 
 
 def resolve_output(path: str | Path | None, plc: str) -> Path:

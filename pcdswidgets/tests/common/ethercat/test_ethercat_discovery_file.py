@@ -35,7 +35,6 @@ def fake_ads(tmp_path, monkeypatch):
     script.chmod(script.stat().st_mode | stat.S_IXUSR)
     monkeypatch.setenv("ADS_ACTIONS_BIN", str(script))
     cache = tmp_path / "cache"
-    monkeypatch.setattr(stretch_module, "CACHE_DIR", cache)
     monkeypatch.setattr(discover, "CACHE_DIR", cache)
     return script
 

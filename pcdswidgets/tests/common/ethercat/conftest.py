@@ -127,7 +127,7 @@ def select(states: EthercatTerminalStatesStretch, port: int):
     widget = states.terminalWidget
     wait_until(lambda: widget.isVisible() and widget.get_macro("PORT") == str(port), timeout=5)
     if states.get_mock():
-        wait_until(lambda: widget._value("disv") is not None, timeout=5)
+        wait_until(lambda: widget.monitor is not None and widget.monitor.value("disv") is not None, timeout=5)
     wait(0.3)
     return widget
 

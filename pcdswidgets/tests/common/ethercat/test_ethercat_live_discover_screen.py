@@ -56,9 +56,10 @@ def test_unconfigured_widget_shows_hint(qtbot):
 
 
 def test_missing_discovery_file_explains(qtbot, tmp_path, monkeypatch):
+    from pcdswidgets.common.ethercat import discover
     from pcdswidgets.common.ethercat import ethercat_terminal_states_stretch as module
 
-    monkeypatch.setattr(module, "CACHE_DIR", tmp_path)
+    monkeypatch.setattr(discover, "CACHE_DIR", tmp_path)
     states = module.EthercatTerminalStatesStretch()
     qtbot.addWidget(states)
     states.setProperty("plc", "plc-does-not-exist")

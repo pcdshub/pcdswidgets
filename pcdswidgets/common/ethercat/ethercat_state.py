@@ -30,7 +30,6 @@ from __future__ import annotations
 
 import functools
 import json
-import os
 import re
 from pathlib import Path
 
@@ -39,25 +38,11 @@ from pydm.widgets.channel import PyDMChannel
 from qtpy import QtCore, QtGui
 from qtpy.QtCore import Qt
 
+from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM
+
 MODULE_DIR = Path(__file__).resolve().parent
 STATUS_QSS = MODULE_DIR / "ethercat_status.qss"
-CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "ecat-states"
 
-# Enum strings in record order (pytmc/ethercat.py). Live mode uses the strings
-# reported by Channel Access; these are the fallback and the mock definition.
-STATE_ENUM = ("INIT", "PREOP", "BOOTSTRAP", "SAFEOP", "OP")
-LINK_ENUM = (
-    "OK",
-    "NOT_PRESENT",
-    "LINK_WITHOUT_COMM",
-    "MISSING_LINK",
-    "ADDITIONAL_LINK",
-    "PORT_A",
-    "PORT_B",
-    "PORT_C",
-    "PORT_D",
-    "MULTIPLE_FLAGS",
-)
 GOOD_STATE, GOOD_LINK = "OP", "OK"
 ABSENT_LINKS = {"NOT_PRESENT", "LINK_WITHOUT_COMM", "MISSING_LINK"}
 # Raw EtherCAT state word (pytmc helper records StateRaw / LinkCode):
@@ -93,7 +78,6 @@ READ_ONLY_NOTE = (
     "This PyDM session is read-only (Qt Designer or pydm --read-only): Channel Access write "
     "permission is not checked and state requests are disabled here."
 )
-TRUTHY = {"1", "true", "yes", "on"}
 
 
 # ------------------------------------------------------------------ decoding
@@ -151,6 +135,14 @@ def access_rule(disp, disa, disv, write_access=None) -> tuple[str, list[str]]:
     return ("LOCKED", reasons) if reasons else ("EDITABLE", [])
 
 
+def access_tooltip(access: str, reasons: list[str]) -> str:
+    """Tooltip for an access value: the lock reasons, plus a note in read-only PyDM sessions."""
+    text = f"{access}\n" + ("\n".join(reasons) if reasons else ACCESS_GRANTED)
+    if session_read_only():
+        text += f"\n\n{READ_ONLY_NOTE}"
+    return text
+
+
 # -------------------------------------------------------------------- styling
 def status_stylesheet() -> str:
     """The ``ecatStatus`` property rules (not a theme), applied by each widget to itself."""
@@ -169,12 +161,18 @@ def set_status(widget, status: str):
     widget.style().polish(widget)
 
 
-def dot_pixmap(health: int, size: int) -> QtGui.QPixmap:
-    """Status marker: OK = neutral grey dot, FAULT = red dot, DISCONNECTED = dashed hollow ring."""
+def _icon_painter(size: int) -> tuple[QtGui.QPixmap, QtGui.QPainter]:
+    """A transparent ``size`` x ``size`` pixmap and an antialiased painter on it (call ``end()``)."""
     pixmap = QtGui.QPixmap(size, size)
     pixmap.fill(Qt.transparent)
     painter = QtGui.QPainter(pixmap)
     painter.setRenderHint(QtGui.QPainter.Antialiasing)
+    return pixmap, painter
+
+
+def dot_pixmap(health: int, size: int) -> QtGui.QPixmap:
+    """Status marker: OK = neutral grey dot, FAULT = red dot, DISCONNECTED = dashed hollow ring."""
+    pixmap, painter = _icon_painter(size)
     rect = QtCore.QRectF(1.5, 1.5, size - 3, size - 3)
     if health in (H_OK, H_FAULT):
         painter.setPen(Qt.NoPen)
@@ -192,10 +190,7 @@ def dot_pixmap(health: int, size: int) -> QtGui.QPixmap:
 def lock_pixmap(access: str, size: int) -> QtGui.QPixmap:
     """Padlock: open blue = EDITABLE, closed grey = LOCKED, pale = UNKNOWN."""
     color = LOCK_COLORS.get(access, LOCK_COLORS["UNKNOWN"])
-    pixmap = QtGui.QPixmap(size, size)
-    pixmap.fill(Qt.transparent)
-    painter = QtGui.QPainter(pixmap)
-    painter.setRenderHint(QtGui.QPainter.Antialiasing)
+    pixmap, painter = _icon_painter(size)
     painter.setPen(QtGui.QPen(color, max(1.5, size * 0.13)))
     painter.setBrush(Qt.NoBrush)
     shackle = QtCore.QRectF(size * 0.27, size * 0.06, size * 0.46, size * 0.62)
@@ -463,8 +458,37 @@ def mock_resend(prefix: str, port: int):
 
 
 # ------------------------------------------------------------------- monitor
+def disconnect_all(channels: list):
+    """Disconnect and drop every channel (the list is emptied, so later calls are no-ops)."""
+    while channels:
+        channel = channels.pop()
+        try:
+            channel.disconnect()
+        except Exception:
+            pass
+
+
+def release_monitors(monitors: list | dict):
+    """
+    Disconnect every monitor in a list or dict (which is emptied, so later calls are no-ops).
+
+    Widgets connect this to their ``destroyed`` signal with :func:`functools.partial`
+    on the container: Qt does not drop PyDM channel slots by itself, so without it a
+    deleted widget leaves its Channel Access connections open.
+    """
+    while monitors:
+        monitor = monitors.popitem()[1] if isinstance(monitors, dict) else monitors.pop()
+        monitor.disconnect_channels()
+
+
 class TerminalMonitor(QtCore.QObject):
-    """Read-only subscription to one terminal's PVs (plus the mock simulation)."""
+    """
+    Read-only subscription to one terminal's PVs, with the derived state / link / access.
+
+    Shared by both widgets. ``protocol == "loc://"`` (mock) works around PyDM's
+    ``loc://`` quirks; a ``mock_seed`` additionally creates the simulated PVs and
+    makes the terminal follow State_SP requests.
+    """
 
     changed = QtCore.Signal()
     simulated_rbv = QtCore.Signal(int)  # mock only: drives the simulated State_RBV
@@ -485,6 +509,8 @@ class TerminalMonitor(QtCore.QObject):
         super().__init__(parent)
         self.terminal = terminal
         self.base = f"{prefix}ECAT:{terminal.port}"
+        self.protocol = protocol
+        self.mock = protocol == "loc://"
         self.mock_seed = mock_seed
         self.values = {key: None for key, _ in self.FIELDS}
         self.connected = {key: False for key, _ in self.FIELDS}
@@ -516,24 +542,19 @@ class TerminalMonitor(QtCore.QObject):
             channel.connect()
 
     def disconnect_channels(self):
-        while self.channels:
-            channel = self.channels.pop()
-            try:
-                channel.disconnect()
-            except Exception:
-                pass
+        disconnect_all(self.channels)
 
     # slots
     def _on_connection(self, key, connected):
-        if self.mock_seed is not None and not connected:
+        if self.mock and not connected:
             return  # PyDM loc:// quirk: the first listener gets a stray False after True
         self.connected[key] = bool(connected)
         self.changed.emit()
 
     def _on_value(self, key, value):
         self.values[key] = value
-        if self.mock_seed is not None:
-            self.connected[key] = True
+        if self.mock:
+            self.connected[key] = True  # PyDM loc:// quirk: value can arrive before the connection
         if key == "sp" and self.mock_seed is not None:
             if self._last_sp is not None and value != self._last_sp:
                 self._simulate_request(value)
@@ -582,7 +603,8 @@ class TerminalMonitor(QtCore.QObject):
             return "UNKNOWN"
         return strings[index] if 0 <= index < len(strings) else "UNKNOWN"
 
-    def _value(self, key):
+    def value(self, key):
+        """Last value of one field (a key of :attr:`FIELDS`), ``None`` while disconnected."""
         return self.values.get(key) if self.connected.get(key) else None
 
     @property
@@ -595,11 +617,11 @@ class TerminalMonitor(QtCore.QObject):
 
     @property
     def state_flags(self) -> list[str] | None:
-        return decode_state_flags(self._value("raw"))
+        return decode_state_flags(self.value("raw"))
 
     @property
     def link_detail(self) -> str | None:
-        return decode_link_text(self._value("linkcode"))
+        return decode_link_text(self.value("linkcode"))
 
     @property
     def health(self) -> int:
@@ -612,4 +634,4 @@ class TerminalMonitor(QtCore.QObject):
 
     @property
     def access(self) -> tuple[str, list[str]]:
-        return access_rule(self._value("disp"), self._value("disa"), self._value("disv"), self.write_access)
+        return access_rule(self.value("disp"), self.value("disa"), self.value("disv"), self.write_access)

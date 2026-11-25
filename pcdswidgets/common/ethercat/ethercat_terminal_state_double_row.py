@@ -6,18 +6,18 @@ from __future__ import annotations
 
 import functools
 
-from pydm.widgets.channel import PyDMChannel
 from qtpy import QtWidgets
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
+from pcdswidgets.common.ethercat.constants import to_bool
 from pcdswidgets.common.ethercat.ethercat_state import (
-    ACCESS_GRANTED,
-    READ_ONLY_NOTE,
+    Terminal,
+    TerminalMonitor,
     access_rule,
-    decode_link_text,
-    decode_state_flags,
+    access_tooltip,
     lock_pixmap,
+    release_monitors,
     session_read_only,
     set_status,
     status_stylesheet,
@@ -30,27 +30,6 @@ try:
     from qtpy.QtCore import pyqtProperty
 except ImportError:
     from qtpy.QtCore import Property as pyqtProperty  # type: ignore
-
-# Channels this widget reads on top of the PyDM widgets in the .ui (key, PV suffix).
-EXTRA_CHANNELS = (
-    ("raw", "StateRaw"),
-    ("linkcode", "LinkCode"),
-    ("link", "Link_RBV"),
-    ("disp", "State_SP.DISP"),
-    ("disa", "State_SP.DISA"),
-    ("disv", "State_SP.DISV"),
-    ("sp", "State_SP"),
-)
-
-
-def _disconnect(channels: list):
-    """Disconnect once (the list is emptied, so later calls are no-ops)."""
-    while channels:
-        channel = channels.pop()
-        try:
-            channel.disconnect()
-        except Exception:
-            pass
 
 
 class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
@@ -77,10 +56,11 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         super().__init__(parent)
         self._protocol = "ca://"
         self._confirm = True
-        self._values: dict = {}
-        self._connected: dict = {}
-        self._write_access = None
-        self._channels: list[PyDMChannel] = []
+        self._monitor: TerminalMonitor | None = None  # the monitor shown (own or shared)
+        self._adopting = False  # set_monitor() is setting the macros: do not reconnect
+        # The monitor this widget created (0 or 1), released on reconnect / deletion. A list,
+        # so the destroyed / aboutToQuit handlers never touch this (possibly deleted) widget.
+        self._owned: list[TerminalMonitor] = []
         self.setStyleSheet(status_stylesheet())  # ecatStatus rules only, never the theme
 
         self._show_disconnected_text(self.PyDMLabel_rbv)
@@ -90,10 +70,10 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         combo.activated[int].connect(self._on_request_activated)
 
         # Release the PV connections while they still exist (widget deleted or app quitting).
-        self.destroyed.connect(functools.partial(_disconnect, self._channels))
+        self.destroyed.connect(functools.partial(release_monitors, self._owned))
         app = QtWidgets.QApplication.instance()
         if app is not None:
-            app.aboutToQuit.connect(functools.partial(_disconnect, self._channels))
+            app.aboutToQuit.connect(functools.partial(release_monitors, self._owned))
         self._refresh()
 
     # ----------------------------------------------------------- properties
@@ -102,7 +82,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         return self._confirm
 
     def set_confirm_requests(self, value: bool) -> None:
-        self._confirm = bool(value) if not isinstance(value, str) else value.strip().lower() in ("1", "true", "yes")
+        self._confirm = to_bool(value)
 
     confirmRequests = pyqtProperty(bool, get_confirm_requests, set_confirm_requests)
 
@@ -134,60 +114,78 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         self._reconnect()
 
     def after_set_macro(self, macro_name: str, value: str):
-        if macro_name in ("PREFIX", "PORT"):
+        if macro_name in ("PREFIX", "PORT") and not self._adopting:
             self._reconnect()
 
     # ------------------------------------------------------------- channels
+    @property
+    def monitor(self) -> TerminalMonitor | None:
+        """The terminal's PV subscription, ``None`` until ``prefix`` and a numeric ``port`` are set."""
+        return self._monitor
+
+    def set_monitor(self, monitor: TerminalMonitor, prefix: str) -> None:
+        """
+        Show a terminal through an existing (shared) :class:`TerminalMonitor`.
+
+        Used by :class:`EthercatTerminalStatesStretch`, which already monitors every
+        terminal: no second subscription is made and the PV macros are set once. The
+        monitor stays owned by the caller; this widget never disconnects it.
+        """
+        self.set_channel_protocol(monitor.protocol)
+        self._set_shown(monitor)
+        terminal = monitor.terminal
+        self._adopting = True
+        try:
+            self.setProperty("terminal_name", terminal.display_name)
+            self.setProperty("terminal_type", terminal.type)
+            self.setProperty("prefix", prefix)
+            self.setProperty("port", str(terminal.port))
+        finally:
+            self._adopting = False
+        self._refresh()
+
     def disconnect_channels(self):
-        _disconnect(self._channels)
+        """Release this widget's own subscription and stop showing a shared one."""
+        self._set_shown(None)
+
+    def _set_shown(self, monitor: TerminalMonitor | None):
+        """Show ``monitor``: drop the previous one (released only if this widget owns it)."""
+        previous = self._monitor
+        if previous is not None and previous is not monitor:
+            try:
+                previous.changed.disconnect(self._refresh)
+            except (RuntimeError, TypeError):
+                pass  # already deleted or disconnected
+        if monitor is None or monitor not in self._owned:
+            release_monitors(self._owned)
+        self._monitor = monitor
+        if monitor is not None and monitor is not previous:
+            monitor.changed.connect(self._refresh)
 
     def _reconnect(self):
-        _disconnect(self._channels)
-        self._values.clear()
-        self._connected.clear()
-        self._write_access = None
-        if self.get_macro("PREFIX") and self.get_macro("PORT"):
-            for key, suffix in EXTRA_CHANNELS:
-                channel = PyDMChannel(
-                    address=f"{self._protocol}{self.base}:{suffix}",
-                    connection_slot=functools.partial(self._on_connection, key),
-                    value_slot=functools.partial(self._on_value, key),
-                    write_access_slot=self._on_write_access if key == "sp" else None,
-                )
-                channel.connect()
-                self._channels.append(channel)
+        prefix, port = self.get_macro("PREFIX"), self.get_macro("PORT")
+        shown = self._monitor
+        if shown is not None and shown.base == self.base and shown.protocol == self._protocol:
+            self._refresh()  # already showing this terminal
+            return
+        self._set_shown(None)
+        if prefix and port and str(port).strip().isdigit():
+            terminal = Terminal(port, self.get_macro("TERMINAL_NAME") or "", self.get_macro("TERMINAL_TYPE") or "")
+            monitor = TerminalMonitor(terminal, prefix, self._protocol)
+            self._owned.append(monitor)
+            self._set_shown(monitor)
+            monitor.connect_channels()
         self._refresh()
-
-    @property
-    def _mock(self) -> bool:
-        return self._protocol == "loc://"
-
-    def _on_connection(self, key, connected):
-        if self._mock and not connected:
-            return  # PyDM loc:// quirk: stray False right after True
-        self._connected[key] = bool(connected)
-        self._refresh()
-
-    def _on_value(self, key, value):
-        self._values[key] = value
-        if self._mock:
-            self._connected[key] = True
-        self._refresh()
-
-    def _on_write_access(self, allowed):
-        self._write_access = bool(allowed)
-        self._refresh()
-
-    def _value(self, key):
-        return self._values.get(key) if self._connected.get(key) else None
 
     # -------------------------------------------------------------- display
     def access(self) -> tuple[str, list[str]]:
         """EDITABLE / LOCKED / UNKNOWN and the lock reasons."""
-        return access_rule(self._value("disp"), self._value("disa"), self._value("disv"), self._write_access)
+        monitor = self.monitor
+        return monitor.access if monitor is not None else access_rule(None, None, None)
 
     def _refresh(self):
-        flags = decode_state_flags(self._value("raw"))
+        monitor = self.monitor
+        flags = monitor.state_flags if monitor is not None else None
         if flags is None:
             self.flagsLabel.setText("DISCONNECTED")
             set_status(self.flagsLabel, "muted")
@@ -195,9 +193,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
             self.flagsLabel.setText(" + ".join(flags) if flags else "none")
             set_status(self.flagsLabel, "fault" if flags else "")
 
-        link = decode_link_text(self._value("linkcode"))
-        if link is None and self._value("link") is not None:
-            link = str(self._value("link"))  # fall back to the Link_RBV enum index text
+        link = (monitor.link_detail or monitor.link_text) if monitor is not None else None
         if link is None:
             self.linkLabel.setText("DISCONNECTED")
             set_status(self.linkLabel, "muted")
@@ -211,15 +207,12 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         self.accessIcon.setPixmap(lock_pixmap(access, size))
         self.accessLabel.setText(access)
         set_status(self.accessLabel, {"EDITABLE": "editable", "LOCKED": ""}.get(access, "muted"))
-        why = "\n".join(reasons) if reasons else ACCESS_GRANTED
-        read_only = session_read_only()
-        if read_only:
-            why += f"\n\n{READ_ONLY_NOTE}"
+        tip = access_tooltip(access, reasons)
         for widget in (self.accessIcon, self.accessLabel):
-            widget.setToolTip(f"{access}\n{why}")
-        can_request = access == "EDITABLE" and not read_only
+            widget.setToolTip(tip)
+        can_request, _ = self._can_request()
         self.requestFrame.setEnabled(can_request)
-        self.requestFrame.setToolTip("" if can_request else f"Requests disabled: {access}\n{why}")
+        self.requestFrame.setToolTip("" if can_request else f"Requests disabled: {tip}")
 
     @staticmethod
     def _show_disconnected_text(label):
@@ -239,12 +232,21 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         check_enable_state()
 
     # -------------------------------------------------------------- request
+    def _can_request(self) -> tuple[bool, str]:
+        """Whether State_SP may be written now, and the access tooltip."""
+        access, reasons = self.access()
+        return access == "EDITABLE" and not session_read_only(), access_tooltip(access, reasons)
+
     def _on_request_activated(self, index: int):
         combo = self.PyDMEnumComboBox_state
         target = combo.itemText(index)
         current = combo.value
         if current is not None and int(current) == index:
             return  # same as the last request: nothing to send
+
+        def revert():
+            combo.setCurrentIndex(int(current) if current is not None else -1)
+
         if self._confirm:
             name = self.get_macro("TERMINAL_NAME") or self.base
             answer = QtWidgets.QMessageBox.question(
@@ -255,7 +257,14 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
                 QtWidgets.QMessageBox.No,
             )
             if answer != QtWidgets.QMessageBox.Yes:
-                if current is not None:
-                    combo.setCurrentIndex(int(current))  # revert the selection
+                revert()
                 return
+        # PV updates keep arriving while the dialog is open: check access again right before writing.
+        allowed, why = self._can_request()
+        if not allowed:
+            revert()
+            QtWidgets.QMessageBox.warning(
+                self, "Request not sent", f"State {target} was not requested for {self.base}:\n\n{why}"
+            )
+            return
         combo.internal_combo_box_activated_int(index)

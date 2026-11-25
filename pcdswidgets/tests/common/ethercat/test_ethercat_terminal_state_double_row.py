@@ -142,7 +142,7 @@ def test_standalone_designer_defaults(qtbot: QtBot):
     assert w.property("prefix") == "" and w.property("port") == ""
     assert w.property("confirmRequests") is True
     assert w.accessLabel.text() == "UNKNOWN" and not w.requestFrame.isEnabled()
-    assert w._channels == []  # nothing connects until prefix and port are set
+    assert w.monitor is None  # nothing connects until prefix and port are set
 
 
 def test_standalone_live_disconnected(qtbot: QtBot):
@@ -169,6 +169,29 @@ def test_protocol_switch_rewrites_every_channel(qtbot: QtBot):
     w.set_channel_protocol("loc://")
     assert w.PyDMLabel_rbv.channel.startswith("loc://")
     assert w.PyDMEnumComboBox_state.channel.startswith("loc://")
-    assert all(c.address.startswith("loc://PYTEST:PROTO:ECAT:1:") for c in w._channels)
+    assert all(c.address.startswith("loc://PYTEST:PROTO:ECAT:1:") for c in w.monitor.channels)
     assert type(w)._widget_to_pre_template["PyDMLabel_rbv"][0][1].startswith("ca://")  # class untouched
     w.disconnect_channels()
+
+
+# ------------------------------------------------- access re-checked at write
+def test_request_not_sent_if_locked_while_confirming(fresh_states, monkeypatch):
+    """The dialog lets PV updates in: a terminal that becomes LOCKED meanwhile is not written."""
+    from qtpy import QtWidgets
+
+    w = select(fresh_states, 1020)
+    monitor = fresh_states.monitors[1020]
+    warnings = []
+
+    def question(*_args, **_kwargs):
+        monitor.values["disp"] = 1  # DISP goes to 1 while the operator reads the dialog
+        return QtWidgets.QMessageBox.Yes
+
+    monkeypatch.setattr(QtWidgets.QMessageBox, "question", question)
+    monkeypatch.setattr(QtWidgets.QMessageBox, "warning", lambda *args, **_kw: warnings.append(args[2]))
+    sp_before = monitor.value("sp")
+    request(w, "OP")
+    wait(1.2)
+    assert len(warnings) == 1 and "LOCKED" in warnings[0] and "DISP" in warnings[0]
+    assert monitor.value("sp") == sp_before and monitor.state_text == "SAFEOP"
+    assert w.PyDMEnumComboBox_state.currentText() == "SAFEOP"  # reverted
