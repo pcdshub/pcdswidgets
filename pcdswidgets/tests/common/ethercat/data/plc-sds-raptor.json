@@ -1,0 +1,945 @@
+{
+ "schema": 1,
+ "plc": "plc-sds-raptor",
+ "generated": "2026-11-09T10:17:59-08:00",
+ "sources": [
+  "ads read-ecat-topology plc-sds-raptor --format json --port-end 65535"
+ ],
+ "terminals": [
+  {
+   "port": 1001,
+   "name": "Term 66 (EL6070)",
+   "type": "EL6070",
+   "neighbors": {
+    "A": 0,
+    "B": 1002,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1002,
+   "name": "Term 67 (EK1110)",
+   "type": "EK1110",
+   "neighbors": {
+    "A": 1001,
+    "B": 1003,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1003,
+   "name": "Box 23 (EP9128-0021)",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1002,
+    "B": 0,
+    "C": 1004,
+    "D": 0
+   }
+  },
+  {
+   "port": 1004,
+   "name": "Term 71 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1003,
+    "B": 0,
+    "C": 1005,
+    "D": 0
+   }
+  },
+  {
+   "port": 1005,
+   "name": "Term 72 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1004,
+    "B": 0,
+    "C": 1006,
+    "D": 0
+   }
+  },
+  {
+   "port": 1006,
+   "name": "Box 31 (EP9128-0021)",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1005,
+    "B": 0,
+    "C": 1007,
+    "D": 0
+   }
+  },
+  {
+   "port": 1007,
+   "name": "Term 73 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1006,
+    "B": 0,
+    "C": 1008,
+    "D": 0
+   }
+  },
+  {
+   "port": 1008,
+   "name": "Term 74 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1007,
+    "B": 0,
+    "C": 1009,
+    "D": 0
+   }
+  },
+  {
+   "port": 1009,
+   "name": "Box 75 (EP9128-0021)",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1008,
+    "B": 0,
+    "C": 1010,
+    "D": 0
+   }
+  },
+  {
+   "port": 1010,
+   "name": "Term 76 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1009,
+    "B": 0,
+    "C": 1011,
+    "D": 0
+   }
+  },
+  {
+   "port": 1011,
+   "name": "Term 77 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1010,
+    "B": 0,
+    "C": 1012,
+    "D": 0
+   }
+  },
+  {
+   "port": 1012,
+   "name": "Box 93 (EP9128-0021)",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1011,
+    "B": 0,
+    "C": 1026,
+    "D": 1013
+   }
+  },
+  {
+   "port": 1013,
+   "name": "FEL-SIM",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1012,
+    "B": 0,
+    "C": 1022,
+    "D": 1014
+   }
+  },
+  {
+   "port": 1014,
+   "name": "RCC",
+   "type": "EK1100",
+   "neighbors": {
+    "A": 1013,
+    "B": 1015,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1015,
+   "name": "RCC-E1 (EL2004)",
+   "type": "EL2004",
+   "neighbors": {
+    "A": 1014,
+    "B": 1016,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1016,
+   "name": "RCC-E2 (EL1004)",
+   "type": "EL1004",
+   "neighbors": {
+    "A": 1015,
+    "B": 1017,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1017,
+   "name": "RCC-E3 (EL2004)",
+   "type": "EL2004",
+   "neighbors": {
+    "A": 1016,
+    "B": 1018,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1018,
+   "name": "RCC-E4 (EL2004)",
+   "type": "EL2004",
+   "neighbors": {
+    "A": 1017,
+    "B": 1019,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1019,
+   "name": "RCC-E5 (EL1004)",
+   "type": "EL1004",
+   "neighbors": {
+    "A": 1018,
+    "B": 1020,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1020,
+   "name": "RCC-E6 (EL3314)",
+   "type": "EL3314",
+   "neighbors": {
+    "A": 1019,
+    "B": 1021,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1021,
+   "name": "RCC-E7 (EL3174)",
+   "type": "EL3174",
+   "neighbors": {
+    "A": 1020,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1022,
+   "name": "Term 87 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1013,
+    "B": 0,
+    "C": 1023,
+    "D": 0
+   }
+  },
+  {
+   "port": 1023,
+   "name": "Term 88 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1022,
+    "B": 0,
+    "C": 1024,
+    "D": 0
+   }
+  },
+  {
+   "port": 1024,
+   "name": "FEL-SIM-RCC (EP2339-0021)",
+   "type": "EP2339-0021",
+   "neighbors": {
+    "A": 1023,
+    "B": 1025,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1025,
+   "name": "FEL-SIM-PCM (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1024,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1026,
+   "name": "Term 94 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1012,
+    "B": 0,
+    "C": 1027,
+    "D": 0
+   }
+  },
+  {
+   "port": 1027,
+   "name": "Term 95 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1026,
+    "B": 0,
+    "C": 1028,
+    "D": 0
+   }
+  },
+  {
+   "port": 1028,
+   "name": "WALL-RCC (EP2338-0001)",
+   "type": "EP2338-0001",
+   "neighbors": {
+    "A": 1027,
+    "B": 1029,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1029,
+   "name": "WALL-RCC-PCM (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1028,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1030,
+   "name": "ALI (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1031,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1031,
+   "name": "ALI_X (EP7041-0002)",
+   "type": "EP7041-0002",
+   "neighbors": {
+    "A": 1030,
+    "B": 1032,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1032,
+   "name": "ALI_Y (EP7041-0002)",
+   "type": "EP7041-0002",
+   "neighbors": {
+    "A": 1031,
+    "B": 1033,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1033,
+   "name": "ALI_Z (EP7041-0002)",
+   "type": "EP7041-0002",
+   "neighbors": {
+    "A": 1032,
+    "B": 1034,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1034,
+   "name": "ALI_X_ENC (EP5101-0011)",
+   "type": "EP5101-0011",
+   "neighbors": {
+    "A": 1033,
+    "B": 1035,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1035,
+   "name": "ALI_Gauges (EP3174-0002)",
+   "type": "EP3174-0002",
+   "neighbors": {
+    "A": 1034,
+    "B": 1036,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1036,
+   "name": "ALI_PropValve (EP7041-0002)",
+   "type": "EP7041-0002",
+   "neighbors": {
+    "A": 1035,
+    "B": 1037,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1037,
+   "name": "ALI_Y_ENC (EP5101-0011)",
+   "type": "EP5101-0011",
+   "neighbors": {
+    "A": 1036,
+    "B": 1038,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1038,
+   "name": "ALI_DIO (EP2338-0001)",
+   "type": "EP2338-0001",
+   "neighbors": {
+    "A": 1037,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1039,
+   "name": "M3 Selector A (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1040,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1040,
+   "name": "M3 Selector A Digital IO (EP233",
+   "type": "EP2338-1001",
+   "neighbors": {
+    "A": 1039,
+    "B": 1041,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1041,
+   "name": "M3 Selector A Serial IO (EP6002",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1040,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1042,
+   "name": "M3 Selector B (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1043,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1043,
+   "name": "M3 Selector B Digital IO (EP233",
+   "type": "EP2338-1001",
+   "neighbors": {
+    "A": 1042,
+    "B": 1044,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1044,
+   "name": "M3 Selector B Serial IO (EP6002",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1043,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1045,
+   "name": "PCM A (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1046,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1046,
+   "name": "PCM A (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1045,
+    "B": 1047,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1047,
+   "name": "PCM A (EP3174-0002)",
+   "type": "EP3174-0002",
+   "neighbors": {
+    "A": 1046,
+    "B": 1048,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1048,
+   "name": "PCM A (EP6002-0002)",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1047,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1049,
+   "name": "PCM B (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1050,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1050,
+   "name": "PCM B (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1049,
+    "B": 1051,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1051,
+   "name": "PCM B (EP3174-0002)",
+   "type": "EP3174-0002",
+   "neighbors": {
+    "A": 1050,
+    "B": 1052,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1052,
+   "name": "PCM B (EP6002-0002)",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1051,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1053,
+   "name": "Gas_Mani (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1054,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1054,
+   "name": "Gas_Mani_NeedleValve (EP4374-00",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1053,
+    "B": 1055,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1055,
+   "name": "Gas_Mani_ValveCtrl (EP2338-0001",
+   "type": "EP2338-0001",
+   "neighbors": {
+    "A": 1054,
+    "B": 1056,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1056,
+   "name": "Gas_Mani_ValveRbk (EP2338-0001)",
+   "type": "EP2338-0001",
+   "neighbors": {
+    "A": 1055,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1057,
+   "name": "M3 Selector C (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1058,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1058,
+   "name": "M3 Selector C Digital IO (EP233",
+   "type": "EP2338-1001",
+   "neighbors": {
+    "A": 1057,
+    "B": 1059,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1059,
+   "name": "M3 Selector C Serial IO (EP6002",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1058,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1060,
+   "name": "M3 Selector D (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1061,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1061,
+   "name": "M3 Selector D Digital IO (EP233",
+   "type": "EP2338-1001",
+   "neighbors": {
+    "A": 1060,
+    "B": 1062,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1062,
+   "name": "M3 Selector D Serial IO (EP6002",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1061,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1063,
+   "name": "PCM C (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1064,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1064,
+   "name": "PCM C (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1063,
+    "B": 1065,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1065,
+   "name": "PCM C (EP3174-0002)",
+   "type": "EP3174-0002",
+   "neighbors": {
+    "A": 1064,
+    "B": 1066,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1066,
+   "name": "PCM C (EP6002-0002)",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1065,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1067,
+   "name": "PCM D (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1068,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1068,
+   "name": "PCM D (EP4374-0002)",
+   "type": "EP4374-0002",
+   "neighbors": {
+    "A": 1067,
+    "B": 1069,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1069,
+   "name": "PCM D (EP3174-0002)",
+   "type": "EP3174-0002",
+   "neighbors": {
+    "A": 1068,
+    "B": 1070,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1070,
+   "name": "PCM D (EP6002-0002)",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1069,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1071,
+   "name": "Bronkhorst MFM A",
+   "type": "Mass Flow / Pre",
+   "neighbors": {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1072,
+   "name": "Bronkhorst MFM B",
+   "type": "Mass Flow / Pre",
+   "neighbors": {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1073,
+   "name": "Bronkhorst MFM C",
+   "type": "Mass Flow / Pre",
+   "neighbors": {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1074,
+   "name": "Bronkhorst MFM D",
+   "type": "Mass Flow / Pre",
+   "neighbors": {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1075,
+   "name": "Solenoid Pair A (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1076,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1076,
+   "name": "Solenoid Pair A Digital IO (EP2",
+   "type": "EP2338-0001",
+   "neighbors": {
+    "A": 1075,
+    "B": 1077,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1077,
+   "name": "SC5",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1076,
+    "B": 0,
+    "C": 1078,
+    "D": 0
+   }
+  },
+  {
+   "port": 1078,
+   "name": "Box 26 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1077,
+    "B": 0,
+    "C": 1079,
+    "D": 0
+   }
+  },
+  {
+   "port": 1079,
+   "name": "Box 27 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1078,
+    "B": 0,
+    "C": 0,
+    "D": 1080
+   }
+  },
+  {
+   "port": 1080,
+   "name": "SC4",
+   "type": "EP9128-0021",
+   "neighbors": {
+    "A": 1079,
+    "B": 0,
+    "C": 1081,
+    "D": 0
+   }
+  },
+  {
+   "port": 1081,
+   "name": "Box 24 (EP9128-1021)",
+   "type": "EP9128-1021",
+   "neighbors": {
+    "A": 1080,
+    "B": 0,
+    "C": 1082,
+    "D": 0
+   }
+  },
+  {
+   "port": 1082,
+   "name": "Box 25 (EP9128-2021)",
+   "type": "EP9128-2021",
+   "neighbors": {
+    "A": 1081,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1083,
+   "name": "Sensirion Flow Meter A (EP1111)",
+   "type": "EP1111",
+   "neighbors": {
+    "A": 0,
+    "B": 1084,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1084,
+   "name": "Sensirion Flow Meter A Serial 0",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1083,
+    "B": 1085,
+    "C": 0,
+    "D": 0
+   }
+  },
+  {
+   "port": 1085,
+   "name": "Sensirion Flow Meter A Serial 0",
+   "type": "EP6002-0002",
+   "neighbors": {
+    "A": 1084,
+    "B": 0,
+    "C": 0,
+    "D": 0
+   }
+  }
+ ]
+}

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pcdswidgets EthercatTerminalStatesStretch (ECS Common Ethercat), size class "stretch":
+  every EtherCAT terminal of one PLC as a tree with per-group status roll-up, a filter
+  toolbar and the selected terminal (EthercatTerminalStateDoubleRow) below.
+  Designed at 850 x 1000 (docked system-summary size), minimum 850 x 560.
+  Configured by designer properties (plc, prefix, discoveryFile, mock, ...) handled in
+  pcdswidgets/common/ethercat/ethercat_terminal_states_stretch.py; no macros in this file.
+  No inline styleSheet: the look comes from the application theme; status colours come
+  from ethercat_status.qss (ecatStatus rules).
+-->
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>850</width><height>1000</height></rect>
+  </property>
+  <property name="minimumSize">
+   <size><width>850</width><height>560</height></size>
+  </property>
+  <property name="font">
+   <font><family>Sans Serif</family><pointsize>11</pointsize></font>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>EtherCAT Terminal States</string>
+  </property>
+  <layout class="QVBoxLayout" name="formLayout">
+   <property name="spacing"><number>0</number></property>
+   <property name="leftMargin"><number>0</number></property>
+   <property name="topMargin"><number>0</number></property>
+   <property name="rightMargin"><number>0</number></property>
+   <property name="bottomMargin"><number>0</number></property>
+   <item>
+    <widget class="QFrame" name="screenFrame">
+     <property name="toolTip"><string/></property>
+     <property name="frameShape"><enum>QFrame::Box</enum></property>
+     <property name="frameShadow"><enum>QFrame::Sunken</enum></property>
+     <property name="lineWidth"><number>1</number></property>
+     <layout class="QVBoxLayout" name="mainLayout">
+      <property name="spacing"><number>6</number></property>
+      <property name="leftMargin"><number>6</number></property>
+      <property name="topMargin"><number>6</number></property>
+      <property name="rightMargin"><number>6</number></property>
+      <property name="bottomMargin"><number>6</number></property>
+      <item>
+       <widget class="PyDMLabel" name="DeviceName">
+        <property name="font">
+         <font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font>
+        </property>
+        <property name="text"><string>EtherCAT Terminal States</string></property>
+        <property name="alignment"><set>Qt::AlignCenter</set></property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="toolbarLayout">
+        <property name="spacing"><number>6</number></property>
+        <item>
+         <widget class="QLabel" name="showCaption">
+          <property name="font"><font><family>Sans Serif</family><pointsize>12</pointsize><weight>75</weight><bold>true</bold></font></property>
+          <property name="text"><string>Show</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="showCombo">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Filter the tree by terminal status</string></property>
+          <property name="sizeAdjustPolicy"><enum>QComboBox::AdjustToContents</enum></property>
+          <item><property name="text"><string>All terminals</string></property></item>
+          <item><property name="text"><string>Faults</string></property></item>
+          <item><property name="text"><string>Not OP</string></property></item>
+          <item><property name="text"><string>Link not OK</string></property></item>
+          <item><property name="text"><string>Editable</string></property></item>
+          <item><property name="text"><string>Disconnected</string></property></item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="filterEdit">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Filter by terminal name, type or port</string></property>
+          <property name="placeholderText"><string>Filter name, type, port</string></property>
+          <property name="clearButtonEnabled"><bool>true</bool></property>
+          <property name="minimumSize"><size><width>220</width><height>0</height></size></property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="toolbarSpacer">
+          <property name="orientation"><enum>Qt::Horizontal</enum></property>
+          <property name="sizeHint" stdset="0"><size><width>10</width><height>10</height></size></property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="expandButton">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Expand all tree branches</string></property>
+          <property name="text"><string>Expand</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="collapseButton">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Collapse to the top-level groups</string></property>
+          <property name="text"><string>Collapse</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="rediscoverButton">
+          <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+          <property name="toolTip"><string>Re-run the read-only ads-actions discovery (read-ecat-topology)</string></property>
+          <property name="text"><string>Rediscover</string></property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTreeWidget" name="terminalTree">
+        <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+        <property name="minimumSize"><size><width>0</width><height>150</height></size></property>
+        <property name="horizontalScrollBarPolicy"><enum>Qt::ScrollBarAlwaysOff</enum></property>
+        <property name="editTriggers"><set>QAbstractItemView::NoEditTriggers</set></property>
+        <property name="alternatingRowColors"><bool>true</bool></property>
+        <property name="selectionMode"><enum>QAbstractItemView::SingleSelection</enum></property>
+        <property name="textElideMode"><enum>Qt::ElideRight</enum></property>
+        <property name="indentation"><number>14</number></property>
+        <property name="uniformRowHeights"><bool>true</bool></property>
+        <property name="allColumnsShowFocus"><bool>true</bool></property>
+        <property name="columnCount"><number>5</number></property>
+        <column><property name="text"><string>Terminal</string></property></column>
+        <column><property name="text"><string>Port</string></property></column>
+        <column><property name="text"><string>State</string></property></column>
+        <column><property name="text"><string>Link</string></property></column>
+        <column><property name="text"><string>Access</string></property></column>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="detailPanel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy>
+        </property>
+        <layout class="QVBoxLayout" name="detailLayout">
+         <property name="spacing"><number>0</number></property>
+         <property name="leftMargin"><number>0</number></property>
+         <property name="topMargin"><number>0</number></property>
+         <property name="rightMargin"><number>0</number></property>
+         <property name="bottomMargin"><number>0</number></property>
+         <item>
+          <widget class="QLabel" name="detailPlaceholder">
+           <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
+           <property name="minimumSize"><size><width>800</width><height>100</height></size></property>
+           <property name="frameShape"><enum>QFrame::Box</enum></property>
+           <property name="frameShadow"><enum>QFrame::Plain</enum></property>
+           <property name="ecatStatus" stdset="0"><string>muted</string></property>
+           <property name="text"><string>Select a terminal in the tree to view its state and link, and to request a state change.</string></property>
+           <property name="alignment"><set>Qt::AlignCenter</set></property>
+           <property name="wordWrap"><bool>true</bool></property>
+          </widget>
+         </item>
+         <item>
+          <widget class="EthercatTerminalStateDoubleRow" name="terminalWidget">
+           <property name="visible"><bool>false</bool></property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy>
+           </property>
+           <property name="minimumSize"><size><width>800</width><height>100</height></size></property>
+           <property name="maximumSize"><size><width>16777215</width><height>100</height></size></property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>EthercatTerminalStateDoubleRow</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.common.ethercat.ethercat_terminal_state_double_row</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

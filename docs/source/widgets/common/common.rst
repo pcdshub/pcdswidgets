@@ -10,5 +10,6 @@ Widgets in these categories are sorted under "Common" in the designer widget box
     :maxdepth: 1
 
     dock/dock.rst
+    ethercat/ethercat.rst
     toolbar/toolbar.rst
     tools/tools.rst

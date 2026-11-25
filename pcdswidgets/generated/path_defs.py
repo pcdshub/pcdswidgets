@@ -43,6 +43,7 @@ SCREEN_PATHS = {
     "VVCNO_expert": "screens/vacuum/valves/VVCNO_expert.ui",
     "VVC_detailed": "screens/vacuum/valves/VVC_detailed.ui",
     "VVC_expert": "screens/vacuum/valves/VVC_expert.ui",
+    "ethercat_terminal_states": "screens/common/ethercat/ethercat_terminal_states.py",
     "motor_state_mover_expert": "screens/motion/motor_state_mover_expert.py",
 }
 WIDGET_PATHS = {
@@ -61,6 +62,8 @@ WIDGET_PATHS = {
     "DoubleSpinBoxClickToScroll": "pcdswidgets.common.widget_overrides.spinbox_click_to_scroll:DoubleSpinBoxClickToScroll",
     "EPSByteIndicator": "pcdswidgets.eps_byteindicator:EPSByteIndicator",
     "EpicsRoiFull": "pcdswidgets.imaging.common.epics_roi_full:EpicsRoiFull",
+    "EthercatTerminalStateDoubleRow": "pcdswidgets.common.ethercat.ethercat_terminal_state_double_row:EthercatTerminalStateDoubleRow",
+    "EthercatTerminalStatesStretch": "pcdswidgets.common.ethercat.ethercat_terminal_states_stretch:EthercatTerminalStatesStretch",
     "ExposureTimingControlFull": "pcdswidgets.imaging.common.exposure_timing_control_full:ExposureTimingControlFull",
     "FastShutter": "pcdswidgets.vacuum.valves:FastShutter",
     "FeatureFinder": "pcdswidgets.common.tools.feature_finder:FeatureFinder",
