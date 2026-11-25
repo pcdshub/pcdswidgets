@@ -92,7 +92,7 @@ def press_rediscover(states):
 def test_missing_file_starts_nothing(qtbot, fake_ads, tmp_path):
     states = make(qtbot, str(tmp_path / "out"))
     qtbot.wait(500)
-    assert states._process is None and states.monitors == {}
+    assert not states.runner.running and states.monitors == {}
     assert not (tmp_path / "out").exists()
     text = states.terminalTree.topLevelItem(0).text(0)
     assert text.startswith("No discovery file") and "Press Rediscover" in text
@@ -103,7 +103,7 @@ def test_reload_never_discovers(qtbot, fake_ads, tmp_path):
     states = make(qtbot, str(tmp_path / "out"))
     for _ in range(3):
         states.reload()
-    assert states._process is None and not (tmp_path / "out").exists()
+    assert not states.runner.running and not (tmp_path / "out").exists()
 
 
 def test_rediscover_creates_the_file(qtbot, fake_ads, tmp_path):
@@ -142,9 +142,24 @@ def test_failed_discovery_is_reported(qtbot, fake_ads, tmp_path, monkeypatch):
     monkeypatch.setattr(stretch_module.QtWidgets.QMessageBox, "warning", lambda *a: dialogs.append(a))
     states = make(qtbot, str(tmp_path / "out"))
     press_rediscover(states)
-    wait_until(lambda: states._process is None, timeout=30)
+    wait_until(lambda: not states.runner.running, timeout=30)
     assert len(dialogs) == 1 and "route to plc-test missing" in dialogs[0][2]
     assert states.terminalTree.topLevelItem(0).text(0).startswith("No discovery file")  # explanation restored
     assert states.rediscoverButton.isEnabled()  # the user can retry
     states.reload()
-    assert states._process is None  # never retried on its own
+    assert not states.runner.running  # never retried on its own
+
+
+def test_writable_output(tmp_path):
+    """The discovery target if it can be written, else the user cache."""
+    target = tmp_path / "a" / "snap.json"
+    assert discover.writable_output(target, "plc-test") == target
+    locked = tmp_path / "locked"
+    locked.mkdir()
+    locked.chmod(stat.S_IRUSR | stat.S_IXUSR)
+    try:
+        if os.access(locked, os.W_OK):
+            pytest.skip("running as a user that can write read-only directories")
+        assert discover.writable_output(locked / "snap.json", "plc-test") == discover.resolve_output(None, "plc-test")
+    finally:
+        locked.chmod(stat.S_IRWXU)

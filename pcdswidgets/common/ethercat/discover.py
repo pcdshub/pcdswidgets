@@ -72,6 +72,11 @@ def can_create(path: Path) -> bool:
     return parent.is_dir() and os.access(parent, os.W_OK | os.X_OK)
 
 
+def writable_output(target: Path, plc: str) -> Path:
+    """``target`` if it can be written, else the user cache ``~/.cache/ecat-states/<plc>.json``."""
+    return target if can_create(target) else resolve_output(None, plc)
+
+
 def find_ads() -> str | None:
     """Locate the ads-actions CLI (PATH, $ADS_ACTIONS_BIN, released install)."""
     for candidate in (os.environ.get("ADS_ACTIONS_BIN"), shutil.which("ads"), RELEASED_ADS):

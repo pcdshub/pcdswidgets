@@ -1,8 +1,5 @@
 """
-Shared EtherCAT terminal-state logic for the ``common.ethercat`` widgets.
-
-Used by :class:`EthercatTerminalStateDoubleRow` (one terminal) and
-:class:`EthercatTerminalStatesStretch` (every terminal of a PLC as a tree).
+Qt-free model of the ``common.ethercat`` widgets: decoding, rules, tree and roll-ups.
 
 PVs per terminal (pytmc ``ethercat.py``), ``{prefix}ECAT:{port}:...``:
 
@@ -22,25 +19,17 @@ PV                  Type   RO/RW  Meaning
 A terminal is EDITABLE when ``DISP == 0`` and ``DISA != DISV`` and Channel Access
 grants write access (the record semantics, as in pytmc ``effective_access()``).
 
-Colours follow high-performance HMI practice: neutral for normal, colour only
-for meaning (Carbon support-error red for faults, Blue 60 for EDITABLE).
+Nothing here imports Qt or PyDM: the status of a terminal comes from any object with
+the :class:`TerminalStatus` attributes (the live :class:`~.monitor.TerminalMonitor`).
 """
 
 from __future__ import annotations
 
-import functools
 import json
 import re
+from dataclasses import dataclass
 from pathlib import Path
-
-from pydm.data_plugins import is_read_only
-from pydm.widgets.channel import PyDMChannel
-from qtpy import QtCore, QtGui
-from qtpy.QtCore import Qt
-
-from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM
-
-STATUS_QSS = Path(__file__).resolve().parent / "ethercat_status.qss"
+from typing import Protocol
 
 GOOD_STATE, GOOD_LINK = "OP", "OK"
 # Raw EtherCAT state word (pytmc helper records StateRaw / LinkCode):
@@ -61,19 +50,14 @@ LINK_FLAG_BITS = {
 H_OK, H_FAULT, H_DISCONNECTED = 0, 1, 2
 HEALTHS = (H_OK, H_FAULT, H_DISCONNECTED)
 
-FAULT_RED = QtGui.QColor("#da1e28")  # Carbon support-error
-MUTED_GREY = QtGui.QColor("#8d8d8d")  # Carbon Gray 50: OK markers and muted text, light and dark themes
-LOCK_COLORS = {
-    "EDITABLE": QtGui.QColor("#0f62fe"),  # Carbon Blue 60, the interaction accent
-    "LOCKED": QtGui.QColor("#6f6f6f"),
-    "UNKNOWN": QtGui.QColor("#c6c6c6"),
-}
-
 ACCESS_GRANTED = "State requests accepted (DISP == 0, DISA != DISV)"
 READ_ONLY_NOTE = (
     "This PyDM session is read-only (Qt Designer or pydm --read-only): Channel Access write "
     "permission is not checked and state requests are disabled here."
 )
+
+# Tree filter modes, in the order of the "Show" combo box of the .ui
+SHOW_ALL, SHOW_FAULTS, SHOW_NOT_OP, SHOW_LINK, SHOW_EDITABLE, SHOW_DISCONNECTED = range(6)
 
 
 # ------------------------------------------------------------------ decoding
@@ -99,21 +83,17 @@ def decode_link_text(code) -> str | None:
     return f"{what} \u00b7 {where}" if what and where else (what or where)
 
 
-def session_read_only() -> bool:
-    """True in a read-only PyDM session: Qt Designer, or ``pydm --read-only``."""
-    return bool(is_read_only())
-
-
-def access_rule(disp, disa, disv, write_access=None) -> tuple[str, list[str]]:
+# -------------------------------------------------------------------- access
+def access_rule(disp, disa, disv, write_access=None, read_only=False) -> tuple[str, list[str]]:
     """
     EDITABLE / LOCKED / UNKNOWN for one terminal, with the reasons when locked.
 
     EDITABLE when ``DISP == 0`` and ``DISA != DISV`` and write access is not denied.
-    In a read-only PyDM session (Qt Designer, ``pydm --read-only``) every channel
-    reports no write access regardless of the IOC, so write access is ignored there:
-    the answer then comes from the record fields only.
+    In a read-only PyDM session (``read_only``: Qt Designer, ``pydm --read-only``) every
+    channel reports no write access regardless of the IOC, so write access is ignored
+    there: the answer then comes from the record fields only.
     """
-    if session_read_only():
+    if read_only:
         write_access = None
     if disp is None or disa is None or disv is None:
         return "UNKNOWN", ["State_SP access fields not connected"]
@@ -131,78 +111,12 @@ def access_rule(disp, disa, disv, write_access=None) -> tuple[str, list[str]]:
     return ("LOCKED", reasons) if reasons else ("EDITABLE", [])
 
 
-def access_tooltip(access: str, reasons: list[str]) -> str:
+def access_tooltip(access: str, reasons: list[str], read_only: bool = False) -> str:
     """Tooltip for an access value: the lock reasons, plus a note in read-only PyDM sessions."""
     text = f"{access}\n" + ("\n".join(reasons) if reasons else ACCESS_GRANTED)
-    if session_read_only():
+    if read_only:
         text += f"\n\n{READ_ONLY_NOTE}"
     return text
-
-
-# -------------------------------------------------------------------- styling
-def status_stylesheet() -> str:
-    """The ``ecatStatus`` property rules (not a theme), applied by each widget to itself."""
-    try:
-        return STATUS_QSS.read_text(encoding="utf-8")
-    except OSError:
-        return ""
-
-
-def set_status(widget, status: str):
-    """Tag a label with ``ecatStatus`` (fault / editable / muted / ""); the status sheet colours it."""
-    if widget.property("ecatStatus") == status:
-        return
-    widget.setProperty("ecatStatus", status)
-    widget.style().unpolish(widget)
-    widget.style().polish(widget)
-
-
-def _icon_painter(size: int) -> tuple[QtGui.QPixmap, QtGui.QPainter]:
-    """A transparent ``size`` x ``size`` pixmap and an antialiased painter on it (call ``end()``)."""
-    pixmap = QtGui.QPixmap(size, size)
-    pixmap.fill(Qt.transparent)
-    painter = QtGui.QPainter(pixmap)
-    painter.setRenderHint(QtGui.QPainter.Antialiasing)
-    return pixmap, painter
-
-
-def dot_pixmap(health: int, size: int) -> QtGui.QPixmap:
-    """Status marker: OK = neutral grey dot, FAULT = red dot, DISCONNECTED = dashed hollow ring."""
-    pixmap, painter = _icon_painter(size)
-    rect = QtCore.QRectF(1.5, 1.5, size - 3, size - 3)
-    if health in (H_OK, H_FAULT):
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(MUTED_GREY if health == H_OK else FAULT_RED)
-    else:
-        pen = QtGui.QPen(MUTED_GREY, 1.5)
-        pen.setStyle(Qt.DashLine)
-        painter.setPen(pen)
-        painter.setBrush(Qt.NoBrush)
-    painter.drawEllipse(rect)
-    painter.end()
-    return pixmap
-
-
-def lock_pixmap(access: str, size: int) -> QtGui.QPixmap:
-    """Padlock: open blue = EDITABLE, closed grey = LOCKED, pale = UNKNOWN."""
-    color = LOCK_COLORS.get(access, LOCK_COLORS["UNKNOWN"])
-    pixmap, painter = _icon_painter(size)
-    painter.setPen(QtGui.QPen(color, max(1.5, size * 0.13)))
-    painter.setBrush(Qt.NoBrush)
-    shackle = QtCore.QRectF(size * 0.27, size * 0.06, size * 0.46, size * 0.62)
-    if access == "EDITABLE":
-        shackle.translate(size * 0.16, -size * 0.04)
-        painter.drawArc(shackle, 0, 180 * 16)
-        painter.drawLine(
-            QtCore.QPointF(shackle.left(), shackle.center().y()), QtCore.QPointF(shackle.left(), size * 0.36)
-        )
-    else:
-        painter.drawArc(shackle, 0, 180 * 16)
-    painter.setPen(Qt.NoPen)
-    painter.setBrush(color)
-    painter.drawRoundedRect(QtCore.QRectF(size * 0.14, size * 0.42, size * 0.72, size * 0.54), size * 0.08, size * 0.08)
-    painter.end()
-    return pixmap
 
 
 # ----------------------------------------------------------------- discovery
@@ -362,134 +276,74 @@ class _TreeBuilder:
         return groups
 
 
-# ------------------------------------------------------------------- monitor
-def release_monitors(monitors: list | dict):
-    """
-    Disconnect every monitor in a list or dict (which is emptied, so later calls are no-ops).
+# ------------------------------------------------------ roll-up and filtering
+class TerminalStatus(Protocol):
+    """What the roll-up and the filter read from a terminal (a TerminalMonitor provides it)."""
 
-    Widgets connect this to their ``destroyed`` signal with :func:`functools.partial`
-    on the container: Qt does not drop PyDM channel slots by itself, so without it a
-    deleted widget leaves its Channel Access connections open.
-    """
-    while monitors:
-        monitor = monitors.popitem()[1] if isinstance(monitors, dict) else monitors.pop()
-        monitor.disconnect_channels()
+    terminal: Terminal
+    state_text: str | None
+    link_text: str | None
+    health: int
+    access: tuple[str, list[str]]
 
 
-class TerminalMonitor(QtCore.QObject):
-    """
-    Read-only Channel Access subscription to one terminal's PVs, with the derived
-    state / link / access. Shared by both widgets.
-    """
+@dataclass(frozen=True)
+class GroupSummary:
+    """The worst status and the counts of a group of terminals (a group / Port row of the tree)."""
 
-    changed = QtCore.Signal()
+    total: int
+    worst: int
+    disconnected: int
+    not_op: int
+    bad_link: int
+    editable: int
+    unknown: int
 
-    FIELDS = (
-        ("state", "State_RBV"),
-        ("link", "Link_RBV"),
-        ("sp", "State_SP"),
-        ("disp", "State_SP.DISP"),
-        ("disa", "State_SP.DISA"),
-        ("disv", "State_SP.DISV"),
-        ("raw", "StateRaw"),  # pytmc helper records
-        ("linkcode", "LinkCode"),
-    )
-
-    def __init__(self, terminal: Terminal, prefix: str, parent=None):
-        super().__init__(parent)
-        self.terminal = terminal
-        self.base = f"{prefix}ECAT:{terminal.port}"
-        self.values = {key: None for key, _ in self.FIELDS}
-        self.connected = {key: False for key, _ in self.FIELDS}
-        self.enums: dict[str, tuple] = {}
-        self.write_access = None
-        self.channels = []
-        for key, suffix in self.FIELDS:
-            self.channels.append(
-                PyDMChannel(
-                    address=f"ca://{self.base}:{suffix}",
-                    connection_slot=functools.partial(self._on_connection, key),
-                    value_slot=functools.partial(self._on_value, key),
-                    enum_strings_slot=(
-                        functools.partial(self._on_enums, key) if key in ("state", "link", "sp") else None
-                    ),
-                    write_access_slot=self._on_write_access if key == "sp" else None,
-                )
-            )
-
-    def connect_channels(self):
-        for channel in self.channels:
-            channel.connect()
-
-    def disconnect_channels(self):
-        """Disconnect and drop every channel (the list is emptied, so later calls are no-ops)."""
-        while self.channels:
-            channel = self.channels.pop()
-            try:
-                channel.disconnect()
-            except Exception:
-                pass
-
-    # slots
-    def _on_connection(self, key, connected):
-        self.connected[key] = bool(connected)
-        self.changed.emit()
-
-    def _on_value(self, key, value):
-        self.values[key] = value
-        self.changed.emit()
-
-    def _on_enums(self, key, strings):
-        self.enums[key] = tuple(strings or ())
-        self.changed.emit()
-
-    def _on_write_access(self, allowed):
-        self.write_access = bool(allowed)
-        self.changed.emit()
-
-    # derived status
-    def _enum_text(self, key, fallback):
-        if not self.connected[key] or self.values[key] is None:
-            return None
-        value = self.values[key]
-        if isinstance(value, str):
-            return value
-        strings = self.enums.get(key) or fallback
-        try:
-            index = int(value)
-        except (TypeError, ValueError):
-            return "UNKNOWN"
-        return strings[index] if 0 <= index < len(strings) else "UNKNOWN"
-
-    def value(self, key):
-        """Last value of one field (a key of :attr:`FIELDS`), ``None`` while disconnected."""
-        return self.values.get(key) if self.connected.get(key) else None
+    @classmethod
+    def of(cls, terminals: list[TerminalStatus]) -> GroupSummary:
+        accesses = [t.access[0] for t in terminals]
+        return cls(
+            total=len(terminals),
+            worst=max((t.health for t in terminals), default=H_OK),
+            disconnected=sum(t.health == H_DISCONNECTED for t in terminals),
+            not_op=sum(t.state_text is not None and t.state_text != GOOD_STATE for t in terminals),
+            bad_link=sum(t.link_text is not None and t.link_text != GOOD_LINK for t in terminals),
+            editable=accesses.count("EDITABLE"),
+            unknown=accesses.count("UNKNOWN"),
+        )
 
     @property
-    def state_text(self):
-        return self._enum_text("state", STATE_ENUM)
+    def state_text(self) -> str:
+        return "DISCONNECTED" if self.disconnected else "ALL OP" if not self.not_op else f"{self.not_op} NOT OP"
 
     @property
-    def link_text(self):
-        return self._enum_text("link", LINK_ENUM)
+    def link_text(self) -> str:
+        return "DISCONNECTED" if self.disconnected else "ALL OK" if not self.bad_link else f"{self.bad_link} NOT OK"
 
     @property
-    def state_flags(self) -> list[str] | None:
-        return decode_state_flags(self.value("raw"))
+    def state_tooltip(self) -> str:
+        in_op = self.total - self.not_op - self.disconnected
+        return f"{in_op} of {self.total} in OP, {self.not_op} not OP, {self.disconnected} disconnected"
 
     @property
-    def link_detail(self) -> str | None:
-        return decode_link_text(self.value("linkcode"))
+    def access(self) -> str:
+        """EDITABLE if any terminal is, UNKNOWN if none is known, else LOCKED."""
+        return "EDITABLE" if self.editable else "UNKNOWN" if self.unknown == self.total else "LOCKED"
 
-    @property
-    def health(self) -> int:
-        state, link = self.state_text, self.link_text
-        if state is None or link is None:
-            return H_DISCONNECTED
-        if self.state_flags:
-            return H_FAULT  # e.g. OP with the ERROR flag set
-        return H_OK if (state == GOOD_STATE and link == GOOD_LINK) else H_FAULT
 
-    @property
-    def access(self) -> tuple[str, list[str]]:
-        return access_rule(self.value("disp"), self.value("disa"), self.value("disv"), self.write_access)
+def matches(status: TerminalStatus, mode: int, text: str = "") -> bool:
+    """Whether a terminal passes the tree filter: a ``SHOW_*`` mode and a lower-case text."""
+    t = status.terminal
+    if text and text not in f"{t.name} {t.type} {t.port}".lower():
+        return False
+    if mode == SHOW_FAULTS:
+        return status.health != H_OK
+    if mode == SHOW_NOT_OP:
+        return status.state_text != GOOD_STATE
+    if mode == SHOW_LINK:
+        return status.link_text != GOOD_LINK
+    if mode == SHOW_EDITABLE:
+        return status.access[0] == "EDITABLE"
+    if mode == SHOW_DISCONNECTED:
+        return status.health == H_DISCONNECTED
+    return True

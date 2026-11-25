@@ -30,7 +30,7 @@ except ImportError:
 
 class EthercatTerminalStateDoubleRowBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
-    PyDMEnumComboBox_state: "PyDMEnumComboBox"
+    PyDMEnumComboBox_state: "ConfirmingEnumComboBox"
     PyDMLabel_name: "PyDMLabel"
     PyDMLabel_rbv: "PyDMLabel"
     accessBox: "QtWidgets.QWidget"

@@ -7,7 +7,8 @@ not turn editable terminals into LOCKED ones; requests stay disabled with a note
 import pytest
 from pydm.data_plugins import is_read_only, set_read_only
 
-from pcdswidgets.common.ethercat import ethercat_state as es
+from pcdswidgets.common.ethercat.model import access_rule
+from pcdswidgets.common.ethercat.monitor import session_read_only
 
 from .conftest import EDITABLE_PORTS, make_states, select
 
@@ -21,14 +22,14 @@ def read_only_session():
     set_read_only(previous)
 
 
-def test_rule_ignores_write_access_only_in_read_only_sessions(read_only_session):
-    assert es.access_rule(0, 0, 1, write_access=False) == ("EDITABLE", [])
-    assert es.access_rule(1, 1, 1, write_access=False)[0] == "LOCKED"  # record fields still lock
+def test_session_is_detected(read_only_session):
+    assert session_read_only()
 
 
-def test_rule_in_normal_session_still_honours_asg():
-    assert not is_read_only()
-    assert es.access_rule(0, 0, 1, write_access=False)[0] == "LOCKED"
+def test_rule_ignores_write_access_only_in_read_only_sessions():
+    assert access_rule(0, 0, 1, write_access=False, read_only=True) == ("EDITABLE", [])
+    assert access_rule(1, 1, 1, write_access=False, read_only=True)[0] == "LOCKED"  # record fields still lock
+    assert access_rule(0, 0, 1, write_access=False)[0] == "LOCKED"  # normal session: ASG honoured
 
 
 def test_tree_keeps_editable_terminals_in_read_only_session(qtbot, read_only_session):

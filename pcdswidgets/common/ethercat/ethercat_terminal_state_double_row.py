@@ -11,17 +11,9 @@ from qtpy import QtWidgets
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.common.ethercat.constants import to_bool
-from pcdswidgets.common.ethercat.ethercat_state import (
-    Terminal,
-    TerminalMonitor,
-    access_rule,
-    access_tooltip,
-    lock_pixmap,
-    release_monitors,
-    session_read_only,
-    set_status,
-    status_stylesheet,
-)
+from pcdswidgets.common.ethercat.model import Terminal, access_rule, access_tooltip
+from pcdswidgets.common.ethercat.monitor import TerminalMonitor, release_monitors, session_read_only
+from pcdswidgets.common.ethercat.style import lock_pixmap, set_status, status_stylesheet
 from pcdswidgets.generated.common.ethercat.ethercat_terminal_state_double_row_base import (
     EthercatTerminalStateDoubleRowBase,
 )
@@ -63,10 +55,8 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         self.setStyleSheet(status_stylesheet())  # ecatStatus rules only, never the theme
 
         self._show_disconnected_text(self.PyDMLabel_rbv)
-        combo = self.PyDMEnumComboBox_state
-        # Ask before a state request is sent (the combo box would write immediately).
-        combo.activated[int].disconnect(combo.internal_combo_box_activated_int)
-        combo.activated[int].connect(self._on_request_activated)
+        # The Request combo box (a ConfirmingEnumComboBox) writes only what this accepts.
+        self.PyDMEnumComboBox_state.confirm = self._confirm_request
 
         # Release the PV connections while they still exist (widget deleted or app quitting).
         self.destroyed.connect(functools.partial(release_monitors, self._owned))
@@ -182,7 +172,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         self.accessIcon.setPixmap(lock_pixmap(access, size))
         self.accessLabel.setText(access)
         set_status(self.accessLabel, {"EDITABLE": "editable", "LOCKED": ""}.get(access, "muted"))
-        tip = access_tooltip(access, reasons)
+        tip = access_tooltip(access, reasons, session_read_only())
         for widget in (self.accessIcon, self.accessLabel):
             widget.setToolTip(tip)
         can_request, _ = self._can_request()
@@ -210,18 +200,19 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
     def _can_request(self) -> tuple[bool, str]:
         """Whether State_SP may be written now, and the access tooltip."""
         access, reasons = self.access()
-        return access == "EDITABLE" and not session_read_only(), access_tooltip(access, reasons)
+        read_only = session_read_only()
+        return access == "EDITABLE" and not read_only, access_tooltip(access, reasons, read_only)
 
-    def _on_request_activated(self, index: int):
+    def _confirm_request(self, index: int) -> bool:
+        """
+        The Request combo box's ``confirm`` hook: True writes State_SP, False puts the
+        selection back. Asks the user first (unless ``confirmRequests`` is off) and checks
+        access again right before writing, since PV updates keep arriving during the dialog.
+        """
         combo = self.PyDMEnumComboBox_state
         target = combo.itemText(index)
-        current = combo.value
-        if current is not None and int(current) == index:
-            return  # same as the last request: nothing to send
-
-        def revert():
-            combo.setCurrentIndex(int(current) if current is not None else -1)
-
+        if combo.value is not None and int(combo.value) == index:
+            return False  # same as the last request: nothing to send
         if self._confirm:
             name = self.get_macro("TERMINAL_NAME") or self.base
             answer = QtWidgets.QMessageBox.question(
@@ -232,14 +223,10 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
                 QtWidgets.QMessageBox.No,
             )
             if answer != QtWidgets.QMessageBox.Yes:
-                revert()
-                return
-        # PV updates keep arriving while the dialog is open: check access again right before writing.
+                return False
         allowed, why = self._can_request()
         if not allowed:
-            revert()
             QtWidgets.QMessageBox.warning(
                 self, "Request not sent", f"State {target} was not requested for {self.base}:\n\n{why}"
             )
-            return
-        combo.internal_combo_box_activated_int(index)
+        return allowed

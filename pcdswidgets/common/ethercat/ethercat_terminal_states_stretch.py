@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import functools
-import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -16,23 +15,27 @@ from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
 from pcdswidgets.common.ethercat import discover
 from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM, to_bool
-from pcdswidgets.common.ethercat.ethercat_state import (
-    FAULT_RED,
+from pcdswidgets.common.ethercat.discovery_runner import DiscoveryRunner
+from pcdswidgets.common.ethercat.model import (
     GOOD_LINK,
     GOOD_STATE,
-    H_DISCONNECTED,
     H_OK,
     HEALTHS,
-    LOCK_COLORS,
-    MUTED_GREY,
+    SHOW_ALL,
+    GroupSummary,
     Node,
-    TerminalMonitor,
     access_tooltip,
     build_tree,
-    dot_pixmap,
     load_discovery,
+    matches,
+)
+from pcdswidgets.common.ethercat.monitor import TerminalMonitor, release_monitors, session_read_only
+from pcdswidgets.common.ethercat.style import (
+    FAULT_RED,
+    LOCK_COLORS,
+    MUTED_GREY,
+    dot_pixmap,
     lock_pixmap,
-    release_monitors,
     status_stylesheet,
 )
 from pcdswidgets.generated.common.ethercat.ethercat_terminal_states_stretch_base import (
@@ -46,7 +49,6 @@ except ImportError:
 
 COL_NAME, COL_PORT, COL_STATE, COL_LINK, COL_ACCESS = range(5)
 ROLE_PORT = Qt.UserRole + 1
-SHOW_ALL, SHOW_FAULTS, SHOW_NOT_OP, SHOW_LINK, SHOW_EDITABLE, SHOW_DISCONNECTED = range(6)
 
 
 def _set_foreground(item, col, color):
@@ -94,7 +96,9 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.monitors: dict[int, TerminalMonitor] = {}
         self.terminal_items: dict[int, QtWidgets.QTreeWidgetItem] = {}
         self.meta: dict = {}
-        self._process: QtCore.QProcess | None = None
+        self.runner = DiscoveryRunner(self)
+        self.runner.finished.connect(self._on_discovery_finished)
+        self.runner.failed.connect(self._on_discovery_failed)
         self._refresh_timer = QtCore.QTimer(self, singleShot=True, interval=150)
         self._refresh_timer.timeout.connect(self.refresh)
         # Properties can arrive in any order (designer, .ui, code): reload once they settle.
@@ -217,9 +221,6 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     def _title(self) -> str:
         return f"EtherCAT Terminal States - {self._plc or 'set the plc property'}"
 
-    def _default_discovery(self) -> Path:
-        return discover.resolve_output(None, self._plc or "unknown")
-
     def discovery_target(self) -> Path:
         """
         Where the discovery file is read from and written to.
@@ -231,15 +232,14 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
 
     def _write_target(self) -> Path:
         """The discovery target, or the user cache if the target location is not writable."""
-        target = self.discovery_target()
-        return target if discover.can_create(target) else self._default_discovery()
+        return discover.writable_output(self.discovery_target(), self._plc or "unknown")
 
     def reload(self):
         """(Re)load the discovery file and (re)connect every terminal. Never runs a discovery itself."""
         self._reload_timer.stop()
         self.DeviceName.setText(self._title())
         ads = discover.find_ads()
-        self.rediscoverButton.setEnabled(bool(self._plc) and ads is not None and self._process is None)
+        self.rediscoverButton.setEnabled(bool(self._plc) and ads is not None and not self.runner.running)
         if ads is None:
             self.rediscoverButton.setToolTip(
                 "ads-actions not found: run `ctrlenv-pathmunge ads-actions` before launching"
@@ -266,7 +266,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         output = self._write_target()
         where = str(output) + ("" if output == target else f" ({target.parent} is not writable)")
         cli = f"python -m pcdswidgets.common.ethercat.discover {self._plc or '<plc>'} -o {target}"
-        if self._process is not None:
+        if self.runner.running:
             self._show_message(f"Creating {where} (read-only discovery)...")
         elif not self._plc:
             self._show_message(f"No discovery file at {target}. Set the plc property to discover the terminals.")
@@ -281,30 +281,24 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     @QtCore.Slot()  # clicked(bool) calls it without arguments; a bound method, never a lambda over self
     def rediscover(self):
         """Run the read-only discovery (ads read-ecat-topology) in the background. User action only."""
-        if self._process is not None or not self._plc:
-            return
         output = self._write_target()
-        args = ["-m", "pcdswidgets.common.ethercat.discover", self._plc, "-o", str(output)]
-        process = QtCore.QProcess(self)
-        process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
-        process.finished.connect(lambda code, _status: self._on_discovery_done(code, output))
-        self._process = process
+        if not self.runner.start(self._plc, output):
+            return
         self.rediscoverButton.setEnabled(False)
         self.rediscoverButton.setText("Discovering...")
         if not self.monitors:  # nothing loaded yet: show progress in the tree
             self._show_message(f"Creating {output} (read-only discovery)...")
-        process.start(sys.executable, args)
 
-    def _on_discovery_done(self, code: int, output: Path):
-        log = bytes(self._process.readAll()).decode(errors="replace").strip()
-        self._process.deleteLater()
-        self._process = None
+    def _discovery_ended(self):
         self.rediscoverButton.setEnabled(True)
         self.rediscoverButton.setText("Rediscover")
-        if code == 0 and output.is_file():
-            self.reload()
-            return
-        detail = "\n".join(log.splitlines()[-6:]) if log else f"exit code {code}"
+
+    def _on_discovery_finished(self, _output: Path):
+        self._discovery_ended()
+        self.reload()
+
+    def _on_discovery_failed(self, detail: str):
+        self._discovery_ended()
         if not self.monitors:  # still nothing loaded: restore the explanation in the tree
             self.reload()
         QtWidgets.QMessageBox.warning(
@@ -410,7 +404,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             self._paint_terminal(item, monitor, below)
             return [monitor] + below
         if below:
-            self._paint_group(item, below, bold)
+            self._paint_group(item, GroupSummary.of(below), bold)
         return below
 
     def _paint_terminal(self, item, monitor, below=()):
@@ -439,7 +433,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             _set_foreground(item, col, color)
         access, reasons = monitor.access
         item.setIcon(COL_ACCESS, self._locks[access])
-        item.setToolTip(COL_ACCESS, access_tooltip(access, reasons))
+        item.setToolTip(COL_ACCESS, access_tooltip(access, reasons, session_read_only()))
         flags = monitor.state_flags
         flag_text = "flags: " + (" + ".join(flags) if flags else "none") if flags is not None else ""
         item.setToolTip(
@@ -449,47 +443,20 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             COL_LINK, "\n".join(filter(None, [monitor.link_detail or monitor.link_text, f"{monitor.base}:Link_RBV"]))
         )
 
-    def _paint_group(self, item, monitors, bold):
-        total = len(monitors)
-        disconnected = sum(m.health == H_DISCONNECTED for m in monitors)
-        not_op = sum(m.state_text is not None and m.state_text != GOOD_STATE for m in monitors)
-        bad_link = sum(m.link_text is not None and m.link_text != GOOD_LINK for m in monitors)
-        accesses = [m.access[0] for m in monitors]
-        editable = accesses.count("EDITABLE")
-        unknown = accesses.count("UNKNOWN")
-        worst = max(m.health for m in monitors)
-        item.setIcon(COL_NAME, self._dots[worst])
+    def _paint_group(self, item, summary: GroupSummary, bold):
+        item.setIcon(COL_NAME, self._dots[summary.worst])
         item.setFont(COL_NAME, bold)
-        state = "DISCONNECTED" if disconnected else "ALL OP" if not_op == 0 else f"{not_op} NOT OP"
-        link = "DISCONNECTED" if disconnected else "ALL OK" if bad_link == 0 else f"{bad_link} NOT OK"
-        item.setToolTip(
-            COL_STATE, f"{total - not_op - disconnected} of {total} in OP, {not_op} not OP, {disconnected} disconnected"
-        )
-        for col, text, good in ((COL_STATE, state, not_op == 0), (COL_LINK, link, bad_link == 0)):
+        item.setToolTip(COL_STATE, summary.state_tooltip)
+        for col, text, good in (
+            (COL_STATE, summary.state_text, not summary.not_op),
+            (COL_LINK, summary.link_text, not summary.bad_link),
+        ):
             item.setText(col, text)
-            color = MUTED_GREY if disconnected else None if good else FAULT_RED
-            _set_foreground(item, col, color)
-        group_access = "EDITABLE" if editable else "UNKNOWN" if unknown == total else "LOCKED"
-        item.setIcon(COL_ACCESS, self._locks[group_access])
-        item.setToolTip(COL_ACCESS, f"{editable} of {total} terminals editable")
+            _set_foreground(item, col, MUTED_GREY if summary.disconnected else None if good else FAULT_RED)
+        item.setIcon(COL_ACCESS, self._locks[summary.access])
+        item.setToolTip(COL_ACCESS, f"{summary.editable} of {summary.total} terminals editable")
 
     # ------------------------------------------------------------------ filter
-    def _matches(self, monitor: TerminalMonitor, mode: int, text: str) -> bool:
-        t = monitor.terminal
-        if text and text not in f"{t.name} {t.type} {t.port}".lower():
-            return False
-        if mode == SHOW_FAULTS:
-            return monitor.health != H_OK
-        if mode == SHOW_NOT_OP:
-            return monitor.state_text != GOOD_STATE
-        if mode == SHOW_LINK:
-            return monitor.link_text != GOOD_LINK
-        if mode == SHOW_EDITABLE:
-            return monitor.access[0] == "EDITABLE"
-        if mode == SHOW_DISCONNECTED:
-            return monitor.health == H_DISCONNECTED
-        return True
-
     def _filter_active(self) -> bool:
         return self.showCombo.currentIndex() != SHOW_ALL or bool(self.filterEdit.text().strip())
 
@@ -519,7 +486,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
             child_visible |= self._filter_item(item.child(index), mode, text)
         port = item.data(COL_NAME, ROLE_PORT)
         if port is not None and port in self.monitors:
-            visible = child_visible or self._matches(self.monitors[port], mode, text)
+            visible = child_visible or matches(self.monitors[port], mode, text)
         elif item.childCount():
             visible = child_visible
         else:

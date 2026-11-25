@@ -117,9 +117,12 @@ def test_designer_group():
 
 
 def test_code_has_no_green_or_inline_colour():
-    source = "".join(p.read_text() for p in (MODULE / "common" / "ethercat").glob("*.py"))
+    sources = {p.name: p.read_text() for p in (MODULE / "common" / "ethercat").glob("*.py")}
+    source = "".join(sources.values())
     assert "QColor(0, 1" not in source and "rgb(0, 1" not in source  # no green
     assert '.setStyleSheet("color' not in source
+    # one palette: hex colours only in style.py
+    assert {name for name, text in sources.items() if re.search(r"#[0-9a-fA-F]{6}\b", text)} == {"style.py"}
 
 
 def test_status_sheet_only_targets_ecatstatus_and_titles():

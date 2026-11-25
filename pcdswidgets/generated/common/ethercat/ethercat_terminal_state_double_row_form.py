@@ -8,9 +8,10 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
-from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
+
+from pcdswidgets.common.ethercat.confirming_combo_box import ConfirmingEnumComboBox
 
 
 class Ui_Form(object):
@@ -136,7 +137,7 @@ class Ui_Form(object):
         self.requestLayout.setContentsMargins(0, 0, 0, 0)
         self.requestLayout.setSpacing(0)
         self.requestLayout.setObjectName("requestLayout")
-        self.PyDMEnumComboBox_state = PyDMEnumComboBox(self.requestFrame)
+        self.PyDMEnumComboBox_state = ConfirmingEnumComboBox(self.requestFrame)
         font = QtGui.QFont()
         font.setFamily("Sans Serif")
         font.setPointSize(11)

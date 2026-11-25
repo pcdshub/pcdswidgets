@@ -30,8 +30,10 @@ from pytestqt.qtbot import QtBot
 from qtpy import QtCore, QtWidgets
 
 from pcdswidgets.common.ethercat.constants import LINK_ENUM, STATE_ENUM
-from pcdswidgets.common.ethercat.ethercat_state import LINK_FLAG_BITS, STATE_FLAG_BITS, TerminalMonitor
 from pcdswidgets.common.ethercat.ethercat_terminal_states_stretch import ROLE_PORT, EthercatTerminalStatesStretch
+from pcdswidgets.common.ethercat.model import LINK_FLAG_BITS, STATE_FLAG_BITS
+from pcdswidgets.common.ethercat.monitor import TerminalMonitor
+from pcdswidgets.common.ethercat.style import PALETTE
 
 DATA = Path(__file__).parent / "data"
 PLC = "plc-sds-raptor"
@@ -40,7 +42,7 @@ RECORDED_STATES = DATA / f"{PLC}.states.json"  # state / link / flags seen on th
 TERMINALS = 85
 EDITABLE_PORTS = list(range(1014, 1022))
 PREFIX = "TEST:IOC:"  # any string: nothing is ever connected
-GREY, RED, BLUE = "#8d8d8d", "#da1e28", "#0f62fe"
+GREY, RED, BLUE = PALETTE["muted"], PALETTE["fault"], PALETTE["editable"]
 
 
 # ------------------------------------------------------------------- offline
@@ -157,10 +159,13 @@ def feed_panel(widget):
     widget.PyDMEnumComboBox_state.write_access_changed(True)
 
 
-def record_writes(widget, monkeypatch) -> list[int]:
-    """Record a panel's State_SP writes (enum indexes) instead of sending them."""
+def record_writes(widget) -> list[int]:
+    """
+    Record a panel's State_SP writes (enum indexes): what the Request combo box emits
+    to its data plugin. Offline, nothing else receives them.
+    """
     writes = []
-    monkeypatch.setattr(widget.PyDMEnumComboBox_state, "internal_combo_box_activated_int", writes.append)
+    widget.PyDMEnumComboBox_state.send_value_signal[int].connect(writes.append)
     return writes
 
 

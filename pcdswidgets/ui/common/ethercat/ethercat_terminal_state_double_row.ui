@@ -136,7 +136,7 @@
            <property name="rightMargin"><number>0</number></property>
            <property name="bottomMargin"><number>0</number></property>
            <item>
-            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_state">
+            <widget class="ConfirmingEnumComboBox" name="PyDMEnumComboBox_state">
              <property name="font"><font><family>Sans Serif</family><pointsize>11</pointsize></font></property>
              <property name="toolTip"><string>Request an EtherCAT state (State_SP). Shows the last request.</string></property>
              <property name="minimumSize"><size><width>150</width><height>0</height></size></property>
@@ -221,6 +221,11 @@
    <class>PyDMEnumComboBox</class>
    <extends>QComboBox</extends>
    <header>pydm.widgets.enum_combo_box</header>
+  </customwidget>
+  <customwidget>
+   <class>ConfirmingEnumComboBox</class>
+   <extends>PyDMEnumComboBox</extends>
+   <header>pcdswidgets.common.ethercat.confirming_combo_box</header>
   </customwidget>
  </customwidgets>
  <resources/>

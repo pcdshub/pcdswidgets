@@ -87,9 +87,9 @@ def test_terminal_widget_fills_panel_width(states):
 
 
 # ------------------------------------------------- requests (writes recorded)
-def test_request_cancelled_writes_nothing(fresh_states, answer, monkeypatch):
+def test_request_cancelled_writes_nothing(fresh_states, answer):
     w = select(fresh_states, 1020)
-    writes = record_writes(w, monkeypatch)
+    writes = record_writes(w)
     calls = answer("no")
     request(w, "OP")
     assert len(calls) == 1 and "OP" in calls[0] and "RCC-E6" in calls[0]
@@ -97,28 +97,28 @@ def test_request_cancelled_writes_nothing(fresh_states, answer, monkeypatch):
     assert w.PyDMEnumComboBox_state.currentText() == "SAFEOP"  # reverted
 
 
-def test_request_confirmed_writes_state_sp(fresh_states, answer, monkeypatch):
+def test_request_confirmed_writes_state_sp(fresh_states, answer):
     w = select(fresh_states, 1020)
-    writes = record_writes(w, monkeypatch)
+    writes = record_writes(w)
     calls = answer("yes")
     request(w, "OP")
     assert len(calls) == 1 and f"{fresh_states.get_prefix()}ECAT:1020:State_SP" in calls[0]
     assert writes == [4]  # OP
 
 
-def test_same_state_request_asks_nothing(fresh_states, answer, monkeypatch):
+def test_same_state_request_asks_nothing(fresh_states, answer):
     w = select(fresh_states, 1020)
-    writes = record_writes(w, monkeypatch)
+    writes = record_writes(w)
     calls = answer("yes")
     request(w, "SAFEOP")
     assert calls == [] and writes == []
 
 
-def test_confirmation_can_be_disabled(fresh_states, answer, monkeypatch):
+def test_confirmation_can_be_disabled(fresh_states, answer):
     fresh_states.setProperty("confirmRequests", False)
     w = select(fresh_states, 1020)
     assert w.property("confirmRequests") is False
-    writes = record_writes(w, monkeypatch)
+    writes = record_writes(w)
     calls = answer("no")
     request(w, "PREOP")
     assert calls == [] and writes == [1]  # PREOP
@@ -127,7 +127,7 @@ def test_confirmation_can_be_disabled(fresh_states, answer, monkeypatch):
 def test_request_not_sent_if_locked_while_confirming(fresh_states, monkeypatch):
     """The dialog lets PV updates in: a terminal that becomes LOCKED meanwhile is not written."""
     w = select(fresh_states, 1020)
-    writes = record_writes(w, monkeypatch)
+    writes = record_writes(w)
     monitor = fresh_states.monitors[1020]
     warnings = []
 
