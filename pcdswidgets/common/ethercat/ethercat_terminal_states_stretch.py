@@ -71,7 +71,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
     Designer properties: ``plc`` (host used for discovery, e.g. ``plc-sds-raptor``),
     ``prefix`` (IOC prefix incl. trailing colon, e.g. ``PLC:ICL:IOC:``),
     ``discoveryFile`` (read-only discovery JSON, default ``~/.cache/ecat-states/<plc>.json``)
-    and ``confirmRequests``. The discovery is refreshed with the Rediscover button
+    and ``confirmRequests``. The terminal list is re-read with the Rediscover button
     (``ads read-ecat-topology``, needs ads-actions; the EtherCAT master's AMS Net ID is
     resolved by ads-actions).
 
@@ -99,8 +99,10 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.runner = DiscoveryRunner(self)
         self.runner.finished.connect(self._on_discovery_finished)
         self.runner.failed.connect(self._on_discovery_failed)
-        self._refresh_timer = QtCore.QTimer(self, singleShot=True, interval=150)
-        self._refresh_timer.timeout.connect(self.refresh)
+        # PV updates arrive through each monitor's ``changed`` signal; a burst of them is
+        # repainted once (single shot, started by the first change: no polling).
+        self._repaint_timer = QtCore.QTimer(self, singleShot=True, interval=150)
+        self._repaint_timer.timeout.connect(self.repaint_status)
         # Properties can arrive in any order (designer, .ui, code): reload once they settle.
         self._reload_timer = QtCore.QTimer(self, singleShot=True, interval=0)
         self._reload_timer.timeout.connect(self.reload)
@@ -186,7 +188,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         if obj is self.terminalTree and event.type() == QtCore.QEvent.FontChange:
             self._make_icons()
             self._update_column_widths()
-            self._schedule_refresh()
+            self._schedule_repaint()
         return super().eventFilter(obj, event)
 
     def _make_icons(self):
@@ -311,7 +313,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         item = QtWidgets.QTreeWidgetItem([text])
         _set_foreground(item, COL_NAME, MUTED_GREY)
         self.terminalTree.addTopLevelItem(item)
-        self.refresh()
+        self.repaint_status()
 
     # ------------------------------------------------------------------- build
     def _build(self, terminals):
@@ -320,7 +322,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         tree.clear()
         for t in terminals:
             monitor = TerminalMonitor(t, self._prefix, self)
-            monitor.changed.connect(self._schedule_refresh)
+            monitor.changed.connect(self._schedule_repaint)
             self.monitors[t.port] = monitor
 
         for node in build_tree(terminals):
@@ -345,7 +347,7 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         )
         for monitor in self.monitors.values():
             monitor.connect_channels()
-        self.refresh()
+        self.repaint_status()
 
     def _make_item(self, node: Node) -> QtWidgets.QTreeWidgetItem:
         item = QtWidgets.QTreeWidgetItem()
@@ -380,24 +382,29 @@ class EthercatTerminalStatesStretch(EthercatTerminalStatesStretchBase):
         self.teardown()
         super().closeEvent(event)
 
-    # ----------------------------------------------------------------- refresh
-    def _schedule_refresh(self):
-        if not self._refresh_timer.isActive():
-            self._refresh_timer.start()
+    # ------------------------------------------------------------------ repaint
+    def _schedule_repaint(self):
+        if not self._repaint_timer.isActive():
+            self._repaint_timer.start()
 
-    def refresh(self):
+    def repaint_status(self):
+        """
+        Repaint every row from the monitors' latest PV values (colours, dots, roll-ups),
+        then reapply the filter. Reads nothing from the IOC. Not ``repaint``: that is
+        QWidget's own paint method.
+        """
         tree = self.terminalTree
         bold = QtGui.QFont(tree.font())
         bold.setBold(True)
         for index in range(tree.topLevelItemCount()):
-            self._refresh_item(tree.topLevelItem(index), bold)
+            self._repaint_item(tree.topLevelItem(index), bold)
         self.apply_filter()
 
-    def _refresh_item(self, item, bold) -> list[TerminalMonitor]:
-        """Update one row (recursively); return the monitors below it."""
+    def _repaint_item(self, item, bold) -> list[TerminalMonitor]:
+        """Repaint one row (recursively); return the monitors below it."""
         below = []
         for index in range(item.childCount()):
-            below += self._refresh_item(item.child(index), bold)
+            below += self._repaint_item(item.child(index), bold)
         port = item.data(COL_NAME, ROLE_PORT)
         if port is not None and port in self.monitors:
             monitor = self.monitors[port]

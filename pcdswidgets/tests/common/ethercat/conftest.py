@@ -244,7 +244,7 @@ def make_states(qtbot: QtBot | None = None, fed: bool = True, **props):
         seeds = seed_values()
         for port, monitor in states.monitors.items():
             feed(monitor, seeds[port])
-        states.refresh()
+        states.repaint_status()
     return states
 
 

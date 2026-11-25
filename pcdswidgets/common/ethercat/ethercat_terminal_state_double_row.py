@@ -63,7 +63,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         app = QtWidgets.QApplication.instance()
         if app is not None:
             app.aboutToQuit.connect(functools.partial(release_monitors, self._owned))
-        self._refresh()
+        self._repaint_status()
 
     # ----------------------------------------------------------- properties
     def get_confirm_requests(self) -> bool:
@@ -108,7 +108,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
             self.setProperty("port", str(terminal.port))
         finally:
             self._adopting = False
-        self._refresh()
+        self._repaint_status()
 
     def disconnect_channels(self):
         """Release this widget's own subscription and stop showing a shared one."""
@@ -119,20 +119,20 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         previous = self._monitor
         if previous is not None and previous is not monitor:
             try:
-                previous.changed.disconnect(self._refresh)
+                previous.changed.disconnect(self._repaint_status)
             except (RuntimeError, TypeError):
                 pass  # already deleted or disconnected
         if monitor is None or monitor not in self._owned:
             release_monitors(self._owned)
         self._monitor = monitor
         if monitor is not None and monitor is not previous:
-            monitor.changed.connect(self._refresh)
+            monitor.changed.connect(self._repaint_status)
 
     def _reconnect(self):
         prefix, port = self.get_macro("PREFIX"), self.get_macro("PORT")
         shown = self._monitor
         if shown is not None and shown.base == self.base:
-            self._refresh()  # already showing this terminal
+            self._repaint_status()  # already showing this terminal
             return
         self._set_shown(None)
         if prefix and port and str(port).strip().isdigit():
@@ -140,7 +140,7 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
             self._owned.append(monitor)
             self._set_shown(monitor)
             monitor.connect_channels()
-        self._refresh()
+        self._repaint_status()
 
     # -------------------------------------------------------------- display
     def access(self) -> tuple[str, list[str]]:
@@ -148,7 +148,8 @@ class EthercatTerminalStateDoubleRow(EthercatTerminalStateDoubleRowBase):
         monitor = self.monitor
         return monitor.access if monitor is not None else access_rule(None, None, None)
 
-    def _refresh(self):
+    def _repaint_status(self):
+        """Repaint the labels from the monitor's latest PV values (on each of its ``changed``)."""
         monitor = self.monitor
         flags = monitor.state_flags if monitor is not None else None
         if flags is None:

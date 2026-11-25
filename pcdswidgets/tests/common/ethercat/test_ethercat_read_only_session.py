@@ -37,7 +37,7 @@ def test_tree_keeps_editable_terminals_in_read_only_session(qtbot, read_only_ses
     try:
         for monitor in states.monitors.values():  # what Channel Access reports in a read-only session
             monitor.write_access = False
-        states.refresh()
+        states.repaint_status()
         editable = sorted(p for p, m in states.monitors.items() if m.access[0] == "EDITABLE")
         assert editable == EDITABLE_PORTS
         tip = states.terminal_items[1020].toolTip(4)
@@ -51,7 +51,7 @@ def test_panel_shows_editable_but_disables_requests_in_read_only_session(qtbot, 
     try:
         w = select(states, 1020)
         w.monitor.write_access = False  # what Channel Access reports in a read-only session
-        w._refresh()
+        w._repaint_status()
         assert w.accessLabel.text() == "EDITABLE"
         assert not w.requestFrame.isEnabled()
         assert "read-only" in w.accessLabel.toolTip() and "read-only" in w.requestFrame.toolTip()
