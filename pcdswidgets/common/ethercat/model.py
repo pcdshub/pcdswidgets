@@ -3,18 +3,18 @@ Qt-free model of the ``common.ethercat`` widgets: decoding, rules, tree and roll
 
 PVs per terminal (pytmc ``ethercat.py``), ``{prefix}ECAT:{port}:...``:
 
-==================  =====  =====  ==============================================
-PV                  Type   RO/RW  Meaning
-==================  =====  =====  ==============================================
-``State_RBV``       mbbi   RO     INIT / PREOP / BOOTSTRAP / SAFEOP / OP
-``Link_RBV``        mbbi   RO     OK / NOT_PRESENT / ... / MULTIPLE_FLAGS
-``State_SP``        mbbo   RW     requested state (same enum as ``State_RBV``)
-``State_SP.DISP``   field  RO     1 = Channel Access puts disabled
-``State_SP.DISA``   field  RO     record disabled when DISA == DISV
-``State_SP.DISV``   field  RO
-``StateRaw``        longin RO     raw state word: flags in bits 4-7 (pytmc helper)
-``LinkCode``        calc   RO     link conditions bits 0-3, ports bits 4-7 (helper)
-==================  =====  =====  ==============================================
+==================  ======  =====  ==============================================
+PV                  Type    RO/RW  Meaning
+==================  ======  =====  ==============================================
+``State_RBV``       mbbi    RO     INIT / PREOP / BOOTSTRAP / SAFEOP / OP
+``Link_RBV``        mbbi    RO     OK / NOT_PRESENT / ... / MULTIPLE_FLAGS
+``State_SP``        mbbo    RW     requested state (same enum as ``State_RBV``)
+``State_SP.DISP``   field   RO     1 = Channel Access puts disabled
+``State_SP.DISA``   field   RO     record disabled when DISA == DISV
+``State_SP.DISV``   field   RO
+``StateRaw``        longin  RO     raw state word: flags in bits 4-7 (pytmc helper)
+``LinkCode``        calc    RO     link conditions bits 0-3, ports bits 4-7 (helper)
+==================  ======  =====  ==============================================
 
 A terminal is EDITABLE when ``DISP == 0`` and ``DISA != DISV`` and Channel Access
 grants write access (the record semantics, as in pytmc ``effective_access()``).

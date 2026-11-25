@@ -78,7 +78,7 @@ def writable_output(target: Path, plc: str) -> Path:
 
 
 def find_ads() -> str | None:
-    """Locate the ads-actions CLI (PATH, $ADS_ACTIONS_BIN, released install)."""
+    """Locate the ads-actions CLI: $ADS_ACTIONS_BIN, then ``ads`` on PATH, then the released install."""
     for candidate in (os.environ.get("ADS_ACTIONS_BIN"), shutil.which("ads"), RELEASED_ADS):
         if candidate and os.access(candidate, os.X_OK):
             return candidate

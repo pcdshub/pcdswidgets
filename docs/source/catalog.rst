@@ -152,6 +152,31 @@ Dock: pcdswidgets/common/dock
        | the TabDock
      - .. image:: /_static/catalog/tab_dock_diagram_button.png
 
+EtherCAT: pcdswidgets/common/ethercat
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+
+   * - Widget
+     - Function
+     - Example
+   * - :any:`EthercatTerminalStatesStretch`
+     - | Every EtherCAT terminal of one Beckhoff PLC as a tree that follows
+       | the wiring (master line, junction Port branches, Hot Connect groups).
+       | Each group shows the worst status below it; filters for faults,
+       | not OP, link, editable and disconnected terminals. Selecting a
+       | terminal shows it in an EthercatTerminalStateDoubleRow panel.
+       | Set "plc" and "prefix"; the terminal list comes from a read-only
+       | discovery run with the Rediscover button. Also a screen:
+       | ``pcdswidgets-show ethercat_terminal_states``.
+     - N/a
+   * - :any:`EthercatTerminalStateDoubleRow`
+     - | One EtherCAT terminal: state, state flags, decoded link condition
+       | and access (EDITABLE / LOCKED, with the reasons). Requests a
+       | state change after a confirmation, only when the terminal is
+       | editable. Set "prefix" and "port" (the EtherCAT address).
+     - N/a
+
 Toolbar: pcdswidgets/common/toolbar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
